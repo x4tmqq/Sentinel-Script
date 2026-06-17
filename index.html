@@ -1,10 +1,11 @@
-cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
+cat > /home/claude/sentinel_v3.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sentinel Script</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -162,6 +163,12 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .certified-badge { display:inline-flex;align-items:center;gap:0.2rem;margin-left:0.3rem;flex-shrink:0; }
   .certified-badge svg { width:14px;height:14px; }
 
+  /* Loading overlay */
+  .loading-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:99000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s; }
+  .loading-overlay.show { opacity:1;visibility:visible; }
+  .loading-spinner { width:48px;height:48px;border:3px solid rgba(124,58,237,0.2);border-top-color:#A78BFA;border-radius:50%;animation:spin .8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg);} }
+
   /* AUTH MODAL */
   .auth-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:10000;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:center;justify-content:center;padding:1rem; }
   .auth-overlay.open { opacity:1;visibility:visible; }
@@ -184,6 +191,7 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .auth-error.visible { display:block; }
   .auth-submit { width:100%;padding:0.75rem;background:linear-gradient(135deg,var(--purple),var(--blue));border:none;border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:700;cursor:none;transition:all .2s;margin-bottom:1rem;box-shadow:0 4px 20px rgba(124,58,237,0.3); }
   .auth-submit:hover { transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,58,237,0.4); }
+  .auth-submit:disabled { opacity:0.6;transform:none; }
   .auth-switch { text-align:center;font-size:0.82rem;color:var(--text-muted); }
   .auth-switch-btn { background:none;border:none;color:var(--purple-light);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:600;cursor:none;text-decoration:underline; }
   .auth-close { position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;font-size:1rem;transition:all .2s; }
@@ -316,7 +324,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   body.theme-light .dashboard-panel { background:#ffffff; }
   .dashboard-overlay.open .dashboard-panel { transform:translateX(0); }
 
-  /* Full layout — dashboard content centered */
   body.layout-full .dashboard-overlay { position:static;background:none;backdrop-filter:none;opacity:1;visibility:visible;pointer-events:none; }
   body.layout-full .dashboard-panel { position:static;width:100%;transform:none;border-right:none;border-bottom:1px solid var(--border);height:auto;max-height:none;pointer-events:all; }
   body.layout-full .dash-body { display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:center; }
@@ -379,7 +386,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .sub-panel.open { display:block;animation:fadeSlide .2s ease; }
   .sub-panel-title { font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem; }
 
-  /* THEME PICKER — amélioré */
   .theme-group { margin-bottom:1rem; }
   .theme-group-label { font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:0.5rem;font-weight:600; }
   .basic-theme-split { position:relative;border-radius:12px;overflow:hidden;height:80px;cursor:none;border:2px solid var(--border);transition:border-color .2s,transform .2s; }
@@ -394,42 +400,19 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .basic-dot.light-dot { background:#7c3aed; }
   .basic-dot.active-dot { transform:scale(1.4);box-shadow:0 0 6px currentColor; }
 
-  /* Previews thèmes améliorées */
   .theme-grid-other { display:grid;grid-template-columns:1fr 1fr;gap:0.5rem; }
   .theme-option { border-radius:10px;overflow:hidden;border:2px solid var(--border);cursor:none;transition:border-color .2s,transform .2s;position:relative; }
   .theme-option:hover { border-color:rgba(124,58,237,0.5);transform:scale(1.03); }
   .theme-option.selected { border-color:var(--purple-light); }
   .theme-option.selected::after { content:'✓';position:absolute;top:4px;right:4px;width:14px;height:14px;background:var(--purple-light);border-radius:50%;color:#000;font-size:0.55rem;font-weight:700;display:flex;align-items:center;justify-content:center; }
   .theme-preview { height:60px;width:100%;display:block;position:relative;overflow:hidden; }
-
-  /* Midnight preview — fond sombre + quelques étoiles placées librement */
-  .theme-preview-midnight {
-    background: linear-gradient(160deg, #0d0d1a 0%, #1a1060 100%);
-  }
+  .theme-preview-midnight { background:linear-gradient(160deg,#0d0d1a 0%,#1a1060 100%); }
   .theme-preview-midnight .star { position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0.8; }
-  .star-1{top:12%;left:15%;width:1.5px;height:1.5px;}
-  .star-2{top:30%;left:55%;width:2px;height:2px;opacity:0.6;}
-  .star-3{top:60%;left:25%;width:1px;height:1px;opacity:0.5;}
-  .star-4{top:20%;left:80%;width:2.5px;height:2.5px;opacity:0.9;}
-  .star-5{top:70%;left:70%;width:1.5px;height:1.5px;opacity:0.7;}
-  .star-6{top:45%;left:10%;width:1px;height:1px;opacity:0.4;}
-  .star-7{top:80%;left:45%;width:2px;height:2px;opacity:0.6;}
-  .star-8{top:10%;left:40%;width:1px;height:1px;opacity:0.5;}
-  .star-9{top:55%;left:88%;width:1.5px;height:1.5px;opacity:0.8;}
+  .star-1{top:12%;left:15%;width:1.5px;height:1.5px;} .star-2{top:30%;left:55%;width:2px;height:2px;opacity:0.6;} .star-3{top:60%;left:25%;width:1px;height:1px;opacity:0.5;} .star-4{top:20%;left:80%;width:2.5px;height:2.5px;opacity:0.9;} .star-5{top:70%;left:70%;width:1.5px;height:1.5px;opacity:0.7;} .star-6{top:45%;left:10%;width:1px;height:1px;opacity:0.4;} .star-7{top:80%;left:45%;width:2px;height:2px;opacity:0.6;} .star-8{top:10%;left:40%;width:1px;height:1px;opacity:0.5;} .star-9{top:55%;left:88%;width:1.5px;height:1.5px;opacity:0.8;}
   .midnight-accent { position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(0deg,rgba(100,60,220,0.3),transparent); }
-
-  /* Nexus preview — grille de points bien visible */
-  .theme-preview-nexus {
-    background: #000;
-  }
-  .nexus-dots-preview {
-    position:absolute;inset:0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.65) 1px, transparent 1px);
-    background-size: 10px 10px;
-    background-position: 5px 5px;
-  }
+  .theme-preview-nexus { background:#000; }
+  .nexus-dots-preview { position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.65) 1px,transparent 1px);background-size:10px 10px;background-position:5px 5px; }
   .nexus-accent { position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:30px;height:2px;background:linear-gradient(90deg,#7C3AED,#06B6D4);border-radius:2px; }
-
   .theme-label { font-size:0.62rem;text-align:center;padding:0.3rem 0.2rem;color:var(--text-muted);font-weight:500;background:rgba(255,255,255,0.02); }
   .notif-coming { display:none;padding:0.75rem 1rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:10px;font-size:0.8rem;color:#FCD34D;margin-top:0.6rem;text-align:center; }
   .notif-coming.open { display:block;animation:fadeSlide .2s ease; }
@@ -439,7 +422,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .lang-btn.active { background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.45);color:var(--purple-light); }
   .lang-flag { font-size:1rem;line-height:1; }
 
-  /* LAYOUT PICKER */
   .layout-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem; }
   .layout-opt { border:2px solid var(--border);border-radius:10px;overflow:hidden;cursor:none;transition:border-color .2s,transform .2s;position:relative; }
   .layout-opt:hover { border-color:rgba(124,58,237,0.5);transform:scale(1.02); }
@@ -452,7 +434,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .layout-preview-full::after { content:'';position:absolute;top:14px;left:4px;right:4px;bottom:4px;background:rgba(124,58,237,0.07);border-radius:3px; }
   .layout-label { font-size:0.62rem;text-align:center;padding:0.3rem 0.2rem;color:var(--text-muted);font-weight:500;background:rgba(255,255,255,0.02); }
 
-  /* ACCOUNT ACTIONS */
   .account-actions { display:flex;flex-direction:column;gap:0.5rem; }
   .account-action-btn { display:flex;align-items:center;gap:0.65rem;padding:0.65rem 0.9rem;border-radius:10px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:500;cursor:none;transition:all .2s;text-align:left;width:100%;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text); }
   .account-action-btn:hover { transform:translateX(3px); }
@@ -467,7 +448,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .account-action-btn.admin-btn { color:#FFD700;border-color:rgba(255,215,0,0.2); }
   .account-action-btn.admin-btn:hover { background:rgba(255,215,0,0.08);border-color:rgba(255,215,0,0.4); }
 
-  /* EDIT PROFILE */
   .edit-field { margin-bottom:0.85rem; }
   .edit-label { display:block;font-size:0.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem; }
   .edit-input { width:100%;padding:0.55rem 0.8rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.83rem;outline:none;transition:all .2s; }
@@ -484,7 +464,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .avatar-upload-edit-btn { display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.7rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:8px;color:var(--purple-light);font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:500;cursor:none;transition:all .2s;width:100%;justify-content:center;margin-top:0.5rem; }
   .avatar-upload-edit-btn:hover { background:rgba(124,58,237,0.2); }
 
-  /* DELETE CONFIRM (dashboard) */
   .delete-confirm { display:none;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.25);border-radius:10px;padding:0.9rem;margin-top:0.5rem;text-align:center; }
   .delete-confirm.open { display:block;animation:fadeSlide .2s ease; }
   .delete-confirm-text { font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem; }
@@ -494,7 +473,7 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .delete-yes-btn:hover { background:rgba(239,68,68,0.3); }
   .delete-no-btn { flex:1;padding:0.45rem;background:transparent;border:1px solid var(--border);border-radius:7px;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:0.78rem;cursor:none;transition:all .2s; }
 
-  /* ===== ADMIN PANEL ===== */
+  /* ADMIN PANEL */
   .admin-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(14px);z-index:15000;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto; }
   .admin-overlay.open { opacity:1;visibility:visible; }
   .admin-panel { background:#0a0a12;border:1px solid rgba(255,215,0,0.2);border-radius:20px;width:100%;max-width:780px;margin:2rem auto;position:relative; }
@@ -511,7 +490,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .admin-section { display:none; }
   .admin-section.active { display:block;animation:fadeSlide .2s ease; }
 
-  /* Admin — champs généraux */
   .admin-field { margin-bottom:1rem; }
   .admin-label { display:block;font-size:0.7rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem; }
   .admin-input { width:100%;padding:0.55rem 0.85rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.85rem;outline:none;transition:all .2s; }
@@ -532,7 +510,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .admin-btn-green:hover { background:rgba(16,185,129,0.22); }
   .admin-btn-full { width:100%;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem; }
 
-  /* Admin — cards scripts */
   .admin-script-card { background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem; }
   .admin-script-card-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem; }
   .admin-script-name { font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text); }
@@ -543,7 +520,6 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .vote-edit-input { width:60px;padding:0.2rem 0.4rem;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:0.78rem;font-family:'JetBrains Mono',monospace;outline:none;text-align:center; }
   .vote-edit-input:focus { border-color:rgba(255,215,0,0.4); }
 
-  /* Admin — users list */
   .admin-users-list { display:flex;flex-direction:column;gap:0.6rem;max-height:400px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,0.3) transparent;padding-right:0.25rem; }
   .admin-user-row { display:flex;align-items:center;gap:0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:0.65rem 0.85rem; }
   .admin-user-avatar { width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0; }
@@ -554,21 +530,15 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
   .badge-admin { background:rgba(255,215,0,0.15);color:#FFD700;border:1px solid rgba(255,215,0,0.3); }
   .badge-certified { background:rgba(124,58,237,0.15);color:var(--purple-light);border:1px solid rgba(124,58,237,0.3); }
   .badge-banned { background:rgba(239,68,68,0.15);color:#F87171;border:1px solid rgba(239,68,68,0.3); }
-  .badge-tempbanned { background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.3); }
   .admin-user-actions { display:flex;gap:0.35rem;flex-wrap:wrap; }
 
-  /* Admin — comments section */
   .admin-comment-row { display:flex;align-items:flex-start;gap:0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.6rem; }
   .admin-comment-body { flex:1;min-width:0; }
   .admin-comment-meta { font-size:0.7rem;color:var(--text-muted);margin-bottom:0.3rem;display:flex;gap:0.5rem;flex-wrap:wrap; }
   .admin-comment-text { font-size:0.8rem;color:var(--text);line-height:1.5;word-break:break-word; }
 
-  /* Add script form sections */
   .admin-form-section { background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem; }
   .admin-form-section-title { font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-light);font-weight:600;margin-bottom:0.85rem; }
-
-  /* Banned info */
-  .ban-info { background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:0.75rem;margin-top:0.5rem;font-size:0.78rem;color:#F87171; }
 
   @media (max-width:768px) {
     .cards-grid { grid-template-columns:1fr; }
@@ -598,6 +568,9 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="cursor-light" id="cursorLight"></div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
 
 <!-- AUTH MODAL -->
 <div class="auth-overlay" id="authOverlay">
@@ -687,30 +660,17 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
       <button class="admin-tab" data-atab="comments">💬 Commentaires</button>
     </div>
     <div class="admin-body">
-
-      <!-- TAB: VOTES -->
-      <div class="admin-section active" id="atab-votes">
-        <div id="adminVotesList"></div>
-      </div>
-
-      <!-- TAB: UTILISATEURS -->
+      <div class="admin-section active" id="atab-votes"><div id="adminVotesList"></div></div>
       <div class="admin-section" id="atab-users">
-        <div class="admin-field">
-          <label class="admin-label">Rechercher un utilisateur</label>
-          <input type="text" class="admin-input" id="adminUserSearch" placeholder="Nom d'utilisateur...">
-        </div>
+        <div class="admin-field"><label class="admin-label">Rechercher un utilisateur</label><input type="text" class="admin-input" id="adminUserSearch" placeholder="Nom d'utilisateur..."></div>
         <div class="admin-users-list" id="adminUsersList"></div>
-        <!-- Ban temporaire modal inline -->
         <div id="tempBanForm" style="display:none;margin-top:1rem;">
           <div class="admin-form-section">
             <div class="admin-form-section-title">⏱️ Bannissement temporaire</div>
             <div class="admin-field"><label class="admin-label">Utilisateur</label><input class="admin-input" id="tempBanUsername" readonly></div>
             <div class="admin-field"><label class="admin-label">Durée</label>
               <select class="admin-select" id="tempBanDuration">
-                <option value="3600000">1 heure</option>
-                <option value="86400000">1 jour</option>
-                <option value="604800000">1 semaine</option>
-                <option value="2592000000">1 mois</option>
+                <option value="3600000">1 heure</option><option value="86400000">1 jour</option><option value="604800000">1 semaine</option><option value="2592000000">1 mois</option>
               </select>
             </div>
             <div class="admin-field"><label class="admin-label">Raison</label><input class="admin-input" id="tempBanReason" placeholder="Raison du ban..."></div>
@@ -721,19 +681,12 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
           </div>
         </div>
       </div>
-
-      <!-- TAB: SCRIPTS -->
       <div class="admin-section" id="atab-scripts">
         <div class="admin-form-section">
           <div class="admin-form-section-title">➕ Ajouter un nouveau script</div>
           <div class="admin-row">
             <div class="admin-field"><label class="admin-label">Nom du script *</label><input class="admin-input" id="newScriptName" placeholder="Ex: Speed Hub v3"></div>
-            <div class="admin-field"><label class="admin-label">Catégorie *</label>
-              <select class="admin-select" id="newScriptCategory">
-                <option value="game">🎮 Game</option>
-                <option value="util">⚡ Utilitaire</option>
-              </select>
-            </div>
+            <div class="admin-field"><label class="admin-label">Catégorie *</label><select class="admin-select" id="newScriptCategory"><option value="game">🎮 Game</option><option value="util">⚡ Utilitaire</option></select></div>
           </div>
           <div class="admin-row">
             <div class="admin-field"><label class="admin-label">Nom du jeu</label><input class="admin-input" id="newScriptGameName" placeholder="Ex: Speed Run"></div>
@@ -743,18 +696,12 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
             <div class="admin-field"><label class="admin-label">Créateur</label><input class="admin-input" id="newScriptCreator" placeholder="Ex: SentinelTeam"></div>
             <div class="admin-field"><label class="admin-label">Joueurs actifs</label><input class="admin-input" id="newScriptPlayers" placeholder="Ex: ~5000"></div>
           </div>
-          <div class="admin-field"><label class="admin-label">URL Thumbnail / Bannière</label><input class="admin-input" id="newScriptBanner" placeholder="https://... (image du jeu)"></div>
+          <div class="admin-field"><label class="admin-label">URL Thumbnail / Bannière</label><input class="admin-input" id="newScriptBanner" placeholder="https://..."></div>
           <div class="admin-field"><label class="admin-label">Nom du fichier script</label><input class="admin-input" id="newScriptFile" placeholder="Ex: monscript-v3.lua"></div>
-          <div class="admin-field"><label class="admin-label">Description</label><input class="admin-input" id="newScriptDesc" placeholder="Courte description du script..."></div>
-          <div class="admin-field"><label class="admin-label">Script complet (copié dans le presse-papier) *</label><textarea class="admin-textarea" id="newScriptCode" placeholder='loadstring(game:HttpGet("https://..."))()' rows="3"></textarea></div>
-          <div class="admin-field"><label class="admin-label">Script affiché sur la carte (peut être raccourci)</label><textarea class="admin-textarea" id="newScriptDisplay" placeholder="-- Version affichée sur la carte" rows="3"></textarea></div>
-          <div class="admin-field"><label class="admin-label">Statut</label>
-            <select class="admin-select" id="newScriptStatus">
-              <option value="active">✅ Actif</option>
-              <option value="new">🆕 Nouveau</option>
-              <option value="popular">🔥 Populaire</option>
-            </select>
-          </div>
+          <div class="admin-field"><label class="admin-label">Description</label><input class="admin-input" id="newScriptDesc" placeholder="Courte description..."></div>
+          <div class="admin-field"><label class="admin-label">Script complet *</label><textarea class="admin-textarea" id="newScriptCode" placeholder='loadstring(game:HttpGet("https://..."))()' rows="3"></textarea></div>
+          <div class="admin-field"><label class="admin-label">Script affiché sur la carte</label><textarea class="admin-textarea" id="newScriptDisplay" placeholder="-- Version affichée sur la carte" rows="3"></textarea></div>
+          <div class="admin-field"><label class="admin-label">Statut</label><select class="admin-select" id="newScriptStatus"><option value="active">✅ Actif</option><option value="new">🆕 Nouveau</option><option value="popular">🔥 Populaire</option></select></div>
           <button class="admin-btn admin-btn-gold admin-btn-full" id="addScriptBtn">➕ Ajouter le script</button>
         </div>
         <div>
@@ -762,16 +709,10 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
           <div id="adminScriptsList"></div>
         </div>
       </div>
-
-      <!-- TAB: COMMENTAIRES -->
       <div class="admin-section" id="atab-comments">
-        <div class="admin-field">
-          <label class="admin-label">Filtrer par script</label>
-          <select class="admin-select" id="adminCommentFilter"></select>
-        </div>
+        <div class="admin-field"><label class="admin-label">Filtrer par script</label><select class="admin-select" id="adminCommentFilter"></select></div>
         <div id="adminCommentsList"></div>
       </div>
-
     </div>
   </div>
 </div>
@@ -816,9 +757,7 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
               <div class="edit-field"><label class="edit-label" id="editBioLabel">Bio</label><input type="text" class="edit-input" id="editBio" placeholder="Courte bio..." maxlength="80"></div>
               <button class="edit-save-btn" id="editSaveBtn"><span id="editSaveLabel">Enregistrer</span></button>
             </div>
-            <button class="account-action-btn admin-btn" id="openAdminBtn" style="display:none">
-              ⚙️ <span>Admin Panel</span>
-            </button>
+            <button class="account-action-btn admin-btn" id="openAdminBtn" style="display:none">⚙️ <span>Admin Panel</span></button>
             <button class="account-action-btn switch" id="switchAccountBtn">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
               <span id="switchAccountLabel">Se connecter sur un autre compte</span>
@@ -889,18 +828,13 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
               <div class="theme-grid-other">
                 <div class="theme-option" data-theme="midnight">
                   <div class="theme-preview theme-preview-midnight">
-                    <div class="star star-1"></div><div class="star star-2"></div><div class="star star-3"></div>
-                    <div class="star star-4"></div><div class="star star-5"></div><div class="star star-6"></div>
-                    <div class="star star-7"></div><div class="star star-8"></div><div class="star star-9"></div>
+                    <div class="star star-1"></div><div class="star star-2"></div><div class="star star-3"></div><div class="star star-4"></div><div class="star star-5"></div><div class="star star-6"></div><div class="star star-7"></div><div class="star star-8"></div><div class="star star-9"></div>
                     <div class="midnight-accent"></div>
                   </div>
                   <div class="theme-label" id="themeNameMidnight">Minuit</div>
                 </div>
                 <div class="theme-option" data-theme="nexus">
-                  <div class="theme-preview theme-preview-nexus">
-                    <div class="nexus-dots-preview"></div>
-                    <div class="nexus-accent"></div>
-                  </div>
+                  <div class="theme-preview theme-preview-nexus"><div class="nexus-dots-preview"></div><div class="nexus-accent"></div></div>
                   <div class="theme-label" id="themeNameNexus">Nexus</div>
                 </div>
               </div>
@@ -975,9 +909,9 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
     <h1 class="hero-title"><span class="line1">Sentinel</span><span class="line2">Script</span></h1>
     <p class="hero-sub" id="heroSub">Des scripts puissants pour élever votre expérience de jeu. Copiez, collez, dominez.</p>
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num" id="statScriptCount">3</span><span class="stat-label" id="statScripts">Scripts</span></div>
+      <div class="stat"><span class="stat-num" id="statScriptCount">—</span><span class="stat-label" id="statScripts">Scripts</span></div>
       <div class="stat-divider"></div>
-      <div class="stat"><span class="stat-num">10</span><span class="stat-label" id="statMembers">Membres</span></div>
+      <div class="stat"><span class="stat-num" id="statMemberCount">—</span><span class="stat-label" id="statMembers">Membres</span></div>
       <div class="stat-divider"></div>
       <div class="stat"><span class="stat-num">99%</span><span class="stat-label">Uptime</span></div>
     </div>
@@ -1010,7 +944,7 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
         <div class="banner-title" id="bannerTitle">Rejoins la communauté</div>
         <p class="banner-desc" id="bannerDescEl">Accède aux scripts en exclusivité, reçois les mises à jour en premier. Contacte <strong style="color:var(--purple-light)">@x4tmq</strong>.</p>
         <div class="owner-card">
-          <img id="ownerAvatar" src="" alt="x4tmq" class="owner-avatar" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=x4tmq'">
+          <img id="ownerAvatar" src="https://i.postimg.cc/sGrFchHS/IMG-2262.jpg" alt="x4tmq" class="owner-avatar" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=x4tmq'">
           <div class="owner-info">
             <div class="owner-name">x4tmq<span class="certified-badge" title="Compte certifié"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
             <div class="owner-sub" id="ownerSubLabel">Créateur · Sentinel Script</div>
@@ -1018,7 +952,7 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
           <span class="owner-tag">@x4tmq</span>
         </div>
         <div class="members-row">
-          <span class="member-count"><strong>10</strong> <span id="membersLabel">membres</span></span>
+          <span class="member-count"><strong id="memberCountBanner">—</strong> <span id="membersLabel">membres</span></span>
           <span class="new-badge" id="newOpenedBadge">🆕 Vient d'ouvrir</span>
         </div>
       </div>
@@ -1034,201 +968,421 @@ cat > /home/claude/sentinel_v2.html << 'HTMLEOF'
 
 <script>
 // ============================================================
-// OWNER AVATAR
+// SUPABASE CONFIG — remplace par tes vraies valeurs
 // ============================================================
-(function(){
-  var av=document.getElementById('ownerAvatar');
-  av.src='https://i.postimg.cc/sGrFchHS/IMG-2262.jpg';
-  av.onerror=function(){av.src='https://api.dicebear.com/7.x/bottts/svg?seed=x4tmq';};
-})();
+const SUPABASE_URL = 'https://fzuocfhzzvscjhcxuzog.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6dW9jZmh6enZzY2poY3h1em9nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NDQwNDQsImV4cCI6MjA5NzIyMDA0NH0.I4Vhya1HGNgsm8gZ5FIM5ePZqk0aX_ARMgYop15rcxk';
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ============================================================
-// STORAGE
+// CONSTANTES
 // ============================================================
-var Store={
-  get:function(k,def){try{var v=localStorage.getItem('ss_'+k);return v!==null?JSON.parse(v):(def!==undefined?def:null);}catch(e){return def!==undefined?def:null;}},
-  set:function(k,val){try{localStorage.setItem('ss_'+k,JSON.stringify(val));}catch(e){}},
-  del:function(k){try{localStorage.removeItem('ss_'+k);}catch(e){}}
+const OWNER_USERNAME = 'x4tmq_official';
+const AVATAR_SEEDS = ['NeonBlade','CryptoFox','VoidWalker','ShadowByte','PhantomKey','StarlightX','EchoShift','LunarByte'];
+const AVATAR_STYLES_LIST = ['pixel-art','bottts','avataaars','micah','fun-emoji','lorelei','thumbs','shapes'];
+const AVATAR_OPTIONS = AVATAR_SEEDS.map((s,i) => `https://api.dicebear.com/7.x/${AVATAR_STYLES_LIST[i%AVATAR_STYLES_LIST.length]}/svg?seed=${encodeURIComponent(s)}`);
+
+// ============================================================
+// LOCAL STORAGE (thème, lang, session uniquement)
+// ============================================================
+const Store = {
+  get:(k,def=null)=>{try{const v=localStorage.getItem('ss_'+k);return v!==null?JSON.parse(v):def;}catch{return def;}},
+  set:(k,v)=>{try{localStorage.setItem('ss_'+k,JSON.stringify(v));}catch{}},
+  del:(k)=>{try{localStorage.removeItem('ss_'+k);}catch{}}
 };
 
 // ============================================================
-// ADMIN / CERTIFIED / ROLES
+// SESSION (stockée en localStorage pour persistance)
 // ============================================================
-var OWNER_USERNAME='x4tmq_official';
-function isAdmin(username){
-  if(!username)return false;
-  var u=username.toLowerCase();
-  if(u===OWNER_USERNAME.toLowerCase())return true;
-  var admins=Store.get('admin_users',[]);
-  return admins.map(function(a){return a.toLowerCase();}).indexOf(u)>=0;
-}
-function isCertified(username){
-  if(!username)return false;
-  var u=username.toLowerCase();
-  if(u===OWNER_USERNAME.toLowerCase())return true;
-  var certs=Store.get('certified_users',[]);
-  return certs.map(function(c){return c.toLowerCase();}).indexOf(u)>=0;
-}
-function isBanned(username){
-  if(!username)return false;
-  var bans=Store.get('banned_users',{});
-  var entry=bans[username.toLowerCase()];
-  if(!entry)return false;
-  if(entry.permanent)return true;
-  if(entry.until&&Date.now()<entry.until)return true;
-  // expired ban — clean up
-  delete bans[username.toLowerCase()];Store.set('banned_users',bans);return false;
-}
-function getBanInfo(username){
-  var bans=Store.get('banned_users',{});return bans[username.toLowerCase()]||null;
-}
+let currentUser = Store.get('session', null);
+
+function isLoggedIn(){ return !!currentUser; }
+function sessionLogin(u){ currentUser = u; Store.set('session', u); }
+function sessionLogout(){ currentUser = null; Store.del('session'); }
+
+// ============================================================
+// ROLES
+// ============================================================
+function isAdmin(u){ if(!u) return false; return u.role==='admin' || u.role==='owner' || u.username?.toLowerCase()===OWNER_USERNAME.toLowerCase(); }
+function isCertified(u){ if(!u) return false; return u.role==='owner'||u.role==='admin'||u.role==='certified'||u.username?.toLowerCase()===OWNER_USERNAME.toLowerCase(); }
+function isBanned(u){ if(!u) return false; if(u.banned) return true; if(u.ban_until && new Date(u.ban_until) > new Date()) return true; return false; }
+
 function certifiedSVG(){
-  return '<span class="certified-badge" title="Compte certifié"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+  return `<span class="certified-badge" title="Compte certifié"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
 }
 
 // ============================================================
-// USERS DB
+// HASH MOT DE PASSE (SHA-256 via WebCrypto)
 // ============================================================
-function hashSimple(str){var h=0;for(var i=0;i<str.length;i++){h=(Math.imul(31,h)+str.charCodeAt(i))|0;}return h.toString(16);}
-function getUsers(){return Store.get('users_db',{});}
-function saveUsers(db){Store.set('users_db',db);}
-function userExists(username){return !!getUsers()[username.toLowerCase()];}
-function createUser(username,password,avatar){
-  var db=getUsers(),key=username.toLowerCase();
-  db[key]={username:username,displayName:username,passwordHash:hashSimple(password),avatar:avatar,bio:'',createdAt:Date.now()};
-  saveUsers(db);return db[key];
-}
-function verifyUser(username,password){
-  var db=getUsers(),u=db[username.toLowerCase()];
-  if(!u||u.passwordHash!==hashSimple(password))return null;return u;
-}
-function updateUser(username,fields){
-  var db=getUsers(),key=username.toLowerCase();if(!db[key])return;
-  Object.assign(db[key],fields);saveUsers(db);
-  var sess=Store.get('session',null);
-  if(sess&&sess.username.toLowerCase()===key){sess=Object.assign(sess,fields);Store.set('session',sess);}
-}
-function deleteUser(username){var db=getUsers();delete db[username.toLowerCase()];saveUsers(db);}
-
-// ============================================================
-// SESSION
-// ============================================================
-var currentUser=Store.get('session',null);
-function login(userObj){currentUser=userObj;Store.set('session',userObj);updateAuthUI();}
-function logout(){currentUser=null;Store.del('session');updateAuthUI();}
-function isLoggedIn(){return !!currentUser;}
-
-// ============================================================
-// AVATARS
-// ============================================================
-var AVATAR_SEEDS=['NeonBlade','CryptoFox','VoidWalker','ShadowByte','PhantomKey','StarlightX','EchoShift','LunarByte'];
-var AVATAR_STYLES_LIST=['pixel-art','bottts','avataaars','micah','fun-emoji','lorelei','thumbs','shapes'];
-function avatarUrl(seed,style){return 'https://api.dicebear.com/7.x/'+(style||'bottts')+'/svg?seed='+encodeURIComponent(seed);}
-var AVATAR_OPTIONS=AVATAR_SEEDS.map(function(s,i){return avatarUrl(s,AVATAR_STYLES_LIST[i%AVATAR_STYLES_LIST.length]);});
-function buildAvatarPicker(containerEl,previewEl,selectedUrl,onSelect){
-  containerEl.innerHTML='';
-  AVATAR_OPTIONS.forEach(function(url){
-    var img=document.createElement('img');img.src=url;img.className='avatar-opt'+(url===selectedUrl?' selected':'');
-    img.addEventListener('click',function(){containerEl.querySelectorAll('img').forEach(function(i){i.classList.remove('selected');});img.classList.add('selected');previewEl.src=url;onSelect(url);});
-    containerEl.appendChild(img);
-  });
-}
-function readImageFile(file,cb){var r=new FileReader();r.onload=function(e){cb(e.target.result);};r.readAsDataURL(file);}
-
-// Update ALL avatar occurrences on page
-function updateAllAvatars(newAvatarUrl){
-  document.getElementById('navAvatar').src=newAvatarUrl;
-  document.getElementById('dashAccountAvatar').src=newAvatarUrl;
-  var myCA=document.getElementById('myCommentAvatar');if(myCA)myCA.src=newAvatarUrl;
-  var ep=document.getElementById('editAvatarPreview');if(ep)ep.src=newAvatarUrl;
+async function hashPassword(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
 // ============================================================
-// SCRIPTS DATA (base)
+// LOADING
 // ============================================================
-var DEFAULT_SCRIPTS={
-  'examination-v4':{id:'examination-v4',name:'Examination v4',category:'game',catLabel:'Games',catClass:'cat-game',status:'new',statusLabel:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',gameName:'Examination',gameLink:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',activePlayers:'~600',maturity:'Modérée',scriptFile:'Examination-Main[obf].lua',desc:'Automatise et gère vos examinations avec précision. Détection intelligente des formulaires.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',scriptDisplay:'-- Sentinel Script · Examination v4\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20[obf]"))()'},
-  'ink-game-v7':{id:'ink-game-v7',name:'Ink Game v7',category:'game',catLabel:'Games',catClass:'cat-game',status:'active',statusLabel:'Actif',banner:'https://tr.rbxcdn.com/180DAY-eeb754830041c5f9ddfd168242949f14/768/432/Image/Webp/noFilter',gameName:'Ink Game',gameLink:'https://www.roblox.com/fr/games/99567941238278/Ink-Game',creator:'game i think',activePlayers:'~10 000',maturity:'Moyenne',scriptFile:'InkGame-Main[obf].lua',desc:'Script Ink Game avec ESP, auto-collect et optimisations avancées.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20%5Bobf%5D"))()',scriptDisplay:'-- Sentinel Script · Ink Game v7\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'},
-  'infinite-yield':{id:'infinite-yield',name:'Infinite Yield',category:'util',catLabel:'Utilitaires',catClass:'cat-util',status:'popular',statusLabel:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',gameName:'Roblox (universel)',gameLink:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',activePlayers:null,maturity:null,scriptFile:'infiniteyield.lua',desc:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',scriptDisplay:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'}
-};
+const loadingOverlay = document.getElementById('loadingOverlay');
+function showLoading(){ loadingOverlay.classList.add('show'); }
+function hideLoading(){ loadingOverlay.classList.remove('show'); }
 
-function getScripts(){
-  var stored=Store.get('scripts_db',null);
-  if(!stored){Store.set('scripts_db',DEFAULT_SCRIPTS);return DEFAULT_SCRIPTS;}
-  return stored;
+// ============================================================
+// TOAST
+// ============================================================
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function showToast(msg, color){
+  toastEl.innerHTML = msg;
+  toastEl.style.color = color||'';
+  toastEl.style.background = color ? color+'22' : '';
+  toastEl.style.borderColor = color ? color+'55' : '';
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 2400);
 }
-function saveScripts(db){Store.set('scripts_db',db);}
+
+// ============================================================
+// ESC HTML
+// ============================================================
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // ============================================================
 // I18N
 // ============================================================
-var currentLang=Store.get('lang','fr');
-var L={
+let currentLang = Store.get('lang','fr');
+const L = {
   fr:{navLogin:'Connexion',navSignup:"S'inscrire",navDiscord:'Rejoindre le Discord',heroSub:'Des scripts puissants pour élever votre expérience de jeu. Copiez, collez, dominez.',statScripts:'Scripts',statMembers:'Membres',scrollHint:'Explorer',libLabel:'Bibliothèque',libTitle:'Tous les scripts',searchPlaceholder:'Rechercher un script...',filterAll:'Tous',filterGame:'🎮 Games',filterUtil:'⚡ Utilitaires',copyLabel:'Copier le script',copiedLabel:'✓ Copié !',detailsLabel:'Détails',noResultsTitle:'Aucun script trouvé',noResultsSub:'Essaie un autre terme de recherche.',bannerTitle:'Rejoins la communauté',ownerSub:'Créateur · Sentinel Script',membersLabel:'membres',newOpened:"🆕 Vient d'ouvrir",joinLabel:'Rejoindre',footerText:"Tous droits réservés 2025 · Scripts à usage éducatif uniquement",metaGameName:'Jeu',metaPlayers:'Joueurs actifs',metaCreator:'Créateur',metaMaturity:'Maturité',modalCopyBtn:'⎘ Copier le script',modalCopied:'✓ Copié !',toastCopied:'✓ Script copié dans le presse-papier',toastLike:'👍 Merci pour votre avis !',toastDislike:'👎 Avis enregistré',toastVoteChanged:'🔄 Vote modifié',commentsEmpty:"Aucun commentaire pour l'instant. Sois le premier !",commentsEmptyIcon:'💬',voteLoginMsg:'Connecte-toi pour voter',commentLoginLink:'Connecte-toi',commentSignupLink:'crée un compte',commentPlaceholder:'Laisse un commentaire...',commentPublish:'Publier',langChanged:'🌐 Langue : Français',dashSectionCompte:'Compte',dashSectionAnalytics:'Analytics',dashSectionPrefs:'Préférences',dashSectionLang:'Langue',dashGuestMsg:"Tu n'es pas connecté.",dashLoginBtn:'Se connecter',dashSignupBtn:'Créer un compte',insightsBtnLabel:'Insights',metricViewsLabel:'Vues',metricCopiesLabel:'Copiés',metricLikesLabel:"% J'aime",chartTitleLabel:'Activité (7 derniers jours)',legendViewsLabel:'Vues',legendCopiesLabel:'Copies',appearanceBtnLabel:'Apparence',notifBtnLabel:'Notifications',comingSoonLabel:'Bientôt',themeGroupBasic:'✦ Basic',themeGroupOther:'✦ Autres thèmes',basicDarkName:'Obscur',basicLightName:'Clarté',themeNameMidnight:'Minuit',themeNameNexus:'Nexus',layoutGroupLabel:'✦ Position du dashboard',layoutLabelNormal:'Normale',layoutLabelFull:'Full',editProfileLabel:'Modifier le compte',editProfileTitle:'Modifier le profil',editAvatarLabel:'Avatar',editDisplayNameLabel:"Nom d'affichage",editUsernameLabel:"Nom d'utilisateur",editBioLabel:'Bio',editSaveLabel:'Enregistrer',editUploadLabel:'Importer une image',switchAccountLabel:'Se connecter sur un autre compte',logoutLabel:'Se déconnecter',deleteAccountLabel:'Supprimer le compte',toastWelcomeBack:'👋 Bon retour,',toastAccountCreated:"🎉 Compte créé ! Bienvenue,",toastLoggedOut:'👋 Déconnecté.',toastProfileUpdated:'✅ Profil mis à jour !',toastAccountDeleted:'🗑️ Compte supprimé.',toastVoteLogin:'🔒 Connecte-toi pour voter.',commentLikeLogin:'🔒 Connecte-toi pour liker.',commentPublished:'💬 Commentaire publié !',commentModified:'✏️ Commentaire modifié.',commentDeleted:'🗑️ Commentaire supprimé.',confirmDeleteTitle:'Supprimer ce commentaire ?',confirmDeleteSub:'Cette action est irréversible.',confirmYesLabel:'Supprimer',confirmEditLabel:'Modifier',confirmNoLabel:'Annuler',commentMineTag:'toi',commentEdit:'✏️ Modifier',commentDelete:'🗑️ Supprimer',commentSave:'Enregistrer',commentCancel:'Annuler',fillAllFields:"Remplis tous les champs.",invalidUsername:"Nom d'utilisateur invalide (3-20 caractères, lettres/chiffres/underscore).",passMin8:'Le mot de passe doit faire au moins 8 caractères.',usernameTaken:"Ce nom d'utilisateur est déjà pris.",wrongCredentials:"Nom d'utilisateur ou mot de passe incorrect.",bannedMsg:"Ce compte est banni."},
   en:{navLogin:'Login',navSignup:'Sign Up',navDiscord:'Join Discord',heroSub:'Powerful scripts to elevate your gaming experience. Copy, paste, dominate.',statScripts:'Scripts',statMembers:'Members',scrollHint:'Explore',libLabel:'Library',libTitle:'All scripts',searchPlaceholder:'Search a script...',filterAll:'All',filterGame:'🎮 Games',filterUtil:'⚡ Utilities',copyLabel:'Copy script',copiedLabel:'✓ Copied!',detailsLabel:'Details',noResultsTitle:'No scripts found',noResultsSub:'Try a different search term.',bannerTitle:'Join the community',ownerSub:'Creator · Sentinel Script',membersLabel:'members',newOpened:'🆕 Just opened',joinLabel:'Join',footerText:'All rights reserved 2025 · Scripts for educational use only',metaGameName:'Game',metaPlayers:'Active players',metaCreator:'Creator',metaMaturity:'Maturity',modalCopyBtn:'⎘ Copy script',modalCopied:'✓ Copied!',toastCopied:'✓ Script copied to clipboard',toastLike:'👍 Thanks for your feedback!',toastDislike:'👎 Feedback recorded',toastVoteChanged:'🔄 Vote changed',commentsEmpty:'No comments yet. Be the first!',commentsEmptyIcon:'💬',voteLoginMsg:'Log in to vote',commentLoginLink:'Log in',commentSignupLink:'create an account',commentPlaceholder:'Leave a comment...',commentPublish:'Publish',langChanged:'🌐 Language: English',dashSectionCompte:'Account',dashSectionAnalytics:'Analytics',dashSectionPrefs:'Preferences',dashSectionLang:'Language',dashGuestMsg:"You're not logged in.",dashLoginBtn:'Login',dashSignupBtn:'Create account',insightsBtnLabel:'Insights',metricViewsLabel:'Views',metricCopiesLabel:'Copied',metricLikesLabel:'% Likes',chartTitleLabel:'Activity (last 7 days)',legendViewsLabel:'Views',legendCopiesLabel:'Copies',appearanceBtnLabel:'Appearance',notifBtnLabel:'Notifications',comingSoonLabel:'Soon',themeGroupBasic:'✦ Basic',themeGroupOther:'✦ Other themes',basicDarkName:'Dark',basicLightName:'Light',themeNameMidnight:'Midnight',themeNameNexus:'Nexus',layoutGroupLabel:'✦ Dashboard position',layoutLabelNormal:'Normal',layoutLabelFull:'Full',editProfileLabel:'Edit account',editProfileTitle:'Edit profile',editAvatarLabel:'Avatar',editDisplayNameLabel:'Display name',editUsernameLabel:'Username',editBioLabel:'Bio',editSaveLabel:'Save',editUploadLabel:'Upload image',switchAccountLabel:'Switch account',logoutLabel:'Log out',deleteAccountLabel:'Delete account',toastWelcomeBack:'👋 Welcome back,',toastAccountCreated:'🎉 Account created! Welcome,',toastLoggedOut:'👋 Logged out.',toastProfileUpdated:'✅ Profile updated!',toastAccountDeleted:'🗑️ Account deleted.',toastVoteLogin:'🔒 Log in to vote.',commentLikeLogin:'🔒 Log in to like.',commentPublished:'💬 Comment published!',commentModified:'✏️ Comment edited.',commentDeleted:'🗑️ Comment deleted.',confirmDeleteTitle:'Delete this comment?',confirmDeleteSub:'This action is irreversible.',confirmYesLabel:'Delete',confirmEditLabel:'Edit',confirmNoLabel:'Cancel',commentMineTag:'you',commentEdit:'✏️ Edit',commentDelete:'🗑️ Delete',commentSave:'Save',commentCancel:'Cancel',fillAllFields:'Please fill all fields.',invalidUsername:'Invalid username (3-20 chars, letters/digits/underscore).',passMin8:'Password must be at least 8 characters.',usernameTaken:'This username is already taken.',wrongCredentials:'Incorrect username or password.',bannedMsg:'This account is banned.'}
 };
-function t(k){return(L[currentLang]&&L[currentLang][k]!==undefined)?L[currentLang][k]:(L['fr'][k]!==undefined?L['fr'][k]:k);}
-function setTxt(id,txt){var el=document.getElementById(id);if(el)el.textContent=txt;}
+function t(k){ return (L[currentLang]?.[k]) ?? (L['fr'][k] ?? k); }
+function setTxt(id, txt){ const el=document.getElementById(id); if(el) el.textContent=txt; }
 
 function applyTranslations(){
-  setTxt('navLoginBtn',t('navLogin'));setTxt('navSignupBtn',t('navSignup'));setTxt('navDiscordLabel',t('navDiscord'));
-  setTxt('heroSub',t('heroSub'));setTxt('statScripts',t('statScripts'));setTxt('statMembers',t('statMembers'));setTxt('scrollHintLabel',t('scrollHint'));
-  setTxt('libLabel',t('libLabel'));setTxt('libTitle',t('libTitle'));
-  var si=document.getElementById('searchInput');if(si)si.placeholder=t('searchPlaceholder');
-  setTxt('filterAll',t('filterAll'));setTxt('filterGame',t('filterGame'));setTxt('filterUtil',t('filterUtil'));
-  setTxt('nfsAll',t('filterAll'));setTxt('nfsGame',t('filterGame'));setTxt('nfsUtil',t('filterUtil'));
-  document.querySelectorAll('.copy-label').forEach(function(el){el.textContent=t('copyLabel');});
-  document.querySelectorAll('.details-label').forEach(function(el){el.textContent=t('detailsLabel');});
-  setTxt('noResultsTitle',t('noResultsTitle'));setTxt('noResultsSub',t('noResultsSub'));
-  setTxt('bannerTitle',t('bannerTitle'));
-  var bd=document.getElementById('bannerDescEl');if(bd)bd.innerHTML=t('bannerDesc')||('Accède aux scripts en exclusivité, reçois les mises à jour en premier. Contacte <strong style="color:var(--purple-light)">@x4tmq</strong>.');
-  setTxt('ownerSubLabel',t('ownerSub'));setTxt('membersLabel',t('membersLabel'));setTxt('newOpenedBadge',t('newOpened'));setTxt('joinLabel',t('joinLabel'));setTxt('footerText',t('footerText'));
-  setTxt('dashSectionCompte',t('dashSectionCompte'));setTxt('dashSectionAnalytics',t('dashSectionAnalytics'));setTxt('dashSectionPrefs',t('dashSectionPrefs'));setTxt('dashSectionLang',t('dashSectionLang'));
-  setTxt('dashGuestMsg',t('dashGuestMsg'));setTxt('dashLoginBtn',t('dashLoginBtn'));setTxt('dashSignupBtn',t('dashSignupBtn'));
-  setTxt('insightsBtnLabel',t('insightsBtnLabel'));setTxt('metricViewsLabel',t('metricViewsLabel'));setTxt('metricCopiesLabel',t('metricCopiesLabel'));setTxt('metricLikesLabel',t('metricLikesLabel'));
-  setTxt('chartTitleLabel',t('chartTitleLabel'));setTxt('legendViewsLabel',t('legendViewsLabel'));setTxt('legendCopiesLabel',t('legendCopiesLabel'));
-  setTxt('appearanceBtnLabel',t('appearanceBtnLabel'));setTxt('notifBtnLabel',t('notifBtnLabel'));setTxt('comingSoonLabel',t('comingSoonLabel'));
-  setTxt('themeGroupBasic',t('themeGroupBasic'));setTxt('themeGroupOther',t('themeGroupOther'));
-  setTxt('basicDarkName',t('basicDarkName'));setTxt('basicLightName',t('basicLightName'));
-  setTxt('themeNameMidnight',t('themeNameMidnight'));setTxt('themeNameNexus',t('themeNameNexus'));
-  setTxt('layoutGroupLabel',t('layoutGroupLabel'));setTxt('layoutLabelNormal',t('layoutLabelNormal'));setTxt('layoutLabelFull',t('layoutLabelFull'));
-  setTxt('editProfileLabel',t('editProfileLabel'));setTxt('editProfileTitle',t('editProfileTitle'));
-  setTxt('editAvatarLabel',t('editAvatarLabel'));setTxt('editDisplayNameLabel',t('editDisplayNameLabel'));setTxt('editUsernameLabel',t('editUsernameLabel'));setTxt('editBioLabel',t('editBioLabel'));
-  setTxt('editSaveLabel',t('editSaveLabel'));setTxt('editUploadLabel',t('editUploadLabel'));
-  setTxt('switchAccountLabel',t('switchAccountLabel'));setTxt('logoutLabel',t('logoutLabel'));setTxt('deleteAccountLabel',t('deleteAccountLabel'));
-  var ct=document.getElementById('commentTextarea');if(ct)ct.placeholder=t('commentPlaceholder');
-  var cs=document.getElementById('commentSubmit');if(cs)cs.textContent=t('commentPublish');
-  var cl=document.getElementById('commentLoginLink');if(cl)cl.textContent=t('commentLoginLink');
-  var csl=document.getElementById('commentSignupLink');if(csl)csl.textContent=t('commentSignupLink');
-  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.dataset.lang===currentLang);});
+  setTxt('navLoginBtn',t('navLogin')); setTxt('navSignupBtn',t('navSignup')); setTxt('navDiscordLabel',t('navDiscord'));
+  setTxt('heroSub',t('heroSub')); setTxt('statScripts',t('statScripts')); setTxt('statMembers',t('statMembers')); setTxt('scrollHintLabel',t('scrollHint'));
+  setTxt('libLabel',t('libLabel')); setTxt('libTitle',t('libTitle'));
+  const si=document.getElementById('searchInput'); if(si) si.placeholder=t('searchPlaceholder');
+  setTxt('filterAll',t('filterAll')); setTxt('filterGame',t('filterGame')); setTxt('filterUtil',t('filterUtil'));
+  setTxt('nfsAll',t('filterAll')); setTxt('nfsGame',t('filterGame')); setTxt('nfsUtil',t('filterUtil'));
+  document.querySelectorAll('.copy-label').forEach(el=>el.textContent=t('copyLabel'));
+  document.querySelectorAll('.details-label').forEach(el=>el.textContent=t('detailsLabel'));
+  setTxt('noResultsTitle',t('noResultsTitle')); setTxt('noResultsSub',t('noResultsSub'));
+  setTxt('bannerTitle',t('bannerTitle')); setTxt('ownerSubLabel',t('ownerSub'));
+  setTxt('membersLabel',t('membersLabel')); setTxt('newOpenedBadge',t('newOpened'));
+  setTxt('joinLabel',t('joinLabel')); setTxt('footerText',t('footerText'));
+  setTxt('dashSectionCompte',t('dashSectionCompte')); setTxt('dashSectionAnalytics',t('dashSectionAnalytics'));
+  setTxt('dashSectionPrefs',t('dashSectionPrefs')); setTxt('dashSectionLang',t('dashSectionLang'));
+  setTxt('dashGuestMsg',t('dashGuestMsg')); setTxt('dashLoginBtn',t('dashLoginBtn')); setTxt('dashSignupBtn',t('dashSignupBtn'));
+  setTxt('insightsBtnLabel',t('insightsBtnLabel')); setTxt('metricViewsLabel',t('metricViewsLabel'));
+  setTxt('metricCopiesLabel',t('metricCopiesLabel')); setTxt('metricLikesLabel',t('metricLikesLabel'));
+  setTxt('chartTitleLabel',t('chartTitleLabel')); setTxt('legendViewsLabel',t('legendViewsLabel')); setTxt('legendCopiesLabel',t('legendCopiesLabel'));
+  setTxt('appearanceBtnLabel',t('appearanceBtnLabel')); setTxt('notifBtnLabel',t('notifBtnLabel')); setTxt('comingSoonLabel',t('comingSoonLabel'));
+  setTxt('themeGroupBasic',t('themeGroupBasic')); setTxt('themeGroupOther',t('themeGroupOther'));
+  setTxt('basicDarkName',t('basicDarkName')); setTxt('basicLightName',t('basicLightName'));
+  setTxt('themeNameMidnight',t('themeNameMidnight')); setTxt('themeNameNexus',t('themeNameNexus'));
+  setTxt('layoutGroupLabel',t('layoutGroupLabel')); setTxt('layoutLabelNormal',t('layoutLabelNormal')); setTxt('layoutLabelFull',t('layoutLabelFull'));
+  setTxt('editProfileLabel',t('editProfileLabel')); setTxt('editProfileTitle',t('editProfileTitle'));
+  setTxt('editAvatarLabel',t('editAvatarLabel')); setTxt('editDisplayNameLabel',t('editDisplayNameLabel'));
+  setTxt('editUsernameLabel',t('editUsernameLabel')); setTxt('editBioLabel',t('editBioLabel'));
+  setTxt('editSaveLabel',t('editSaveLabel')); setTxt('editUploadLabel',t('editUploadLabel'));
+  setTxt('switchAccountLabel',t('switchAccountLabel')); setTxt('logoutLabel',t('logoutLabel')); setTxt('deleteAccountLabel',t('deleteAccountLabel'));
+  const ct=document.getElementById('commentTextarea'); if(ct) ct.placeholder=t('commentPlaceholder');
+  const cs=document.getElementById('commentSubmit'); if(cs) cs.textContent=t('commentPublish');
+  const cl=document.getElementById('commentLoginLink'); if(cl) cl.textContent=t('commentLoginLink');
+  const csl=document.getElementById('commentSignupLink'); if(csl) csl.textContent=t('commentSignupLink');
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===currentLang));
   updateVoteUI();
 }
+
+// ============================================================
+// SUPABASE — USERS
+// ============================================================
+async function sbUserExists(username){
+  const { data } = await sb.from('users').select('id').eq('username', username.toLowerCase()).maybeSingle();
+  return !!data;
+}
+async function sbCreateUser(username, password, avatar){
+  const hash = await hashPassword(password);
+  const { data, error } = await sb.from('users').insert({
+    username: username.toLowerCase(),
+    display_name: username,
+    password_hash: hash,
+    avatar: avatar || AVATAR_OPTIONS[0],
+    bio: '',
+    role: username.toLowerCase()===OWNER_USERNAME.toLowerCase()?'owner':'member'
+  }).select().single();
+  if(error) throw error;
+  return data;
+}
+async function sbVerifyUser(username, password){
+  const hash = await hashPassword(password);
+  const { data, error } = await sb.from('users').select('*').eq('username', username.toLowerCase()).eq('password_hash', hash).maybeSingle();
+  if(error) throw error;
+  return data;
+}
+async function sbGetUser(username){
+  const { data } = await sb.from('users').select('*').eq('username', username.toLowerCase()).maybeSingle();
+  return data;
+}
+async function sbUpdateUser(username, fields){
+  const { data, error } = await sb.from('users').update(fields).eq('username', username.toLowerCase()).select().single();
+  if(error) throw error;
+  return data;
+}
+async function sbDeleteUser(username){
+  await sb.from('users').delete().eq('username', username.toLowerCase());
+}
+async function sbGetAllUsers(q){
+  let query = sb.from('users').select('*').order('created_at', {ascending:false});
+  if(q) query = query.ilike('username', `%${q}%`);
+  const { data } = await query;
+  return data || [];
+}
+async function sbCountUsers(){
+  const { count } = await sb.from('users').select('*', {count:'exact', head:true});
+  return count || 0;
+}
+
+// ============================================================
+// SUPABASE — SCRIPTS
+// ============================================================
+let scriptsCache = [];
+
+async function sbLoadScripts(){
+  const { data } = await sb.from('scripts').select('*').order('created_at', {ascending:true});
+  scriptsCache = data || [];
+  // Si vide, insérer les scripts par défaut
+  if(scriptsCache.length === 0){
+    await sbInsertDefaultScripts();
+    const { data: d2 } = await sb.from('scripts').select('*').order('created_at');
+    scriptsCache = d2 || [];
+  }
+  return scriptsCache;
+}
+async function sbInsertDefaultScripts(){
+  const defaults = [
+    {id:'examination-v4',name:'Examination v4',category:'game',status:'new',status_label:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',game_name:'Examination',game_link:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',active_players:'~600',maturity:'Modérée',script_file:'Examination-Main[obf].lua',description:'Automatise et gère vos examinations avec précision. Détection intelligente des formulaires.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Examination v4\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20[obf]"))()'},
+    {id:'ink-game-v7',name:'Ink Game v7',category:'game',status:'active',status_label:'Actif',banner:'https://tr.rbxcdn.com/180DAY-eeb754830041c5f9ddfd168242949f14/768/432/Image/Webp/noFilter',game_name:'Ink Game',game_link:'https://www.roblox.com/fr/games/99567941238278/Ink-Game',creator:'game i think',active_players:'~10 000',maturity:'Moyenne',script_file:'InkGame-Main[obf].lua',description:'Script Ink Game avec ESP, auto-collect et optimisations avancées.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Ink Game v7\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'},
+    {id:'infinite-yield',name:'Infinite Yield',category:'util',status:'popular',status_label:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',game_name:'Roblox (universel)',game_link:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',active_players:null,maturity:null,script_file:'infiniteyield.lua',description:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',script_display:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'}
+  ];
+  for(const s of defaults){
+    await sb.from('scripts').upsert(s);
+  }
+}
+async function sbAddScript(data){
+  const { error } = await sb.from('scripts').insert(data);
+  if(error) throw error;
+}
+async function sbDeleteScript(id){
+  await sb.from('scripts').delete().eq('id', id);
+}
+
+// ============================================================
+// SUPABASE — VOTES
+// ============================================================
+async function sbGetVotes(scriptId){
+  const { data } = await sb.from('votes').select('*').eq('script_id', scriptId);
+  return data || [];
+}
+async function sbGetAllVotesCounts(){
+  const { data } = await sb.from('votes').select('script_id, vote_type');
+  const counts = {};
+  for(const v of (data||[])){
+    if(!counts[v.script_id]) counts[v.script_id] = {like:0, dislike:0};
+    counts[v.script_id][v.vote_type] = (counts[v.script_id][v.vote_type]||0)+1;
+  }
+  return counts;
+}
+async function sbGetUserVotes(username){
+  const { data } = await sb.from('votes').select('*').eq('username', username.toLowerCase());
+  const map = {};
+  for(const v of (data||[])) map[v.script_id] = v.vote_type;
+  return map;
+}
+async function sbSetVote(scriptId, username, voteType){
+  const uname = username.toLowerCase();
+  const { data: existing } = await sb.from('votes').select('*').eq('script_id', scriptId).eq('username', uname).maybeSingle();
+  if(existing){
+    if(existing.vote_type === voteType){
+      await sb.from('votes').delete().eq('id', existing.id);
+      return null; // toggled off
+    } else {
+      await sb.from('votes').update({vote_type: voteType}).eq('id', existing.id);
+      return voteType;
+    }
+  } else {
+    await sb.from('votes').insert({script_id: scriptId, username: uname, vote_type: voteType});
+    return voteType;
+  }
+}
+
+// vote data cache
+let voteCounts = {}; // {scriptId: {like:N, dislike:N}}
+let userVotes = {};  // {scriptId: 'like'|'dislike'}
+
+async function loadVotesCache(){
+  voteCounts = await sbGetAllVotesCounts();
+  if(currentUser) userVotes = await sbGetUserVotes(currentUser.username);
+  else userVotes = {};
+}
+
+// ============================================================
+// SUPABASE — COMMENTS
+// ============================================================
+async function sbGetComments(scriptId){
+  const { data } = await sb.from('comments').select('*').eq('script_id', scriptId).order('created_at', {ascending:true});
+  return data || [];
+}
+async function sbAddComment(scriptId, obj){
+  const { data, error } = await sb.from('comments').insert({
+    script_id: scriptId,
+    author_username: obj.author_username,
+    pseudo: obj.pseudo,
+    avatar: obj.avatar,
+    text: obj.text,
+    likes: 0,
+    liked_by: []
+  }).select().single();
+  if(error) throw error;
+  return data;
+}
+async function sbUpdateComment(id, fields){
+  const { error } = await sb.from('comments').update(fields).eq('id', id);
+  if(error) throw error;
+}
+async function sbDeleteComment(id){
+  await sb.from('comments').delete().eq('id', id);
+}
+
+// ============================================================
+// SUPABASE — ANALYTICS
+// ============================================================
+async function sbGetAnalytics(){
+  const { data } = await sb.from('analytics').select('*').eq('id','global').maybeSingle();
+  return data || {views:0, copies:0, history:[]};
+}
+async function sbIncrementAnalytic(field){
+  const curr = await sbGetAnalytics();
+  const today = new Date().toLocaleDateString('fr');
+  const history = Array.isArray(curr.history) ? [...curr.history] : [];
+  const idx = history.findIndex(h=>h.date===today);
+  if(idx>=0) history[idx][field] = (history[idx][field]||0)+1;
+  else { const e={date:today,views:0,copies:0}; e[field]+=1; history.push(e); }
+  await sb.from('analytics').update({[field]: (curr[field]||0)+1, history}).eq('id','global');
+}
+
+// ============================================================
+// AVATAR PICKER
+// ============================================================
+function buildAvatarPicker(containerEl, previewEl, selectedUrl, onSelect){
+  containerEl.innerHTML = '';
+  AVATAR_OPTIONS.forEach(url=>{
+    const img = document.createElement('img');
+    img.src = url; img.className = 'avatar-opt'+(url===selectedUrl?' selected':'');
+    img.addEventListener('click',()=>{
+      containerEl.querySelectorAll('img').forEach(i=>i.classList.remove('selected'));
+      img.classList.add('selected'); previewEl.src = url; onSelect(url);
+    });
+    containerEl.appendChild(img);
+  });
+}
+function readImageFile(file, cb){
+  const r = new FileReader(); r.onload = e=>cb(e.target.result); r.readAsDataURL(file);
+}
+
+// ============================================================
+// CURSOR
+// ============================================================
+const cursorDot=document.getElementById('cursor'), cursorRing=document.getElementById('cursorRing'), cursorLight=document.getElementById('cursorLight');
+let mx=window.innerWidth/2, my=window.innerHeight/2, rx=mx, ry=my;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+(function loop(){ cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; cursorLight.style.left=mx+'px'; cursorLight.style.top=my+'px'; rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; requestAnimationFrame(loop); })();
+
+// ============================================================
+// CARD HOVER
+// ============================================================
+function initCardHover(){
+  document.querySelectorAll('.card').forEach(card=>{
+    let rafId;
+    card.addEventListener('mousemove', e=>{
+      const r=card.getBoundingClientRect(), relX=e.clientX-r.left, relY=e.clientY-r.top;
+      const tiltX=((relY-r.height/2)/r.height)*5, tiltY=-((relX-r.width/2)/r.width)*5;
+      card.style.setProperty('--mx',(relX/r.width*100).toFixed(1)+'%');
+      card.style.setProperty('--my',(relY/r.height*100).toFixed(1)+'%');
+      if(rafId) cancelAnimationFrame(rafId);
+      rafId=requestAnimationFrame(()=>card.style.transform=`perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px) scale(1.015)`);
+    });
+    card.addEventListener('mouseleave',()=>{ if(rafId) cancelAnimationFrame(rafId); card.style.transform=''; });
+  });
+}
+
+// ============================================================
+// STARFIELD
+// ============================================================
+const starCanvas=document.getElementById('starfield'), starCtx=starCanvas.getContext('2d');
+let stars=[], starRAF=null, starActive=false;
+function initStars(){ stars=[]; starCanvas.width=window.innerWidth; starCanvas.height=window.innerHeight; for(let i=0;i<260;i++) stars.push({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.6+0.3,speed:Math.random()*0.4+0.1,op:Math.random()*0.6+0.2}); }
+function drawStarFrame(){ starCtx.clearRect(0,0,starCanvas.width,starCanvas.height); for(const s of stars){ s.y-=s.speed; if(s.y<-2){s.y=starCanvas.height+2;s.x=Math.random()*starCanvas.width;} starCtx.beginPath(); starCtx.arc(s.x,s.y,s.r,0,Math.PI*2); starCtx.fillStyle=`rgba(210,215,255,${s.op})`; starCtx.fill(); } starRAF=requestAnimationFrame(drawStarFrame); }
+function startStarfield(){ if(starActive) return; starActive=true; initStars(); starRAF=requestAnimationFrame(drawStarFrame); }
+function stopStarfield(){ if(!starActive) return; starActive=false; if(starRAF) cancelAnimationFrame(starRAF); starRAF=null; starCtx.clearRect(0,0,starCanvas.width,starCanvas.height); }
+window.addEventListener('resize',()=>{ if(!starActive) return; starCanvas.width=window.innerWidth; starCanvas.height=window.innerHeight; initStars(); });
+
+// ============================================================
+// THEME
+// ============================================================
+let currentTheme = Store.get('theme','dark');
+function applyTheme(theme){
+  const hasFullLayout = document.body.classList.contains('layout-full');
+  document.body.className = 'theme-'+theme+(hasFullLayout?' layout-full':'');
+  currentTheme=theme; Store.set('theme',theme);
+  updateBasicSplitUI();
+  document.querySelectorAll('.theme-option').forEach(opt=>opt.classList.toggle('selected', opt.dataset.theme===theme));
+  const bs=document.getElementById('basicSplitBtn'); if(bs) bs.classList.toggle('selected', theme==='dark'||theme==='light');
+  if(theme==='midnight') startStarfield(); else stopStarfield();
+}
+function updateBasicSplitUI(){
+  const dd=document.getElementById('basicDotDark'), dl=document.getElementById('basicDotLight');
+  if(!dd||!dl) return;
+  dd.classList.toggle('active-dot', currentTheme==='dark');
+  dl.classList.toggle('active-dot', currentTheme==='light');
+}
+document.getElementById('basicSplitBtn').addEventListener('click', function(e){
+  const rect=this.getBoundingClientRect();
+  applyTheme(e.clientX-rect.left < rect.width/2 ? 'dark' : 'light');
+});
+document.querySelectorAll('.theme-option').forEach(opt=>opt.addEventListener('click',()=>applyTheme(opt.dataset.theme)));
+applyTheme(currentTheme);
+
+// ============================================================
+// LAYOUT
+// ============================================================
+let currentLayout = Store.get('layout','normal');
+function applyLayout(layout){
+  currentLayout=layout; Store.set('layout',layout);
+  document.body.classList.toggle('layout-full', layout==='full');
+  document.querySelectorAll('.layout-opt').forEach(opt=>opt.classList.toggle('selected', opt.dataset.layout===layout));
+}
+document.querySelectorAll('.layout-opt').forEach(opt=>opt.addEventListener('click',()=>applyLayout(opt.dataset.layout)));
+applyLayout(currentLayout);
 
 // ============================================================
 // RENDER CARDS
 // ============================================================
 function getStatusDot(status){
-  if(status==='new')return '<div class="status-dot status-new"></div>';
-  if(status==='popular')return '<div class="status-dot status-active" style="background:#F59E0B;box-shadow:0 0 6px #F59E0B;"></div>';
+  if(status==='new') return '<div class="status-dot status-new"></div>';
+  if(status==='popular') return '<div class="status-dot status-active" style="background:#F59E0B;box-shadow:0 0 6px #F59E0B;"></div>';
   return '<div class="status-dot status-active"></div>';
-}
-function getStatusLabel(status,label){
-  if(label)return label;
-  if(status==='new')return 'Nouveau';
-  if(status==='popular')return 'Populaire';
-  return 'Actif';
 }
 
 function renderAllCards(){
-  var grid=document.getElementById('cardsGrid');
-  var noRes=document.getElementById('noResults');
-  grid.innerHTML='';
-  grid.appendChild(noRes);
-  var scripts=getScripts();
-  Object.values(scripts).forEach(function(data){
-    var card=buildCard(data);
-    grid.insertBefore(card,noRes);
-  });
+  const grid = document.getElementById('cardsGrid');
+  const noRes = document.getElementById('noResults');
+  grid.innerHTML=''; grid.appendChild(noRes);
+  for(const data of scriptsCache){
+    const card = buildCard(data);
+    grid.insertBefore(card, noRes);
+  }
   updateStatCount();
   initCardHover();
   applyFiltersAndSearch();
@@ -1236,445 +1390,523 @@ function renderAllCards(){
 }
 
 function buildCard(data){
-  var card=document.createElement('div');
-  card.className='card card-appear';
-  card.dataset.category=data.category||'game';
-  card.dataset.scriptId=data.id;
-  var catClass=data.category==='util'?'cat-util':'cat-game';
-  var catLabel=data.category==='util'?'Utilitaires':'Games';
-  var statusLabel=getStatusLabel(data.status,data.statusLabel);
-  card.innerHTML=
-    '<div class="card-top"><div class="card-info"><span class="card-category '+catClass+'">'+catLabel+'</span><div class="card-name">'+escHtml(data.name)+'</div></div><div class="card-status">'+getStatusDot(data.status)+escHtml(statusLabel)+'</div></div>'+
-    '<p class="card-desc">'+escHtml(data.desc||'')+'</p>'+
-    '<div class="script-block"><div class="script-header"><div class="script-dot d-red"></div><div class="script-dot d-yellow"></div><div class="script-dot d-green"></div><span class="script-label">'+escHtml(data.scriptFile||'script.lua')+'</span></div><div class="script-content"><span class="cm">-- Sentinel Script · '+escHtml(data.name)+'</span>\n<span class="fn">loadstring</span>(<span class="fn">game</span>:<span class="fn">HttpGet</span>(<span class="str">"'+escHtml((data.script||'').replace(/loadstring\(game:HttpGet\("([^"]+)"\)\)\(\)/,'$1'))+'</span>))()</div></div>'+
-    '<div class="card-actions">'+
-      '<button class="vote-btn like-btn" data-script="'+data.id+'" data-type="like">👍 <span class="vote-count">0</span></button>'+
-      '<button class="vote-btn dislike-btn" data-script="'+data.id+'" data-type="dislike">👎 <span class="vote-count">0</span></button>'+
-      '<span class="vote-lock-msg" id="vote-lock-'+data.id+'" style="display:none"></span>'+
-    '</div>'+
-    '<div class="card-bottom-row">'+
-      '<button class="copy-btn" data-script="'+escHtml(data.script||'')+'"><span>⎘</span> <span class="copy-label">Copier le script</span></button>'+
-      '<button class="details-btn" data-script-id="'+data.id+'"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span class="details-label">Détails</span></button>'+
-    '</div>';
-
-  card.querySelector('.copy-btn').addEventListener('click',function(e){copyScript(data.script,e.currentTarget);});
-  card.querySelector('.details-btn').addEventListener('click',function(){openModal(data.id);});
-  card.querySelectorAll('.vote-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){handleVote(data.id,btn.dataset.type);});
-  });
+  const card = document.createElement('div');
+  card.className = 'card card-appear';
+  card.dataset.category = data.category||'game';
+  card.dataset.scriptId = data.id;
+  const catClass = data.category==='util'?'cat-util':'cat-game';
+  const catLabel = data.category==='util'?'Utilitaires':'Games';
+  const statusLabel = data.status_label || (data.status==='new'?'Nouveau':data.status==='popular'?'Populaire':'Actif');
+  const votes = voteCounts[data.id]||{like:0,dislike:0};
+  const myVote = userVotes[data.id]||null;
+  card.innerHTML=`
+    <div class="card-top">
+      <div class="card-info"><span class="card-category ${catClass}">${catLabel}</span><div class="card-name">${escHtml(data.name)}</div></div>
+      <div class="card-status">${getStatusDot(data.status)}${escHtml(statusLabel)}</div>
+    </div>
+    <p class="card-desc">${escHtml(data.description||'')}</p>
+    <div class="script-block">
+      <div class="script-header"><div class="script-dot d-red"></div><div class="script-dot d-yellow"></div><div class="script-dot d-green"></div><span class="script-label">${escHtml(data.script_file||'script.lua')}</span></div>
+      <div class="script-content">${escHtml(data.script_display||data.script||'')}</div>
+    </div>
+    <div class="card-actions">
+      <button class="vote-btn like-btn${myVote==='like'?' liked':''}" data-script="${data.id}" data-type="like">👍 <span class="vote-count">${votes.like||0}</span></button>
+      <button class="vote-btn dislike-btn${myVote==='dislike'?' disliked':''}" data-script="${data.id}" data-type="dislike">👎 <span class="vote-count">${votes.dislike||0}</span></button>
+      <span class="vote-lock-msg" id="vote-lock-${data.id}" style="display:${isLoggedIn()?'none':'inline'}">${t('voteLoginMsg')}</span>
+    </div>
+    <div class="card-bottom-row">
+      <button class="copy-btn"><span>⎘</span> <span class="copy-label">${t('copyLabel')}</span></button>
+      <button class="details-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span class="details-label">${t('detailsLabel')}</span></button>
+    </div>`;
+  card.querySelector('.copy-btn').addEventListener('click', e=>copyScript(data.script, e.currentTarget));
+  card.querySelector('.details-btn').addEventListener('click', ()=>openModal(data.id));
+  card.querySelectorAll('.vote-btn').forEach(btn=>btn.addEventListener('click', ()=>handleVote(data.id, btn.dataset.type)));
   return card;
 }
 
 function updateStatCount(){
-  var c=Object.keys(getScripts()).length;
-  var el=document.getElementById('statScriptCount');if(el)el.textContent=c;
-  var badge=document.getElementById('heroBadge');
-  if(badge)badge.textContent='2.0 — '+c+' script'+(c>1?'s':'')+' disponible'+(c>1?'s':'');
+  const c = scriptsCache.length;
+  setTxt('statScriptCount', c);
+  const badge = document.getElementById('heroBadge');
+  if(badge) badge.textContent = `2.0 — ${c} script${c>1?'s':''} disponible${c>1?'s':''}`;
 }
 
 // ============================================================
-// VOTES
+// VOTES UI
 // ============================================================
-function getVotes(){return Store.get('votes_v2',{});}
-function saveVotes(v){Store.set('votes_v2',v);}
-function getUserVoteForScript(sid){
-  if(!isLoggedIn())return null;
-  var v=getVotes();if(!v[sid])return null;
-  return(v[sid].userVotes||{})[currentUser.username.toLowerCase()]||null;
-}
-function initVoteCounts(){
-  var v=getVotes();
-  document.querySelectorAll('.vote-btn').forEach(function(btn){
-    var sid=btn.dataset.script,type=btn.dataset.type;
-    if(!v[sid])v[sid]={like:0,dislike:0,userVotes:{}};
-    btn.querySelector('.vote-count').textContent=v[sid][type]||0;
-  });
-}
 function updateVoteUI(){
-  var v=getVotes();
-  document.querySelectorAll('.vote-btn').forEach(function(btn){
-    var sid=btn.dataset.script,type=btn.dataset.type;
-    if(!v[sid])v[sid]={like:0,dislike:0,userVotes:{}};
-    btn.querySelector('.vote-count').textContent=v[sid][type]||0;
-    var loggedIn=isLoggedIn();
-    btn.classList.toggle('locked',!loggedIn);btn.classList.remove('liked','disliked');
-    if(loggedIn){var myVote=getUserVoteForScript(sid);if(myVote==='like')btn.classList.toggle('liked',type==='like');if(myVote==='dislike')btn.classList.toggle('disliked',type==='dislike');}
-  });
-  document.querySelectorAll('.vote-lock-msg').forEach(function(el){el.style.display=!isLoggedIn()?'inline':'none';if(!isLoggedIn())el.textContent=t('voteLoginMsg');});
-}
-function handleVote(sid,type){
-  if(!isLoggedIn()){showToast(t('toastVoteLogin'),'#F87171');openAuth('login');return;}
-  var v=getVotes();
-  if(!v[sid])v[sid]={like:0,dislike:0,userVotes:{}};if(!v[sid].userVotes)v[sid].userVotes={};
-  var ukey=currentUser.username.toLowerCase(),prev=v[sid].userVotes[ukey]||null;
-  if(prev===type){v[sid][type]=Math.max(0,(v[sid][type]||0)-1);delete v[sid].userVotes[ukey];}
-  else{if(prev){v[sid][prev]=Math.max(0,(v[sid][prev]||0)-1);showToast(t('toastVoteChanged'),'#A78BFA');}else{showToast(type==='like'?t('toastLike'):t('toastDislike'),type==='like'?'#34D399':'#F87171');}v[sid][type]=(v[sid][type]||0)+1;v[sid].userVotes[ukey]=type;}
-  saveVotes(v);updateVoteUI();updateMetrics();
-}
-
-// ============================================================
-// AUTH UI
-// ============================================================
-function updateAuthUI(){
-  var loggedIn=isLoggedIn(),u=currentUser;
-  document.getElementById('navAuthBtns').style.display=loggedIn?'none':'flex';
-  document.getElementById('navUserPill').classList.toggle('visible',loggedIn);
-  if(loggedIn&&u){
-    var av=u.avatar||AVATAR_OPTIONS[0];
-    document.getElementById('navAvatar').src=av;
-    document.getElementById('navUsername').textContent=u.displayName||u.username;
-    document.getElementById('dashAccountAvatar').src=av;
-    var dnEl=document.getElementById('dashAccountName');
-    dnEl.innerHTML=escHtml(u.displayName||u.username)+(isCertified(u.username)?certifiedSVG():'');
-    if(isAdmin(u.username)){
-      var adminTag=document.createElement('span');adminTag.className='comment-admin-tag';adminTag.textContent='Admin';adminTag.style.marginLeft='0.3rem';
-      dnEl.appendChild(adminTag);
+  const loggedIn = isLoggedIn();
+  document.querySelectorAll('.vote-btn').forEach(btn=>{
+    const sid=btn.dataset.script, type=btn.dataset.type;
+    const counts = voteCounts[sid]||{like:0,dislike:0};
+    const vc = btn.querySelector('.vote-count');
+    if(vc) vc.textContent = counts[type]||0;
+    btn.classList.toggle('locked', !loggedIn);
+    btn.classList.remove('liked','disliked');
+    if(loggedIn){
+      const mv = userVotes[sid];
+      if(mv==='like') btn.classList.toggle('liked', type==='like');
+      if(mv==='dislike') btn.classList.toggle('disliked', type==='dislike');
     }
-    document.getElementById('dashAccountUsername').textContent='@'+u.username;
-    document.getElementById('dashAccountBio').textContent=u.bio||'';
-    var adminBtn=document.getElementById('openAdminBtn');
-    if(adminBtn)adminBtn.style.display=isAdmin(u.username)?'flex':'none';
-  }
-  document.getElementById('dashAccountLogged').style.display=loggedIn?'block':'none';
-  document.getElementById('dashAccountGuest').style.display=loggedIn?'none':'block';
-  updateVoteUI();updateCommentUI();
-}
-function updateCommentUI(){
-  var loggedIn=isLoggedIn();
-  var form=document.getElementById('commentForm'),notice=document.getElementById('commentLockedNotice');
-  if(form)form.classList.toggle('hidden',!loggedIn);
-  if(notice)notice.classList.toggle('visible',!loggedIn);
-  if(loggedIn&&currentUser){var av=document.getElementById('myCommentAvatar');if(av)av.src=currentUser.avatar||AVATAR_OPTIONS[0];}
-}
-
-// ============================================================
-// CURSOR
-// ============================================================
-var cursorDot=document.getElementById('cursor'),cursorRing=document.getElementById('cursorRing'),cursorLight=document.getElementById('cursorLight');
-var mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
-document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;});
-(function loop(){cursorDot.style.left=mx+'px';cursorDot.style.top=my+'px';cursorLight.style.left=mx+'px';cursorLight.style.top=my+'px';rx+=(mx-rx)*0.14;ry+=(my-ry)*0.14;cursorRing.style.left=rx+'px';cursorRing.style.top=ry+'px';requestAnimationFrame(loop);})();
-
-// CARD HOVER
-function initCardHover(){
-  document.querySelectorAll('.card').forEach(function(card){
-    var rafId;
-    card.addEventListener('mouseenter',function(){});
-    card.addEventListener('mousemove',function(e){
-      var boundingRect=card.getBoundingClientRect();
-      var relX=e.clientX-boundingRect.left,relY=e.clientY-boundingRect.top;
-      var tiltX=((relY-boundingRect.height/2)/boundingRect.height)*5;
-      var tiltY=-((relX-boundingRect.width/2)/boundingRect.width)*5;
-      card.style.setProperty('--mx',(relX/boundingRect.width*100).toFixed(1)+'%');
-      card.style.setProperty('--my',(relY/boundingRect.height*100).toFixed(1)+'%');
-      if(rafId)cancelAnimationFrame(rafId);
-      rafId=requestAnimationFrame(function(){card.style.transform='perspective(800px) rotateX('+tiltX+'deg) rotateY('+tiltY+'deg) translateY(-4px) scale(1.015)';});
-    });
-    card.addEventListener('mouseleave',function(){if(rafId)cancelAnimationFrame(rafId);card.style.transform='';});
+  });
+  document.querySelectorAll('.vote-lock-msg').forEach(el=>{
+    el.style.display = !loggedIn ? 'inline' : 'none';
+    if(!loggedIn) el.textContent = t('voteLoginMsg');
   });
 }
 
-// ============================================================
-// TOAST
-// ============================================================
-var toastEl=document.getElementById('toast'),toastTimer;
-function showToast(msg,color){toastEl.innerHTML=msg;toastEl.style.color=color||'';toastEl.style.background=color?color+'22':'';toastEl.style.borderColor=color?color+'55':'';toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove('show');},2400);}
-
-// ============================================================
-// AUTH MODAL
-// ============================================================
-var authOverlay=document.getElementById('authOverlay');
-var signupAvatarSelected=AVATAR_OPTIONS[0];
-function openAuth(mode){authOverlay.classList.add('open');document.body.style.overflow='hidden';showAuthPanel(mode||'login');buildAvatarPicker(document.getElementById('signupAvatarOptions'),document.getElementById('signupAvatarPreview'),signupAvatarSelected,function(url){signupAvatarSelected=url;});document.getElementById('signupAvatarPreview').src=signupAvatarSelected;}
-function closeAuth(){authOverlay.classList.remove('open');document.body.style.overflow='';clearAuthErrors();}
-function showAuthPanel(mode){document.getElementById('authLoginPanel').style.display=mode==='login'?'block':'none';document.getElementById('authSignupPanel').style.display=mode==='signup'?'block':'none';clearAuthErrors();}
-function clearAuthErrors(){var l=document.getElementById('loginError'),s=document.getElementById('signupError');if(l)l.classList.remove('visible');if(s)s.classList.remove('visible');}
-document.getElementById('authClose').addEventListener('click',closeAuth);
-authOverlay.addEventListener('click',function(e){if(e.target===authOverlay)closeAuth();});
-document.getElementById('goToSignup').addEventListener('click',function(){showAuthPanel('signup');});
-document.getElementById('goToLogin').addEventListener('click',function(){showAuthPanel('login');});
-document.getElementById('navLoginBtn').addEventListener('click',function(){openAuth('login');});
-document.getElementById('navSignupBtn').addEventListener('click',function(){openAuth('signup');});
-document.getElementById('dashLoginBtn').addEventListener('click',function(){dashOverlay.classList.remove('open');openAuth('login');});
-document.getElementById('dashSignupBtn').addEventListener('click',function(){dashOverlay.classList.remove('open');openAuth('signup');});
-document.getElementById('commentLoginLink').addEventListener('click',function(e){e.preventDefault();closeModal();openAuth('login');});
-document.getElementById('commentSignupLink').addEventListener('click',function(e){e.preventDefault();closeModal();openAuth('signup');});
-document.getElementById('signupUploadBtn').addEventListener('click',function(){document.getElementById('signupAvatarFile').click();});
-document.getElementById('signupAvatarFile').addEventListener('change',function(e){var file=e.target.files[0];if(!file)return;readImageFile(file,function(dataUrl){signupAvatarSelected=dataUrl;document.getElementById('signupAvatarPreview').src=dataUrl;document.querySelectorAll('#signupAvatarOptions img').forEach(function(i){i.classList.remove('selected');});});});
-
-document.getElementById('loginSubmit').addEventListener('click',function(){
-  var username=document.getElementById('loginUsername').value.trim(),password=document.getElementById('loginPassword').value;
-  var errEl=document.getElementById('loginError');
-  if(!username||!password){errEl.textContent=t('fillAllFields');errEl.classList.add('visible');return;}
-  if(isBanned(username)){errEl.textContent=t('bannedMsg')+' '+getBanReasonStr(username);errEl.classList.add('visible');return;}
-  var u=verifyUser(username,password);
-  if(!u){errEl.textContent=t('wrongCredentials');errEl.classList.add('visible');return;}
-  login(u);closeAuth();showToast(t('toastWelcomeBack')+' '+(u.displayName||u.username)+' !','#A78BFA');
-  document.getElementById('loginUsername').value='';document.getElementById('loginPassword').value='';
-});
-document.getElementById('signupSubmit').addEventListener('click',function(){
-  var username=document.getElementById('signupUsername').value.trim(),password=document.getElementById('signupPassword').value;
-  var errEl=document.getElementById('signupError');
-  if(!username){errEl.textContent=t('fillAllFields');errEl.classList.add('visible');return;}
-  if(!/^[a-zA-Z0-9_]{3,20}$/.test(username)){errEl.textContent=t('invalidUsername');errEl.classList.add('visible');return;}
-  if(password.length<8){errEl.textContent=t('passMin8');errEl.classList.add('visible');return;}
-  if(userExists(username)){errEl.textContent=t('usernameTaken');errEl.classList.add('visible');return;}
-  var u=createUser(username,password,signupAvatarSelected);login(u);closeAuth();
-  showToast(t('toastAccountCreated')+' '+username+' !','#34D399');
-  document.getElementById('signupUsername').value='';document.getElementById('signupPassword').value='';
-});
-document.getElementById('loginPassword').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('loginSubmit').click();});
-document.getElementById('signupPassword').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('signupSubmit').click();});
-
-function getBanReasonStr(username){
-  var info=getBanInfo(username);if(!info)return '';
-  if(info.permanent)return '(Banni définitivement'+(info.reason?': '+info.reason:'')+')';
-  var remaining=info.until-Date.now();if(remaining<=0)return '';
-  var h=Math.ceil(remaining/3600000);
-  return '(Ban temporaire, encore ~'+h+'h'+(info.reason?': '+info.reason:'')+')';
+async function handleVote(sid, type){
+  if(!isLoggedIn()){ showToast(t('toastVoteLogin'),'#F87171'); openAuth('login'); return; }
+  const prev = userVotes[sid]||null;
+  const result = await sbSetVote(sid, currentUser.username, type);
+  // Update local cache
+  if(!voteCounts[sid]) voteCounts[sid]={like:0,dislike:0};
+  if(prev) voteCounts[sid][prev] = Math.max(0,(voteCounts[sid][prev]||0)-1);
+  if(result){ voteCounts[sid][result] = (voteCounts[sid][result]||0)+1; userVotes[sid]=result; }
+  else { delete userVotes[sid]; }
+  if(prev && result && prev!==result) showToast(t('toastVoteChanged'),'#A78BFA');
+  else if(result) showToast(type==='like'?t('toastLike'):t('toastDislike'), type==='like'?'#34D399':'#F87171');
+  updateVoteUI();
+  updateMetrics();
 }
 
 // ============================================================
 // SEARCH & FILTERS
 // ============================================================
-var searchInput=document.getElementById('searchInput'),searchClear=document.getElementById('searchClear');
-var currentFilter='all',currentSearch='';
+let currentFilter='all', currentSearch='';
 function applyFiltersAndSearch(){
-  var q=currentSearch.toLowerCase().trim(),visible=0;
-  document.querySelectorAll('.card[data-script-id]').forEach(function(card){
-    var sid=card.dataset.scriptId,scripts=getScripts(),data=scripts[sid];
-    var catOk=currentFilter==='all'||card.dataset.category===currentFilter;
-    var nm=card.querySelector('.card-name')?card.querySelector('.card-name').textContent.toLowerCase():'';
-    var ds=card.querySelector('.card-desc')?card.querySelector('.card-desc').textContent.toLowerCase():'';
-    var searchOk=q===''||nm.includes(q)||ds.includes(q)||(data&&(data.catLabel||'').toLowerCase().includes(q))||(data&&(data.gameName||'').toLowerCase().includes(q));
-    var show=catOk&&searchOk;card.classList.toggle('hidden',!show);if(show)visible++;
+  const q = currentSearch.toLowerCase().trim();
+  let visible=0;
+  document.querySelectorAll('.card[data-script-id]').forEach(card=>{
+    const catOk = currentFilter==='all' || card.dataset.category===currentFilter;
+    const nm = (card.querySelector('.card-name')?.textContent||'').toLowerCase();
+    const ds = (card.querySelector('.card-desc')?.textContent||'').toLowerCase();
+    const data = scriptsCache.find(s=>s.id===card.dataset.scriptId);
+    const searchOk = q==='' || nm.includes(q) || ds.includes(q) || (data?.game_name||'').toLowerCase().includes(q);
+    const show = catOk && searchOk;
+    card.classList.toggle('hidden', !show);
+    if(show) visible++;
   });
-  document.getElementById('noResults').classList.toggle('visible',visible===0);
+  document.getElementById('noResults').classList.toggle('visible', visible===0);
 }
-searchInput.addEventListener('input',function(){currentSearch=searchInput.value;searchClear.classList.toggle('visible',currentSearch.length>0);applyFiltersAndSearch();});
-searchClear.addEventListener('click',function(){searchInput.value='';currentSearch='';searchClear.classList.remove('visible');searchInput.focus();applyFiltersAndSearch();});
+const searchInput=document.getElementById('searchInput'), searchClear=document.getElementById('searchClear');
+searchInput.addEventListener('input',()=>{ currentSearch=searchInput.value; searchClear.classList.toggle('visible', currentSearch.length>0); applyFiltersAndSearch(); });
+searchClear.addEventListener('click',()=>{ searchInput.value=''; currentSearch=''; searchClear.classList.remove('visible'); searchInput.focus(); applyFiltersAndSearch(); });
 function setFilter(f){
   currentFilter=f;
-  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.toggle('active',b.dataset.filter===f);});
-  document.querySelectorAll('.nfs-btn[data-nfs]').forEach(function(b){b.classList.toggle('active',b.dataset.nfs===f);});
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.filter===f));
+  document.querySelectorAll('.nfs-btn[data-nfs]').forEach(b=>b.classList.toggle('active', b.dataset.nfs===f));
   applyFiltersAndSearch();
 }
-document.querySelectorAll('.filter-btn').forEach(function(btn){btn.addEventListener('click',function(){setFilter(btn.dataset.filter);});});
-document.querySelectorAll('.nfs-btn[data-nfs]').forEach(function(btn){btn.addEventListener('click',function(){setFilter(btn.dataset.nfs);});});
+document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>setFilter(btn.dataset.filter)));
+document.querySelectorAll('.nfs-btn[data-nfs]').forEach(btn=>btn.addEventListener('click',()=>setFilter(btn.dataset.nfs)));
 
+// ============================================================
 // COPY
-function fallbackCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
-function copyScript(script,btn){
-  try{navigator.clipboard.writeText(script).catch(function(){fallbackCopy(script);});}catch(e){fallbackCopy(script);}
+// ============================================================
+function fallbackCopy(text){ const ta=document.createElement('textarea'); ta.value=text; ta.style.cssText='position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch{} document.body.removeChild(ta); }
+function copyScript(script, btn){
+  try{ navigator.clipboard.writeText(script).catch(()=>fallbackCopy(script)); }catch{ fallbackCopy(script); }
   if(btn){
-    btn.classList.add('copied');var lbl=btn.querySelector('.copy-label');if(lbl)lbl.textContent=t('copiedLabel');var icon=btn.querySelector('span:first-child');if(icon)icon.textContent='✓';
+    btn.classList.add('copied');
+    const lbl=btn.querySelector('.copy-label'); if(lbl) lbl.textContent=t('copiedLabel');
+    const icon=btn.querySelector('span:first-child'); if(icon) icon.textContent='✓';
     showToast(t('toastCopied'));
-    var a=Store.get('analytics',{views:0,copies:0,history:[]});a.copies=(a.copies||0)+1;
-    var today=new Date().toLocaleDateString('fr'),idx=(a.history||[]).findIndex(function(h){return h.date===today;});
-    if(idx>=0){a.history[idx].copies=(a.history[idx].copies||0)+1;}else{a.history.push({date:today,views:0,copies:1});}
-    Store.set('analytics',a);updateMetrics();
-    setTimeout(function(){btn.classList.remove('copied');var l2=btn.querySelector('.copy-label');if(l2)l2.textContent=t('copyLabel');var ic2=btn.querySelector('span:first-child');if(ic2)ic2.textContent='⎘';},2200);
+    sbIncrementAnalytic('copies').then(()=>updateMetrics());
+    setTimeout(()=>{ btn.classList.remove('copied'); const l2=btn.querySelector('.copy-label'); if(l2) l2.textContent=t('copyLabel'); const ic2=btn.querySelector('span:first-child'); if(ic2) ic2.textContent='⎘'; }, 2200);
   }
 }
 
 // ============================================================
-// STARFIELD
+// AUTH MODAL
 // ============================================================
-var starCanvas=document.getElementById('starfield'),starCtx=starCanvas.getContext('2d'),stars=[],starRAF=null,starActive=false;
-function initStars(){stars=[];starCanvas.width=window.innerWidth;starCanvas.height=window.innerHeight;for(var i=0;i<260;i++){stars.push({x:Math.random()*starCanvas.width,y:Math.random()*starCanvas.height,r:Math.random()*1.6+0.3,speed:Math.random()*0.4+0.1,op:Math.random()*0.6+0.2});}}
-function drawStarFrame(){starCtx.clearRect(0,0,starCanvas.width,starCanvas.height);for(var i=0;i<stars.length;i++){var s=stars[i];s.y-=s.speed;if(s.y<-2){s.y=starCanvas.height+2;s.x=Math.random()*starCanvas.width;}starCtx.beginPath();starCtx.arc(s.x,s.y,s.r,0,Math.PI*2);starCtx.fillStyle='rgba(210,215,255,'+s.op+')';starCtx.fill();}starRAF=requestAnimationFrame(drawStarFrame);}
-function startStarfield(){if(starActive)return;starActive=true;initStars();starRAF=requestAnimationFrame(drawStarFrame);}
-function stopStarfield(){if(!starActive)return;starActive=false;if(starRAF)cancelAnimationFrame(starRAF);starRAF=null;starCtx.clearRect(0,0,starCanvas.width,starCanvas.height);}
-window.addEventListener('resize',function(){if(!starActive)return;starCanvas.width=window.innerWidth;starCanvas.height=window.innerHeight;initStars();});
+const authOverlay = document.getElementById('authOverlay');
+let signupAvatarSelected = AVATAR_OPTIONS[0];
 
-// ============================================================
-// THEME SYSTEM
-// ============================================================
-var currentTheme=Store.get('theme','dark');
-function applyTheme(theme){
-  var layoutClass=document.body.classList.contains('layout-full')?' layout-full':'';
-  document.body.className='theme-'+theme+layoutClass;
-  currentTheme=theme;Store.set('theme',theme);
-  updateBasicSplitUI();
-  document.querySelectorAll('.theme-option').forEach(function(opt){opt.classList.toggle('selected',opt.dataset.theme===theme);});
-  var bs=document.getElementById('basicSplitBtn');if(bs)bs.classList.toggle('selected',theme==='dark'||theme==='light');
-  if(theme==='midnight')startStarfield();else stopStarfield();
+function openAuth(mode){
+  authOverlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  showAuthPanel(mode||'login');
+  buildAvatarPicker(document.getElementById('signupAvatarOptions'), document.getElementById('signupAvatarPreview'), signupAvatarSelected, url=>{ signupAvatarSelected=url; });
+  document.getElementById('signupAvatarPreview').src = signupAvatarSelected;
 }
-function updateBasicSplitUI(){
-  var dd=document.getElementById('basicDotDark'),dl=document.getElementById('basicDotLight');if(!dd||!dl)return;
-  dd.classList.toggle('active-dot',currentTheme==='dark');
-  dl.classList.toggle('active-dot',currentTheme==='light');
+function closeAuth(){ authOverlay.classList.remove('open'); document.body.style.overflow=''; clearAuthErrors(); }
+function showAuthPanel(mode){
+  document.getElementById('authLoginPanel').style.display = mode==='login'?'block':'none';
+  document.getElementById('authSignupPanel').style.display = mode==='signup'?'block':'none';
+  clearAuthErrors();
 }
-document.getElementById('basicSplitBtn').addEventListener('click',function(e){
-  var rect=this.getBoundingClientRect(),relX=e.clientX-rect.left;
-  applyTheme(relX/rect.width<0.5?'dark':'light');
+function clearAuthErrors(){
+  const l=document.getElementById('loginError'), s=document.getElementById('signupError');
+  if(l) l.classList.remove('visible'); if(s) s.classList.remove('visible');
+}
+document.getElementById('authClose').addEventListener('click', closeAuth);
+authOverlay.addEventListener('click', e=>{ if(e.target===authOverlay) closeAuth(); });
+document.getElementById('goToSignup').addEventListener('click', ()=>showAuthPanel('signup'));
+document.getElementById('goToLogin').addEventListener('click', ()=>showAuthPanel('login'));
+document.getElementById('navLoginBtn').addEventListener('click', ()=>openAuth('login'));
+document.getElementById('navSignupBtn').addEventListener('click', ()=>openAuth('signup'));
+document.getElementById('dashLoginBtn').addEventListener('click', ()=>{ dashOverlay.classList.remove('open'); openAuth('login'); });
+document.getElementById('dashSignupBtn').addEventListener('click', ()=>{ dashOverlay.classList.remove('open'); openAuth('signup'); });
+document.getElementById('commentLoginLink').addEventListener('click', e=>{ e.preventDefault(); closeModal(); openAuth('login'); });
+document.getElementById('commentSignupLink').addEventListener('click', e=>{ e.preventDefault(); closeModal(); openAuth('signup'); });
+document.getElementById('signupUploadBtn').addEventListener('click', ()=>document.getElementById('signupAvatarFile').click());
+document.getElementById('signupAvatarFile').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; readImageFile(f, url=>{ signupAvatarSelected=url; document.getElementById('signupAvatarPreview').src=url; document.querySelectorAll('#signupAvatarOptions img').forEach(i=>i.classList.remove('selected')); }); });
+
+document.getElementById('loginSubmit').addEventListener('click', async function(){
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  if(!username||!password){ errEl.textContent=t('fillAllFields'); errEl.classList.add('visible'); return; }
+  this.disabled=true; this.textContent='...';
+  try{
+    const u = await sbVerifyUser(username, password);
+    if(!u){ errEl.textContent=t('wrongCredentials'); errEl.classList.add('visible'); return; }
+    if(isBanned(u)){
+      let msg=t('bannedMsg');
+      if(u.ban_until) msg+=` (jusqu'au ${new Date(u.ban_until).toLocaleDateString('fr')})`;
+      if(u.ban_reason) msg+=` — ${u.ban_reason}`;
+      errEl.textContent=msg; errEl.classList.add('visible'); return;
+    }
+    sessionLogin(u);
+    userVotes = await sbGetUserVotes(u.username);
+    closeAuth(); showToast(t('toastWelcomeBack')+' '+(u.display_name||u.username)+' !', '#A78BFA');
+    updateAuthUI(); updateVoteUI();
+    document.getElementById('loginUsername').value=''; document.getElementById('loginPassword').value='';
+  }catch(e){ errEl.textContent='Erreur serveur: '+e.message; errEl.classList.add('visible'); }
+  finally{ this.disabled=false; this.textContent='Se connecter'; }
 });
-document.querySelectorAll('.theme-option').forEach(function(opt){opt.addEventListener('click',function(){applyTheme(opt.dataset.theme);});});
-applyTheme(currentTheme);
+
+document.getElementById('signupSubmit').addEventListener('click', async function(){
+  const username = document.getElementById('signupUsername').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const errEl = document.getElementById('signupError');
+  if(!username){ errEl.textContent=t('fillAllFields'); errEl.classList.add('visible'); return; }
+  if(!/^[a-zA-Z0-9_]{3,20}$/.test(username)){ errEl.textContent=t('invalidUsername'); errEl.classList.add('visible'); return; }
+  if(password.length<8){ errEl.textContent=t('passMin8'); errEl.classList.add('visible'); return; }
+  this.disabled=true; this.textContent='...';
+  try{
+    const exists = await sbUserExists(username);
+    if(exists){ errEl.textContent=t('usernameTaken'); errEl.classList.add('visible'); return; }
+    const u = await sbCreateUser(username, password, signupAvatarSelected);
+    sessionLogin(u);
+    closeAuth(); showToast(t('toastAccountCreated')+' '+username+' !', '#34D399');
+    updateAuthUI(); updateVoteUI();
+    document.getElementById('signupUsername').value=''; document.getElementById('signupPassword').value='';
+    // Mettre à jour le compteur de membres
+    loadStats();
+  }catch(e){ errEl.textContent='Erreur lors de la création du compte: '+e.message; errEl.classList.add('visible'); }
+  finally{ this.disabled=false; this.textContent='Créer le compte'; }
+});
+
+document.getElementById('loginPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('loginSubmit').click(); });
+document.getElementById('signupPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('signupSubmit').click(); });
 
 // ============================================================
-// LAYOUT
+// AUTH UI UPDATE
 // ============================================================
-var currentLayout=Store.get('layout','normal');
-function applyLayout(layout){
-  currentLayout=layout;Store.set('layout',layout);
-  document.body.classList.toggle('layout-full',layout==='full');
-  document.querySelectorAll('.layout-opt').forEach(function(opt){opt.classList.toggle('selected',opt.dataset.layout===layout);});
+function updateAuthUI(){
+  const loggedIn = isLoggedIn(), u = currentUser;
+  document.getElementById('navAuthBtns').style.display = loggedIn?'none':'flex';
+  document.getElementById('navUserPill').classList.toggle('visible', loggedIn);
+  if(loggedIn && u){
+    const av = u.avatar||AVATAR_OPTIONS[0];
+    document.getElementById('navAvatar').src = av;
+    document.getElementById('navUsername').textContent = u.display_name||u.username;
+    document.getElementById('dashAccountAvatar').src = av;
+    const dnEl = document.getElementById('dashAccountName');
+    dnEl.innerHTML = escHtml(u.display_name||u.username) + (isCertified(u)?certifiedSVG():'');
+    if(isAdmin(u)){
+      const at=document.createElement('span'); at.className='comment-admin-tag'; at.textContent='Admin'; at.style.marginLeft='0.3rem';
+      dnEl.appendChild(at);
+    }
+    document.getElementById('dashAccountUsername').textContent = '@'+u.username;
+    document.getElementById('dashAccountBio').textContent = u.bio||'';
+    const adminBtn = document.getElementById('openAdminBtn');
+    if(adminBtn) adminBtn.style.display = isAdmin(u)?'flex':'none';
+    const myCA = document.getElementById('myCommentAvatar'); if(myCA) myCA.src=av;
+  }
+  document.getElementById('dashAccountLogged').style.display = loggedIn?'block':'none';
+  document.getElementById('dashAccountGuest').style.display = loggedIn?'none':'block';
+  updateVoteUI();
+  updateCommentUI();
 }
-document.querySelectorAll('.layout-opt').forEach(function(opt){opt.addEventListener('click',function(){applyLayout(opt.dataset.layout);});});
-applyLayout(currentLayout);
-document.getElementById('nfsDashBtn').addEventListener('click',function(){if(currentLayout!=='full'){dashOverlay.classList.add('open');}updateMetrics();});
+
+function updateCommentUI(){
+  const loggedIn = isLoggedIn();
+  const form=document.getElementById('commentForm'), notice=document.getElementById('commentLockedNotice');
+  if(form) form.classList.toggle('hidden', !loggedIn);
+  if(notice) notice.classList.toggle('visible', !loggedIn);
+}
 
 // ============================================================
 // DASHBOARD
 // ============================================================
-var dashOverlay=document.getElementById('dashOverlay');
-document.getElementById('dashOpenBtn').addEventListener('click',function(){dashOverlay.classList.add('open');updateMetrics();});
-document.getElementById('dashCloseBtn').addEventListener('click',function(){dashOverlay.classList.remove('open');});
-dashOverlay.addEventListener('click',function(e){if(e.target===dashOverlay)dashOverlay.classList.remove('open');});
+const dashOverlay = document.getElementById('dashOverlay');
+document.getElementById('dashOpenBtn').addEventListener('click', ()=>{ dashOverlay.classList.add('open'); updateMetrics(); });
+document.getElementById('dashCloseBtn').addEventListener('click', ()=>dashOverlay.classList.remove('open'));
+dashOverlay.addEventListener('click', e=>{ if(e.target===dashOverlay) dashOverlay.classList.remove('open'); });
+document.getElementById('nfsDashBtn').addEventListener('click', ()=>{ if(currentLayout!=='full') dashOverlay.classList.add('open'); updateMetrics(); });
 
-var insightsOpen=false;
-document.getElementById('insightsBtn').addEventListener('click',function(){insightsOpen=!insightsOpen;document.getElementById('insightsPanel').classList.toggle('open',insightsOpen);if(insightsOpen)updateMetrics();});
-var appearOpen=false;
-document.getElementById('appearanceBtn').addEventListener('click',function(){appearOpen=!appearOpen;document.getElementById('appearancePanel').classList.toggle('open',appearOpen);});
-var notifOpen=false;
-document.getElementById('notifPrefBtn').addEventListener('click',function(){notifOpen=!notifOpen;document.getElementById('notifComing').classList.toggle('open',notifOpen);});
-
-// ADMIN BTN
-document.getElementById('openAdminBtn').addEventListener('click',function(){
-  dashOverlay.classList.remove('open');
-  openAdminPanel();
-});
+let insightsOpen=false, appearOpen=false, notifOpen=false;
+document.getElementById('insightsBtn').addEventListener('click', ()=>{ insightsOpen=!insightsOpen; document.getElementById('insightsPanel').classList.toggle('open',insightsOpen); if(insightsOpen) updateMetrics(); });
+document.getElementById('appearanceBtn').addEventListener('click', ()=>{ appearOpen=!appearOpen; document.getElementById('appearancePanel').classList.toggle('open',appearOpen); });
+document.getElementById('notifPrefBtn').addEventListener('click', ()=>{ notifOpen=!notifOpen; document.getElementById('notifComing').classList.toggle('open',notifOpen); });
+document.getElementById('openAdminBtn').addEventListener('click', ()=>{ dashOverlay.classList.remove('open'); openAdminPanel(); });
 
 // EDIT PROFILE
-var editProfileOpen=false,editSelectedAvatar='';
-document.getElementById('editProfileBtn').addEventListener('click',function(){
+let editProfileOpen=false, editSelectedAvatar='';
+document.getElementById('editProfileBtn').addEventListener('click', ()=>{
   editProfileOpen=!editProfileOpen;
-  document.getElementById('editProfilePanel').classList.toggle('open',editProfileOpen);
-  if(editProfileOpen&&currentUser){
-    editSelectedAvatar=currentUser.avatar||AVATAR_OPTIONS[0];
-    document.getElementById('editDisplayName').value=currentUser.displayName||currentUser.username;
-    document.getElementById('editUsername').value=currentUser.username;
-    document.getElementById('editBio').value=currentUser.bio||'';
-    document.getElementById('editAvatarPreview').src=editSelectedAvatar;
-    buildAvatarPicker(document.getElementById('editAvatarOpts'),document.getElementById('editAvatarPreview'),editSelectedAvatar,function(url){editSelectedAvatar=url;});
+  document.getElementById('editProfilePanel').classList.toggle('open', editProfileOpen);
+  if(editProfileOpen && currentUser){
+    editSelectedAvatar = currentUser.avatar||AVATAR_OPTIONS[0];
+    document.getElementById('editDisplayName').value = currentUser.display_name||currentUser.username;
+    document.getElementById('editUsername').value = currentUser.username;
+    document.getElementById('editBio').value = currentUser.bio||'';
+    document.getElementById('editAvatarPreview').src = editSelectedAvatar;
+    buildAvatarPicker(document.getElementById('editAvatarOpts'), document.getElementById('editAvatarPreview'), editSelectedAvatar, url=>{ editSelectedAvatar=url; });
   }
 });
-document.getElementById('editUploadBtn').addEventListener('click',function(){document.getElementById('editAvatarFile').click();});
-document.getElementById('editAvatarFile').addEventListener('change',function(e){
-  var file=e.target.files[0];if(!file)return;
-  readImageFile(file,function(dataUrl){
-    editSelectedAvatar=dataUrl;
-    document.getElementById('editAvatarPreview').src=dataUrl;
-    document.querySelectorAll('#editAvatarOpts img').forEach(function(i){i.classList.remove('selected');});
-  });
-});
-document.getElementById('editSaveBtn').addEventListener('click',function(){
-  if(!currentUser)return;
-  var newDisplay=document.getElementById('editDisplayName').value.trim(),newUsername=document.getElementById('editUsername').value.trim(),newBio=document.getElementById('editBio').value.trim(),newAvatar=editSelectedAvatar||currentUser.avatar;
-  if(!newDisplay||!newUsername){showToast('⚠️ Remplis tous les champs.','#F87171');return;}
-  if(!/^[a-zA-Z0-9_]{3,20}$/.test(newUsername)){showToast('⚠️ Nom invalide.','#F87171');return;}
-  if(newUsername.toLowerCase()!==currentUser.username.toLowerCase()&&userExists(newUsername)){showToast('⚠️ Nom déjà pris.','#F87171');return;}
+document.getElementById('editUploadBtn').addEventListener('click', ()=>document.getElementById('editAvatarFile').click());
+document.getElementById('editAvatarFile').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; readImageFile(f, url=>{ editSelectedAvatar=url; document.getElementById('editAvatarPreview').src=url; document.querySelectorAll('#editAvatarOpts img').forEach(i=>i.classList.remove('selected')); }); });
+
+document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
+  if(!currentUser) return;
+  const newDisplay = document.getElementById('editDisplayName').value.trim();
+  const newUsername = document.getElementById('editUsername').value.trim();
+  const newBio = document.getElementById('editBio').value.trim();
+  const newAvatar = editSelectedAvatar||currentUser.avatar;
+  if(!newDisplay||!newUsername){ showToast('⚠️ Remplis tous les champs.','#F87171'); return; }
+  if(!/^[a-zA-Z0-9_]{3,20}$/.test(newUsername)){ showToast('⚠️ Nom invalide.','#F87171'); return; }
   if(newUsername.toLowerCase()!==currentUser.username.toLowerCase()){
-    var db=getUsers(),oldKey=currentUser.username.toLowerCase(),newKey=newUsername.toLowerCase();
-    db[newKey]=Object.assign({},db[oldKey],{username:newUsername,displayName:newDisplay,bio:newBio,avatar:newAvatar});
-    delete db[oldKey];saveUsers(db);currentUser=db[newKey];Store.set('session',currentUser);
-  }else{
-    updateUser(currentUser.username,{displayName:newDisplay,bio:newBio,avatar:newAvatar});
-    currentUser=Store.get('session',null);
+    const exists = await sbUserExists(newUsername);
+    if(exists){ showToast('⚠️ Nom déjà pris.','#F87171'); return; }
   }
-  updateAllAvatars(newAvatar);
-  updateAuthUI();showToast(t('toastProfileUpdated'),'#34D399');
-  document.getElementById('editProfilePanel').classList.remove('open');editProfileOpen=false;
+  try{
+    const updated = await sbUpdateUser(currentUser.username, {
+      display_name: newDisplay,
+      bio: newBio,
+      avatar: newAvatar,
+      ...(newUsername.toLowerCase()!==currentUser.username.toLowerCase()?{username:newUsername.toLowerCase()}:{})
+    });
+    sessionLogin(updated);
+    document.getElementById('navAvatar').src = newAvatar;
+    document.getElementById('dashAccountAvatar').src = newAvatar;
+    const myCA=document.getElementById('myCommentAvatar'); if(myCA) myCA.src=newAvatar;
+    updateAuthUI();
+    showToast(t('toastProfileUpdated'),'#34D399');
+    document.getElementById('editProfilePanel').classList.remove('open'); editProfileOpen=false;
+  }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
 });
-document.getElementById('logoutBtn').addEventListener('click',function(){logout();dashOverlay.classList.remove('open');showToast(t('toastLoggedOut'),'#FCD34D');});
-document.getElementById('switchAccountBtn').addEventListener('click',function(){logout();dashOverlay.classList.remove('open');setTimeout(function(){openAuth('login');},200);});
-var deleteConfirmEl=document.getElementById('deleteConfirm');
-document.getElementById('deleteAccountBtn').addEventListener('click',function(){deleteConfirmEl.classList.toggle('open');});
-document.getElementById('deleteNoBtn').addEventListener('click',function(){deleteConfirmEl.classList.remove('open');});
-document.getElementById('deleteYesBtn').addEventListener('click',function(){if(!currentUser)return;deleteUser(currentUser.username);logout();deleteConfirmEl.classList.remove('open');dashOverlay.classList.remove('open');showToast(t('toastAccountDeleted'),'#F87171');});
 
-// LANG
-document.querySelectorAll('.lang-btn').forEach(function(btn){
-  btn.classList.toggle('active',btn.dataset.lang===currentLang);
-  btn.addEventListener('click',function(){currentLang=btn.dataset.lang;Store.set('lang',currentLang);applyTranslations();showToast(t('langChanged'));});
+document.getElementById('logoutBtn').addEventListener('click', ()=>{ sessionLogout(); userVotes={}; dashOverlay.classList.remove('open'); showToast(t('toastLoggedOut'),'#FCD34D'); updateAuthUI(); updateVoteUI(); });
+document.getElementById('switchAccountBtn').addEventListener('click', ()=>{ sessionLogout(); userVotes={}; dashOverlay.classList.remove('open'); setTimeout(()=>openAuth('login'),200); updateAuthUI(); });
+
+const deleteConfirmEl = document.getElementById('deleteConfirm');
+document.getElementById('deleteAccountBtn').addEventListener('click', ()=>deleteConfirmEl.classList.toggle('open'));
+document.getElementById('deleteNoBtn').addEventListener('click', ()=>deleteConfirmEl.classList.remove('open'));
+document.getElementById('deleteYesBtn').addEventListener('click', async ()=>{
+  if(!currentUser) return;
+  try{
+    await sbDeleteUser(currentUser.username);
+    sessionLogout(); userVotes={};
+    deleteConfirmEl.classList.remove('open'); dashOverlay.classList.remove('open');
+    showToast(t('toastAccountDeleted'),'#F87171'); updateAuthUI(); updateVoteUI();
+  }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
+});
+
+document.querySelectorAll('.lang-btn').forEach(btn=>{
+  btn.classList.toggle('active', btn.dataset.lang===currentLang);
+  btn.addEventListener('click', ()=>{ currentLang=btn.dataset.lang; Store.set('lang',currentLang); applyTranslations(); showToast(t('langChanged')); });
 });
 
 // ============================================================
-// ANALYTICS
+// ANALYTICS / METRICS
 // ============================================================
-function getLikePct(){var v=getVotes(),tl=0,tv=0;Object.keys(v).forEach(function(k){tl+=(v[k].like||0);tv+=(v[k].like||0)+(v[k].dislike||0);});return tv===0?'—':Math.round((tl/tv)*100)+'%';}
-function updateMetrics(){
-  var a=Store.get('analytics',{views:0,copies:0,history:[]});
-  document.getElementById('metricViews').textContent=a.views||0;
-  document.getElementById('metricCopies').textContent=a.copies||0;
-  document.getElementById('metricLikes').textContent=getLikePct();
-  drawChart();
+async function updateMetrics(){
+  const a = await sbGetAnalytics();
+  setTxt('metricViews', a.views||0);
+  setTxt('metricCopies', a.copies||0);
+  // like %
+  let tl=0,tv=0;
+  for(const c of Object.values(voteCounts)){ tl+=(c.like||0); tv+=(c.like||0)+(c.dislike||0); }
+  setTxt('metricLikes', tv===0?'—':Math.round((tl/tv)*100)+'%');
+  drawChart(a);
 }
-function drawChart(){
-  var svg=document.getElementById('activityChart'),a=Store.get('analytics',{views:0,copies:0,history:[]}),W=300,H=80,padT=8,padR=8,padB=18,padL=8;
-  var days=[],today=new Date();
-  for(var i=6;i>=0;i--){var d=new Date(today);d.setDate(today.getDate()-i);var label=d.toLocaleDateString('fr');var entry=(a.history||[]).find(function(h){return h.date===label;});days.push({label:label,views:entry?(entry.views||0):0,copies:entry?(entry.copies||0):0,day:d.getDay()});}
-  var tLabel=today.toLocaleDateString('fr'),tIdx=days.findIndex(function(d){return d.label===tLabel;});if(tIdx>=0)days[tIdx].views=Math.max(days[tIdx].views,a.views||0);
-  var maxV=1;days.forEach(function(d){if(d.views>maxV)maxV=d.views;if(d.copies>maxV)maxV=d.copies;});
-  function sy(v){return padT+(H-padT-padB)*(1-v/maxV);}function sx(i2){return padL+(i2/(days.length-1))*(W-padL-padR);}
-  var vPts=days.map(function(d,i2){return sx(i2)+','+sy(d.views);}).join(' ');
-  var cPts=days.map(function(d,i2){return sx(i2)+','+sy(d.copies);}).join(' ');
-  var vArea=sx(0)+','+(H-padB)+' '+vPts+' '+sx(days.length-1)+','+(H-padB);
-  var cArea=sx(0)+','+(H-padB)+' '+cPts+' '+sx(days.length-1)+','+(H-padB);
-  var dNames=['D','L','M','M','J','V','S'];
-  var labels=days.map(function(d,i2){return '<text x="'+sx(i2)+'" y="'+(H-2)+'" font-size="7" text-anchor="middle" fill="rgba(100,116,139,0.7)">'+dNames[d.day]+'</text>';}).join('');
-  var vDots=days.map(function(d,i2){return '<circle cx="'+sx(i2)+'" cy="'+sy(d.views)+'" r="2.5" fill="#A78BFA"/>';}).join('');
-  var cDots=days.map(function(d,i2){return '<circle cx="'+sx(i2)+'" cy="'+sy(d.copies)+'" r="2.5" fill="#06B6D4"/>';}).join('');
-  svg.innerHTML='<defs><linearGradient id="gV" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#A78BFA" stop-opacity="0.3"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></linearGradient><linearGradient id="gC" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06B6D4" stop-opacity="0.2"/><stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/></linearGradient></defs><polygon points="'+vArea+'" fill="url(#gV)"/><polygon points="'+cArea+'" fill="url(#gC)"/><polyline points="'+vPts+'" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><polyline points="'+cPts+'" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>'+vDots+cDots+labels;
+function drawChart(a){
+  const svg=document.getElementById('activityChart');
+  if(!svg) return;
+  const W=300,H=80,padT=8,padR=8,padB=18,padL=8;
+  const days=[];
+  const today=new Date();
+  for(let i=6;i>=0;i--){ const d=new Date(today); d.setDate(today.getDate()-i); const label=d.toLocaleDateString('fr'); const entry=(a.history||[]).find(h=>h.date===label); days.push({label,views:entry?(entry.views||0):0,copies:entry?(entry.copies||0):0,day:d.getDay()}); }
+  let maxV=1; days.forEach(d=>{ if(d.views>maxV)maxV=d.views; if(d.copies>maxV)maxV=d.copies; });
+  const sy=v=>padT+(H-padT-padB)*(1-v/maxV), sx=i=>padL+(i/(days.length-1))*(W-padL-padR);
+  const vPts=days.map((d,i)=>sx(i)+','+sy(d.views)).join(' ');
+  const cPts=days.map((d,i)=>sx(i)+','+sy(d.copies)).join(' ');
+  const vArea=sx(0)+','+(H-padB)+' '+vPts+' '+sx(days.length-1)+','+(H-padB);
+  const cArea=sx(0)+','+(H-padB)+' '+cPts+' '+sx(days.length-1)+','+(H-padB);
+  const dNames=['D','L','M','M','J','V','S'];
+  const labels=days.map((d,i)=>`<text x="${sx(i)}" y="${H-2}" font-size="7" text-anchor="middle" fill="rgba(100,116,139,0.7)">${dNames[d.day]}</text>`).join('');
+  const vDots=days.map((d,i)=>`<circle cx="${sx(i)}" cy="${sy(d.views)}" r="2.5" fill="#A78BFA"/>`).join('');
+  const cDots=days.map((d,i)=>`<circle cx="${sx(i)}" cy="${sy(d.copies)}" r="2.5" fill="#06B6D4"/>`).join('');
+  svg.innerHTML=`<defs><linearGradient id="gV" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#A78BFA" stop-opacity="0.3"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></linearGradient><linearGradient id="gC" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06B6D4" stop-opacity="0.2"/><stop offset="100%" stop-color="#06B6D4" stop-opacity="0"/></linearGradient></defs><polygon points="${vArea}" fill="url(#gV)"/><polygon points="${cArea}" fill="url(#gC)"/><polyline points="${vPts}" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><polyline points="${cPts}" fill="none" stroke="#06B6D4" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>${vDots}${cDots}${labels}`;
 }
 
 // ============================================================
 // MODAL DETAILS
 // ============================================================
-var modalOverlay=document.getElementById('modalOverlay'),currentModalSid=null;
+const modalOverlay = document.getElementById('modalOverlay');
+let currentModalSid = null;
+
 function openModal(sid){
-  var scripts=getScripts(),data=scripts[sid];if(!data)return;currentModalSid=sid;
-  var bw=document.getElementById('modalBannerWrap');
-  if(data.banner){var bi=document.createElement('img');bi.className='modal-banner';bi.alt=data.name;if(sid==='infinite-yield'){bi.style.objectFit='contain';bi.style.background='#0d0d1a';bi.style.padding='1.5rem';}bi.src=data.banner;bi.onerror=function(){bw.innerHTML='<div class="modal-banner-placeholder">🎮</div>';};bw.innerHTML='';bw.appendChild(bi);}
-  else{bw.innerHTML='<div class="modal-banner-placeholder">⚡</div>';}
-  var catClass=data.category==='util'?'cat-util':'cat-game';
-  var catLabel=data.category==='util'?'Utilitaires':'Games';
-  var tagEl=document.getElementById('modalTag');tagEl.textContent=catLabel;tagEl.className='modal-tag '+catClass;
+  const data = scriptsCache.find(s=>s.id===sid);
+  if(!data) return;
+  currentModalSid = sid;
+  const bw = document.getElementById('modalBannerWrap');
+  if(data.banner){ const bi=document.createElement('img'); bi.className='modal-banner'; bi.alt=data.name; if(sid==='infinite-yield'){bi.style.objectFit='contain';bi.style.background='#0d0d1a';bi.style.padding='1.5rem';} bi.src=data.banner; bi.onerror=()=>bw.innerHTML='<div class="modal-banner-placeholder">🎮</div>'; bw.innerHTML=''; bw.appendChild(bi); }
+  else bw.innerHTML='<div class="modal-banner-placeholder">⚡</div>';
+  const catClass=data.category==='util'?'cat-util':'cat-game', catLabel=data.category==='util'?'Utilitaires':'Games';
+  const tagEl=document.getElementById('modalTag'); tagEl.textContent=catLabel; tagEl.className='modal-tag '+catClass;
   document.getElementById('modalName').textContent=data.name;
-  var metaEl=document.getElementById('modalMeta'),metas=[];
-  metas.push({label:t('metaCreator'),value:data.creator||'—'});
-  if(data.gameName){if(data.gameLink)metas.push({label:t('metaGameName'),value:'<a href="'+data.gameLink+'" target="_blank" rel="noopener">'+escHtml(data.gameName)+'</a>'});else metas.push({label:t('metaGameName'),value:escHtml(data.gameName)});}
-  if(data.activePlayers)metas.push({label:t('metaPlayers'),value:data.activePlayers});
-  if(data.maturity)metas.push({label:t('metaMaturity'),value:data.maturity});
-  metaEl.innerHTML=metas.map(function(m){return'<div class="meta-item"><div class="meta-label">'+m.label+'</div><div class="meta-value">'+m.value+'</div></div>';}).join('');
-  document.getElementById('modalScriptLabel').textContent=data.scriptFile||'script.lua';
-  document.getElementById('modalScriptContent').textContent=data.scriptDisplay||data.script;
-  var mcb=document.getElementById('modalCopyBtn');
-  mcb.innerHTML='<span>⎘</span> Copier le script';mcb.classList.remove('copied');
-  mcb.onclick=function(){
-    try{navigator.clipboard.writeText(data.script).catch(function(){fallbackCopy(data.script);});}catch(e){fallbackCopy(data.script);}
-    mcb.classList.add('copied');mcb.innerHTML='<span>✓</span> Copié !';showToast(t('toastCopied'));
-    var a=Store.get('analytics',{views:0,copies:0,history:[]});a.copies=(a.copies||0)+1;Store.set('analytics',a);updateMetrics();
-    setTimeout(function(){mcb.classList.remove('copied');mcb.innerHTML='<span>⎘</span> Copier le script';},2200);
+  const metaEl=document.getElementById('modalMeta');
+  const metas=[{label:t('metaCreator'),value:data.creator||'—'}];
+  if(data.game_name){ if(data.game_link) metas.push({label:t('metaGameName'),value:`<a href="${escHtml(data.game_link)}" target="_blank" rel="noopener">${escHtml(data.game_name)}</a>`}); else metas.push({label:t('metaGameName'),value:escHtml(data.game_name)}); }
+  if(data.active_players) metas.push({label:t('metaPlayers'),value:data.active_players});
+  if(data.maturity) metas.push({label:t('metaMaturity'),value:data.maturity});
+  metaEl.innerHTML=metas.map(m=>`<div class="meta-item"><div class="meta-label">${m.label}</div><div class="meta-value">${m.value}</div></div>`).join('');
+  document.getElementById('modalScriptLabel').textContent=data.script_file||'script.lua';
+  document.getElementById('modalScriptContent').textContent=data.script_display||data.script||'';
+  const mcb=document.getElementById('modalCopyBtn');
+  mcb.innerHTML='<span>⎘</span> Copier le script'; mcb.classList.remove('copied');
+  mcb.onclick=()=>{
+    try{ navigator.clipboard.writeText(data.script).catch(()=>fallbackCopy(data.script)); }catch{ fallbackCopy(data.script); }
+    mcb.classList.add('copied'); mcb.innerHTML='<span>✓</span> Copié !'; showToast(t('toastCopied'));
+    sbIncrementAnalytic('copies');
+    setTimeout(()=>{ mcb.classList.remove('copied'); mcb.innerHTML='<span>⎘</span> Copier le script'; },2200);
   };
-  updateCommentUI();renderComments(sid);
-  modalOverlay.classList.add('open');document.body.style.overflow='hidden';
+  updateCommentUI();
+  loadAndRenderComments(sid);
+  modalOverlay.classList.add('open'); document.body.style.overflow='hidden';
 }
-function closeModal(){modalOverlay.classList.remove('open');document.body.style.overflow='';currentModalSid=null;}
-document.getElementById('modalClose').addEventListener('click',closeModal);
-modalOverlay.addEventListener('click',function(e){if(e.target===modalOverlay)closeModal();});
+function closeModal(){ modalOverlay.classList.remove('open'); document.body.style.overflow=''; currentModalSid=null; }
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e=>{ if(e.target===modalOverlay) closeModal(); });
 
 // ============================================================
 // COMMENTS
 // ============================================================
-function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function getComments(sid){return Store.get('comments_'+sid,[]);}
-function saveComments(sid,arr){Store.set('comments_'+sid,arr);}
-function timeAgo(ts){var s=Math.floor((Date.now()-ts)/1000);if(s<60)return currentLang==='en'?'just now':"à l'instant";var m=Math.floor(s/60);if(m<60)return currentLang==='en'?m+'m ago':'il y a '+m+'min';var h=Math.floor(m/60);if(h<24)return currentLang==='en'?h+'h ago':'il y a '+h+'h';return currentLang==='en'?Math.floor(h/24)+'d ago':'il y a '+Math.floor(h/24)+'j';}
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-new Date(ts).getTime())/1000);
+  if(s<60) return currentLang==='en'?'just now':"à l'instant";
+  const m=Math.floor(s/60); if(m<60) return currentLang==='en'?m+'m ago':'il y a '+m+'min';
+  const h=Math.floor(m/60); if(h<24) return currentLang==='en'?h+'h ago':'il y a '+h+'h';
+  return currentLang==='en'?Math.floor(h/24)+'d ago':'il y a '+Math.floor(h/24)+'j';
+}
 
-var confirmCallback=null,confirmEditCallback=null;
-var confirmOverlay=document.getElementById('confirmOverlay');
+async function loadAndRenderComments(sid){
+  const comments = await sbGetComments(sid);
+  renderComments(sid, comments);
+}
+
+function renderComments(sid, comments){
+  const list=document.getElementById('commentsList'), countBadge=document.getElementById('commentCount');
+  countBadge.textContent=comments.length;
+  if(comments.length===0){ list.innerHTML=`<div class="comments-empty"><span class="comments-empty-icon">${t('commentsEmptyIcon')}</span>${t('commentsEmpty')}</div>`; return; }
+  const me=currentUser?currentUser.username.toLowerCase():null;
+  const userIsAdmin=currentUser&&isAdmin(currentUser);
+  list.innerHTML=comments.slice().reverse().map(c=>{
+    const isMine=me&&c.author_username?.toLowerCase()===me;
+    const likeCount=c.likes||0, likedByMe=me&&(c.liked_by||[]).includes(me);
+    const certBadge=isCertified({username:c.author_username,role:c.author_role})?certifiedSVG():'';
+    const adminBadge=isAdmin({username:c.author_username,role:c.author_role})?'<span class="comment-admin-tag">Admin</span>':'';
+    const canDelete=isMine||userIsAdmin;
+    return `<div class="comment-item" id="ci-${c.id}">
+      <img class="comment-item-avatar" src="${escHtml(c.avatar||'')}" alt="${escHtml(c.pseudo)}" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(c.pseudo)}'">
+      <div class="comment-item-body">
+        <div class="comment-item-header">
+          <span class="comment-pseudo">${escHtml(c.pseudo)}${certBadge}${adminBadge}</span>
+          ${isMine?`<span class="comment-mine-tag">${t('commentMineTag')}</span>`:''}
+          <span class="comment-time">${timeAgo(c.created_at)}</span>
+        </div>
+        <div class="comment-text" id="ct-${c.id}">${escHtml(c.text)}</div>
+        <div class="comment-actions-row">
+          <button class="comment-action-btn comment-like-btn${likedByMe?' liked':''}" data-cid="${c.id}" data-sid="${sid}">👍 ${likeCount}</button>
+          ${isMine?`<button class="comment-action-btn comment-edit-btn" data-cid="${c.id}" data-sid="${sid}">${t('commentEdit')}</button>`:''}
+          ${canDelete?`<button class="comment-action-btn comment-delete-btn" data-cid="${c.id}" data-sid="${sid}">${t('commentDelete')}</button>`:''}
+        </div>
+        ${isMine?`<div class="comment-edit-form" id="cef-${c.id}"><textarea class="comment-edit-textarea" rows="2">${escHtml(c.text)}</textarea><div class="comment-edit-actions"><button class="comment-edit-save" data-cid="${c.id}" data-sid="${sid}">${t('commentSave')}</button><button class="comment-edit-cancel" data-cid="${c.id}">${t('commentCancel')}</button></div></div>`:''}
+      </div></div>`;
+  }).join('');
+
+  list.querySelectorAll('.comment-like-btn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      if(!isLoggedIn()){ showToast(t('commentLikeLogin'),'#F87171'); return; }
+      const cid=btn.dataset.cid, sid2=btn.dataset.sid;
+      const comments2=await sbGetComments(sid2);
+      const c=comments2.find(x=>x.id===cid); if(!c) return;
+      const lb=Array.isArray(c.liked_by)?[...c.liked_by]:[];
+      const pos=lb.indexOf(me);
+      let newLikes, newLikedBy;
+      if(pos>=0){ lb.splice(pos,1); newLikes=Math.max(0,(c.likes||0)-1); newLikedBy=lb; }
+      else { lb.push(me); newLikes=(c.likes||0)+1; newLikedBy=lb; }
+      await sbUpdateComment(cid, {likes:newLikes, liked_by:newLikedBy});
+      loadAndRenderComments(sid2);
+    });
+  });
+  list.querySelectorAll('.comment-edit-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ const ef=document.getElementById('cef-'+btn.dataset.cid); if(ef) ef.classList.toggle('open'); });
+  });
+  list.querySelectorAll('.comment-edit-save').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const ef=document.getElementById('cef-'+btn.dataset.cid);
+      const ta=ef?.querySelector('textarea'); if(!ta||!ta.value.trim()) return;
+      await sbUpdateComment(btn.dataset.cid, {text:ta.value.trim(), edited:true});
+      loadAndRenderComments(btn.dataset.sid); showToast(t('commentModified'),'#A78BFA');
+    });
+  });
+  list.querySelectorAll('.comment-edit-cancel').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ const ef=document.getElementById('cef-'+btn.dataset.cid); if(ef) ef.classList.remove('open'); });
+  });
+  list.querySelectorAll('.comment-delete-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const cid=btn.dataset.cid, sid2=btn.dataset.sid;
+      const isMineBtn=me&&comments.find(c=>c.id===cid)?.author_username?.toLowerCase()===me;
+      openConfirm({
+        title:t('confirmDeleteTitle'), sub:t('confirmDeleteSub'),
+        yesLabel:t('confirmYesLabel'), noLabel:t('confirmNoLabel'),
+        onYes:async()=>{ await sbDeleteComment(cid); loadAndRenderComments(sid2); showToast(t('commentDeleted'),'#F87171'); },
+        onEdit:isMineBtn?()=>{ const ef=document.getElementById('cef-'+cid); if(ef) ef.classList.add('open'); }:null,
+        editLabel:t('confirmEditLabel')
+      });
+    });
+  });
+}
+
+const commentTextarea=document.getElementById('commentTextarea');
+document.getElementById('commentSubmit').addEventListener('click', async ()=>{
+  if(!isLoggedIn()){ showToast('🔒','#F87171'); return; }
+  const text=commentTextarea.value.trim(); if(!text||!currentModalSid) return;
+  try{
+    const newC=await sbAddComment(currentModalSid, {
+      author_username: currentUser.username,
+      pseudo: currentUser.display_name||currentUser.username,
+      avatar: currentUser.avatar||AVATAR_OPTIONS[0],
+      text
+    });
+    commentTextarea.value='';
+    loadAndRenderComments(currentModalSid);
+    showToast(t('commentPublished'),'#A78BFA');
+  }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
+});
+commentTextarea.addEventListener('keydown', e=>{ if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)) document.getElementById('commentSubmit').click(); });
+
+// ============================================================
+// CONFIRM MODAL
+// ============================================================
+let confirmCallback=null, confirmEditCallback=null;
+const confirmOverlay=document.getElementById('confirmOverlay');
 function openConfirm(opts){
   document.getElementById('confirmTitle').textContent=opts.title||t('confirmDeleteTitle');
   document.getElementById('confirmSub').textContent=opts.sub||t('confirmDeleteSub');
@@ -1682,352 +1914,245 @@ function openConfirm(opts){
   document.getElementById('confirmEdit').style.display=opts.onEdit?'':'none';
   document.getElementById('confirmEdit').textContent=opts.editLabel||t('confirmEditLabel');
   document.getElementById('confirmNo').textContent=opts.noLabel||t('confirmNoLabel');
-  confirmCallback=opts.onYes||null;confirmEditCallback=opts.onEdit||null;
+  confirmCallback=opts.onYes||null; confirmEditCallback=opts.onEdit||null;
   confirmOverlay.classList.add('open');
 }
-function closeConfirm(){confirmOverlay.classList.remove('open');confirmCallback=null;confirmEditCallback=null;}
-document.getElementById('confirmYes').addEventListener('click',function(){if(confirmCallback)confirmCallback();closeConfirm();});
-document.getElementById('confirmEdit').addEventListener('click',function(){if(confirmEditCallback)confirmEditCallback();closeConfirm();});
-document.getElementById('confirmNo').addEventListener('click',closeConfirm);
-confirmOverlay.addEventListener('click',function(e){if(e.target===confirmOverlay)closeConfirm();});
-
-function renderComments(sid){
-  var comments=getComments(sid),list=document.getElementById('commentsList'),countBadge=document.getElementById('commentCount');
-  countBadge.textContent=comments.length;
-  if(comments.length===0){list.innerHTML='<div class="comments-empty"><span class="comments-empty-icon">'+t('commentsEmptyIcon')+'</span>'+t('commentsEmpty')+'</div>';return;}
-  var me=currentUser?currentUser.username.toLowerCase():null;
-  var userIsAdmin=currentUser&&isAdmin(currentUser.username);
-  list.innerHTML=comments.slice().reverse().map(function(c,ri){
-    var realIdx=comments.length-1-ri;
-    var isMine=me&&c.authorUsername&&c.authorUsername.toLowerCase()===me;
-    var likeCount=c.likes||0,likedByMe=me&&(c.likedBy||[]).indexOf(me)>=0;
-    var certBadge=isCertified(c.authorUsername)?certifiedSVG():'';
-    var adminBadge=isAdmin(c.authorUsername)?'<span class="comment-admin-tag">Admin</span>':'';
-    var canDelete=isMine||userIsAdmin;
-    return '<div class="comment-item" id="comment-'+sid+'-'+realIdx+'">'+
-      '<img class="comment-item-avatar" src="'+escHtml(c.avatar||'')+'" alt="'+escHtml(c.pseudo)+'" onerror="this.src=\'https://api.dicebear.com/7.x/identicon/svg?seed='+encodeURIComponent(c.pseudo)+'\'">'+
-      '<div class="comment-item-body">'+
-        '<div class="comment-item-header">'+
-          '<span class="comment-pseudo">'+escHtml(c.pseudo)+certBadge+adminBadge+'</span>'+
-          (isMine?'<span class="comment-mine-tag">'+t('commentMineTag')+'</span>':'')+
-          '<span class="comment-time">'+timeAgo(c.ts)+'</span>'+
-        '</div>'+
-        '<div class="comment-text" id="comment-text-'+sid+'-'+realIdx+'">'+escHtml(c.text)+'</div>'+
-        '<div class="comment-actions-row">'+
-          '<button class="comment-action-btn comment-like-btn'+(likedByMe?' liked':'')+'" data-sid="'+sid+'" data-idx="'+realIdx+'">👍 '+likeCount+'</button>'+
-          (isMine?'<button class="comment-action-btn comment-edit-btn" data-sid="'+sid+'" data-idx="'+realIdx+'">'+t('commentEdit')+'</button>':'')+
-          (canDelete?'<button class="comment-action-btn comment-delete-btn" data-sid="'+sid+'" data-idx="'+realIdx+'">'+t('commentDelete')+'</button>':'')+
-        '</div>'+
-        (isMine?'<div class="comment-edit-form" id="comment-edit-'+sid+'-'+realIdx+'"><textarea class="comment-edit-textarea" rows="2">'+escHtml(c.text)+'</textarea><div class="comment-edit-actions"><button class="comment-edit-save" data-sid="'+sid+'" data-idx="'+realIdx+'">'+t('commentSave')+'</button><button class="comment-edit-cancel" data-sid="'+sid+'" data-idx="'+realIdx+'">'+t('commentCancel')+'</button></div></div>':'')+
-      '</div></div>';
-  }).join('');
-
-  list.querySelectorAll('.comment-like-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      if(!isLoggedIn()){showToast(t('commentLikeLogin'),'#F87171');return;}
-      var s=btn.dataset.sid,idx=parseInt(btn.dataset.idx),comments=getComments(s),c=comments[idx],me2=currentUser.username.toLowerCase();
-      if(!c.likedBy)c.likedBy=[];
-      var pos=c.likedBy.indexOf(me2);
-      if(pos>=0){c.likedBy.splice(pos,1);c.likes=Math.max(0,(c.likes||0)-1);}else{c.likedBy.push(me2);c.likes=(c.likes||0)+1;}
-      saveComments(s,comments);renderComments(s);
-    });
-  });
-  list.querySelectorAll('.comment-edit-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var s=btn.dataset.sid,idx=parseInt(btn.dataset.idx),ef=document.getElementById('comment-edit-'+s+'-'+idx);if(ef)ef.classList.toggle('open');
-    });
-  });
-  list.querySelectorAll('.comment-edit-save').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var s=btn.dataset.sid,idx=parseInt(btn.dataset.idx),comments=getComments(s),c=comments[idx];
-      var ef=document.getElementById('comment-edit-'+s+'-'+idx),ta=ef?ef.querySelector('textarea'):null;
-      if(!ta||!ta.value.trim())return;
-      c.text=ta.value.trim();c.edited=true;saveComments(s,comments);renderComments(s);showToast(t('commentModified'),'#A78BFA');
-    });
-  });
-  list.querySelectorAll('.comment-edit-cancel').forEach(function(btn){btn.addEventListener('click',function(){var ef=document.getElementById('comment-edit-'+btn.dataset.sid+'-'+btn.dataset.idx);if(ef)ef.classList.remove('open');});});
-  list.querySelectorAll('.comment-delete-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var s=btn.dataset.sid,idx=parseInt(btn.dataset.idx);
-      openConfirm({
-        title:t('confirmDeleteTitle'),sub:t('confirmDeleteSub'),
-        yesLabel:t('confirmYesLabel'),noLabel:t('confirmNoLabel'),
-        onYes:function(){var comments=getComments(s);comments.splice(idx,1);saveComments(s,comments);renderComments(s);showToast(t('commentDeleted'),'#F87171');},
-        onEdit:isMine?function(){var ef=document.getElementById('comment-edit-'+s+'-'+idx);if(ef)ef.classList.add('open');}:null,
-        editLabel:t('confirmEditLabel')
-      });
-    });
-  });
-}
-
-var commentTextarea=document.getElementById('commentTextarea');
-document.getElementById('commentSubmit').addEventListener('click',function(){
-  if(!isLoggedIn()){showToast('🔒','#F87171');return;}
-  var text=commentTextarea.value.trim();if(!text||!currentModalSid)return;
-  var comments=getComments(currentModalSid);
-  comments.push({pseudo:currentUser.displayName||currentUser.username,authorUsername:currentUser.username,avatar:currentUser.avatar||AVATAR_OPTIONS[0],text:text,ts:Date.now(),likes:0,likedBy:[]});
-  saveComments(currentModalSid,comments);commentTextarea.value='';renderComments(currentModalSid);showToast(t('commentPublished'),'#A78BFA');
-});
-commentTextarea.addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))document.getElementById('commentSubmit').click();});
+function closeConfirm(){ confirmOverlay.classList.remove('open'); confirmCallback=null; confirmEditCallback=null; }
+document.getElementById('confirmYes').addEventListener('click', ()=>{ if(confirmCallback) confirmCallback(); closeConfirm(); });
+document.getElementById('confirmEdit').addEventListener('click', ()=>{ if(confirmEditCallback) confirmEditCallback(); closeConfirm(); });
+document.getElementById('confirmNo').addEventListener('click', closeConfirm);
+confirmOverlay.addEventListener('click', e=>{ if(e.target===confirmOverlay) closeConfirm(); });
 
 // ============================================================
 // ADMIN PANEL
 // ============================================================
-var adminOverlay=document.getElementById('adminOverlay');
-var currentAdminTab='votes';
+const adminOverlay=document.getElementById('adminOverlay');
+let currentAdminTab='votes';
 
 function openAdminPanel(){
-  if(!currentUser||!isAdmin(currentUser.username)){showToast('⛔ Accès refusé','#F87171');return;}
-  adminOverlay.classList.add('open');
-  document.body.style.overflow='hidden';
+  if(!currentUser||!isAdmin(currentUser)){ showToast('⛔ Accès refusé','#F87171'); return; }
+  adminOverlay.classList.add('open'); document.body.style.overflow='hidden';
   switchAdminTab('votes');
 }
-document.getElementById('adminClose').addEventListener('click',function(){adminOverlay.classList.remove('open');document.body.style.overflow='';});
-adminOverlay.addEventListener('click',function(e){if(e.target===adminOverlay){adminOverlay.classList.remove('open');document.body.style.overflow='';}});
+document.getElementById('adminClose').addEventListener('click', ()=>{ adminOverlay.classList.remove('open'); document.body.style.overflow=''; });
+adminOverlay.addEventListener('click', e=>{ if(e.target===adminOverlay){ adminOverlay.classList.remove('open'); document.body.style.overflow=''; } });
 
-document.querySelectorAll('.admin-tab').forEach(function(tab){
-  tab.addEventListener('click',function(){switchAdminTab(tab.dataset.atab);});
-});
+document.querySelectorAll('.admin-tab').forEach(tab=>tab.addEventListener('click',()=>switchAdminTab(tab.dataset.atab)));
 function switchAdminTab(tab){
   currentAdminTab=tab;
-  document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.toggle('active',t.dataset.atab===tab);});
-  document.querySelectorAll('.admin-section').forEach(function(s){s.classList.toggle('active',s.id==='atab-'+tab);});
-  if(tab==='votes')renderAdminVotes();
-  if(tab==='users')renderAdminUsers();
-  if(tab==='scripts')renderAdminScripts();
-  if(tab==='comments')renderAdminComments();
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.toggle('active',t.dataset.atab===tab));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.toggle('active',s.id==='atab-'+tab));
+  if(tab==='votes') renderAdminVotes();
+  if(tab==='users') renderAdminUsers();
+  if(tab==='scripts') renderAdminScripts();
+  if(tab==='comments') renderAdminComments();
 }
 
-// --- ADMIN: VOTES ---
-function renderAdminVotes(){
-  var v=getVotes(),scripts=getScripts();
-  var html='';
-  Object.values(scripts).forEach(function(data){
-    var sv=v[data.id]||{like:0,dislike:0,userVotes:{}};
-    html+='<div class="admin-script-card">'+
-      '<div class="admin-script-card-header"><span class="admin-script-name">'+escHtml(data.name)+'</span></div>'+
-      '<div class="admin-votes-row">'+
-        '<div class="vote-edit-group"><span>👍</span><input class="vote-edit-input" type="number" min="0" value="'+(sv.like||0)+'" id="vlike-'+data.id+'" data-sid="'+data.id+'" data-type="like"></div>'+
-        '<div class="vote-edit-group"><span>👎</span><input class="vote-edit-input" type="number" min="0" value="'+(sv.dislike||0)+'" id="vdislike-'+data.id+'" data-sid="'+data.id+'" data-type="dislike"></div>'+
-        '<button class="admin-btn admin-btn-gold admin-mini-btn" onclick="saveAdminVotes(\''+data.id+'\')">Sauvegarder</button>'+
-      '</div>'+
-    '</div>';
-  });
-  document.getElementById('adminVotesList').innerHTML=html||'<p style="color:var(--text-muted);font-size:0.82rem;">Aucun script.</p>';
+// ADMIN VOTES
+async function renderAdminVotes(){
+  const el=document.getElementById('adminVotesList');
+  const counts = await sbGetAllVotesCounts();
+  let html='';
+  for(const data of scriptsCache){
+    const sv=counts[data.id]||{like:0,dislike:0};
+    html+=`<div class="admin-script-card">
+      <div class="admin-script-card-header"><span class="admin-script-name">${escHtml(data.name)}</span></div>
+      <div class="admin-votes-row">
+        <div class="vote-edit-group"><span>👍</span><input class="vote-edit-input" type="number" min="0" value="${sv.like||0}" id="vlike-${data.id}"></div>
+        <div class="vote-edit-group"><span>👎</span><input class="vote-edit-input" type="number" min="0" value="${sv.dislike||0}" id="vdislike-${data.id}"></div>
+        <button class="admin-btn admin-btn-gold admin-mini-btn" onclick="saveAdminVotes('${data.id}')">Sauvegarder</button>
+      </div></div>`;
+  }
+  el.innerHTML=html||'<p style="color:var(--text-muted);font-size:0.82rem;">Aucun script.</p>';
 }
-function saveAdminVotes(sid){
-  var v=getVotes();
-  if(!v[sid])v[sid]={like:0,dislike:0,userVotes:{}};
-  var likeEl=document.getElementById('vlike-'+sid),dislikeEl=document.getElementById('vdislike-'+sid);
-  if(likeEl)v[sid].like=Math.max(0,parseInt(likeEl.value)||0);
-  if(dislikeEl)v[sid].dislike=Math.max(0,parseInt(dislikeEl.value)||0);
-  saveVotes(v);updateVoteUI();showToast('✅ Votes mis à jour !','#34D399');
+async function saveAdminVotes(sid){
+  const likeVal=parseInt(document.getElementById('vlike-'+sid)?.value)||0;
+  const dislikeVal=parseInt(document.getElementById('vdislike-'+sid)?.value)||0;
+  // Supprimer tous les votes synthétiques existants, puis insérer
+  await sb.from('votes').delete().eq('script_id',sid).eq('synthetic',true);
+  const toInsert=[];
+  for(let i=0;i<likeVal;i++) toInsert.push({script_id:sid,username:`__synth_like_${i}`,vote_type:'like',synthetic:true});
+  for(let i=0;i<dislikeVal;i++) toInsert.push({script_id:sid,username:`__synth_dislike_${i}`,vote_type:'dislike',synthetic:true});
+  if(toInsert.length>0) await sb.from('votes').insert(toInsert);
+  voteCounts=await sbGetAllVotesCounts(); updateVoteUI();
+  showToast('✅ Votes mis à jour !','#34D399');
 }
 
-// --- ADMIN: USERS ---
-var tempBanTargetUser='';
-function renderAdminUsers(){
-  var q=(document.getElementById('adminUserSearch')?document.getElementById('adminUserSearch').value.toLowerCase():'');
-  var db=getUsers(),html='';
-  var bans=Store.get('banned_users',{});
-  var admins=Store.get('admin_users',[]);
-  var certs=Store.get('certified_users',[]);
-  Object.values(db).forEach(function(u){
-    if(q&&!u.username.toLowerCase().includes(q)&&!(u.displayName||'').toLowerCase().includes(q))return;
-    var ukey=u.username.toLowerCase();
-    var banEntry=bans[ukey];
-    var isOwner=ukey===OWNER_USERNAME.toLowerCase();
-    var uIsAdmin=admins.map(function(a){return a.toLowerCase();}).indexOf(ukey)>=0||isOwner;
-    var uIsCert=certs.map(function(c){return c.toLowerCase();}).indexOf(ukey)>=0||isOwner;
-    var banned=isBanned(u.username);
-    var badges='';
-    if(isOwner)badges+='<span class="admin-user-badge badge-admin">👑 Propriétaire</span>';
-    else if(uIsAdmin)badges+='<span class="admin-user-badge badge-admin">⚙️ Admin</span>';
-    if(uIsCert&&!isOwner)badges+='<span class="admin-user-badge badge-certified">✓ Certifié</span>';
-    if(banned){
-      var bi=banEntry;var banTxt=bi&&bi.permanent?'Banni':'Banni temp';
-      badges+='<span class="admin-user-badge badge-banned">🔨 '+banTxt+'</span>';
-    }
-    html+='<div class="admin-user-row">'+
-      '<img class="admin-user-avatar" src="'+escHtml(u.avatar||AVATAR_OPTIONS[0])+'" onerror="this.src=\'https://api.dicebear.com/7.x/identicon/svg?seed='+escHtml(u.username)+'\'">'+
-      '<div class="admin-user-info"><div class="admin-user-name">'+escHtml(u.displayName||u.username)+'</div><div class="admin-user-meta">@'+escHtml(u.username)+badges+'</div></div>'+
-      (!isOwner?'<div class="admin-user-actions">'+
-        (!banned?'<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminPermBan(\''+escHtml(u.username)+'\')">🔨 Ban</button>':'<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminUnban(\''+escHtml(u.username)+'\')">🔓 Dé-ban</button>')+
-        (!banned?'<button class="admin-btn admin-mini-btn" style="border-color:rgba(245,158,11,0.4);color:#FCD34D;" onclick="adminTempBanOpen(\''+escHtml(u.username)+'\')">⏱ Temp</button>':'')+
-        (!uIsAdmin?'<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminGiveAdmin(\''+escHtml(u.username)+'\')">⚙️ Admin</button>':'<button class="admin-btn admin-mini-btn" style="border-color:rgba(239,68,68,0.3);color:#F87171;" onclick="adminRevokeAdmin(\''+escHtml(u.username)+'\')">⊘ Admin</button>')+
-        (!uIsCert?'<button class="admin-btn admin-mini-btn admin-btn-purple" onclick="adminCertify(\''+escHtml(u.username)+'\')">✓ Certifier</button>':'<button class="admin-btn admin-mini-btn" style="border-color:var(--border);color:var(--text-muted);" onclick="adminUncertify(\''+escHtml(u.username)+'\')">⊘ Certif</button>')+
-      '</div>':'<span style="font-size:0.72rem;color:#FFD700;">Propriétaire</span>')+
-    '</div>';
-  });
-  document.getElementById('adminUsersList').innerHTML=html||'<p style="color:var(--text-muted);font-size:0.82rem;">Aucun utilisateur trouvé.</p>';
+// ADMIN USERS
+let tempBanTargetUser='';
+async function renderAdminUsers(){
+  const q=document.getElementById('adminUserSearch')?.value.toLowerCase()||'';
+  const users=await sbGetAllUsers(q);
+  let html='';
+  for(const u of users){
+    const isOwner=u.username===OWNER_USERNAME.toLowerCase();
+    const uIsAdmin=u.role==='admin'||u.role==='owner';
+    const uIsCert=u.role==='certified'||uIsAdmin;
+    const banned=isBanned(u);
+    let badges='';
+    if(isOwner) badges+='<span class="admin-user-badge badge-admin">👑 Propriétaire</span>';
+    else if(uIsAdmin) badges+='<span class="admin-user-badge badge-admin">⚙️ Admin</span>';
+    if(uIsCert&&!isOwner) badges+='<span class="admin-user-badge badge-certified">✓ Certifié</span>';
+    if(banned) badges+=`<span class="admin-user-badge badge-banned">🔨 ${u.banned?'Banni':'Banni temp'}</span>`;
+    html+=`<div class="admin-user-row">
+      <img class="admin-user-avatar" src="${escHtml(u.avatar||AVATAR_OPTIONS[0])}" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(u.username)}'">
+      <div class="admin-user-info"><div class="admin-user-name">${escHtml(u.display_name||u.username)}</div><div class="admin-user-meta">@${escHtml(u.username)}${badges}</div></div>
+      ${!isOwner?`<div class="admin-user-actions">
+        ${!banned?`<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminPermBan('${escHtml(u.username)}')">🔨 Ban</button>`:`<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminUnban('${escHtml(u.username)}')">🔓 Dé-ban</button>`}
+        ${!banned?`<button class="admin-btn admin-mini-btn" style="border-color:rgba(245,158,11,0.4);color:#FCD34D;" onclick="adminTempBanOpen('${escHtml(u.username)}')">⏱ Temp</button>`:''}
+        ${!uIsAdmin?`<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminGiveAdmin('${escHtml(u.username)}')">⚙️ Admin</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:rgba(239,68,68,0.3);color:#F87171;" onclick="adminRevokeAdmin('${escHtml(u.username)}')">⊘ Admin</button>`}
+        ${!uIsCert?`<button class="admin-btn admin-mini-btn admin-btn-purple" onclick="adminCertify('${escHtml(u.username)}')">✓ Certifier</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:var(--border);color:var(--text-muted);" onclick="adminUncertify('${escHtml(u.username)}')">⊘ Certif</button>`}
+      </div>`:'<span style="font-size:0.72rem;color:#FFD700;">Propriétaire</span>'}
+    </div>`;
+  }
+  document.getElementById('adminUsersList').innerHTML=html||'<p style="color:var(--text-muted);font-size:0.82rem;">Aucun utilisateur.</p>';
 }
-document.getElementById('adminUserSearch').addEventListener('input',function(){renderAdminUsers();});
+document.getElementById('adminUserSearch').addEventListener('input', ()=>renderAdminUsers());
 
-function adminPermBan(username){
-  if(username.toLowerCase()===OWNER_USERNAME.toLowerCase())return;
-  var bans=Store.get('banned_users',{});
-  bans[username.toLowerCase()]={permanent:true,reason:'Banni par admin',at:Date.now()};
-  Store.set('banned_users',bans);
-  if(currentUser&&currentUser.username.toLowerCase()===username.toLowerCase()){logout();}
-  showToast('🔨 '+username+' banni définitivement.','#F87171');renderAdminUsers();
+async function adminPermBan(username){
+  if(username===OWNER_USERNAME) return;
+  await sbUpdateUser(username, {banned:true, ban_reason:'Banni par admin', ban_until:null});
+  if(currentUser?.username===username){ sessionLogout(); updateAuthUI(); }
+  showToast(`🔨 ${username} banni définitivement.`,'#F87171'); renderAdminUsers();
 }
-function adminUnban(username){
-  var bans=Store.get('banned_users',{});delete bans[username.toLowerCase()];Store.set('banned_users',bans);
-  showToast('🔓 '+username+' débanni.','#34D399');renderAdminUsers();
+async function adminUnban(username){
+  await sbUpdateUser(username, {banned:false, ban_until:null, ban_reason:null});
+  showToast(`🔓 ${username} débanni.`,'#34D399'); renderAdminUsers();
 }
-function adminTempBanOpen(username){
-  tempBanTargetUser=username;
-  document.getElementById('tempBanUsername').value=username;
-  document.getElementById('tempBanForm').style.display='block';
-}
-document.getElementById('tempBanConfirm').addEventListener('click',function(){
-  if(!tempBanTargetUser)return;
-  var dur=parseInt(document.getElementById('tempBanDuration').value)||86400000;
-  var reason=document.getElementById('tempBanReason').value.trim()||'Comportement inapproprié';
-  var bans=Store.get('banned_users',{});
-  bans[tempBanTargetUser.toLowerCase()]={permanent:false,until:Date.now()+dur,reason:reason,at:Date.now()};
-  Store.set('banned_users',bans);
-  if(currentUser&&currentUser.username.toLowerCase()===tempBanTargetUser.toLowerCase()){logout();}
-  showToast('⏱ '+tempBanTargetUser+' banni temporairement.','#FCD34D');
-  document.getElementById('tempBanForm').style.display='none';tempBanTargetUser='';renderAdminUsers();
+function adminTempBanOpen(username){ tempBanTargetUser=username; document.getElementById('tempBanUsername').value=username; document.getElementById('tempBanForm').style.display='block'; }
+document.getElementById('tempBanConfirm').addEventListener('click', async ()=>{
+  if(!tempBanTargetUser) return;
+  const dur=parseInt(document.getElementById('tempBanDuration').value)||86400000;
+  const reason=document.getElementById('tempBanReason').value.trim()||'Comportement inapproprié';
+  const until=new Date(Date.now()+dur).toISOString();
+  await sbUpdateUser(tempBanTargetUser, {banned:false, ban_until:until, ban_reason:reason});
+  if(currentUser?.username===tempBanTargetUser){ sessionLogout(); updateAuthUI(); }
+  showToast(`⏱ ${tempBanTargetUser} banni temporairement.`,'#FCD34D');
+  document.getElementById('tempBanForm').style.display='none'; tempBanTargetUser=''; renderAdminUsers();
 });
-document.getElementById('tempBanCancel').addEventListener('click',function(){document.getElementById('tempBanForm').style.display='none';tempBanTargetUser='';});
+document.getElementById('tempBanCancel').addEventListener('click', ()=>{ document.getElementById('tempBanForm').style.display='none'; tempBanTargetUser=''; });
 
-function adminGiveAdmin(username){
-  var admins=Store.get('admin_users',[]);
-  if(admins.map(function(a){return a.toLowerCase();}).indexOf(username.toLowerCase())<0)admins.push(username);
-  Store.set('admin_users',admins);showToast('⚙️ '+username+' promu Admin !','#FFD700');renderAdminUsers();
-}
-function adminRevokeAdmin(username){
-  var admins=Store.get('admin_users',[]);
-  admins=admins.filter(function(a){return a.toLowerCase()!==username.toLowerCase();});
-  Store.set('admin_users',admins);showToast('⊘ Admin retiré à '+username+'.','#F87171');renderAdminUsers();
-}
-function adminCertify(username){
-  var certs=Store.get('certified_users',[]);
-  if(certs.map(function(c){return c.toLowerCase();}).indexOf(username.toLowerCase())<0)certs.push(username);
-  Store.set('certified_users',certs);showToast('✓ '+username+' certifié !','#A78BFA');renderAdminUsers();
-}
-function adminUncertify(username){
-  var certs=Store.get('certified_users',[]);
-  certs=certs.filter(function(c){return c.toLowerCase()!==username.toLowerCase();});
-  Store.set('certified_users',certs);showToast('⊘ Certification retirée.','#F87171');renderAdminUsers();
-}
+async function adminGiveAdmin(username){ await sbUpdateUser(username,{role:'admin'}); showToast(`⚙️ ${username} promu Admin !`,'#FFD700'); renderAdminUsers(); }
+async function adminRevokeAdmin(username){ await sbUpdateUser(username,{role:'member'}); showToast(`⊘ Admin retiré à ${username}.`,'#F87171'); renderAdminUsers(); }
+async function adminCertify(username){ await sbUpdateUser(username,{role:'certified'}); showToast(`✓ ${username} certifié !`,'#A78BFA'); renderAdminUsers(); }
+async function adminUncertify(username){ await sbUpdateUser(username,{role:'member'}); showToast(`⊘ Certification retirée.`,'#F87171'); renderAdminUsers(); }
 
-// --- ADMIN: SCRIPTS ---
-function renderAdminScripts(){
-  var scripts=getScripts(),html='';
-  Object.values(scripts).forEach(function(data){
-    html+='<div class="admin-script-card">'+
-      '<div class="admin-script-card-header">'+
-        '<span class="admin-script-name">'+escHtml(data.name)+'</span>'+
-        '<div class="admin-script-actions">'+
-          '<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteScript(\''+data.id+'\')">🗑 Supprimer</button>'+
-        '</div>'+
-      '</div>'+
-      '<div style="font-size:0.72rem;color:var(--text-muted);">ID: <code>'+escHtml(data.id)+'</code> · Catégorie: '+escHtml(data.catLabel||data.category)+' · Statut: '+escHtml(data.statusLabel||data.status)+'</div>'+
-    '</div>';
-  });
+// ADMIN SCRIPTS
+async function renderAdminScripts(){
+  let html='';
+  for(const data of scriptsCache){
+    html+=`<div class="admin-script-card">
+      <div class="admin-script-card-header">
+        <span class="admin-script-name">${escHtml(data.name)}</span>
+        <div class="admin-script-actions"><button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteScript('${data.id}')">🗑 Supprimer</button></div>
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-muted);">ID: <code>${escHtml(data.id)}</code> · ${escHtml(data.category)} · ${escHtml(data.status)}</div>
+    </div>`;
+  }
   document.getElementById('adminScriptsList').innerHTML=html||'<p style="color:var(--text-muted);font-size:0.82rem;">Aucun script.</p>';
-  // Update comment filter select
-  var sel=document.getElementById('adminCommentFilter');
-  if(sel){sel.innerHTML=Object.values(getScripts()).map(function(s){return'<option value="'+s.id+'">'+escHtml(s.name)+'</option>';}).join('');}
+  const sel=document.getElementById('adminCommentFilter');
+  if(sel) sel.innerHTML=scriptsCache.map(s=>`<option value="${s.id}">${escHtml(s.name)}</option>`).join('');
 }
 
-document.getElementById('addScriptBtn').addEventListener('click',function(){
-  var name=document.getElementById('newScriptName').value.trim();
-  var category=document.getElementById('newScriptCategory').value;
-  var gameName=document.getElementById('newScriptGameName').value.trim();
-  var gameLink=document.getElementById('newScriptGameLink').value.trim();
-  var creator=document.getElementById('newScriptCreator').value.trim();
-  var players=document.getElementById('newScriptPlayers').value.trim();
-  var banner=document.getElementById('newScriptBanner').value.trim();
-  var file=document.getElementById('newScriptFile').value.trim();
-  var desc=document.getElementById('newScriptDesc').value.trim();
-  var script=document.getElementById('newScriptCode').value.trim();
-  var display=document.getElementById('newScriptDisplay').value.trim();
-  var status=document.getElementById('newScriptStatus').value;
-
-  if(!name||!script){showToast('⚠️ Nom et script requis.','#F87171');return;}
-  var id=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  var scripts=getScripts();
-  if(scripts[id]){id+='-'+Date.now();}
-  var statusLabel={active:'Actif',new:'Nouveau',popular:'Populaire'}[status]||'Actif';
-  scripts[id]={
-    id:id,name:name,category:category,
-    catLabel:category==='util'?'Utilitaires':'Games',
-    catClass:category==='util'?'cat-util':'cat-game',
-    status:status,statusLabel:statusLabel,
-    banner:banner||null,gameName:gameName||null,gameLink:gameLink||null,
-    creator:creator||'Sentinel Team',activePlayers:players||null,
-    maturity:null,scriptFile:file||name.toLowerCase().replace(/ /g,'-')+'.lua',
-    desc:desc||'',script:script,
-    scriptDisplay:display||script
-  };
-  saveScripts(scripts);
-  renderAllCards();renderAdminScripts();
-  showToast('✅ Script "'+name+'" ajouté !','#34D399');
-  // Reset fields
-  ['newScriptName','newScriptGameName','newScriptGameLink','newScriptCreator','newScriptPlayers','newScriptBanner','newScriptFile','newScriptDesc','newScriptCode','newScriptDisplay'].forEach(function(id2){var el=document.getElementById(id2);if(el)el.value='';});
+document.getElementById('addScriptBtn').addEventListener('click', async ()=>{
+  const name=document.getElementById('newScriptName').value.trim();
+  const category=document.getElementById('newScriptCategory').value;
+  const gameName=document.getElementById('newScriptGameName').value.trim();
+  const gameLink=document.getElementById('newScriptGameLink').value.trim();
+  const creator=document.getElementById('newScriptCreator').value.trim();
+  const players=document.getElementById('newScriptPlayers').value.trim();
+  const banner=document.getElementById('newScriptBanner').value.trim();
+  const file=document.getElementById('newScriptFile').value.trim();
+  const desc=document.getElementById('newScriptDesc').value.trim();
+  const script=document.getElementById('newScriptCode').value.trim();
+  const display=document.getElementById('newScriptDisplay').value.trim();
+  const status=document.getElementById('newScriptStatus').value;
+  if(!name||!script){ showToast('⚠️ Nom et script requis.','#F87171'); return; }
+  const id=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+(scriptsCache.find(s=>s.id===name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''))?'-'+Date.now():'');
+  const statusLabel={active:'Actif',new:'Nouveau',popular:'Populaire'}[status]||'Actif';
+  try{
+    await sbAddScript({id,name,category,status,status_label:statusLabel,banner:banner||null,game_name:gameName||null,game_link:gameLink||null,creator:creator||'Sentinel Team',active_players:players||null,maturity:null,script_file:file||name.toLowerCase().replace(/ /g,'-')+'.lua',description:desc||'',script,script_display:display||script});
+    await sbLoadScripts(); renderAllCards(); renderAdminScripts();
+    showToast(`✅ Script "${name}" ajouté !`,'#34D399');
+    ['newScriptName','newScriptGameName','newScriptGameLink','newScriptCreator','newScriptPlayers','newScriptBanner','newScriptFile','newScriptDesc','newScriptCode','newScriptDisplay'].forEach(id2=>{ const el=document.getElementById(id2); if(el) el.value=''; });
+  }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
 });
 
-function adminDeleteScript(sid){
-  if(!confirm('Supprimer ce script ?'))return;
-  var scripts=getScripts();delete scripts[sid];saveScripts(scripts);
-  renderAllCards();renderAdminScripts();showToast('🗑️ Script supprimé.','#F87171');
+async function adminDeleteScript(sid){
+  if(!confirm('Supprimer ce script ?')) return;
+  await sbDeleteScript(sid);
+  await sbLoadScripts(); renderAllCards(); renderAdminScripts();
+  showToast('🗑️ Script supprimé.','#F87171');
 }
 
-// --- ADMIN: COMMENTS ---
-function renderAdminComments(){
-  var sel=document.getElementById('adminCommentFilter');
-  // Populate select if needed
-  var scripts=getScripts();
-  if(sel){sel.innerHTML=Object.values(scripts).map(function(s){return'<option value="'+s.id+'">'+escHtml(s.name)+'</option>';}).join('');}
-  var sid=sel?sel.value:'';
-  if(!sid)return;
-  var comments=getComments(sid);
-  var html='';
-  if(comments.length===0){html='<p style="color:var(--text-muted);font-size:0.82rem;padding:1rem 0;">Aucun commentaire.</p>';}
-  comments.slice().reverse().forEach(function(c,ri){
-    var realIdx=comments.length-1-ri;
-    html+='<div class="admin-comment-row">'+
-      '<img class="admin-user-avatar" src="'+escHtml(c.avatar||'')+'" onerror="this.src=\'https://api.dicebear.com/7.x/identicon/svg?seed='+encodeURIComponent(c.pseudo)+'\'">'+
-      '<div class="admin-comment-body">'+
-        '<div class="admin-comment-meta"><strong>'+escHtml(c.pseudo)+'</strong> (@'+escHtml(c.authorUsername||'')+') · '+timeAgo(c.ts)+' · 👍 '+(c.likes||0)+'</div>'+
-        '<div class="admin-comment-text">'+escHtml(c.text)+'</div>'+
-      '</div>'+
-      '<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteComment(\''+sid+'\','+realIdx+')">🗑</button>'+
-    '</div>';
+// ADMIN COMMENTS
+async function renderAdminComments(){
+  const sel=document.getElementById('adminCommentFilter');
+  await renderAdminScripts(); // populate select
+  const sid=sel?.value; if(!sid) return;
+  const comments=await sbGetComments(sid);
+  let html='';
+  if(comments.length===0) html='<p style="color:var(--text-muted);font-size:0.82rem;padding:1rem 0;">Aucun commentaire.</p>';
+  comments.slice().reverse().forEach(c=>{
+    html+=`<div class="admin-comment-row">
+      <img class="admin-user-avatar" src="${escHtml(c.avatar||'')}" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(c.pseudo)}'">
+      <div class="admin-comment-body">
+        <div class="admin-comment-meta"><strong>${escHtml(c.pseudo)}</strong> (@${escHtml(c.author_username||'')}) · ${timeAgo(c.created_at)} · 👍 ${c.likes||0}</div>
+        <div class="admin-comment-text">${escHtml(c.text)}</div>
+      </div>
+      <button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteCommentById('${c.id}','${sid}')">🗑</button>
+    </div>`;
   });
   document.getElementById('adminCommentsList').innerHTML=html;
 }
-document.getElementById('adminCommentFilter').addEventListener('change',function(){renderAdminComments();});
-function adminDeleteComment(sid,idx){
-  var comments=getComments(sid);comments.splice(idx,1);saveComments(sid,comments);
+document.getElementById('adminCommentFilter').addEventListener('change', ()=>renderAdminComments());
+async function adminDeleteCommentById(id, sid){
+  await sbDeleteComment(id);
   renderAdminComments();
-  if(currentModalSid===sid)renderComments(sid);
+  if(currentModalSid===sid) loadAndRenderComments(sid);
   showToast('🗑️ Commentaire supprimé.','#F87171');
 }
 
 // ============================================================
-// TRACK PAGE VIEW
+// STATS (member count, script count)
 // ============================================================
-(function(){
-  var a=Store.get('analytics',{views:0,copies:0,history:[]});a.views=(a.views||0)+1;
-  var today=new Date().toLocaleDateString('fr'),idx=(a.history||[]).findIndex(function(h){return h.date===today;});
-  if(idx>=0){a.history[idx].views=(a.history[idx].views||0)+1;}else{a.history.push({date:today,views:1,copies:0});}
-  Store.set('analytics',a);
-})();
+async function loadStats(){
+  const count = await sbCountUsers();
+  setTxt('statMemberCount', count);
+  setTxt('memberCountBanner', count);
+}
 
 // ============================================================
 // INIT
 // ============================================================
-renderAllCards();
-applyTranslations();
-updateAuthUI();
-initCardHover();
+async function init(){
+  showLoading();
+  try{
+    await sbLoadScripts();
+    await loadVotesCache();
+    renderAllCards();
+    applyTranslations();
+    updateAuthUI();
+    await loadStats();
+    // Analytics: incrémenter les vues
+    sbIncrementAnalytic('views');
+    // Si session existante, refresh depuis Supabase
+    if(currentUser){
+      const fresh = await sbGetUser(currentUser.username);
+      if(fresh){
+        if(isBanned(fresh)){ sessionLogout(); updateAuthUI(); showToast('🔒 Ton compte a été banni.','#F87171'); }
+        else { sessionLogin(fresh); updateAuthUI(); }
+      } else {
+        sessionLogout(); updateAuthUI();
+      }
+    }
+  } catch(e){ console.error('Init error:', e); showToast('Erreur de connexion Supabase','#F87171'); }
+  finally{ hideLoading(); }
+}
+
+init();
 </script>
 </body>
 </html>
 HTMLEOF
-echo "Done: $(wc -c < /home/claude/sentinel_v2.html) bytes"
+echo "Done: $(wc -c < /home/claude/sentinel_v3.html) bytes"
