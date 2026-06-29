@@ -25,6 +25,14 @@
 
   html { scroll-behavior:smooth; }
   body { background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;cursor:none;transition:background 0.4s,color 0.3s; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
+  * { scrollbar-width: thin; scrollbar-color: var(--purple) var(--bg); }
+
   body::after { content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,58,237,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0; }
   body.theme-light::after { background-image:linear-gradient(rgba(124,58,237,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,0.04) 1px,transparent 1px); }
   body.theme-nexus::after { display:none; }
@@ -60,24 +68,100 @@
   .discord-dot { width:7px;height:7px;background:#57F287;border-radius:50%;animation:pg 2s ease-in-out infinite; }
   @keyframes pg { 0%,100%{opacity:1;box-shadow:0 0 4px #57F287;} 50%{opacity:.5;box-shadow:0 0 10px #57F287;} }
 
-  .hero { min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 4rem;position:relative; }
-  .hero-badge { display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.9rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);border-radius:999px;font-size:0.75rem;font-weight:500;color:var(--purple-light);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:2rem; }
-  .hero-badge::before { content:'';width:6px;height:6px;background:var(--purple-light);border-radius:50%;animation:pp 2s infinite; }
-  @keyframes pp { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero { min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 3rem;position:relative; }
+
+  /* ============================================================
+     PAGE NAVIGATION TABS
+     ============================================================ */
+  .page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  .page-nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.3rem;
+  }
+  .page-tab {
+    position: relative;
+    padding: 0.5rem 1.4rem;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: none;
+    transition: color 0.25s;
+    z-index: 1;
+    white-space: nowrap;
+  }
+  .page-tab:hover { color: var(--text); }
+  .page-tab.active { color: var(--text); font-weight: 600; }
+  .page-tab-slider {
+    position: absolute;
+    bottom: 0.3rem;
+    height: calc(100% - 0.6rem);
+    background: rgba(124,58,237,0.14);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 9px;
+    transition: left 0.35s cubic-bezier(0.34,1.2,0.64,1), width 0.35s cubic-bezier(0.34,1.2,0.64,1);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .page-tab-underline {
+    position: absolute;
+    bottom: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+    border-radius: 2px;
+    transition: left 0.35s cubic-bezier(0.34,1.2,0.64,1), width 0.35s cubic-bezier(0.34,1.2,0.64,1), opacity 0.2s;
+    pointer-events: none;
+    z-index: 2;
+    box-shadow: 0 0 8px rgba(167,139,250,0.5);
+  }
+
+  /* Page sections */
+  .page-section { display: none; }
+  .page-section.active {
+    display: block;
+    animation: pageFadeIn 0.38s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes pageFadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     HERO TITLE
+     ============================================================ */
   .hero-title { font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,6.5rem);font-weight:700;line-height:1.0;letter-spacing:-0.04em;margin-bottom:1.5rem; }
   .hero-title .line1 { display:block;color:var(--text); }
   .hero-title .line2 { display:block;background:linear-gradient(90deg,var(--purple-light),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-  .hero-sub { font-size:1.05rem;color:var(--text-muted);max-width:480px;line-height:1.6;margin-bottom:3rem;font-weight:300; }
-  .hero-stats { display:flex;gap:3rem;align-items:center;justify-content:center; }
+  .hero-sub { font-size:1.05rem;color:var(--text-muted);max-width:480px;line-height:1.6;margin-bottom:2rem;font-weight:300; }
+  .hero-stats { display:flex;gap:3rem;align-items:center;justify-content:center;margin-bottom:2rem; }
   .stat { text-align:center; }
   .stat-num { font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text);display:block; }
   .stat-label { font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em; }
   .stat-divider { width:1px;height:40px;background:var(--border); }
-  .scroll-hint { position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--text-dim);font-size:0.72rem;text-transform:uppercase;animation:bounce 2s ease-in-out infinite; }
+  .scroll-hint { position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.4rem;color:var(--text-dim);font-size:0.72rem;text-transform:uppercase;animation:bounce 2s ease-in-out infinite; }
   @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
   .scroll-arrow { color:var(--purple); }
 
-  .main { padding:0 2rem 6rem;max-width:1200px;margin:0 auto; }
+  /* ============================================================
+     SECTION SCRIPTS
+     ============================================================ */
+  .main-scripts { padding:0 2rem 6rem;max-width:1200px;margin:0 auto; }
   .section-header { text-align:center;margin-bottom:3rem; }
   .section-label { font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-light);font-weight:500;margin-bottom:0.6rem;display:block; }
   .section-title { font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-0.03em;color:var(--text); }
@@ -342,8 +426,8 @@
   .discord-join-btn { display:inline-flex;align-items:center;gap:0.6rem;padding:0.75rem 1.6rem;background:#5865F2;border:none;border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:0.9rem;font-weight:600;text-decoration:none;cursor:none;transition:all .2s;box-shadow:0 4px 20px rgba(88,101,242,0.35);flex-shrink:0; }
   .discord-join-btn:hover { background:#4752C4;transform:translateY(-2px); }
 
-  footer { border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;font-size:0.75rem;color:var(--text-dim);letter-spacing:0.04em; }
-  footer span { color:var(--purple); }
+  /* Footer removed */
+
   .toast { position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.35);border-radius:10px;padding:0.7rem 1.4rem;color:#34D399;font-size:0.82rem;font-weight:500;backdrop-filter:blur(12px);z-index:99999;transition:transform .35s cubic-bezier(0.34,1.56,0.64,1);white-space:nowrap; }
   .toast.show { transform:translateX(-50%) translateY(0); }
 
@@ -435,7 +519,7 @@
   .star-1{top:12%;left:15%;width:1.5px;height:1.5px;} .star-2{top:30%;left:55%;width:2px;height:2px;opacity:0.6;} .star-3{top:60%;left:25%;width:1px;height:1px;opacity:0.5;} .star-4{top:20%;left:80%;width:2.5px;height:2.5px;opacity:0.9;} .star-5{top:70%;left:70%;width:1.5px;height:1.5px;opacity:0.7;} .star-6{top:45%;left:10%;width:1px;height:1px;opacity:0.4;} .star-7{top:80%;left:45%;width:2px;height:2px;opacity:0.6;} .star-8{top:10%;left:40%;width:1px;height:1px;opacity:0.5;} .star-9{top:55%;left:88%;width:1.5px;height:1.5px;opacity:0.8;}
   .midnight-accent { position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(0deg,rgba(100,60,220,0.3),transparent); }
   .theme-preview-nexus { background:#000; }
-  .nexus-dots-preview { position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.65) 1px,transparent 1px);background-size:10px 10px;background-position:5px 5px; }
+  .nexus-dots-preview { position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.12) 0.4px,transparent 0.4px);background-size:12px 12px;background-position:6px 6px; }
   .nexus-accent { position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:30px;height:2px;background:linear-gradient(90deg,#7C3AED,#06B6D4);border-radius:2px; }
   .theme-label { font-size:0.62rem;text-align:center;padding:0.3rem 0.2rem;color:var(--text-muted);font-weight:500;background:rgba(255,255,255,0.02); }
   .notif-coming { display:none;padding:0.75rem 1rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:10px;font-size:0.8rem;color:#FCD34D;margin-top:0.6rem;text-align:center; }
@@ -561,11 +645,422 @@
   .admin-form-section { background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem; }
   .admin-form-section-title { font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-light);font-weight:600;margin-bottom:0.85rem; }
 
+  /* ============================================================
+     EXECUTOR SECTION
+     ============================================================ */
+  .exec-header { text-align:center;padding:2rem 1rem; }
+  .exec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+  .exec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.35rem;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .exec-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .exec-card:hover {
+    border-color: rgba(124,58,237,0.4);
+    box-shadow: 0 0 30px rgba(124,58,237,0.12), 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .exec-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 0.75rem;
+  }
+  .exec-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .exec-version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+  .exec-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    flex-shrink: 0;
+    align-items: flex-start;
+    justify-content: flex-end;
+    max-width: 50%;
+  }
+  .exec-badge {
+    font-size: 0.6rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .badge-free    { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34D399; }
+  .badge-paid    { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #FCD34D; }
+  .badge-undetect{ background: rgba(16,185,129,0.1);  border: 1px solid rgba(16,185,129,0.25); color: #6EE7B7; }
+  .badge-detected{ background: rgba(239,68,68,0.1);   border: 1px solid rgba(239,68,68,0.3);  color: #F87171; }
+  .badge-updated { background: rgba(6,182,212,0.1);   border: 1px solid rgba(6,182,212,0.25); color: #67E8F9; }
+  .badge-outdated{ background: rgba(239,68,68,0.08);  border: 1px solid rgba(239,68,68,0.2);  color: #FCA5A5; }
+  .badge-unc     { background: rgba(124,58,237,0.1);  border: 1px solid rgba(124,58,237,0.25); color: var(--purple-light); }
+  .badge-key     { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #FDE68A; }
+  .exec-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+  }
+  .exec-stat {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
+  }
+  body.theme-light .exec-stat { background: rgba(0,0,0,0.03); }
+  .exec-stat-label {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .exec-stat-value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .exec-sunc-bar {
+    margin-bottom: 1rem;
+  }
+  .exec-sunc-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+  .exec-sunc-name {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .exec-sunc-pct {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--purple-light);
+  }
+  .exec-bar-track {
+    height: 4px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .exec-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+  }
+  .exec-links {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+  .exec-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 7px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: none;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: transparent;
+  }
+  .exec-link:hover { background: rgba(255,255,255,0.05); color: var(--text); border-color: rgba(255,255,255,0.15); }
+  .exec-link.buy { border-color: rgba(245,158,11,0.35); color: #FCD34D; background: rgba(245,158,11,0.07); }
+  .exec-link.buy:hover { background: rgba(245,158,11,0.15); }
+  .exec-link.website { border-color: rgba(124,58,237,0.3); color: var(--purple-light); background: rgba(124,58,237,0.07); }
+  .exec-link.website:hover { background: rgba(124,58,237,0.15); }
+  .exec-link.discord { border-color: rgba(88,101,242,0.3); color: #8B9CF4; background: rgba(88,101,242,0.07); }
+  .exec-link.discord:hover { background: rgba(88,101,242,0.15); }
+  .exec-loading {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    grid-column: 1/-1;
+  }
+  .exec-loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 2px solid rgba(124,58,237,0.2);
+    border-top-color: var(--purple-light);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 1rem;
+  }
+  .exec-error {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #F87171;
+    font-size: 0.85rem;
+  }
+  .exec-filter-bar {
+    max-width: 1200px;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .exec-filter-search {
+    flex: 1;
+    min-width: 180px;
+    position: relative;
+  }
+  .exec-filter-search input {
+    width: 100%;
+    padding: 0.55rem 1rem 0.55rem 2.3rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s;
+    cursor: none;
+  }
+  body.theme-light .exec-filter-search input { background: rgba(0,0,0,0.04); }
+  .exec-filter-search input::placeholder { color: var(--text-muted); }
+  .exec-filter-search input:focus { border-color: rgba(124,58,237,0.45); background: rgba(124,58,237,0.05); }
+  .exec-filter-search-icon {
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    display: flex;
+  }
+  .exec-filter-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .exec-filter-btn:hover, .exec-filter-btn.active {
+    background: rgba(124,58,237,0.1);
+    border-color: rgba(124,58,237,0.35);
+    color: var(--purple-light);
+  }
+  .exec-count-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .exec-platform-tag {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ============================================================
+     HELP SECTION
+     ============================================================ */
+  .help-section {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .help-discord-card {
+    background: var(--surface);
+    border: 1px solid rgba(88,101,242,0.3);
+    border-radius: 24px;
+    padding: 3rem 3.5rem;
+    max-width: 560px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(88,101,242,0.08), 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .help-discord-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(88,101,242,0.5), rgba(124,58,237,0.5), transparent);
+  }
+  .help-discord-glow {
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(88,101,242,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .help-discord-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, #5865F2, #7289DA);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 0 30px rgba(88,101,242,0.3);
+  }
+  .help-discord-icon svg { width: 36px; height: 36px; fill: #fff; }
+  .help-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+  }
+  .help-sub {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .help-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 2.25rem;
+    text-align: left;
+  }
+  .help-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    transition: border-color 0.2s;
+  }
+  .help-step:hover { border-color: rgba(88,101,242,0.3); }
+  .help-step-num {
+    width: 26px; height: 26px;
+    background: rgba(88,101,242,0.15);
+    border: 1px solid rgba(88,101,242,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #8B9CF4;
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+  .help-step-body {}
+  .help-step-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.2rem;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .help-step-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .help-join-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 2.25rem;
+    background: linear-gradient(135deg, #5865F2, #7289DA);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(88,101,242,0.35);
+  }
+  .help-join-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(88,101,242,0.5);
+    filter: brightness(1.1);
+  }
+  .help-join-btn svg { width: 20px; height: 20px; }
+  .help-note {
+    margin-top: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    background: rgba(255,255,255,0.02);
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .help-note a { color: var(--purple-light); text-decoration: none; font-weight: 600; }
+  .help-note a:hover { text-decoration: underline; }
+
   @media (max-width:768px) {
     .cards-grid { grid-template-columns:1fr; }
     .discord-banner { flex-direction:column; }
     .hero-stats { gap:1.5rem; }
-    .main { padding:0 1rem 4rem; }
+    .main-scripts { padding:0 1rem 4rem; }
     nav { padding:0 1rem; }
     .dashboard-panel { width:320px; }
     .insights-metrics { grid-template-columns:1fr 1fr; }
@@ -577,13 +1072,14 @@
     .welcome-box { padding:2rem 1.5rem; }
   }
   @media (prefers-reduced-motion:reduce) { .card-appear { animation:none; } }
+
 </style>
 </head>
 <body class="theme-dark">
 
 <canvas id="starfield"></canvas>
 <svg id="nexus-grid" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-  <defs><pattern id="nexus-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="1.4" fill="rgba(255,255,255,0.5)"/></pattern></defs>
+  <defs><pattern id="nexus-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="0.4" fill="rgba(255,255,255,0.12)"/></pattern></defs>
   <rect width="100%" height="100%" fill="url(#nexus-dots)"/>
 </svg>
 
@@ -940,8 +1436,19 @@
 </nav>
 
 <div class="wrapper">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge" id="heroBadge">2.0 — Scripts disponibles</div>
+    <!-- Navigation par onglets -->
+    <div class="page-nav">
+      <div class="page-nav-inner" id="pageNavInner">
+        <button class="page-tab active" data-page="scripts">Scripts</button>
+        <button class="page-tab" data-page="executors">Executors</button>
+        <button class="page-tab" data-page="help">Help</button>
+        <div class="page-tab-slider" id="pageTabSlider"></div>
+        <div class="page-tab-underline" id="pageTabUnderline"></div>
+      </div>
+    </div>
     <h1 class="hero-title"><span class="line1">Sentinel</span><span class="line2">Script</span></h1>
     <p class="hero-sub" id="heroSub">Des scripts puissants pour élever votre expérience de jeu. Copiez, collez, dominez.</p>
     <div class="hero-stats">
@@ -954,52 +1461,123 @@
     <div class="scroll-hint"><span class="scroll-arrow">↓</span><span id="scrollHintLabel">Explorer</span></div>
   </section>
 
-  <main class="main">
-    <div class="section-header">
-      <span class="section-label" id="libLabel">Bibliothèque</span>
-      <h2 class="section-title" id="libTitle">Tous les scripts</h2>
-    </div>
-    <div class="search-wrap">
-      <div class="search-input-wrap">
-        <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-        <input type="text" id="searchInput" placeholder="Rechercher un script...">
-        <button class="search-clear" id="searchClear">✕</button>
+  <!-- CONTENU DES PAGES -->
+  <div class="page-section active" id="page-scripts">
+    <main class="main-scripts">
+      <div class="section-header">
+        <span class="section-label" id="libLabel">Bibliothèque</span>
+        <h2 class="section-title" id="libTitle">Tous les scripts</h2>
       </div>
-    </div>
-    <div class="filters">
-      <button class="filter-btn active" data-filter="all" id="filterAll">Tous</button>
-      <button class="filter-btn" data-filter="game" id="filterGame">🎮 Games</button>
-      <button class="filter-btn" data-filter="util" id="filterUtil">⚡ Utilitaires</button>
-    </div>
-    <div class="cards-grid" id="cardsGrid">
-      <div class="no-results" id="noResults"><span class="no-results-icon">🔍</span><div class="no-results-title" id="noResultsTitle">Aucun script trouvé</div><div class="no-results-sub" id="noResultsSub">Essaie un autre terme de recherche.</div></div>
-    </div>
+      <div class="search-wrap">
+        <div class="search-input-wrap">
+          <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <input type="text" id="searchInput" placeholder="Rechercher un script...">
+          <button class="search-clear" id="searchClear">✕</button>
+        </div>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all" id="filterAll">Tous</button>
+        <button class="filter-btn" data-filter="game" id="filterGame">🎮 Games</button>
+        <button class="filter-btn" data-filter="util" id="filterUtil">⚡ Utilitaires</button>
+      </div>
+      <div class="cards-grid" id="cardsGrid">
+        <div class="no-results" id="noResults"><span class="no-results-icon">🔍</span><div class="no-results-title" id="noResultsTitle">Aucun script trouvé</div><div class="no-results-sub" id="noResultsSub">Essaie un autre terme de recherche.</div></div>
+      </div>
 
-    <div class="discord-banner">
-      <div>
-        <div class="banner-title" id="bannerTitle">Rejoins la communauté</div>
-        <p class="banner-desc" id="bannerDescEl">Accède aux scripts en exclusivité, reçois les mises à jour en premier. Contacte <strong style="color:var(--purple-light)">@x4tmq</strong>.</p>
-        <div class="owner-card">
-          <img id="ownerAvatar" src="https://i.postimg.cc/sGrFchHS/IMG-2262.jpg" alt="x4tmq" class="owner-avatar" onerror="this.src='https://api.dicebear.com/7.x/bottts/svg?seed=x4tmq'">
-          <div class="owner-info">
-            <div class="owner-name">x4tmq<span class="certified-badge" title="Compte certifié"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-            <div class="owner-sub" id="ownerSubLabel">Créateur · Sentinel Script</div>
+      <div class="discord-banner">
+        <div>
+          <div class="banner-title" id="bannerTitle">Rejoins la communauté</div>
+          <p class="banner-desc" id="bannerDescEl">Accède aux scripts en exclusivité, reçois les mises à jour en premier. Contacte <strong style="color:var(--purple-light)">@x4tmq</strong>.</p>
+          <div class="owner-card">
+            <img id="ownerAvatar" src="https://i.postimg.cc/HVqwkhZ9/avatar.jpg" alt="x4tmq" class="owner-avatar" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=x4tmq'">
+            <div class="owner-info">
+              <div class="owner-name">x4tmq<span class="certified-badge" title="Compte certifié"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+              <div class="owner-sub" id="ownerSubLabel">Créateur · Sentinel Script</div>
+            </div>
+            <span class="owner-tag">@x4tmq</span>
           </div>
-          <span class="owner-tag">@x4tmq</span>
+          <div class="members-row">
+            <span class="member-count"><strong id="memberCountBanner">14</strong> <span id="membersLabel">membres</span></span>
+            <span class="new-badge" id="newOpenedBadge">🆕 Vient d'ouvrir</span>
+          </div>
         </div>
-        <div class="members-row">
-          <span class="member-count"><strong id="memberCountBanner">14</strong> <span id="membersLabel">membres</span></span>
-          <span class="new-badge" id="newOpenedBadge">🆕 Vient d'ouvrir</span>
-        </div>
+        <a href="https://discord.gg/hEzaXke2x" target="_blank" rel="noopener" class="discord-join-btn">
+          <svg width="20" height="20" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1987C17.3451 26.2838 20.1717 23.0721 23.7259 23.0721C27.3081 23.0721 30.1626 26.3115 30.1066 30.1987C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1987C40.9371 26.2838 43.7636 23.0721 47.3178 23.0721C50.9 23.0721 53.7545 26.3115 53.6985 30.1987C53.6985 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
+          <span id="joinLabel">Rejoindre</span>
+        </a>
       </div>
-      <a href="https://discord.gg/hEzaXke2x" target="_blank" rel="noopener" class="discord-join-btn">
-        <svg width="20" height="20" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1987C17.3451 26.2838 20.1717 23.0721 23.7259 23.0721C27.3081 23.0721 30.1626 26.3115 30.1066 30.1987C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1987C40.9371 26.2838 43.7636 23.0721 47.3178 23.0721C50.9 23.0721 53.7545 26.3115 53.6985 30.1987C53.6985 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
-        <span id="joinLabel">Rejoindre</span>
-      </a>
+    </main>
+  </div>
+
+  <div class="page-section" id="page-executors">
+    <section class="exec-header">
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--text);" id="executorsTitle">Executors</h2>
+      <p style="color:var(--text-muted);margin-top:0.5rem;" id="executorsSub">Les meilleurs executors pour tes scripts.</p>
+    </section>
+    <div class="exec-filter-bar">
+      <div class="exec-filter-search">
+        <div class="exec-filter-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+        <input type="text" id="execSearch" placeholder="Rechercher un executor...">
+      </div>
+      <div id="execFilterButtons">
+        <button class="exec-filter-btn active" data-efilter="all">Tous</button>
+        <button class="exec-filter-btn" data-efilter="free">Gratuit</button>
+        <button class="exec-filter-btn" data-efilter="paid">Payant</button>
+        <button class="exec-filter-btn" data-efilter="key">Key</button>
+        <button class="exec-filter-btn" data-efilter="keyless">Keyless</button>
+        <button class="exec-filter-btn" data-efilter="powerful">Puissant</button>
+      </div>
+      <span class="exec-count-label" id="execCount">0 executors</span>
     </div>
-  </main>
-  <footer><span>Sentinel Script</span> — <span id="footerText">Tous droits réservés 2025 · Scripts à usage éducatif uniquement</span></footer>
+    <div class="exec-grid" id="execGrid">
+      <div class="exec-loading"><div class="exec-loading-spinner"></div>Chargement des executors...</div>
+    </div>
+  </div>
+
+  <div class="page-section" id="page-help">
+    <div class="help-section">
+      <div class="help-discord-card">
+        <div class="help-discord-glow"></div>
+        <div class="help-discord-icon">
+          <svg viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1987C17.3451 26.2838 20.1717 23.0721 23.7259 23.0721C27.3081 23.0721 30.1626 26.3115 30.1066 30.1987C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1987C40.9371 26.2838 43.7636 23.0721 47.3178 23.0721C50.9 23.0721 53.7545 26.3115 53.6985 30.1987C53.6985 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
+        </div>
+        <div class="help-title" id="helpTitle">Besoin d'aide ?</div>
+        <p class="help-sub" id="helpSub">Rejoins notre serveur Discord et ouvre un ticket. L'équipe Sentinel Script est là pour t'aider.</p>
+        <div class="help-steps">
+          <div class="help-step">
+            <span class="help-step-num">1</span>
+            <div class="help-step-body">
+              <div class="help-step-title" id="helpStep1">Rejoins le Discord</div>
+              <div class="help-step-desc" id="helpStep1Desc">Clique sur le bouton ci-dessous pour accéder au serveur.</div>
+            </div>
+          </div>
+          <div class="help-step">
+            <span class="help-step-num">2</span>
+            <div class="help-step-body">
+              <div class="help-step-title" id="helpStep2">Ouvre un ticket</div>
+              <div class="help-step-desc" id="helpStep2Desc">Dans la section 🌊 | Server, crée un ticket avec ta demande.</div>
+            </div>
+          </div>
+          <div class="help-step">
+            <span class="help-step-num">3</span>
+            <div class="help-step-body">
+              <div class="help-step-title" id="helpStep3">Obtiens de l'aide</div>
+              <div class="help-step-desc" id="helpStep3Desc">Un membre de l'équipe du staff te répondra et t'aideras a résoudre ton probleme.</div>
+            </div>
+          </div>
+        </div>
+        <a href="https://discord.gg/hEzaXke2x" target="_blank" rel="noopener" class="help-join-btn" id="helpJoinBtn">
+          <svg width="20" height="20" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1987C17.3451 26.2838 20.1717 23.0721 23.7259 23.0721C27.3081 23.0721 30.1626 26.3115 30.1066 30.1987C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1987C40.9371 26.2838 43.7636 23.0721 47.3178 23.0721C50.9 23.0721 53.7545 26.3115 53.6985 30.1987C53.6985 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
+          <span id="helpJoinLabel">Rejoindre le Discord</span>
+        </a>
+        <p class="help-note" id="helpNote">Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #support.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer removed -->
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1093,9 +1671,7 @@ function getRoleBadgeClass(u){
 
 function isOnline(u){
   if(!u) return false;
-  // Simule un statut en ligne pour le propriétaire, aléatoire pour les autres
   if(u.username === OWNER_USERNAME) return true;
-  // 80% de chance d'être en ligne
   return Math.random() < 0.8;
 }
 
@@ -1159,11 +1735,389 @@ function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&l
 // ============================================================
 let currentLang = Store.get('lang','fr');
 const L = {
-  fr:{navLogin:'Connexion',navSignup:"S'inscrire",navDiscord:'Rejoindre le Discord',heroSub:'Des scripts puissants pour élever votre expérience de jeu. Copiez, collez, dominez.',statScripts:'Scripts',statMembers:'Membres',scrollHint:'Explorer',libLabel:'Bibliothèque',libTitle:'Tous les scripts',searchPlaceholder:'Rechercher un script...',filterAll:'Tous',filterGame:'🎮 Games',filterUtil:'⚡ Utilitaires',copyLabel:'Copier le script',copiedLabel:'✓ Copié !',detailsLabel:'Détails',noResultsTitle:'Aucun script trouvé',noResultsSub:'Essaie un autre terme de recherche.',bannerTitle:'Rejoins la communauté',ownerSub:'Créateur · Sentinel Script',membersLabel:'membres',newOpened:"🆕 Vient d'ouvrir",joinLabel:'Rejoindre',footerText:"Tous droits réservés 2025 · Scripts à usage éducatif uniquement",metaGameName:'Jeu',metaPlayers:'Joueurs actifs',metaCreator:'Créateur',metaMaturity:'Maturité',modalCopyBtn:'⎘ Copier le script',modalCopied:'✓ Copié !',toastCopied:'✓ Script copié dans le presse-papier',toastLike:'👍 Merci pour votre avis !',toastDislike:'👎 Avis enregistré',toastVoteChanged:'🔄 Vote modifié',commentsEmpty:"Aucun commentaire pour l'instant. Sois le premier !",commentsEmptyIcon:'💬',voteLoginMsg:'Connecte-toi pour voter',commentLoginLink:'Connecte-toi',commentSignupLink:'crée un compte',commentPlaceholder:'Laisse un commentaire...',commentPublish:'Publier',langChanged:'🌐 Langue : Français',dashSectionCompte:'Compte',dashSectionAnalytics:'Analytics',dashSectionPrefs:'Préférences',dashSectionLang:'Langue',dashGuestMsg:"Tu n'es pas connecté.",dashLoginBtn:'Se connecter',dashSignupBtn:'Créer un compte',insightsBtnLabel:'Insights',metricViewsLabel:'Vues',metricCopiesLabel:'Copiés',metricLikesLabel:"% J'aime",chartTitleLabel:'Activité (7 derniers jours)',legendViewsLabel:'Vues',legendCopiesLabel:'Copies',appearanceBtnLabel:'Apparence',notifBtnLabel:'Notifications',comingSoonLabel:'Bientôt',themeGroupBasic:'✦ Basic',themeGroupOther:'✦ Autres thèmes',basicDarkName:'Obscur',basicLightName:'Clarté',themeNameMidnight:'Minuit',themeNameNexus:'Nexus',editProfileLabel:'Modifier le compte',editProfileTitle:'Modifier le profil',editAvatarLabel:'Avatar',editDisplayNameLabel:"Nom d'affichage",editUsernameLabel:"Nom d'utilisateur",editBioLabel:'Bio',editSaveLabel:'Enregistrer',editUploadLabel:'Importer une image',switchAccountLabel:'Se connecter sur un autre compte',logoutLabel:'Se déconnecter',deleteAccountLabel:'Supprimer le compte',toastWelcomeBack:'👋 Bon retour,',toastAccountCreated:"🎉 Compte créé ! Bienvenue,",toastLoggedOut:'👋 Déconnecté.',toastProfileUpdated:'✅ Profil mis à jour !',toastAccountDeleted:'🗑️ Compte supprimé.',toastVoteLogin:'🔒 Connecte-toi pour voter.',commentLikeLogin:'🔒 Connecte-toi pour liker.',commentPublished:'💬 Commentaire publié !',commentModified:'✏️ Commentaire modifié.',commentDeleted:'🗑️ Commentaire supprimé.',confirmDeleteTitle:'Supprimer ce commentaire ?',confirmDeleteSub:'Cette action est irréversible.',confirmYesLabel:'Supprimer',confirmEditLabel:'Modifier',confirmNoLabel:'Annuler',commentMineTag:'toi',commentEdit:'✏️ Modifier',commentDelete:'🗑️ Supprimer',commentSave:'Enregistrer',commentCancel:'Annuler',fillAllFields:"Remplis tous les champs.",invalidUsername:"Nom d'utilisateur invalide (3-20 caractères, lettres/chiffres/underscore).",passMin8:'Le mot de passe doit faire au moins 8 caractères.',usernameTaken:"Ce nom d'utilisateur est déjà pris.",wrongCredentials:"Nom d'utilisateur ou mot de passe incorrect.",bannedMsg:"Ce compte est banni.",profileTitle:'Profil de',statusOnline:'En ligne',statusOffline:'Hors ligne',userId:'ID Utilisateur',memberSince:'Membre depuis',roleLabel:'Rôle',permsLabel:'Permissions',viewProfile:'Voir le profil'},
-  en:{navLogin:'Login',navSignup:'Sign Up',navDiscord:'Join Discord',heroSub:'Powerful scripts to elevate your gaming experience. Copy, paste, dominate.',statScripts:'Scripts',statMembers:'Members',scrollHint:'Explore',libLabel:'Library',libTitle:'All scripts',searchPlaceholder:'Search a script...',filterAll:'All',filterGame:'🎮 Games',filterUtil:'⚡ Utilities',copyLabel:'Copy script',copiedLabel:'✓ Copied!',detailsLabel:'Details',noResultsTitle:'No scripts found',noResultsSub:'Try a different search term.',bannerTitle:'Join the community',ownerSub:'Creator · Sentinel Script',membersLabel:'members',newOpened:'🆕 Just opened',joinLabel:'Join',footerText:'All rights reserved 2025 · Scripts for educational use only',metaGameName:'Game',metaPlayers:'Active players',metaCreator:'Creator',metaMaturity:'Maturity',modalCopyBtn:'⎘ Copy script',modalCopied:'✓ Copied!',toastCopied:'✓ Script copied to clipboard',toastLike:'👍 Thanks for your feedback!',toastDislike:'👎 Feedback recorded',toastVoteChanged:'🔄 Vote changed',commentsEmpty:'No comments yet. Be the first!',commentsEmptyIcon:'💬',voteLoginMsg:'Log in to vote',commentLoginLink:'Log in',commentSignupLink:'create an account',commentPlaceholder:'Leave a comment...',commentPublish:'Publish',langChanged:'🌐 Language: English',dashSectionCompte:'Account',dashSectionAnalytics:'Analytics',dashSectionPrefs:'Preferences',dashSectionLang:'Language',dashGuestMsg:"You're not logged in.",dashLoginBtn:'Login',dashSignupBtn:'Create account',insightsBtnLabel:'Insights',metricViewsLabel:'Views',metricCopiesLabel:'Copied',metricLikesLabel:'% Likes',chartTitleLabel:'Activity (last 7 days)',legendViewsLabel:'Views',legendCopiesLabel:'Copies',appearanceBtnLabel:'Appearance',notifBtnLabel:'Notifications',comingSoonLabel:'Soon',themeGroupBasic:'✦ Basic',themeGroupOther:'✦ Other themes',basicDarkName:'Dark',basicLightName:'Light',themeNameMidnight:'Midnight',themeNameNexus:'Nexus',editProfileLabel:'Edit account',editProfileTitle:'Edit profile',editAvatarLabel:'Avatar',editDisplayNameLabel:'Display name',editUsernameLabel:'Username',editBioLabel:'Bio',editSaveLabel:'Save',editUploadLabel:'Upload image',switchAccountLabel:'Switch account',logoutLabel:'Log out',deleteAccountLabel:'Delete account',toastWelcomeBack:'👋 Welcome back,',toastAccountCreated:'🎉 Account created! Welcome,',toastLoggedOut:'👋 Logged out.',toastProfileUpdated:'✅ Profile updated!',toastAccountDeleted:'🗑️ Account deleted.',toastVoteLogin:'🔒 Log in to vote.',commentLikeLogin:'🔒 Log in to like.',commentPublished:'💬 Comment published!',commentModified:'✏️ Comment edited.',commentDeleted:'🗑️ Comment deleted.',confirmDeleteTitle:'Delete this comment?',confirmDeleteSub:'This action is irreversible.',confirmYesLabel:'Delete',confirmEditLabel:'Edit',confirmNoLabel:'Cancel',commentMineTag:'you',commentEdit:'✏️ Edit',commentDelete:'🗑️ Delete',commentSave:'Save',commentCancel:'Cancel',fillAllFields:'Please fill all fields.',invalidUsername:'Invalid username (3-20 chars, letters/digits/underscore).',passMin8:'Password must be at least 8 characters.',usernameTaken:'This username is already taken.',wrongCredentials:'Incorrect username or password.',bannedMsg:'This account is banned.',profileTitle:'Profile of',statusOnline:'Online',statusOffline:'Offline',userId:'User ID',memberSince:'Member since',roleLabel:'Role',permsLabel:'Permissions',viewProfile:'View profile'}
+  fr:{
+    navLogin:'Connexion',
+    navSignup:"S'inscrire",
+    navDiscord:'Rejoindre le Discord',
+    heroSub:'Des scripts puissants pour élever votre expérience de jeu. Copiez, collez, dominez.',
+    statScripts:'Scripts',
+    statMembers:'Membres',
+    scrollHint:'Explorer',
+    libLabel:'Bibliothèque',
+    libTitle:'Tous les scripts',
+    searchPlaceholder:'Rechercher un script...',
+    filterAll:'Tous',
+    filterGame:'🎮 Games',
+    filterUtil:'⚡ Utilitaires',
+    copyLabel:'Copier le script',
+    copiedLabel:'✓ Copié !',
+    detailsLabel:'Détails',
+    noResultsTitle:'Aucun script trouvé',
+    noResultsSub:'Essaie un autre terme de recherche.',
+    bannerTitle:'Rejoins la communauté',
+    ownerSub:'Créateur · Sentinel Script',
+    membersLabel:'membres',
+    newOpened:"🆕 Vient d'ouvrir",
+    joinLabel:'Rejoindre',
+    metaGameName:'Jeu',
+    metaPlayers:'Joueurs actifs',
+    metaCreator:'Créateur',
+    metaMaturity:'Maturité',
+    modalCopyBtn:'⎘ Copier le script',
+    modalCopied:'✓ Copié !',
+    toastCopied:'✓ Script copié dans le presse-papier',
+    toastLike:'👍 Merci pour votre avis !',
+    toastDislike:'👎 Avis enregistré',
+    toastVoteChanged:'🔄 Vote modifié',
+    commentsEmpty:"Aucun commentaire pour l'instant. Sois le premier !",
+    commentsEmptyIcon:'💬',
+    voteLoginMsg:'Connecte-toi pour voter',
+    commentLoginLink:'Connecte-toi',
+    commentSignupLink:'crée un compte',
+    commentPlaceholder:'Laisse un commentaire...',
+    commentPublish:'Publier',
+    langChanged:'🌐 Langue : Français',
+    dashSectionCompte:'Compte',
+    dashSectionAnalytics:'Analytics',
+    dashSectionPrefs:'Préférences',
+    dashSectionLang:'Langue',
+    dashGuestMsg:"Tu n'es pas connecté.",
+    dashLoginBtn:'Se connecter',
+    dashSignupBtn:'Créer un compte',
+    insightsBtnLabel:'Insights',
+    metricViewsLabel:'Vues',
+    metricCopiesLabel:'Copiés',
+    metricLikesLabel:"% J'aime",
+    chartTitleLabel:'Activité (7 derniers jours)',
+    legendViewsLabel:'Vues',
+    legendCopiesLabel:'Copies',
+    appearanceBtnLabel:'Apparence',
+    notifBtnLabel:'Notifications',
+    comingSoonLabel:'Bientôt',
+    themeGroupBasic:'✦ Basic',
+    themeGroupOther:'✦ Autres thèmes',
+    basicDarkName:'Obscur',
+    basicLightName:'Clarté',
+    themeNameMidnight:'Minuit',
+    themeNameNexus:'Nexus',
+    editProfileLabel:'Modifier le compte',
+    editProfileTitle:'Modifier le profil',
+    editAvatarLabel:'Avatar',
+    editDisplayNameLabel:"Nom d'affichage",
+    editUsernameLabel:"Nom d'utilisateur",
+    editBioLabel:'Bio',
+    editSaveLabel:'Enregistrer',
+    editUploadLabel:'Importer une image',
+    switchAccountLabel:'Se connecter sur un autre compte',
+    logoutLabel:'Se déconnecter',
+    deleteAccountLabel:'Supprimer le compte',
+    toastWelcomeBack:'👋 Bon retour,',
+    toastAccountCreated:"🎉 Compte créé ! Bienvenue,",
+    toastLoggedOut:'👋 Déconnecté.',
+    toastProfileUpdated:'✅ Profil mis à jour !',
+    toastAccountDeleted:'🗑️ Compte supprimé.',
+    toastVoteLogin:'🔒 Connecte-toi pour voter.',
+    commentLikeLogin:'🔒 Connecte-toi pour liker.',
+    commentPublished:'💬 Commentaire publié !',
+    commentModified:'✏️ Commentaire modifié.',
+    commentDeleted:'🗑️ Commentaire supprimé.',
+    confirmDeleteTitle:'Supprimer ce commentaire ?',
+    confirmDeleteSub:'Cette action est irréversible.',
+    confirmYesLabel:'Supprimer',
+    confirmEditLabel:'Modifier',
+    confirmNoLabel:'Annuler',
+    commentMineTag:'toi',
+    commentEdit:'✏️ Modifier',
+    commentDelete:'🗑️ Supprimer',
+    commentSave:'Enregistrer',
+    commentCancel:'Annuler',
+    fillAllFields:"Remplis tous les champs.",
+    invalidUsername:"Nom d'utilisateur invalide (3-20 caractères, lettres/chiffres/underscore).",
+    passMin8:'Le mot de passe doit faire au moins 8 caractères.',
+    usernameTaken:"Ce nom d'utilisateur est déjà pris.",
+    wrongCredentials:"Nom d'utilisateur ou mot de passe incorrect.",
+    bannedMsg:"Ce compte est banni.",
+    profileTitle:'Profil de',
+    statusOnline:'En ligne',
+    statusOffline:'Hors ligne',
+    userId:'ID Utilisateur',
+    memberSince:'Membre depuis',
+    roleLabel:'Rôle',
+    permsLabel:'Permissions',
+    viewProfile:'Voir le profil',
+    // Executors translations
+    executorsTitle:'Executors',
+    executorsSub:'Les meilleurs executors pour tes scripts.',
+    execSearchPlaceholder:'Rechercher un executor...',
+    execFilterAll:'Tous',
+    execFilterFree:'Gratuit',
+    execFilterPaid:'Payant',
+    execFilterKey:'Key',
+    execFilterKeyless:'Keyless',
+    execFilterPowerful:'Puissant',
+    execCountLabel:'executors',
+    execLoading:'Chargement des executors...',
+    execError:'Impossible de charger les executors. Réessaye plus tard.',
+    statPrice:'Prix',
+    statDetection:'Détection',
+    statUpdates:'Mises à jour',
+    statSupport:'Support',
+    badgeFree:'Gratuit',
+    badgePaid:'Payant',
+    badgeUndetect:'Indétectable',
+    badgeDetected:'Détecté',
+    badgeUpdated:'Mis à jour',
+    badgeOutdated:'Obsolète',
+    badgeUNC:'UNC',
+    badgeKey:'Clé',
+    badgeAbandoned:'Abandonné ❌',
+    btnBuy:'Acheter',
+    btnSite:'Site',
+    btnDiscord:'Discord',
+    successRate:'Taux de réussite',
+    // Valeurs des stats
+    val_free:'Gratuit',
+    val_paid:'Payant',
+    val_detection_very_low:'Très faible',
+    val_detection_low:'Faible',
+    val_detection_medium:'Moyenne',
+    val_detection_high:'Élevée',
+    val_updates_regular:'Régulières',
+    val_updates_very_regular:'Très régulières',
+    val_updates_occasional:'Occasionnelles',
+    val_updates_rare:'Peu fréquentes',
+    val_updates_none:'Aucune',
+    val_support_24_7:'24/7',
+    val_support_community:'Communauté',
+    val_support_none:'Aucun',
+    val_support_priority:'Support prioritaire',
+    // Help translations
+    helpTitle:'Besoin d\'aide ?',
+    helpSub:'Rejoins notre serveur Discord et ouvre un ticket. L\'équipe Sentinel Script est là pour t\'aider.',
+    helpStep1:'Rejoins le Discord',
+    helpStep1Desc:'Clique sur le bouton ci-dessous pour accéder au serveur.',
+    helpStep2:'Ouvre un ticket',
+    helpStep2Desc:'Dans la section 🌊 | Server, crée un ticket avec ta demande.',
+    helpStep3:'Obtiens de l\'aide',
+    helpStep3Desc:'Un membre de l\'équipe du staff te répondra et t\'aideras a résoudre ton probleme.',
+    helpJoin:'Rejoindre le Discord',
+    helpNote:'Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #support.'
+  },
+  en:{
+    navLogin:'Login',
+    navSignup:'Sign Up',
+    navDiscord:'Join Discord',
+    heroSub:'Powerful scripts to elevate your gaming experience. Copy, paste, dominate.',
+    statScripts:'Scripts',
+    statMembers:'Members',
+    scrollHint:'Explore',
+    libLabel:'Library',
+    libTitle:'All scripts',
+    searchPlaceholder:'Search a script...',
+    filterAll:'All',
+    filterGame:'🎮 Games',
+    filterUtil:'⚡ Utilities',
+    copyLabel:'Copy script',
+    copiedLabel:'✓ Copied!',
+    detailsLabel:'Details',
+    noResultsTitle:'No scripts found',
+    noResultsSub:'Try a different search term.',
+    bannerTitle:'Join the community',
+    ownerSub:'Creator · Sentinel Script',
+    membersLabel:'members',
+    newOpened:'🆕 Just opened',
+    joinLabel:'Join',
+    metaGameName:'Game',
+    metaPlayers:'Active players',
+    metaCreator:'Creator',
+    metaMaturity:'Maturity',
+    modalCopyBtn:'⎘ Copy script',
+    modalCopied:'✓ Copied!',
+    toastCopied:'✓ Script copied to clipboard',
+    toastLike:'👍 Thanks for your feedback!',
+    toastDislike:'👎 Feedback recorded',
+    toastVoteChanged:'🔄 Vote changed',
+    commentsEmpty:'No comments yet. Be the first!',
+    commentsEmptyIcon:'💬',
+    voteLoginMsg:'Log in to vote',
+    commentLoginLink:'Log in',
+    commentSignupLink:'create an account',
+    commentPlaceholder:'Leave a comment...',
+    commentPublish:'Publish',
+    langChanged:'🌐 Language: English',
+    dashSectionCompte:'Account',
+    dashSectionAnalytics:'Analytics',
+    dashSectionPrefs:'Preferences',
+    dashSectionLang:'Language',
+    dashGuestMsg:"You're not logged in.",
+    dashLoginBtn:'Login',
+    dashSignupBtn:'Create account',
+    insightsBtnLabel:'Insights',
+    metricViewsLabel:'Views',
+    metricCopiesLabel:'Copied',
+    metricLikesLabel:'% Likes',
+    chartTitleLabel:'Activity (last 7 days)',
+    legendViewsLabel:'Views',
+    legendCopiesLabel:'Copies',
+    appearanceBtnLabel:'Appearance',
+    notifBtnLabel:'Notifications',
+    comingSoonLabel:'Soon',
+    themeGroupBasic:'✦ Basic',
+    themeGroupOther:'✦ Other themes',
+    basicDarkName:'Dark',
+    basicLightName:'Light',
+    themeNameMidnight:'Midnight',
+    themeNameNexus:'Nexus',
+    editProfileLabel:'Edit account',
+    editProfileTitle:'Edit profile',
+    editAvatarLabel:'Avatar',
+    editDisplayNameLabel:'Display name',
+    editUsernameLabel:'Username',
+    editBioLabel:'Bio',
+    editSaveLabel:'Save',
+    editUploadLabel:'Upload image',
+    switchAccountLabel:'Switch account',
+    logoutLabel:'Log out',
+    deleteAccountLabel:'Delete account',
+    toastWelcomeBack:'👋 Welcome back,',
+    toastAccountCreated:'🎉 Account created! Welcome,',
+    toastLoggedOut:'👋 Logged out.',
+    toastProfileUpdated:'✅ Profile updated!',
+    toastAccountDeleted:'🗑️ Account deleted.',
+    toastVoteLogin:'🔒 Log in to vote.',
+    commentLikeLogin:'🔒 Log in to like.',
+    commentPublished:'💬 Comment published!',
+    commentModified:'✏️ Comment edited.',
+    commentDeleted:'🗑️ Comment deleted.',
+    confirmDeleteTitle:'Delete this comment?',
+    confirmDeleteSub:'This action is irreversible.',
+    confirmYesLabel:'Delete',
+    confirmEditLabel:'Edit',
+    confirmNoLabel:'Cancel',
+    commentMineTag:'you',
+    commentEdit:'✏️ Edit',
+    commentDelete:'🗑️ Delete',
+    commentSave:'Save',
+    commentCancel:'Cancel',
+    fillAllFields:'Please fill all fields.',
+    invalidUsername:'Invalid username (3-20 chars, letters/digits/underscore).',
+    passMin8:'Password must be at least 8 characters.',
+    usernameTaken:'This username is already taken.',
+    wrongCredentials:'Incorrect username or password.',
+    bannedMsg:'This account is banned.',
+    profileTitle:'Profile of',
+    statusOnline:'Online',
+    statusOffline:'Offline',
+    userId:'User ID',
+    memberSince:'Member since',
+    roleLabel:'Role',
+    permsLabel:'Permissions',
+    viewProfile:'View profile',
+    // Executors translations
+    executorsTitle:'Executors',
+    executorsSub:'The best executors for your scripts.',
+    execSearchPlaceholder:'Search an executor...',
+    execFilterAll:'All',
+    execFilterFree:'Free',
+    execFilterPaid:'Paid',
+    execFilterKey:'Key',
+    execFilterKeyless:'Keyless',
+    execFilterPowerful:'Powerful',
+    execCountLabel:'executors',
+    execLoading:'Loading executors...',
+    execError:'Unable to load executors. Try again later.',
+    statPrice:'Price',
+    statDetection:'Detection',
+    statUpdates:'Updates',
+    statSupport:'Support',
+    badgeFree:'Free',
+    badgePaid:'Paid',
+    badgeUndetect:'Undetectable',
+    badgeDetected:'Detected',
+    badgeUpdated:'Updated',
+    badgeOutdated:'Outdated',
+    badgeUNC:'UNC',
+    badgeKey:'Key',
+    badgeAbandoned:'Abandoned ❌',
+    btnBuy:'Buy',
+    btnSite:'Site',
+    btnDiscord:'Discord',
+    successRate:'Success rate',
+    // Valeurs des stats
+    val_free:'Free',
+    val_paid:'Paid',
+    val_detection_very_low:'Very low',
+    val_detection_low:'Low',
+    val_detection_medium:'Medium',
+    val_detection_high:'High',
+    val_updates_regular:'Regular',
+    val_updates_very_regular:'Very regular',
+    val_updates_occasional:'Occasional',
+    val_updates_rare:'Rare',
+    val_updates_none:'None',
+    val_support_24_7:'24/7',
+    val_support_community:'Community',
+    val_support_none:'None',
+    val_support_priority:'Priority support',
+    // Help translations
+    helpTitle:'Need help?',
+    helpSub:'Join our Discord server and open a ticket. The Sentinel Script team is here to help.',
+    helpStep1:'Join Discord',
+    helpStep1Desc:'Click the button below to access the server.',
+    helpStep2:'Open a ticket',
+    helpStep2Desc:'In the 🌊 | Server section, create a ticket with your request.',
+    helpStep3:'Get help',
+    helpStep3Desc:'A staff team member will reply and help you solve your problem.',
+    helpJoin:'Join Discord',
+    helpNote:'Already on Discord? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Click here</a> to go directly to #🎟️〃ticket.'
+  }
 };
 function t(k){ return (L[currentLang]?.[k]) ?? (L['fr'][k] ?? k); }
 function setTxt(id, txt){ const el=document.getElementById(id); if(el) el.textContent=txt; }
+
+function translateExecutorValue(type, value) {
+  if (!value) return '—';
+  const map = {
+    'price': {
+      'Gratuit': t('val_free'),
+      'Payant': t('val_paid'),
+      'Free': t('val_free'),
+      'Paid': t('val_paid')
+    },
+    'detection': {
+      'Très faible': t('val_detection_very_low'),
+      'Faible': t('val_detection_low'),
+      'Moyenne': t('val_detection_medium'),
+      'Élevée': t('val_detection_high'),
+      'Very low': t('val_detection_very_low'),
+      'Low': t('val_detection_low'),
+      'Medium': t('val_detection_medium'),
+      'High': t('val_detection_high')
+    },
+    'updates': {
+      'Régulières': t('val_updates_regular'),
+      'Très régulières': t('val_updates_very_regular'),
+      'Occasionnelles': t('val_updates_occasional'),
+      'Peu fréquentes': t('val_updates_rare'),
+      'Aucune': t('val_updates_none'),
+      'Regular': t('val_updates_regular'),
+      'Very regular': t('val_updates_very_regular'),
+      'Occasional': t('val_updates_occasional'),
+      'Rare': t('val_updates_rare'),
+      'None': t('val_updates_none')
+    },
+    'support': {
+      '24/7': t('val_support_24_7'),
+      'Communauté': t('val_support_community'),
+      'Aucun': t('val_support_none'),
+      'Support prioritaire': t('val_support_priority'),
+      'Community': t('val_support_community'),
+      'None': t('val_support_none'),
+      'Priority support': t('val_support_priority')
+    }
+  };
+  return map[type]?.[value] || value;
+}
 
 function applyTranslations(){
   setTxt('navLoginBtn',t('navLogin')); setTxt('navSignupBtn',t('navSignup')); setTxt('navDiscordLabel',t('navDiscord'));
@@ -1176,7 +2130,7 @@ function applyTranslations(){
   setTxt('noResultsTitle',t('noResultsTitle')); setTxt('noResultsSub',t('noResultsSub'));
   setTxt('bannerTitle',t('bannerTitle')); setTxt('ownerSubLabel',t('ownerSub'));
   setTxt('membersLabel',t('membersLabel')); setTxt('newOpenedBadge',t('newOpened'));
-  setTxt('joinLabel',t('joinLabel')); setTxt('footerText',t('footerText'));
+  setTxt('joinLabel',t('joinLabel'));
   setTxt('dashSectionCompte',t('dashSectionCompte')); setTxt('dashSectionAnalytics',t('dashSectionAnalytics'));
   setTxt('dashSectionPrefs',t('dashSectionPrefs')); setTxt('dashSectionLang',t('dashSectionLang'));
   setTxt('dashGuestMsg',t('dashGuestMsg')); setTxt('dashLoginBtn',t('dashLoginBtn')); setTxt('dashSignupBtn',t('dashSignupBtn'));
@@ -1197,7 +2151,48 @@ function applyTranslations(){
   const cl=document.getElementById('commentLoginLink'); if(cl) cl.textContent=t('commentLoginLink');
   const csl=document.getElementById('commentSignupLink'); if(csl) csl.textContent=t('commentSignupLink');
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===currentLang));
+
+  // Executors
+  setTxt('executorsTitle', t('executorsTitle'));
+  setTxt('executorsSub', t('executorsSub'));
+  const execSearch = document.getElementById('execSearch');
+  if(execSearch) execSearch.placeholder = t('execSearchPlaceholder');
+  document.querySelectorAll('#execFilterButtons .exec-filter-btn').forEach(btn => {
+    const key = btn.dataset.efilter;
+    const map = {
+      'all': 'execFilterAll',
+      'free': 'execFilterFree',
+      'paid': 'execFilterPaid',
+      'key': 'execFilterKey',
+      'keyless': 'execFilterKeyless',
+      'powerful': 'execFilterPowerful'
+    };
+    if(map[key]) btn.textContent = t(map[key]);
+  });
+  // Help
+  setTxt('helpTitle', t('helpTitle'));
+  setTxt('helpSub', t('helpSub'));
+  setTxt('helpStep1', t('helpStep1'));
+  setTxt('helpStep1Desc', t('helpStep1Desc'));
+  setTxt('helpStep2', t('helpStep2'));
+  setTxt('helpStep2Desc', t('helpStep2Desc'));
+  setTxt('helpStep3', t('helpStep3'));
+  setTxt('helpStep3Desc', t('helpStep3Desc'));
+  const helpJoinBtn = document.getElementById('helpJoinBtn');
+  if(helpJoinBtn) {
+    const span = helpJoinBtn.querySelector('span');
+    if(span) span.textContent = t('helpJoin');
+  }
+  // Utilisation de innerHTML pour que le lien soit interprété
+  const helpNoteEl = document.getElementById('helpNote');
+  if(helpNoteEl) helpNoteEl.innerHTML = t('helpNote');
+
   updateVoteUI();
+
+  // Re-rendre les executors si on est sur la page et qu'ils sont chargés
+  if (currentPage === 'executors' && executorsCache.length > 0) {
+    renderExecutors();
+  }
 }
 
 // ============================================================
@@ -1233,7 +2228,6 @@ async function sbGetUser(username){
   return data || null;
 }
 async function sbUpdateUser(username, fields){
-  // On ajoute updated_at manuellement pour s'assurer que la row existe après l'update
   const payload = { ...fields, updated_at: new Date().toISOString() };
   const { data, error } = await sb
     .from('users')
@@ -1241,9 +2235,7 @@ async function sbUpdateUser(username, fields){
     .eq('username', username.toLowerCase())
     .select('*');
   if(error) throw new Error('Erreur mise à jour profil: '+error.message+' (code: '+error.code+')');
-  // .select() sans .single() retourne un tableau
   if(!data || data.length === 0){
-    // Peut arriver si RLS bloque silencieusement — on relit quand même
     const fresh = await sbGetUser(username);
     if(!fresh) throw new Error('Profil introuvable après mise à jour. Vérifie les policies RLS Supabase (exécute Supabase_v2.sql).');
     return fresh;
@@ -1287,7 +2279,8 @@ async function sbInsertDefaultScripts(){
   const defaults = [
     {id:'examination-v4',name:'Examination v4',category:'game',status:'new',status_label:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',game_name:'Examination',game_link:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',active_players:'~600',maturity:'Modérée',script_file:'Examination-Main[obf].lua',description:'Automatise et gère vos examinations avec précision. Détection intelligente des formulaires.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Examination v4\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20[obf]"))()'},
     {id:'ink-game-v7',name:'Ink Game v7',category:'game',status:'active',status_label:'Actif',banner:'https://tr.rbxcdn.com/180DAY-eeb754830041c5f9ddfd168242949f14/768/432/Image/Webp/noFilter',game_name:'Ink Game',game_link:'https://www.roblox.com/fr/games/99567941238278/Ink-Game',creator:'game i think',active_players:'~10 000',maturity:'Moyenne',script_file:'InkGame-Main[obf].lua',description:'Script Ink Game avec ESP, auto-collect et optimisations avancées.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Ink Game v7\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'},
-    {id:'infinite-yield',name:'Infinite Yield',category:'util',status:'popular',status_label:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',game_name:'Roblox (universel)',game_link:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',active_players:null,maturity:null,script_file:'infiniteyield.lua',description:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',script_display:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'}
+    {id:'infinite-yield',name:'Infinite Yield',category:'util',status:'popular',status_label:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',game_name:'Roblox (universel)',game_link:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',active_players:null,maturity:null,script_file:'infiniteyield.lua',description:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',script_display:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'},
+    {id:'dex-explorer',name:'Dex Explorer',category:'util',status:'popular',status_label:'Populaire',banner:'https://i.postimg.cc/t1S7Y1qF/placeholder.png',game_name:'Roblox (universel)',game_link:null,creator:'AZYsGithub',active_players:null,maturity:'Modérée',script_file:'dex-explorer.lua',description:'Accède à l\'intégralité du jeu (excepté les ServerSided Scripts). Explore chaque recoin de l\'univers Roblox.',script:'loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()',script_display:'-- Dex Explorer\nloadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()'}
   ];
   for(const s of defaults){
     const { error } = await sb.from('scripts').upsert(s);
@@ -1754,7 +2747,6 @@ function updateAuthUI(){
     const navAdminBtn = document.getElementById('navAdminBtn');
     if(navAdminBtn) navAdminBtn.style.display = isAdmin(u)?'flex':'none';
     const myCA = document.getElementById('myCommentAvatar'); if(myCA) myCA.src=av;
-    // Dashboard account card click -> profile
     document.getElementById('dashAccountCard').onclick = ()=>openProfile(u.username);
   }
   document.getElementById('dashAccountLogged').style.display = loggedIn?'block':'none';
@@ -1782,7 +2774,6 @@ let insightsOpen=false, appearOpen=false, notifOpen=false;
 document.getElementById('insightsBtn').addEventListener('click', ()=>{ insightsOpen=!insightsOpen; document.getElementById('insightsPanel').classList.toggle('open',insightsOpen); if(insightsOpen) updateMetrics(); });
 document.getElementById('appearanceBtn').addEventListener('click', ()=>{ appearOpen=!appearOpen; document.getElementById('appearancePanel').classList.toggle('open',appearOpen); });
 document.getElementById('notifPrefBtn').addEventListener('click', ()=>{ notifOpen=!notifOpen; document.getElementById('notifComing').classList.toggle('open',notifOpen); });
-// openAdminBtn removed from dashboard — now only in nav via navAdminBtn
 
 // EDIT PROFILE
 let editProfileOpen=false, editSelectedAvatar='';
@@ -2304,6 +3295,311 @@ async function loadStats(){
 }
 
 // ============================================================
+// PAGE NAVIGATION (ONGELETS)
+// ============================================================
+let currentPage = 'scripts';
+
+function switchPage(pageId) {
+  if (pageId === currentPage) return;
+  // Mise à jour des onglets
+  document.querySelectorAll('.page-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.page === pageId);
+  });
+  // Mise à jour du slider et de l'underline
+  const activeTab = document.querySelector(`.page-tab.active`);
+  if (activeTab) {
+    const inner = document.getElementById('pageNavInner');
+    const innerRect = inner.getBoundingClientRect();
+    const tabRect = activeTab.getBoundingClientRect();
+    const left = tabRect.left - innerRect.left + inner.scrollLeft;
+    const width = tabRect.width;
+    document.getElementById('pageTabSlider').style.left = left + 'px';
+    document.getElementById('pageTabSlider').style.width = width + 'px';
+    document.getElementById('pageTabUnderline').style.left = left + 'px';
+    document.getElementById('pageTabUnderline').style.width = width + 'px';
+  }
+  // Mise à jour des sections
+  document.querySelectorAll('.page-section').forEach(section => {
+    section.classList.toggle('active', section.id === 'page-' + pageId);
+  });
+  currentPage = pageId;
+  // Si la page est Executors, charger les executors
+  if (pageId === 'executors') {
+    loadExecutors();
+  }
+}
+
+document.querySelectorAll('.page-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    switchPage(this.dataset.page);
+  });
+});
+
+// Initialisation de la position du slider
+function initPageNav() {
+  const activeTab = document.querySelector('.page-tab.active');
+  if (activeTab) {
+    const inner = document.getElementById('pageNavInner');
+    const innerRect = inner.getBoundingClientRect();
+    const tabRect = activeTab.getBoundingClientRect();
+    const left = tabRect.left - innerRect.left + inner.scrollLeft;
+    const width = tabRect.width;
+    document.getElementById('pageTabSlider').style.left = left + 'px';
+    document.getElementById('pageTabSlider').style.width = width + 'px';
+    document.getElementById('pageTabUnderline').style.left = left + 'px';
+    document.getElementById('pageTabUnderline').style.width = width + 'px';
+  }
+}
+// Appeler après le chargement
+window.addEventListener('load', initPageNav);
+// Recalculer au redimensionnement
+window.addEventListener('resize', initPageNav);
+
+// ============================================================
+// EXECUTORS API (avec fallback enrichi)
+// ============================================================
+let executorsCache = [];
+let execFilter = 'all';
+let execSearch = '';
+
+// Fallback complet contenant tous les exécuteurs connus
+const FALLBACK_EXECUTORS = [
+  {
+    name: "Synapse Z",
+    version: "3.0",
+    price: "Payant",
+    undetectable: true,
+    updated: true,
+    unc: true,
+    key: false,
+    detection: "Très faible",
+    updates: "Régulières",
+    support: "24/7",
+    successRate: 98,
+    buyLink: "https://robloxcheatz.com/product?id=synapsez&ref=weao",
+    website: "https://z.synapse.do/",
+    discord: "https://discord.com/invite/synz"
+  },
+  {
+    name: "Krnl",
+    version: "1.0",
+    price: "Gratuit",
+    undetectable: false,
+    updated: false,
+    unc: false,
+    key: true,
+    detection: "Élevée",
+    updates: "Aucune",
+    support: "Aucun",
+    successRate: 0,
+    buyLink: null,
+    website: null,
+    discord: null,
+    status: "abandonné" // pour afficher un style spécial
+  },
+  {
+    name: "Xeno",
+    version: "2.5",
+    price: "Gratuit",
+    undetectable: true,
+    updated: true,
+    unc: true,
+    key: false,
+    detection: "Faible",
+    updates: "Très régulières",
+    support: "Communauté",
+    successRate: 40,
+    buyLink: null,
+    website: "https://www.xeno.now/",
+    discord: "https://discord.com/invite/xe-no"
+  },
+  {
+    name: "Madium",
+    version: "1.8",
+    price: "Gratuit",
+    undetectable: true,
+    updated: true,
+    unc: true,
+    key: false,
+    detection: "Très faible",
+    updates: "Régulières",
+    support: "24/7",
+    successRate: 100,
+    buyLink: null,
+    website: "https://getmadium.net/",
+    discord: "https://discord.com/invite/olemad"
+  },
+  {
+    name: "Solara",
+    version: "3.0",
+    price: "Gratuit",
+    undetectable: false,
+    updated: true,
+    unc: false,
+    key: false,
+    detection: "Moyenne",
+    updates: "Régulières",
+    support: "Communauté",
+    successRate: 39,
+    buyLink: null,
+    website: "https://wearedevs.net/d/Solara",
+    discord: "https://discord.com/invite/68RKjkFu2V"
+  },
+  {
+    name: "Velocity",
+    version: "2.0",
+    price: "Gratuit",
+    undetectable: true,
+    updated: true,
+    unc: true,
+    key: false,
+    detection: "Très faible",
+    updates: "Régulières",
+    support: "24/7",
+    successRate: 99,
+    buyLink: null,
+    website: "https://getvelocity.llc/",
+    discord: "https://discord.com/invite/velocityide"
+  },
+  {
+    name: "Potassium",
+    version: "1.2",
+    price: "Payant",
+    undetectable: true,
+    updated: true,
+    unc: true,
+    key: false,
+    detection: "Très faible",
+    updates: "Régulières",
+    support: "24/7",
+    successRate: 100,
+    buyLink: "https://bloxproducts.com/r/weao#Potassium",
+    website: "https://www.potassium.pro/",
+    discord: "https://discord.com/invite/potassium"
+  }
+];
+
+async function loadExecutors() {
+  const grid = document.getElementById('execGrid');
+  grid.innerHTML = `<div class="exec-loading"><div class="exec-loading-spinner"></div>${t('execLoading')}</div>`;
+  try {
+    // Essayer l'API avec un timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const response = await fetch('https://weao.xyz/api/executors', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    if (!response.ok) throw new Error('Erreur API');
+    const data = await response.json();
+    executorsCache = data.executors || [];
+    if (executorsCache.length === 0) throw new Error('Aucun executor reçu');
+  } catch (error) {
+    console.warn('[loadExecutors] Utilisation du fallback:', error.message);
+    executorsCache = FALLBACK_EXECUTORS;
+    // Optionnel: afficher un toast pour informer l'utilisateur
+    // showToast('⚠️ Chargement des executors avec données de secours', '#FCD34D');
+  }
+  renderExecutors();
+}
+
+function renderExecutors() {
+  const grid = document.getElementById('execGrid');
+  const q = execSearch.toLowerCase().trim();
+  let filtered = executorsCache.filter(ex => {
+    const name = (ex.name || '').toLowerCase();
+    const desc = (ex.description || '').toLowerCase();
+    const price = (ex.price || '').toLowerCase();
+    const matchSearch = q === '' || name.includes(q) || desc.includes(q) || price.includes(q) || 
+      (ex.key && q.includes('key')) || 
+      (!ex.key && q.includes('keyless')) ||
+      (ex.price && q.includes(ex.price.toLowerCase()));
+    let matchFilter = true;
+    if (execFilter === 'free') matchFilter = ex.price === 'Free' || ex.price === 'Gratuit';
+    else if (execFilter === 'paid') matchFilter = ex.price !== 'Free' && ex.price !== 'Gratuit';
+    else if (execFilter === 'key') matchFilter = ex.key === true;
+    else if (execFilter === 'keyless') matchFilter = ex.key === false;
+    else if (execFilter === 'powerful') matchFilter = ex.successRate >= 90;
+    return matchSearch && matchFilter;
+  });
+
+  document.getElementById('execCount').textContent = filtered.length + ' ' + t('execCountLabel');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="exec-error" style="color:var(--text-muted);">${t('execError')}</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(ex => {
+    const badges = [];
+    if (ex.price === 'Free' || ex.price === 'Gratuit') badges.push(`<span class="exec-badge badge-free">${t('badgeFree')}</span>`);
+    else if (ex.price) badges.push(`<span class="exec-badge badge-paid">${t('badgePaid')}</span>`);
+    if (ex.undetectable) badges.push(`<span class="exec-badge badge-undetect">${t('badgeUndetect')}</span>`);
+    else badges.push(`<span class="exec-badge badge-detected">${t('badgeDetected')}</span>`);
+    if (ex.updated) badges.push(`<span class="exec-badge badge-updated">${t('badgeUpdated')}</span>`);
+    else badges.push(`<span class="exec-badge badge-outdated">${t('badgeOutdated')}</span>`);
+    if (ex.unc) badges.push(`<span class="exec-badge badge-unc">${t('badgeUNC')}</span>`);
+    if (ex.key) badges.push(`<span class="exec-badge badge-key">${t('badgeKey')}</span>`);
+    if (ex.status === 'abandonné') {
+      badges.push(`<span class="exec-badge badge-outdated" style="background:rgba(239,68,68,0.2);color:#F87171;">${t('badgeAbandoned')}</span>`);
+    }
+
+    const stats = [
+      { label: t('statPrice'), value: ex.price, type: 'price' },
+      { label: t('statDetection'), value: ex.detection, type: 'detection' },
+      { label: t('statUpdates'), value: ex.updates, type: 'updates' },
+      { label: t('statSupport'), value: ex.support, type: 'support' }
+    ];
+
+    const links = [];
+    if (ex.buyLink) links.push(`<a href="${ex.buyLink}" target="_blank" rel="noopener" class="exec-link buy">🛒 ${t('btnBuy')}</a>`);
+    if (ex.website) links.push(`<a href="${ex.website}" target="_blank" rel="noopener" class="exec-link website">🌐 ${t('btnSite')}</a>`);
+    if (ex.discord) links.push(`<a href="${ex.discord}" target="_blank" rel="noopener" class="exec-link discord">💬 ${t('btnDiscord')}</a>`);
+
+    const sunc = ex.successRate !== undefined ? Math.min(Math.max(parseInt(ex.successRate), 0), 100) : null;
+
+    return `<div class="exec-card">
+      <div class="exec-card-top">
+        <div>
+          <div class="exec-title">${escHtml(ex.name)}</div>
+          <div class="exec-version">${escHtml(ex.version || '')}</div>
+        </div>
+        <div class="exec-badges">${badges.join('')}</div>
+      </div>
+      <div class="exec-stats">
+        ${stats.map(s => `<div class="exec-stat"><div class="exec-stat-label">${s.label}</div><div class="exec-stat-value">${escHtml(translateExecutorValue(s.type, s.value))}</div></div>`).join('')}
+      </div>
+      ${sunc !== null ? `
+      <div class="exec-sunc-bar">
+        <div class="exec-sunc-label">
+          <span class="exec-sunc-name">${t('successRate')}</span>
+          <span class="exec-sunc-pct">${sunc}%</span>
+        </div>
+        <div class="exec-bar-track">
+          <div class="exec-bar-fill" style="width:${sunc}%"></div>
+        </div>
+      </div>
+      ` : ''}
+      <div class="exec-links">
+        ${links.join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('execSearch').addEventListener('input', function() {
+  execSearch = this.value;
+  renderExecutors();
+});
+
+document.querySelectorAll('#execFilterButtons .exec-filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('#execFilterButtons .exec-filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    execFilter = this.dataset.efilter;
+    renderExecutors();
+  });
+});
+
+// ============================================================
 // INIT
 // ============================================================
 async function init(){
@@ -2324,6 +3620,10 @@ async function init(){
       } else {
         sessionLogout(); updateAuthUI();
       }
+    }
+    // Charger les executors si la page est active
+    if (currentPage === 'executors') {
+      loadExecutors();
     }
   } catch(e){ console.error('Init error:', e); showToast('Erreur de connexion Supabase','#F87171'); }
   finally{ hideLoading(); }
