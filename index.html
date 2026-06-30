@@ -48,32 +48,36 @@
   .cursor-ring { position:fixed;width:36px;height:36px;border:1px solid rgba(124,58,237,0.5);border-radius:50%;pointer-events:none;z-index:2147483646;transform:translate(-50%,-50%); }
   .cursor-light { position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.14) 0%,rgba(37,99,235,0.06) 35%,transparent 65%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);will-change:left,top; }
   /* Cursor style variants */
-  body.cursor-aurora .cursor { background:#22D3EE;box-shadow:0 0 12px 3px rgba(34,211,238,0.85); }
-  body.cursor-aurora .cursor-ring { border-color:rgba(34,211,238,0.7);box-shadow:0 0 16px rgba(34,211,238,0.35); }
-  body.cursor-aurora .cursor-light { background:radial-gradient(circle,rgba(34,211,238,0.16) 0%,rgba(6,182,212,0.07) 35%,transparent 65%); }
-  body.cursor-minimal .cursor { width:7px;height:7px;background:#fff;mix-blend-mode:normal; }
-  body.cursor-minimal .cursor-ring { display:none; }
-  body.cursor-minimal .cursor-light { opacity:0.35; }
+  /* Prisme — carré vert qui tourne autour d'un carré intérieur incliné plus clair */
+  body.cursor-prisme .cursor { width:9px;height:9px;background:#86EFAC;border-radius:2px;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 9px rgba(134,239,172,0.65); }
+  body.cursor-prisme .cursor-ring { width:30px;height:30px;border:2px solid rgba(34,197,94,0.6);border-radius:7px;background:transparent;animation:cursorSpin 3.4s linear infinite; }
+  body.cursor-prisme .cursor-light { background:radial-gradient(circle,rgba(34,197,94,0.16) 0%,rgba(21,128,61,0.07) 35%,transparent 65%); }
+  /* Comète — cercle orange façon "chargement" avec un losange clair au centre */
+  body.cursor-comete .cursor { width:8px;height:8px;background:#FDBA74;border-radius:2px;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 8px rgba(253,186,116,0.7); }
+  body.cursor-comete .cursor-ring { width:28px;height:28px;border-radius:50%;border:2.5px solid rgba(249,115,22,0.18);border-top-color:#F97316;border-right-color:#F97316;animation:cursorSpin 0.9s linear infinite; }
+  body.cursor-comete .cursor-light { background:radial-gradient(circle,rgba(249,115,22,0.16) 0%,rgba(194,65,12,0.07) 35%,transparent 65%); }
   @keyframes cursorSpin { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
-  body.cursor-comet .cursor { width:13px;height:13px;background:#FB923C;clip-path:polygon(50% 0%,85% 50%,50% 100%,15% 50%);box-shadow:-14px 2px 16px -2px rgba(251,146,60,0.55),-26px 4px 14px -4px rgba(251,146,60,0.25);mix-blend-mode:normal; }
-  body.cursor-comet .cursor-ring { width:30px;height:30px;border:2px solid transparent;border-top-color:rgba(251,146,60,0.7);border-right-color:rgba(251,146,60,0.35);box-shadow:0 0 12px rgba(251,146,60,0.25);animation:cursorSpin 2.4s linear infinite; }
-  body.cursor-comet .cursor-light { background:radial-gradient(circle,rgba(251,146,60,0.15) 0%,rgba(234,88,12,0.06) 35%,transparent 65%); }
-  body.cursor-prism .cursor { width:11px;height:11px;background:#34D399;border-radius:3px;box-shadow:0 0 10px rgba(52,211,153,0.65);transform:translate(-50%,-50%) rotate(45deg);mix-blend-mode:normal; }
-  body.cursor-prism .cursor-ring { width:28px;height:28px;border:1.5px solid rgba(52,211,153,0.55);border-radius:6px;transform:translate(-50%,-50%) rotate(45deg);animation:cursorSpin 6s linear infinite; }
-  body.cursor-prism .cursor-light { background:radial-gradient(circle,rgba(52,211,153,0.15) 0%,rgba(16,185,129,0.06) 35%,transparent 65%); }
-  .wallpaper-layer { position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .4s;filter:blur(var(--wallpaper-blur,0px)); }
-  .wallpaper-layer.active { opacity:1; }
-  .wallpaper-layer.wallpaper-reveal { -webkit-mask-image:radial-gradient(circle 260px at var(--wpx,50%) var(--wpy,50%),rgba(0,0,0,1) 0%,rgba(0,0,0,0.35) 55%,rgba(0,0,0,0) 100%);mask-image:radial-gradient(circle 260px at var(--wpx,50%) var(--wpy,50%),rgba(0,0,0,1) 0%,rgba(0,0,0,0.35) 55%,rgba(0,0,0,0) 100%); }
-  .wallpaper-settings { display:flex;flex-direction:column;gap:0.6rem;padding:0.25rem 0.1rem; }
+  .custom-wallpaper-layer { position:fixed;inset:-40px;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .5s; }
+  .custom-wallpaper-layer.active { opacity:1; }
+  .custom-wallpaper-reveal { opacity:0 !important; }
+  .custom-wallpaper-reveal.reveal-active { opacity:1 !important; -webkit-mask-image: radial-gradient(circle 260px at var(--wpx,50%) var(--wpy,50%), black 0%, transparent 70%); mask-image: radial-gradient(circle 260px at var(--wpx,50%) var(--wpy,50%), black 0%, transparent 70%); }
+  body.theme-light .custom-wallpaper-layer { opacity:0; }
+  body.theme-light .custom-wallpaper-layer.active { opacity:.55; }
+  .wallpaper-settings { display:flex;flex-direction:column;gap:0.6rem;padding:0.7rem 0.85rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px; }
   .wallpaper-row { display:flex;align-items:center;gap:0.5rem; }
-  .wallpaper-row .auth-input { padding:0.5rem 0.75rem;font-size:0.8rem; }
-  .wallpaper-upload-btn { display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:background .2s; }
-  .wallpaper-upload-btn:hover { background:rgba(124,58,237,0.18); }
-  .wallpaper-clear-btn { width:34px;height:34px;border-radius:8px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:#f87171;cursor:pointer;flex-shrink:0;transition:background .2s; }
-  .wallpaper-clear-btn:hover { background:rgba(248,113,113,0.2); }
-  .wallpaper-slider-row { font-size:0.78rem;color:var(--text-muted); }
-  .wallpaper-slider-row input[type=range] { flex:1;accent-color:#A78BFA; }
-  .wallpaper-toggle-row { justify-content:space-between;font-size:0.78rem;color:var(--text-muted); }
+  .wallpaper-input { flex:1;padding:0.5rem 0.7rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none;transition:border-color .2s; }
+  .wallpaper-input:focus { border-color:rgba(124,58,237,0.5); }
+  .wallpaper-upload-btn { width:36px;height:36px;flex-shrink:0;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.28);border-radius:8px;cursor:none;font-size:0.95rem;display:flex;align-items:center;justify-content:center;transition:all .2s; }
+  .wallpaper-upload-btn:hover { background:rgba(124,58,237,0.2); }
+  .wallpaper-active-label { font-size:0.78rem;color:var(--text-muted); }
+  .wallpaper-clear-btn { margin-left:auto;padding:0.3rem 0.7rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.28);border-radius:7px;color:#F87171;font-size:0.75rem;cursor:none;transition:all .2s; }
+  .wallpaper-clear-btn:hover { background:rgba(239,68,68,0.2); }
+  .wallpaper-slider-row { display:flex;flex-direction:column;gap:0.3rem; }
+  .wallpaper-slider-label { font-size:0.78rem;color:var(--text-muted); }
+  .wallpaper-slider { width:100%;accent-color:var(--purple-light);cursor:none; }
+  .wallpaper-toggle-row { display:flex;align-items:center;justify-content:space-between;gap:0.5rem; }
+  body.theme-transitioning, body.theme-transitioning *:not(.cursor):not(.cursor-ring):not(.cursor-light) { transition:background-color .45s ease,border-color .45s ease,color .35s ease,box-shadow .45s ease !important; }
+
   .wrapper { position:relative;z-index:2; }
 
   nav { position:fixed;top:0;left:0;right:0;z-index:500;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background 0.3s; }
@@ -322,6 +326,11 @@
   .auth-input { width:100%;padding:0.65rem 0.9rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;transition:all 0.2s; }
   .auth-input:focus { border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.05);box-shadow:0 0 0 3px rgba(124,58,237,0.1); }
   body.theme-light .auth-input { background:rgba(0,0,0,0.04); }
+  .auth-input-wrap { position:relative; }
+  .auth-input-wrap .auth-input { padding-right:2.6rem; }
+  .auth-pw-toggle { position:absolute;top:50%;right:0.6rem;transform:translateY(-50%);background:none;border:none;cursor:none;padding:0.3rem;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:0.7;transition:opacity .15s,color .15s; }
+  .auth-pw-toggle:hover { opacity:1;color:var(--purple-light); }
+  .auth-pw-toggle svg { width:18px;height:18px;display:block; }
   .auth-hint { font-size:0.7rem;color:var(--text-muted);margin-top:0.3rem; }
   .auth-error { background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:0.6rem 0.9rem;font-size:0.8rem;color:#F87171;margin-bottom:1rem;display:none; }
   .auth-error.visible { display:block; }
@@ -338,6 +347,16 @@
   .avatar-opt { width:38px;height:38px;border-radius:50%;border:2px solid transparent;cursor:none;object-fit:cover;transition:all 0.2s;flex-shrink:0; }
   .avatar-opt:hover { border-color:rgba(124,58,237,0.5);transform:scale(1.08); }
   .avatar-opt.selected { border-color:var(--purple-light);box-shadow:0 0 8px rgba(124,58,237,0.4); }
+  .avatar-picker-label { width:100%;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-dim,#9CA3AF);margin:6px 0 2px; }
+  .avatar-picker-history, .avatar-picker-default { display:flex;flex-wrap:wrap;gap:8px;width:100%; }
+  .avatar-opt-history { border-color:rgba(251,191,36,0.25); }
+  .avatar-opt-history:hover { border-color:rgba(251,191,36,0.6); }
+  .avatar-opt-history.selected { border-color:#FCD34D;box-shadow:0 0 8px rgba(251,191,36,0.4); }
+  .avatar-opt-history-cell { position:relative;display:inline-flex; }
+  .avatar-history-trash { position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;background:rgba(15,15,20,0.92);border:1px solid rgba(248,113,113,0.4);color:#F87171;display:flex;align-items:center;justify-content:center;cursor:none;padding:0;opacity:0;transform:scale(0.85);transition:opacity .15s,transform .15s,background .15s; }
+  .avatar-opt-history-cell:hover .avatar-history-trash { opacity:1;transform:scale(1); }
+  .avatar-history-trash:hover { background:rgba(248,113,113,0.18); }
+  .avatar-history-trash svg { width:9px;height:9px; }
   .avatar-upload-btn { display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.7rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:8px;color:var(--purple-light);font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:500;cursor:none;transition:all .2s;margin-top:0.6rem;width:100%;justify-content:center; }
   .avatar-upload-btn:hover { background:rgba(124,58,237,0.2); }
   .avatar-upload-input { display:none; }
@@ -584,20 +603,17 @@
   .cursor-preview-ring { position:absolute;border-radius:50%; }
   .cursor-preview-classic .cursor-preview-dot { width:8px;height:8px;background:#A78BFA; }
   .cursor-preview-classic .cursor-preview-ring { width:24px;height:24px;border:1px solid rgba(124,58,237,0.5); }
-  .cursor-preview-aurora .cursor-preview-dot { width:8px;height:8px;background:#22D3EE;box-shadow:0 0 8px 2px rgba(34,211,238,0.8); }
-  .cursor-preview-aurora .cursor-preview-ring { width:24px;height:24px;border:1.5px solid rgba(34,211,238,0.7);box-shadow:0 0 10px rgba(34,211,238,0.4); }
-  .cursor-preview-minimal .cursor-preview-dot { width:6px;height:6px;background:#fff; }
-  .cursor-preview-comet .cursor-preview-dot { width:10px;height:10px;background:#FB923C;clip-path:polygon(50% 0%,85% 50%,50% 100%,15% 50%);box-shadow:-10px 1px 12px -2px rgba(251,146,60,0.55); }
-  .cursor-preview-comet .cursor-preview-ring { width:24px;height:24px;border:1.5px solid transparent;border-top-color:rgba(251,146,60,0.7);border-right-color:rgba(251,146,60,0.35); }
-  .cursor-preview-prism .cursor-preview-dot { width:9px;height:9px;background:#34D399;border-radius:3px;box-shadow:0 0 8px rgba(52,211,153,0.65);transform:rotate(45deg); }
-  .cursor-preview-prism .cursor-preview-ring { width:22px;height:22px;border:1.2px solid rgba(52,211,153,0.55);border-radius:5px;transform:rotate(45deg); }
+  .cursor-preview-prisme .cursor-preview-dot { width:8px;height:8px;background:#86EFAC;border-radius:2px;transform:rotate(45deg);box-shadow:0 0 8px rgba(134,239,172,0.65); }
+  .cursor-preview-prisme .cursor-preview-ring { width:24px;height:24px;border:2px solid rgba(34,197,94,0.6);border-radius:6px; }
+  .cursor-preview-comete .cursor-preview-dot { width:7px;height:7px;background:#FDBA74;border-radius:2px;transform:rotate(45deg);box-shadow:0 0 7px rgba(253,186,116,0.7); }
+  .cursor-preview-comete .cursor-preview-ring { width:24px;height:24px;border-radius:50%;border:2px solid rgba(249,115,22,0.18);border-top-color:#F97316;border-right-color:#F97316; }
   .theme-preview { height:60px;width:100%;display:block;position:relative;overflow:hidden; }
   .theme-preview-midnight { background:linear-gradient(160deg,#0d0d1a 0%,#1a1060 100%); }
   .theme-preview-midnight .star { position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0.8; }
   .star-1{top:12%;left:15%;width:1.5px;height:1.5px;} .star-2{top:30%;left:55%;width:2px;height:2px;opacity:0.6;} .star-3{top:60%;left:25%;width:1px;height:1px;opacity:0.5;} .star-4{top:20%;left:80%;width:2.5px;height:2.5px;opacity:0.9;} .star-5{top:70%;left:70%;width:1.5px;height:1.5px;opacity:0.7;} .star-6{top:45%;left:10%;width:1px;height:1px;opacity:0.4;} .star-7{top:80%;left:45%;width:2px;height:2px;opacity:0.6;} .star-8{top:10%;left:40%;width:1px;height:1px;opacity:0.5;} .star-9{top:55%;left:88%;width:1.5px;height:1.5px;opacity:0.8;}
   .midnight-accent { position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(0deg,rgba(100,60,220,0.3),transparent); }
   .theme-preview-nexus { background:#000; }
-  .nexus-dots-preview { position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.12) 0.4px,transparent 0.4px);background-size:12px 12px;background-position:6px 6px; }
+  .nexus-dots-preview { position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,0.85) 1.4px,transparent 1.6px);background-size:7px 7px;background-position:3px 3px; }
   .nexus-accent { position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:30px;height:2px;background:linear-gradient(90deg,#7C3AED,#06B6D4);border-radius:2px; }
   .theme-label { font-size:0.62rem;text-align:center;padding:0.3rem 0.2rem;color:var(--text-muted);font-weight:500;background:rgba(255,255,255,0.02); }
   .notif-coming { display:none;padding:0.75rem 1rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:10px;font-size:0.8rem;color:#FCD34D;margin-top:0.6rem;text-align:center; }
@@ -661,17 +677,18 @@
   /* ADMIN PANEL */
   .admin-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(14px);z-index:15000;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto; }
   .admin-overlay.open { opacity:1;visibility:visible; }
-  .admin-panel { background:#0a0a12;border:1px solid rgba(255,215,0,0.2);border-radius:20px;width:100%;max-width:820px;margin:2rem auto;position:relative; }
-  .admin-header { display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,215,0,0.12);background:linear-gradient(135deg,rgba(255,215,0,0.05),rgba(124,58,237,0.05));border-radius:20px 20px 0 0; }
-  .admin-title { font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:#FFD700;display:flex;align-items:center;gap:0.6rem; }
-  .admin-badge { font-size:0.6rem;background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:4px;padding:0.15rem 0.5rem;color:#FFD700;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em; }
-  .admin-close { width:32px;height:32px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;transition:all .2s;font-size:1rem; }
-  .admin-close:hover { background:rgba(255,255,255,0.12);color:var(--text); }
-  .admin-tabs { display:flex;gap:0.4rem;padding:1rem 1.5rem 0;border-bottom:1px solid var(--border);overflow-x:auto; }
-  .admin-tab { padding:0.5rem 1rem;border-radius:8px 8px 0 0;border:1px solid transparent;border-bottom:none;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:500;cursor:none;color:var(--text-muted);transition:all .2s;white-space:nowrap;background:transparent; }
+  .admin-panel { background:linear-gradient(180deg,#0c0c15,#0a0a12);border:1px solid rgba(255,215,0,0.18);border-radius:22px;width:100%;max-width:820px;margin:2rem auto;position:relative;box-shadow:0 24px 70px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.02) inset;overflow:hidden; }
+  .admin-header { display:flex;align-items:center;justify-content:space-between;padding:1.35rem 1.6rem;border-bottom:1px solid rgba(255,215,0,0.12);background:linear-gradient(120deg,rgba(255,215,0,0.07),rgba(124,58,237,0.07) 60%,rgba(56,189,248,0.05)); }
+  .admin-title { font-family:'Space Grotesk',sans-serif;font-size:1.18rem;font-weight:700;color:#FFD700;display:flex;align-items:center;gap:0.6rem;letter-spacing:0.01em; }
+  .admin-badge { font-size:0.6rem;background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:5px;padding:0.18rem 0.55rem;color:#FFD700;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em; }
+  .admin-close { width:32px;height:32px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:9px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;transition:all .2s;font-size:1rem; }
+  .admin-close:hover { background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#F87171;transform:rotate(90deg); }
+  .admin-tabs { display:flex;gap:0.3rem;padding:0.85rem 1.6rem 0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:thin; }
+  .admin-tab { padding:0.55rem 1.05rem;border-radius:9px 9px 0 0;border:1px solid transparent;border-bottom:none;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;cursor:none;color:var(--text-muted);transition:all .2s;white-space:nowrap;background:transparent;position:relative; }
   .admin-tab:hover { color:var(--text);background:rgba(255,255,255,0.04); }
-  .admin-tab.active { color:#FFD700;background:rgba(255,215,0,0.07);border-color:rgba(255,215,0,0.2);border-bottom:1px solid #0a0a12; }
-  .admin-body { padding:1.5rem; }
+  .admin-tab.active { color:#FFD700;background:rgba(255,215,0,0.08);border-color:rgba(255,215,0,0.2);border-bottom:1px solid #0c0c15; }
+  .admin-tab.active::after { content:'';position:absolute;left:0.6rem;right:0.6rem;bottom:-1px;height:2px;background:linear-gradient(90deg,#FFD700,#FCD34D);border-radius:2px; }
+  .admin-body { padding:1.6rem; }
   .admin-section { display:none; }
   .admin-section.active { display:block;animation:fadeSlide .2s ease; }
 
@@ -715,22 +732,28 @@
   .custom-select-option:hover { background:rgba(255,215,0,0.1); }
   .custom-select-option.selected { background:rgba(255,215,0,0.16);color:#FCD34D;font-weight:600; }
   .admin-row { display:grid;grid-template-columns:1fr 1fr;gap:0.75rem; }
-  .admin-btn { padding:0.6rem 1.2rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:none;transition:all .2s;border:1px solid; }
+  .admin-btn { padding:0.6rem 1.2rem;border-radius:9px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:none;transition:all .18s;border:1px solid; }
+  .admin-btn:hover { transform:translateY(-1px); }
+  .admin-btn:active { transform:translateY(0); }
   .admin-btn-gold { background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.35);color:#FFD700; }
-  .admin-btn-gold:hover { background:rgba(255,215,0,0.22);box-shadow:0 0 14px rgba(255,215,0,0.2); }
+  .admin-btn-gold:hover { background:rgba(255,215,0,0.22);box-shadow:0 4px 16px rgba(255,215,0,0.18); }
   .admin-btn-red { background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.35);color:#F87171; }
-  .admin-btn-red:hover { background:rgba(239,68,68,0.22); }
+  .admin-btn-red:hover { background:rgba(239,68,68,0.22);box-shadow:0 4px 16px rgba(239,68,68,0.15); }
   .admin-btn-purple { background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.35);color:var(--purple-light); }
-  .admin-btn-purple:hover { background:rgba(124,58,237,0.22); }
+  .admin-btn-purple:hover { background:rgba(124,58,237,0.22);box-shadow:0 4px 16px rgba(124,58,237,0.15); }
+  .admin-btn-blue { background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);color:#38BDF8; }
+  .admin-btn-blue:hover { background:rgba(56,189,248,0.22);box-shadow:0 4px 16px rgba(56,189,248,0.18); }
   .admin-btn-green { background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.35);color:#34D399; }
-  .admin-btn-green:hover { background:rgba(16,185,129,0.22); }
+  .admin-btn-green:hover { background:rgba(16,185,129,0.22);box-shadow:0 4px 16px rgba(16,185,129,0.15); }
   .admin-btn-full { width:100%;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;gap:0.5rem; }
 
-  .admin-script-card { background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.75rem; }
+  .admin-script-card { background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:0.75rem;transition:border-color .2s,background .2s; }
+  .admin-script-card:hover { border-color:rgba(255,215,0,0.2);background:rgba(255,255,255,0.035); }
   .admin-script-card-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem; }
   .admin-script-name { font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;color:var(--text); }
-  .admin-script-actions { display:flex;gap:0.4rem; }
-  .admin-mini-btn { padding:0.25rem 0.6rem;border-radius:6px;font-size:0.72rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;border:1px solid;transition:all .2s; }
+  .admin-script-actions { display:flex;gap:0.4rem;flex-wrap:wrap; }
+  .admin-mini-btn { padding:0.3rem 0.65rem;border-radius:7px;font-size:0.72rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;border:1px solid;transition:all .18s; }
+  .admin-mini-btn:hover { transform:translateY(-1px); }
   .admin-votes-row { display:flex;gap:0.5rem;align-items:center;font-size:0.78rem;color:var(--text-muted);flex-wrap:wrap; }
   .vote-edit-group { display:flex;align-items:center;gap:0.35rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:7px;padding:0.15rem 0.4rem; }
   .vote-edit-group span { font-size:0.7rem; }
@@ -739,7 +762,8 @@
   .vote-edit-input::-webkit-inner-spin-button { -webkit-appearance:none; }
 
   .admin-users-list { display:flex;flex-direction:column;gap:0.6rem;max-height:400px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,0.3) transparent;padding-right:0.25rem; }
-  .admin-user-row { display:flex;align-items:center;gap:0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:0.65rem 0.85rem; }
+  .admin-user-row { display:flex;align-items:center;gap:0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:0.65rem 0.85rem;transition:border-color .2s,background .2s; }
+  .admin-user-row:hover { border-color:rgba(124,58,237,0.25);background:rgba(255,255,255,0.03); }
   .admin-user-avatar { width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0;cursor:pointer; }
   .admin-user-avatar:hover { border-color:var(--purple-light); }
   .admin-user-info { flex:1;min-width:0; }
@@ -751,16 +775,17 @@
   .badge-admin { background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);color:var(--purple-light); }
   .badge-support { background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);color:#67E8F9; }
   .badge-staff { background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34D399; }
-  .badge-certified { background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);color:#FCD34D; }
+  .badge-certified { background:rgba(56,189,248,0.15);border:1px solid rgba(56,189,248,0.3);color:#38BDF8; }
   .badge-banned { background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#F87171; }
   .admin-user-actions { display:flex;gap:0.35rem;flex-wrap:wrap; }
 
-  .admin-comment-row { display:flex;align-items:flex-start;gap:0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:0.75rem;margin-bottom:0.6rem; }
+  .admin-comment-row { display:flex;align-items:flex-start;gap:0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;padding:0.75rem;margin-bottom:0.6rem;transition:border-color .2s; }
+  .admin-comment-row:hover { border-color:rgba(255,255,255,0.12); }
   .admin-comment-body { flex:1;min-width:0; }
   .admin-comment-meta { font-size:0.7rem;color:var(--text-muted);margin-bottom:0.3rem;display:flex;gap:0.5rem;flex-wrap:wrap; }
   .admin-comment-text { font-size:0.8rem;color:var(--text);line-height:1.5;word-break:break-word; }
 
-  .admin-form-section { background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem; }
+  .admin-form-section { background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:12px;padding:1.1rem;margin-bottom:1rem; }
   .admin-form-section-title { font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--purple-light);font-weight:600;margin-bottom:0.85rem; }
 
   /* ============================================================
@@ -1407,6 +1432,9 @@
     position: relative;
   }
   .msg-conv-item:hover { background: rgba(255,255,255,0.03); }
+  .msg-conv-close { position:absolute;top:6px;right:8px;width:18px;height:18px;border-radius:5px;border:none;background:rgba(10,10,18,0.55);color:var(--text-muted);font-size:0.65rem;display:flex;align-items:center;justify-content:center;cursor:none;opacity:0;transition:all 0.15s;z-index:2; }
+  .msg-conv-item:hover .msg-conv-close { opacity:0.6; }
+  .msg-conv-close:hover { opacity:1 !important;background:rgba(248,113,113,0.15);color:#F87171; }
   .msg-conv-item.active { background: rgba(124,58,237,0.08); }
   .msg-conv-item.unread .msg-conv-name { color:var(--text); font-weight:700; }
   .msg-conv-avatar-wrap { position:relative;flex-shrink:0; }
@@ -1416,7 +1444,8 @@
   .msg-conv-body { flex:1;min-width:0; }
   .msg-conv-name { font-family:'Space Grotesk',sans-serif;font-size:0.83rem;font-weight:600;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
   .msg-conv-preview { font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0.15rem;font-weight:300; }
-  .msg-conv-meta { display:flex;flex-direction:column;align-items:flex-end;gap:0.2rem;flex-shrink:0; }
+  .msg-conv-meta { display:flex;flex-direction:column;align-items:flex-end;gap:0.2rem;flex-shrink:0;transition:padding-right 0.15s; }
+  .msg-conv-item:hover .msg-conv-meta { padding-right:20px; }
   .msg-conv-time { font-size:0.62rem;color:var(--text-muted); }
   .msg-conv-unread-badge { min-width:18px;height:18px;border-radius:999px;background:var(--purple);font-size:0.6rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 4px; }
   .msg-empty-sidebar { text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:0.8rem; }
@@ -1487,6 +1516,9 @@
   .msg-bubble-sender { font-size:0.68rem;color:var(--text-muted);margin-bottom:0.1rem;font-weight:500; }
   .msg-bubble-group.mine .msg-bubble-sender { color:var(--purple-light); }
   .msg-bubble-seen { font-size:0.68rem;color:var(--text-muted);margin-top:0.15rem;align-self:flex-end; }
+  .msg-bubble-status { display:inline-flex;align-items:center;gap:2px;font-size:0.6rem;color:var(--text-muted);margin-top:0.15rem;align-self:flex-end; }
+  .msg-bubble-status svg { width:13px;height:13px; }
+  .msg-bubble-status.status-seen { color:#60A5FA; }
   .msg-bubble {
     padding: 0.55rem 0.9rem;
     border-radius: 16px;
@@ -1618,7 +1650,7 @@
   .msg-bubble a.msg-inline-link { color:#7DD3FC;text-decoration:underline; }
 
   /* IMPORT MENU (crochet button) */
-  .msg-import-wrap { position:relative; }
+  .msg-import-wrap { position:relative;display:flex;align-items:center; }
   .msg-import-menu {
     position:absolute;bottom:100%;left:0;margin-bottom:0.4rem;
     width:170px;border-radius:10px;overflow:hidden;
@@ -1697,9 +1729,11 @@
   .msg-input-above { display:flex;align-items:center;gap:0.5rem;margin-bottom:0.45rem; }
   .msg-input-above-avatar { width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid var(--border); }
   .msg-input-above-pseudo { font-size:0.72rem;color:var(--text-muted);font-weight:500;font-family:'JetBrains Mono',monospace; }
-  .msg-input-row { display:flex;align-items:flex-end;gap:0.6rem; }
+  .msg-input-row { display:flex;align-items:center;gap:0.6rem; }
+  .msg-tip { display:flex;align-items:center; }
   .msg-textbox {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 60px;
     background: rgba(255,255,255,0.04);
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -1715,8 +1749,22 @@
     transition: border-color 0.2s, background 0.2s;
     line-height: 1.5;
   }
+  @media (max-width:480px) {
+    .msg-input-row { gap:0.35rem; }
+    .msg-action-btn { width:32px;height:32px; }
+    .msg-send-btn { width:36px;height:36px; }
+    .msg-textbox-compact { padding:0.55rem 0.7rem;font-size:0.82rem; }
+  }
   .msg-textbox:focus { border-color:rgba(124,58,237,0.45);background:rgba(124,58,237,0.04); }
   .msg-textbox::placeholder { color:var(--text-muted); }
+  .msg-textbox-compact { font-size:0.85rem;padding:0.6rem 0.85rem; }
+  .emoji-search-bar { display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.7rem;border-bottom:1px solid var(--border);flex-shrink:0; }
+  .emoji-search-bar svg { width:14px;height:14px;color:var(--text-muted);flex-shrink:0; }
+  .emoji-search-bar input { flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem; }
+  .emoji-search-bar input::placeholder { color:var(--text-muted); }
+  .emoji-grid-scroll { display:grid;grid-template-columns:repeat(7,1fr);gap:0.1rem;padding:0.5rem;overflow-y:auto;flex:1;scrollbar-width:thin;align-content:start; }
+  .emoji-cat-label { grid-column:1/-1;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-muted);padding:0.4rem 0.25rem 0.15rem; }
+  .emoji-no-results { grid-column:1/-1;text-align:center;padding:1.5rem 0.5rem;color:var(--text-muted);font-size:0.78rem; }
   .msg-send-btn {
     width: 40px; height: 40px;
     background: rgba(124,58,237,0.15);
@@ -1742,6 +1790,10 @@
     flex-shrink: 0;
     font-size: 0.9rem;
   }
+  .custom-tooltip { position:fixed;z-index:2147483647;pointer-events:none;background:rgba(13,13,20,0.95);border:1px solid rgba(124,58,237,0.35);color:#E5E7EB;font-family:'Inter',sans-serif;font-size:0.72rem;font-weight:500;padding:0.35rem 0.65rem;border-radius:7px;backdrop-filter:blur(8px);box-shadow:0 6px 24px rgba(0,0,0,0.4);opacity:0;transform:translate(-50%,4px) scale(0.96);transition:opacity .12s ease,transform .12s ease;white-space:nowrap; }
+  .custom-tooltip::before { content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:4px solid rgba(124,58,237,0.35); }
+  .custom-tooltip.visible { opacity:1;transform:translate(-50%,0) scale(1); }
+  body.theme-light .custom-tooltip { background:rgba(255,255,255,0.97);color:#1F2937;border-color:rgba(124,58,237,0.25); }
   .msg-action-btn:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.08); }
 
   /* EMOJI PICKER */
@@ -1752,13 +1804,14 @@
     background: #0d0d14;
     border: 1px solid rgba(124,58,237,0.25);
     border-radius: 12px;
-    padding: 0.6rem;
+    padding: 0;
     display: none;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    width: 260px;
+    flex-direction: column;
+    width: 290px;
+    height: 320px;
     z-index: 100;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    overflow: hidden;
   }
   body.theme-light .emoji-picker-panel { background:#fff; }
   .emoji-picker-panel.open { display:flex; }
@@ -1787,8 +1840,8 @@
   .gif-search-bar input { width:100%;padding:0.4rem 0.75rem 0.4rem 2rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none; }
   .gif-search-bar input:focus { border-color:rgba(124,58,237,0.4); }
   .gif-search-bar svg { position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--text-muted);width:13px;height:13px;pointer-events:none; }
-  .gif-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;padding:0.6rem;overflow-y:auto;flex:1;scrollbar-width:thin; }
-  .gif-item { border-radius:8px;overflow:hidden;cursor:none;position:relative;aspect-ratio:4/3; }
+  .gif-grid { display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:auto;gap:0.5rem;padding:0.6rem;overflow-y:auto;flex:1;scrollbar-width:thin;align-content:start;justify-items:stretch; }
+  .gif-item { border-radius:8px;overflow:hidden;cursor:none;position:relative;width:100%;aspect-ratio:1/1;background:rgba(255,255,255,0.03); }
   .gif-item.gif-item-saved .msg-gif-save-btn { top:4px;right:4px;width:24px;height:24px; }
   .gif-item.gif-item-saved .msg-gif-save-btn svg { width:13px;height:13px; }
   .gif-item img { width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s; }
@@ -1916,6 +1969,9 @@
   <defs><pattern id="nexus-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,0.045)"/></pattern></defs>
   <rect width="100%" height="100%" fill="url(#nexus-dots)"/>
 </svg>
+<div id="customWallpaperBase" class="custom-wallpaper-layer"></div>
+<div id="customWallpaperReveal" class="custom-wallpaper-layer custom-wallpaper-reveal"></div>
+
 <svg id="nexus-grid-glow" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <defs><pattern id="nexus-dots-glow" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,0.55)"/></pattern></defs>
   <rect width="100%" height="100%" fill="url(#nexus-dots-glow)"/>
@@ -1923,8 +1979,8 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-<div class="wallpaper-layer" id="wallpaperLayer"></div>
 <div class="cursor-light" id="cursorLight"></div>
+<div class="custom-tooltip" id="customTooltip"></div>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
@@ -1949,7 +2005,7 @@
       <div class="auth-sub">Accède à ton compte pour voter et commenter.</div>
       <div class="auth-error" id="loginError"></div>
       <div class="auth-field"><label class="auth-label">Nom d'utilisateur</label><input type="text" class="auth-input" id="loginUsername" placeholder="ex: CryptoFox99" autocomplete="username"></div>
-      <div class="auth-field"><label class="auth-label">Mot de passe</label><input type="password" class="auth-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="auth-field"><label class="auth-label">Mot de passe</label><div class="auth-input-wrap"><input type="password" class="auth-input" id="loginPassword" placeholder="••••••••" autocomplete="current-password"><button type="button" class="auth-pw-toggle" id="loginPwToggle" tabindex="-1"><svg id="loginPwIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <button class="auth-submit" id="loginSubmit">Se connecter</button>
       <div class="auth-switch">Pas encore de compte ? <button class="auth-switch-btn" id="goToSignup">Créer un compte</button></div>
     </div>
@@ -1958,7 +2014,7 @@
       <div class="auth-sub">Rejoins la communauté Sentinel Script.</div>
       <div class="auth-error" id="signupError"></div>
       <div class="auth-field"><label class="auth-label">Nom d'utilisateur</label><input type="text" class="auth-input" id="signupUsername" placeholder="ex: NeonBlade42" autocomplete="username"><div class="auth-hint">Lettres, chiffres, underscores uniquement.</div></div>
-      <div class="auth-field"><label class="auth-label">Mot de passe</label><input type="password" class="auth-input" id="signupPassword" placeholder="minimum 8 caractères" autocomplete="new-password"></div>
+      <div class="auth-field"><label class="auth-label">Mot de passe</label><div class="auth-input-wrap"><input type="password" class="auth-input" id="signupPassword" placeholder="minimum 8 caractères" autocomplete="new-password"><button type="button" class="auth-pw-toggle" id="signupPwToggle" tabindex="-1"><svg id="signupPwIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
       <div class="auth-field">
         <label class="auth-label">Avatar</label>
         <div class="avatar-select-wrap"><img class="avatar-preview-big" id="signupAvatarPreview" src="" alt="avatar"><div class="avatar-options" id="signupAvatarOptions"></div></div>
@@ -2093,7 +2149,7 @@
           <div class="admin-field"><label class="admin-label">Statut</label><select class="admin-select" id="newScriptStatus"><option value="active">✅ Actif</option><option value="new">🆕 Nouveau</option><option value="popular">🔥 Populaire</option></select></div>
           <div style="display:flex;gap:0.6rem;">
             <button class="admin-btn admin-btn-gold admin-btn-full" id="addScriptBtn" style="flex:1;">➕ Ajouter le script</button>
-            <button class="admin-btn admin-btn-full" id="cancelEditScriptBtn" style="display:none;flex:0 0 auto;border-color:var(--border);color:var(--text-muted);">Annuler</button>
+            <button class="admin-btn" id="cancelEditScriptBtn" style="display:none;flex:0 0 auto;padding:0.6rem 1.4rem;border-color:var(--border);color:var(--text-muted);">Annuler</button>
           </div>
         </div>
         <div>
@@ -2154,6 +2210,10 @@
               </div>
               <div class="edit-field"><label class="edit-label" id="editDisplayNameLabel">Nom d'affichage</label><input type="text" class="edit-input" id="editDisplayName" placeholder="Ton nom visible"></div>
               <div class="edit-field"><label class="edit-label" id="editUsernameLabel">Nom d'utilisateur</label><input type="text" class="edit-input" id="editUsername"></div>
+              <div class="edit-field" id="editUsernamePwField" style="display:none">
+                <label class="edit-label">Confirme ton mot de passe</label>
+                <div class="auth-input-wrap"><input type="password" class="edit-input" id="editUsernamePassword" placeholder="Requis pour changer de nom d'utilisateur" autocomplete="current-password"><button type="button" class="auth-pw-toggle" id="editUsernamePwToggle" tabindex="-1"><svg id="editUsernamePwIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+              </div>
               <div class="edit-field"><label class="edit-label" id="editBioLabel">Bio</label><input type="text" class="edit-input" id="editBio" placeholder="Courte bio..." maxlength="80"></div>
               <button class="edit-save-btn" id="editSaveBtn"><span id="editSaveLabel">Enregistrer</span></button>
             </div>
@@ -2243,23 +2303,15 @@
               <div class="theme-grid-other">
                 <div class="cursor-option selected" data-cursor="classic">
                   <div class="cursor-preview cursor-preview-classic"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNameClassic">Classique</div>
+                  <div class="theme-label" id="cursorNameClassic">L'original</div>
                 </div>
-                <div class="cursor-option" data-cursor="aurora">
-                  <div class="cursor-preview cursor-preview-aurora"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNameNeon">Aurore</div>
+                <div class="cursor-option" data-cursor="prisme">
+                  <div class="cursor-preview cursor-preview-prisme"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label" id="cursorNamePrisme">Prisme</div>
                 </div>
-                <div class="cursor-option" data-cursor="comet">
-                  <div class="cursor-preview cursor-preview-comet"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNameComet">Comète</div>
-                </div>
-                <div class="cursor-option" data-cursor="prism">
-                  <div class="cursor-preview cursor-preview-prism"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNamePrism">Prisme</div>
-                </div>
-                <div class="cursor-option" data-cursor="minimal">
-                  <div class="cursor-preview cursor-preview-minimal"><div class="cursor-preview-dot"></div></div>
-                  <div class="theme-label" id="cursorNameMinimal">Minimal</div>
+                <div class="cursor-option" data-cursor="comete">
+                  <div class="cursor-preview cursor-preview-comete"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label" id="cursorNameComete">Comète</div>
                 </div>
               </div>
             </div>
@@ -2267,18 +2319,21 @@
               <div class="theme-group-label" id="themeGroupWallpaper">✦ Fond d'écran personnalisé</div>
               <div class="wallpaper-settings">
                 <div class="wallpaper-row">
-                  <input type="text" id="wallpaperUrlInput" class="auth-input" placeholder="Lien de l'image (https://...)" style="flex:1;">
-                  <label class="wallpaper-upload-btn" for="wallpaperFileInput">📁<input type="file" id="wallpaperFileInput" accept="image/*" hidden></label>
-                  <button class="wallpaper-clear-btn" id="wallpaperClearBtn" title="Retirer le fond d'écran">✕</button>
+                  <input type="text" id="wallpaperUrlInput" class="wallpaper-input" placeholder="Lien d'une image (https://...)">
+                  <button class="wallpaper-upload-btn" id="wallpaperUploadBtn">📁</button>
+                  <input type="file" id="wallpaperFileInput" accept="image/*" style="display:none;">
                 </div>
-                <div class="wallpaper-row wallpaper-slider-row">
-                  <span id="wallpaperBlurLabel">Flou</span>
-                  <input type="range" id="wallpaperBlurRange" min="0" max="30" value="0">
-                  <span id="wallpaperBlurValue">0px</span>
+                <div class="wallpaper-row" id="wallpaperActiveRow" style="display:none;">
+                  <span class="wallpaper-active-label">Fond actif</span>
+                  <button class="wallpaper-clear-btn" id="wallpaperClearBtn">Retirer</button>
                 </div>
-                <div class="wallpaper-row wallpaper-toggle-row">
-                  <span id="wallpaperRevealLabel">Révéler l'image avec la lumière du curseur</span>
-                  <label class="notif-switch"><input type="checkbox" id="wallpaperRevealToggle"><span class="notif-switch-track"></span></label>
+                <div class="wallpaper-slider-row">
+                  <label class="wallpaper-slider-label">Flou : <span id="wallpaperBlurValue">8</span>px</label>
+                  <input type="range" id="wallpaperBlurSlider" min="0" max="30" value="8" class="wallpaper-slider">
+                </div>
+                <div class="wallpaper-toggle-row">
+                  <span class="wallpaper-slider-label">Révéler avec la lumière du curseur</span>
+                  <label class="notif-switch"><input type="checkbox" id="wallpaperCursorRevealToggle"><span class="notif-switch-track"></span></label>
                 </div>
               </div>
             </div>
@@ -2632,21 +2687,25 @@
             <button class="msg-action-btn" id="msgVoiceBtn" title="Message vocal">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
             </button>
-            <textarea class="msg-textbox" id="msgTextbox" placeholder="Envoyer un message..." rows="1" maxlength="10000"></textarea>
-            <div style="display:flex;flex-direction:column;gap:0.3rem;position:relative;">
-              <div style="position:relative;">
-                <button class="msg-action-btn" id="msgEmojiBtn" title="Emoji">😊</button>
-                <div class="emoji-picker-panel" id="emojiPickerPanel"></div>
-              </div>
-              <div style="position:relative;">
-                <button class="msg-action-btn" id="msgGifBtn" title="GIF">GIF</button>
-                <div class="gif-picker-panel" id="gifPickerPanel">
-                  <div class="gif-search-bar">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    <input type="text" id="gifSearchInput" placeholder="Rechercher un GIF...">
-                  </div>
-                  <div class="gif-grid" id="gifGrid"><div class="gif-loading">Recherche des GIFs...</div></div>
+            <textarea class="msg-textbox msg-textbox-compact" id="msgTextbox" placeholder="Envoyer un message..." rows="1" maxlength="10000"></textarea>
+            <div class="msg-tip" data-tip="Emoji" style="position:relative;">
+              <button class="msg-action-btn" id="msgEmojiBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></button>
+              <div class="emoji-picker-panel" id="emojiPickerPanel">
+                <div class="emoji-search-bar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  <input type="text" id="emojiSearchInput" placeholder="Rechercher un emoji...">
                 </div>
+                <div class="emoji-grid-scroll" id="emojiGridScroll"></div>
+              </div>
+            </div>
+            <div class="msg-tip" data-tip="GIF" style="position:relative;">
+              <button class="msg-action-btn" id="msgGifBtn">GIF</button>
+              <div class="gif-picker-panel" id="gifPickerPanel">
+                <div class="gif-search-bar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  <input type="text" id="gifSearchInput" placeholder="Rechercher un GIF...">
+                </div>
+                <div class="gif-grid" id="gifGrid"><div class="gif-loading">Recherche des GIFs...</div></div>
               </div>
             </div>
             <button class="msg-send-btn" id="msgSendBtn">
@@ -2729,6 +2788,21 @@ const AVATAR_SEEDS = ['NeonBlade','CryptoFox','VoidWalker','ShadowByte','Phantom
 const AVATAR_STYLES_LIST = ['pixel-art','bottts','avataaars','micah','fun-emoji','lorelei','thumbs','shapes'];
 const AVATAR_OPTIONS = AVATAR_SEEDS.map((s,i) => `https://api.dicebear.com/7.x/${AVATAR_STYLES_LIST[i%AVATAR_STYLES_LIST.length]}/svg?seed=${encodeURIComponent(s)}`);
 
+// Avatar générique (fond blanc, silhouette grise) utilisée pour les comptes supprimés / introuvables
+const UNKNOWN_USER_AVATAR = "data:image/svg+xml;utf8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#FFFFFF"/><circle cx="50" cy="38" r="18" fill="#B0B5BD"/><path d="M50 60c-22 0-38 14-38 32v8h76v-8c0-18-16-32-38-32z" fill="#B0B5BD"/></svg>`);
+// Renvoie true si l'utilisateur a été supprimé OU nous a bloqués (donc "introuvable" de notre point de vue)
+function isUserUnavailable(otherUser, otherUsername){
+  if(!otherUser) return true; // compte supprimé
+  if((otherUser.blocked_users||[]).includes(currentUser?.username)) return true; // il/elle nous a bloqués
+  return false;
+}
+function displayNameFor(otherUser, otherUsername){
+  return isUserUnavailable(otherUser, otherUsername) ? 'Utilisateur introuvable' : (otherUser?.display_name || otherUsername || 'Inconnu');
+}
+function avatarFor(otherUser, otherUsername){
+  return isUserUnavailable(otherUser, otherUsername) ? UNKNOWN_USER_AVATAR : (otherUser?.avatar || AVATAR_OPTIONS[0]);
+}
+
 // Rôles et permissions (0-6)
 const ROLE_PERMS = {
   owner: 6,
@@ -2787,7 +2861,18 @@ let welcomeShown = Store.getBool('welcomeShown', false);
 
 function isLoggedIn(){ return !!currentUser; }
 function sessionLogin(u){ currentUser = u; Store.set('session', u); }
-function sessionLogout(){ currentUser = null; Store.del('session'); }
+function sessionLogout(){
+  currentUser = null; Store.del('session');
+  // Sécurité : on coupe tout accès aux messages de l'ancien compte.
+  // Sans ça, le polling continuait à charger la conversation ouverte
+  // jusqu'au prochain refresh, ce qui exposait les messages d'un
+  // compte à la personne connectée juste après sur le même appareil.
+  try { clearInterval(msgPollingInterval); } catch {}
+  currentConvId = null;
+  const msgPage = document.getElementById('msgPage');
+  if (msgPage) msgPage.classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 function isAdmin(u){ if(!u) return false; const lvl=getPermLevel(u); return lvl>=5; }
 function canManageScripts(u){ if(!u) return false; return getPermLevel(u)>=5; }
@@ -2887,7 +2972,7 @@ const L = {
     filterGame:'🎮 Games',
     filterUtil:'⚡ Utilitaires',
     copyLabel:'Copier le script',
-    copiedLabel:'✓ Copié !',
+    copiedLabel:'Copié !',
     detailsLabel:'Détails',
     noResultsTitle:'Aucun script trouvé',
     noResultsSub:'Essaie un autre terme de recherche.',
@@ -2902,7 +2987,7 @@ const L = {
     metaMaturity:'Maturité',
     modalCopyBtn:'⎘ Copier le script',
     modalCopied:'✓ Copié !',
-    toastCopied:'✓ Script copié dans le presse-papier',
+    toastCopied:'Script copié dans le presse-papier',
     toastLike:'👍 Merci pour votre avis !',
     toastDislike:'👎 Avis enregistré',
     toastVoteChanged:'🔄 Vote modifié',
@@ -2938,11 +3023,9 @@ const L = {
     themeNameMidnight:'Minuit',
     themeNameNexus:'Nexus',
     themeGroupCursor:'✦ Curseur',
-    cursorNameClassic:'Classique',
-    cursorNameNeon:'Aurore',
-    cursorNameComet:'Comète',
-    cursorNamePrism:'Prisme',
-    cursorNameMinimal:'Minimal',
+    cursorNameClassic:"L'original",
+    cursorNamePrisme:'Prisme',
+    cursorNameComete:'Comète',
     editProfileLabel:'Modifier le compte',
     editProfileTitle:'Modifier le profil',
     editAvatarLabel:'Avatar',
@@ -3068,7 +3151,7 @@ const L = {
     filterGame:'🎮 Games',
     filterUtil:'⚡ Utilities',
     copyLabel:'Copy script',
-    copiedLabel:'✓ Copied!',
+    copiedLabel:'Copied!',
     detailsLabel:'Details',
     noResultsTitle:'No scripts found',
     noResultsSub:'Try a different search term.',
@@ -3083,7 +3166,7 @@ const L = {
     metaMaturity:'Maturity',
     modalCopyBtn:'⎘ Copy script',
     modalCopied:'✓ Copied!',
-    toastCopied:'✓ Script copied to clipboard',
+    toastCopied:'Script copied to clipboard',
     toastLike:'👍 Thanks for your feedback!',
     toastDislike:'👎 Feedback recorded',
     toastVoteChanged:'🔄 Vote changed',
@@ -3119,11 +3202,9 @@ const L = {
     themeNameMidnight:'Midnight',
     themeNameNexus:'Nexus',
     themeGroupCursor:'✦ Cursor',
-    cursorNameClassic:'Classic',
-    cursorNameNeon:'Aurora',
-    cursorNameComet:'Comet',
-    cursorNamePrism:'Prism',
-    cursorNameMinimal:'Minimal',
+    cursorNameClassic:'Original',
+    cursorNamePrisme:'Prism',
+    cursorNameComete:'Comet',
     editProfileLabel:'Edit account',
     editProfileTitle:'Edit profile',
     editAvatarLabel:'Avatar',
@@ -3304,7 +3385,7 @@ function applyTranslations(){
   setTxt('themeGroupBasic',t('themeGroupBasic')); setTxt('themeGroupOther',t('themeGroupOther'));
   setTxt('basicDarkName',t('basicDarkName')); setTxt('basicLightName',t('basicLightName'));
   setTxt('themeNameMidnight',t('themeNameMidnight')); setTxt('themeNameNexus',t('themeNameNexus'));
-  setTxt('themeGroupCursor',t('themeGroupCursor')); setTxt('cursorNameClassic',t('cursorNameClassic')); setTxt('cursorNameNeon',t('cursorNameNeon')); setTxt('cursorNameComet',t('cursorNameComet')); setTxt('cursorNamePrism',t('cursorNamePrism')); setTxt('cursorNameMinimal',t('cursorNameMinimal'));
+  setTxt('themeGroupCursor',t('themeGroupCursor')); setTxt('cursorNameClassic',t('cursorNameClassic')); setTxt('cursorNamePrisme',t('cursorNamePrisme')); setTxt('cursorNameComete',t('cursorNameComete'));
   setTxt('editProfileLabel',t('editProfileLabel')); setTxt('editProfileTitle',t('editProfileTitle'));
   setTxt('editAvatarLabel',t('editAvatarLabel')); setTxt('editDisplayNameLabel',t('editDisplayNameLabel'));
   setTxt('editUsernameLabel',t('editUsernameLabel')); setTxt('editBioLabel',t('editBioLabel'));
@@ -3455,6 +3536,25 @@ async function sbAddScript(data){
   const { error } = await sb.from('scripts').insert(data);
   if(error) throw new Error('Erreur ajout script: '+error.message);
 }
+async function sbRenameUsernameEverywhere(oldUsername, newUsername){
+  const oldU = oldUsername.toLowerCase(), newU = newUsername.toLowerCase();
+  try{ await sb.from('votes').update({username:newU}).eq('username',oldU); }catch(e){ console.error('[rename votes]',e); }
+  try{ await sb.from('comments').update({author_username:newU}).eq('author_username',oldU); }catch(e){ console.error('[rename comments]',e); }
+  try{ await sb.from('friends').update({requester:newU}).eq('requester',oldU); }catch(e){ console.error('[rename friends req]',e); }
+  try{ await sb.from('friends').update({target:newU}).eq('target',oldU); }catch(e){ console.error('[rename friends tgt]',e); }
+  try{ await sb.from('notifications').update({target_username:newU}).eq('target_username',oldU); }catch(e){ console.error('[rename notif tgt]',e); }
+  try{ await sb.from('notifications').update({from_username:newU}).eq('from_username',oldU); }catch(e){ console.error('[rename notif from]',e); }
+  try{ await sb.from('messages').update({sender_username:newU}).eq('sender_username',oldU); }catch(e){ console.error('[rename messages]',e); }
+  try{
+    const { data: convs } = await sb.from('conversations').select('id,participants').contains('participants',[oldU]);
+    if(convs && convs.length){
+      for(const c of convs){
+        const np = (c.participants||[]).map(p=>p.toLowerCase()===oldU?newU:p);
+        await sb.from('conversations').update({participants:np}).eq('id',c.id);
+      }
+    }
+  }catch(e){ console.error('[rename conversations]',e); }
+}
 async function sbUpdateScript(id, patch){
   const { error } = await sb.from('scripts').update(patch).eq('id', id);
   if(error) throw new Error('Erreur modification script: '+error.message);
@@ -3577,8 +3677,45 @@ async function sbIncrementAnalytic(field){
 // ============================================================
 // AVATAR PICKER
 // ============================================================
-function buildAvatarPicker(containerEl, previewEl, selectedUrl, onSelect){
+function buildAvatarPicker(containerEl, previewEl, selectedUrl, onSelect, historyList, onDeleteHistory){
   containerEl.innerHTML = '';
+  const history = (historyList||[]).filter(Boolean).slice(0,8);
+  if(history.length){
+    const label = document.createElement('div');
+    label.className = 'avatar-picker-label';
+    label.textContent = `Tes anciennes photos (${history.length}/8)`;
+    containerEl.appendChild(label);
+    const histWrap = document.createElement('div');
+    histWrap.className = 'avatar-picker-history';
+    history.forEach(url=>{
+      const cell = document.createElement('div');
+      cell.className = 'avatar-opt-history-cell';
+      const img = document.createElement('img');
+      img.src = url; img.className = 'avatar-opt avatar-opt-history'+(url===selectedUrl?' selected':'');
+      img.addEventListener('click',()=>{
+        containerEl.querySelectorAll('img').forEach(i=>i.classList.remove('selected'));
+        img.classList.add('selected'); previewEl.src = url; onSelect(url);
+      });
+      cell.appendChild(img);
+      if(onDeleteHistory){
+        const trash = document.createElement('button');
+        trash.type = 'button';
+        trash.className = 'avatar-history-trash';
+        trash.title = 'Supprimer cette ancienne photo';
+        trash.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+        trash.addEventListener('click', e=>{ e.stopPropagation(); onDeleteHistory(url, cell); });
+        cell.appendChild(trash);
+      }
+      histWrap.appendChild(cell);
+    });
+    containerEl.appendChild(histWrap);
+    const label2 = document.createElement('div');
+    label2.className = 'avatar-picker-label';
+    label2.textContent = 'Avatars par défaut';
+    containerEl.appendChild(label2);
+  }
+  const defaultWrap = document.createElement('div');
+  defaultWrap.className = 'avatar-picker-default';
   AVATAR_OPTIONS.forEach(url=>{
     const img = document.createElement('img');
     img.src = url; img.className = 'avatar-opt'+(url===selectedUrl?' selected':'');
@@ -3586,8 +3723,9 @@ function buildAvatarPicker(containerEl, previewEl, selectedUrl, onSelect){
       containerEl.querySelectorAll('img').forEach(i=>i.classList.remove('selected'));
       img.classList.add('selected'); previewEl.src = url; onSelect(url);
     });
-    containerEl.appendChild(img);
+    defaultWrap.appendChild(img);
   });
+  containerEl.appendChild(defaultWrap);
 }
 function readImageFile(file, cb){
   const r = new FileReader(); r.onload = e=>cb(e.target.result); r.readAsDataURL(file);
@@ -3598,9 +3736,10 @@ function readImageFile(file, cb){
 // ============================================================
 const cursorDot=document.getElementById('cursor'), cursorRing=document.getElementById('cursorRing'), cursorLight=document.getElementById('cursorLight');
 const nexusGridGlow=document.getElementById('nexus-grid-glow');
+let wallpaperRevealEl=document.getElementById('customWallpaperReveal');
 let mx=window.innerWidth/2, my=window.innerHeight/2, rx=mx, ry=my;
 document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
-(function loop(){ cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; cursorLight.style.left=mx+'px'; cursorLight.style.top=my+'px'; rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; if(nexusGridGlow){ nexusGridGlow.style.setProperty('--ngx', mx+'px'); nexusGridGlow.style.setProperty('--ngy', my+'px'); } requestAnimationFrame(loop); })();
+(function loop(){ cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; cursorLight.style.left=mx+'px'; cursorLight.style.top=my+'px'; rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; if(nexusGridGlow){ nexusGridGlow.style.setProperty('--ngx', mx+'px'); nexusGridGlow.style.setProperty('--ngy', my+'px'); } if(wallpaperRevealEl){ wallpaperRevealEl.style.setProperty('--wpx', mx+'px'); wallpaperRevealEl.style.setProperty('--wpy', my+'px'); } requestAnimationFrame(loop); })();
 
 // ============================================================
 // CARD HOVER
@@ -3637,7 +3776,10 @@ window.addEventListener('resize',()=>{ if(!starActive) return; starCanvas.width=
 let currentTheme = Store.get('theme','dark');
 function applyTheme(theme){
   const cursorClasses = Array.from(document.body.classList).filter(c=>c.startsWith('cursor-'));
-  document.body.className = 'theme-'+theme + (cursorClasses.length ? ' '+cursorClasses.join(' ') : '');
+  document.body.classList.add('theme-transitioning');
+  clearTimeout(applyTheme._t);
+  applyTheme._t = setTimeout(()=>document.body.classList.remove('theme-transitioning'), 480);
+  document.body.className = 'theme-'+theme + ' theme-transitioning' + (cursorClasses.length ? ' '+cursorClasses.join(' ') : '');
   currentTheme=theme; Store.set('theme',theme);
   updateBasicSplitUI();
   document.querySelectorAll('.theme-option').forEach(opt=>opt.classList.toggle('selected', opt.dataset.theme===theme));
@@ -3661,9 +3803,9 @@ applyTheme(currentTheme);
 // CURSOR STYLE
 // ============================================================
 let currentCursorStyle = Store.get('cursorStyle','classic');
-if(currentCursorStyle==='neon') currentCursorStyle='aurora'; // migration ancien nom
+if(!['classic','prisme','comete'].includes(currentCursorStyle)) currentCursorStyle = 'classic';
 function applyCursorStyle(style){
-  document.body.classList.remove('cursor-classic','cursor-aurora','cursor-minimal','cursor-comet','cursor-prism');
+  document.body.classList.remove('cursor-classic','cursor-prisme','cursor-comete','cursor-minimal','cursor-visee','cursor-orbite','cursor-encre');
   document.body.classList.add('cursor-'+style);
   currentCursorStyle = style; Store.set('cursorStyle', style);
   document.querySelectorAll('.cursor-option').forEach(opt=>opt.classList.toggle('selected', opt.dataset.cursor===style));
@@ -3672,71 +3814,130 @@ document.querySelectorAll('.cursor-option').forEach(opt=>opt.addEventListener('c
 applyCursorStyle(currentCursorStyle);
 
 // ============================================================
-// WALLPAPER PERSONNALISÉ
+// FOND D'ÉCRAN PERSONNALISÉ
 // ============================================================
-const wallpaperLayer = document.getElementById('wallpaperLayer');
-const wallpaperUrlInput = document.getElementById('wallpaperUrlInput');
-const wallpaperFileInput = document.getElementById('wallpaperFileInput');
-const wallpaperClearBtn = document.getElementById('wallpaperClearBtn');
-const wallpaperBlurRange = document.getElementById('wallpaperBlurRange');
-const wallpaperBlurValue = document.getElementById('wallpaperBlurValue');
-const wallpaperRevealToggle = document.getElementById('wallpaperRevealToggle');
+const wallpaperBaseEl = document.getElementById('customWallpaperBase');
+const wpUrlInput = document.getElementById('wallpaperUrlInput');
+const wpUploadBtn = document.getElementById('wallpaperUploadBtn');
+const wpFileInput = document.getElementById('wallpaperFileInput');
+const wpActiveRow = document.getElementById('wallpaperActiveRow');
+const wpClearBtn = document.getElementById('wallpaperClearBtn');
+const wpBlurSlider = document.getElementById('wallpaperBlurSlider');
+const wpBlurValue = document.getElementById('wallpaperBlurValue');
+const wpRevealToggle = document.getElementById('wallpaperCursorRevealToggle');
 
 let wallpaperUrl = Store.get('wallpaperUrl', '');
-let wallpaperBlur = Store.get('wallpaperBlur', 0);
+let wallpaperBlur = Store.get('wallpaperBlur', 8);
 let wallpaperReveal = Store.getBool('wallpaperReveal', false);
 
+function renderWallpaperBlur(){
+  const px = wallpaperBlur+'px';
+  wallpaperBaseEl.style.filter = 'blur('+px+')';
+  wallpaperRevealEl.style.filter = 'blur('+px+')';
+}
+function renderWallpaperRevealMode(){
+  wallpaperBaseEl.classList.toggle('active', !!wallpaperUrl && !wallpaperReveal);
+  wallpaperRevealEl.classList.toggle('reveal-active', !!wallpaperUrl && wallpaperReveal);
+}
 function applyWallpaper(url){
   wallpaperUrl = url || '';
-  Store.set('wallpaperUrl', wallpaperUrl);
   if(wallpaperUrl){
-    wallpaperLayer.style.backgroundImage = `url("${wallpaperUrl}")`;
-    wallpaperLayer.classList.add('active');
+    const bg = `url("${wallpaperUrl}")`;
+    wallpaperBaseEl.style.backgroundImage = bg;
+    wallpaperRevealEl.style.backgroundImage = bg;
   } else {
-    wallpaperLayer.style.backgroundImage = '';
-    wallpaperLayer.classList.remove('active');
+    wallpaperBaseEl.style.backgroundImage = '';
+    wallpaperRevealEl.style.backgroundImage = '';
   }
+  renderWallpaperRevealMode();
+  if(wpActiveRow) wpActiveRow.style.display = wallpaperUrl ? 'flex' : 'none';
+  if(wpUrlInput && document.activeElement!==wpUrlInput) wpUrlInput.value = wallpaperUrl && !wallpaperUrl.startsWith('data:') ? wallpaperUrl : '';
 }
-function applyWallpaperBlur(val){
-  wallpaperBlur = val;
-  Store.set('wallpaperBlur', val);
-  document.documentElement.style.setProperty('--wallpaper-blur', val+'px');
-  if(wallpaperBlurValue) wallpaperBlurValue.textContent = val+'px';
+function setWallpaperUrl(url){
+  applyWallpaper(url);
+  try{ Store.set('wallpaperUrl', wallpaperUrl); }catch{ showToast(currentLang==='fr'?'Image trop lourde pour être sauvegardée localement':'Image too large to be saved locally'); }
 }
-function applyWallpaperReveal(on){
-  wallpaperReveal = on;
-  Store.set('wallpaperReveal', on);
-  wallpaperLayer.classList.toggle('wallpaper-reveal', !!on);
+if(wpUrlInput){
+  wpUrlInput.addEventListener('keydown', e=>{ if(e.key==='Enter') setWallpaperUrl(wpUrlInput.value.trim()); });
+  wpUrlInput.addEventListener('blur', ()=>{ if(wpUrlInput.value.trim()) setWallpaperUrl(wpUrlInput.value.trim()); });
 }
-
-if(wallpaperUrlInput) wallpaperUrlInput.value = wallpaperUrl && !wallpaperUrl.startsWith('data:') ? wallpaperUrl : '';
-if(wallpaperBlurRange) wallpaperBlurRange.value = wallpaperBlur;
-if(wallpaperRevealToggle) wallpaperRevealToggle.checked = wallpaperReveal;
-applyWallpaper(wallpaperUrl);
-applyWallpaperBlur(wallpaperBlur);
-applyWallpaperReveal(wallpaperReveal);
-
-if(wallpaperUrlInput) wallpaperUrlInput.addEventListener('change', ()=>{ applyWallpaper(wallpaperUrlInput.value.trim()); });
-if(wallpaperFileInput) wallpaperFileInput.addEventListener('change', (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  if(file.size > 4*1024*1024){ showToast('⚠️ Image trop lourde (max 4 Mo).', '#F87171'); wallpaperFileInput.value=''; return; }
+if(wpUploadBtn) wpUploadBtn.addEventListener('click', ()=> wpFileInput.click());
+if(wpFileInput) wpFileInput.addEventListener('change', ()=>{
+  const f = wpFileInput.files && wpFileInput.files[0]; if(!f) return;
   const reader = new FileReader();
-  reader.onload = ()=>{ wallpaperUrlInput.value=''; applyWallpaper(reader.result); };
-  reader.readAsDataURL(file);
+  reader.onload = ()=> setWallpaperUrl(reader.result);
+  reader.readAsDataURL(f);
 });
-if(wallpaperClearBtn) wallpaperClearBtn.addEventListener('click', ()=>{
-  wallpaperUrlInput.value=''; wallpaperFileInput.value=''; applyWallpaper('');
+if(wpClearBtn) wpClearBtn.addEventListener('click', ()=>{ setWallpaperUrl(''); if(wpUrlInput) wpUrlInput.value=''; });
+if(wpBlurSlider) wpBlurSlider.addEventListener('input', ()=>{
+  wallpaperBlur = parseInt(wpBlurSlider.value,10)||0;
+  if(wpBlurValue) wpBlurValue.textContent = wallpaperBlur;
+  renderWallpaperBlur();
+  Store.set('wallpaperBlur', wallpaperBlur);
 });
-if(wallpaperBlurRange) wallpaperBlurRange.addEventListener('input', ()=>{ applyWallpaperBlur(Number(wallpaperBlurRange.value)); });
-if(wallpaperRevealToggle) wallpaperRevealToggle.addEventListener('change', ()=>{ applyWallpaperReveal(wallpaperRevealToggle.checked); });
+if(wpRevealToggle) wpRevealToggle.addEventListener('change', ()=>{
+  wallpaperReveal = wpRevealToggle.checked;
+  Store.set('wallpaperReveal', wallpaperReveal);
+  renderWallpaperRevealMode();
+});
 
-document.addEventListener('mousemove', e=>{
-  if(wallpaperReveal && wallpaperLayer){
-    wallpaperLayer.style.setProperty('--wpx', e.clientX+'px');
-    wallpaperLayer.style.setProperty('--wpy', e.clientY+'px');
+// init from saved prefs
+if(wpBlurSlider) wpBlurSlider.value = wallpaperBlur;
+if(wpBlurValue) wpBlurValue.textContent = wallpaperBlur;
+if(wpRevealToggle) wpRevealToggle.checked = wallpaperReveal;
+renderWallpaperBlur();
+applyWallpaper(wallpaperUrl);
+
+// ============================================================
+// TOOLTIPS CUSTOM (remplace les title= natifs du navigateur)
+// ============================================================
+const customTooltipEl = document.getElementById('customTooltip');
+function convertTitlesToTooltips(){
+  document.querySelectorAll('[title]:not([data-tip])').forEach(el=>{
+    const tip = el.getAttribute('title');
+    if(tip){ el.setAttribute('data-tip', tip); }
+    el.removeAttribute('title');
+  });
+}
+convertTitlesToTooltips();
+new MutationObserver(()=>{ clearTimeout(window._ttMutTimer); window._ttMutTimer=setTimeout(convertTitlesToTooltips, 200); })
+  .observe(document.body, { childList:true, subtree:true, attributes:true, attributeFilter:['title'] });
+
+let tooltipTarget = null;
+function positionTooltip(el){
+  const r = el.getBoundingClientRect();
+  customTooltipEl.style.left = Math.min(Math.max(r.left + r.width/2, 40), window.innerWidth-40) + 'px';
+  let top = r.top - 10;
+  if(top < 30){ top = r.bottom + 10; customTooltipEl.style.transform = 'translate(-50%,0)'; customTooltipEl.dataset.below='1'; }
+  else { customTooltipEl.dataset.below=''; }
+  customTooltipEl.style.top = top + 'px';
+}
+document.addEventListener('mouseover', e=>{
+  // Strip any native title instantly (before the browser's own hover-delay tooltip can appear)
+  const titledAncestor = e.target.closest && e.target.closest('[title]');
+  if(titledAncestor){
+    const t = titledAncestor.getAttribute('title');
+    if(t){ titledAncestor.setAttribute('data-tip', t); }
+    titledAncestor.removeAttribute('title');
   }
+  const el = e.target.closest('[data-tip]');
+  if(!el || el===tooltipTarget) return;
+  tooltipTarget = el;
+  const tip = el.getAttribute('data-tip');
+  if(!tip) return;
+  customTooltipEl.textContent = tip;
+  customTooltipEl.style.transform = 'translate(-50%,4px) scale(0.96)';
+  positionTooltip(el);
+  requestAnimationFrame(()=>{ customTooltipEl.classList.add('visible'); customTooltipEl.style.transform = customTooltipEl.dataset.below ? 'translate(-50%,0)' : 'translate(-50%,0) scale(1)'; });
 });
+document.addEventListener('mouseout', e=>{
+  const el = e.target.closest('[data-tip]');
+  if(!el || el!==tooltipTarget) return;
+  if(e.relatedTarget && el.contains(e.relatedTarget)) return;
+  tooltipTarget = null;
+  customTooltipEl.classList.remove('visible');
+});
+document.addEventListener('scroll', ()=>{ if(tooltipTarget){ positionTooltip(tooltipTarget); } }, true);
 
 // ============================================================
 // RENDER CARDS
@@ -3773,6 +3974,8 @@ function buildCard(data){
   card.dataset.category = data.category||'game';
   card.dataset.scriptId = data.id;
   const isUtil = data.category==='util';
+  const isExternal = isUtil ? !data.uses_unc : null;
+  if (isUtil) card.dataset.origin = isExternal ? 'external' : 'internal';
   const catClass = data.category==='util'?'cat-util':'cat-game';
   const catLabel = data.category==='util'?'Utilitaires':'Games';
   const originBadge = '';
@@ -4002,6 +4205,19 @@ document.getElementById('signupSubmit').addEventListener('click', async function
 });
 
 document.getElementById('loginPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('loginSubmit').click(); });
+function setupPwToggle(inputId, btnId, iconId){
+  const input = document.getElementById(inputId), btn = document.getElementById(btnId), icon = document.getElementById(iconId);
+  if(!input||!btn||!icon) return;
+  btn.addEventListener('click', ()=>{
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    icon.innerHTML = show ? '<path d="M3 3l18 18"/><path d="M10.6 10.6a3 3 0 0 0 4.24 4.24"/><path d="M16.9 16.9C15.4 17.86 13.77 18.4 12 18.4c-7 0-11-7-11-7a18.6 18.6 0 0 1 5.06-5.94M9.5 5.6C10.3 5.4 11.13 5.3 12 5.3c7 0 11 7 11 7a18.6 18.6 0 0 1-2.88 3.78"/>' : '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/>';
+    btn.title = show ? 'Masquer le mot de passe' : 'Afficher le mot de passe';
+  });
+}
+setupPwToggle('loginPassword','loginPwToggle','loginPwIcon');
+setupPwToggle('signupPassword','signupPwToggle','signupPwIcon');
+
 document.getElementById('signupPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('signupSubmit').click(); });
 
 // ============================================================
@@ -4080,11 +4296,26 @@ document.getElementById('editProfileBtn').addEventListener('click', ()=>{
     document.getElementById('editDisplayName').value = currentUser.display_name||currentUser.username;
     document.getElementById('editUsername').value = currentUser.username;
     document.getElementById('editBio').value = currentUser.bio||'';
+    document.getElementById('editUsernamePassword').value = '';
+    document.getElementById('editUsernamePwField').style.display = 'none';
     document.getElementById('editAvatarPreview').src = editSelectedAvatar;
-    buildAvatarPicker(document.getElementById('editAvatarOpts'), document.getElementById('editAvatarPreview'), editSelectedAvatar, url=>{ editSelectedAvatar=url; });
+    buildAvatarPicker(document.getElementById('editAvatarOpts'), document.getElementById('editAvatarPreview'), editSelectedAvatar, url=>{ editSelectedAvatar=url; }, currentUser.avatar_history, async (url, cellEl)=>{
+      try{
+        const newHist = (currentUser.avatar_history||[]).filter(a=>a!==url);
+        const updated = await sbUpdateUser(currentUser.username, { avatar_history: newHist });
+        sessionLogin(updated);
+        cellEl.remove();
+        showToast('🗑️ Ancienne photo supprimée.','#34D399');
+      }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
+    });
   }
 });
 document.getElementById('editUploadBtn').addEventListener('click', ()=>document.getElementById('editAvatarFile').click());
+setupPwToggle('editUsernamePassword','editUsernamePwToggle','editUsernamePwIcon');
+document.getElementById('editUsername').addEventListener('input', ()=>{
+  const changed = currentUser && document.getElementById('editUsername').value.trim().toLowerCase() !== currentUser.username.toLowerCase();
+  document.getElementById('editUsernamePwField').style.display = changed ? '' : 'none';
+});
 document.getElementById('editAvatarFile').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; readImageFile(f, url=>{ editSelectedAvatar=url; document.getElementById('editAvatarPreview').src=url; document.querySelectorAll('#editAvatarOpts img').forEach(i=>i.classList.remove('selected')); }); });
 
 document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
@@ -4111,6 +4342,9 @@ document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
       avatar_history: newHistory,
       ...(newUsername.toLowerCase()!==currentUser.username.toLowerCase()?{username:newUsername.toLowerCase()}:{})
     });
+    if(newUsername.toLowerCase()!==currentUser.username.toLowerCase()){
+      await sbRenameUsernameEverywhere(currentUser.username, newUsername);
+    }
     sessionLogin(updated);
     document.getElementById('navAvatar').src = newAvatar;
     document.getElementById('dashAccountAvatar').src = newAvatar;
@@ -4495,7 +4729,7 @@ async function renderAdminUsers(){
         ${!banned?`<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminPermBan('${escHtml(u.username)}')">🔨 Ban</button>`:`<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminUnban('${escHtml(u.username)}')">🔓 Dé-ban</button>`}
         ${!banned?`<button class="admin-btn admin-mini-btn" style="background:rgba(245,158,11,0.14);border-color:rgba(245,158,11,0.4);color:#FCD34D;" onclick="adminTempBanOpen('${escHtml(u.username)}')">⏱ Temp</button>`:''}
         ${!uIsAdmin?`<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminGiveAdmin('${escHtml(u.username)}')">⚙️ Admin</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:rgba(239,68,68,0.3);color:#F87171;" onclick="adminRevokeAdmin('${escHtml(u.username)}')">⊘ Admin</button>`}
-        ${!uIsCert?`<button class="admin-btn admin-mini-btn admin-btn-purple" onclick="adminCertify('${escHtml(u.username)}')">✓ Certifier</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:var(--border);color:var(--text-muted);" onclick="adminUncertify('${escHtml(u.username)}')">⊘ Certif</button>`}
+        ${!uIsCert?`<button class="admin-btn admin-mini-btn admin-btn-blue" onclick="adminCertify('${escHtml(u.username)}')">✓ Certifier</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:var(--border);color:var(--text-muted);" onclick="adminUncertify('${escHtml(u.username)}')">⊘ Certif</button>`}
         ${canDelete?`<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteUser('${escHtml(u.username)}')">🗑</button>`:''}
       </div>`:'<span style="font-size:0.72rem;color:#FFD700;">👑 Propriétaire</span>'}
     </div>`;
@@ -5265,8 +5499,8 @@ async function sbSendMessage(conversationId, content, type = 'text', meta = {}) 
   };
   const { data, error } = await sb.from('messages').insert(msg).select('*').single();
   if (error) throw new Error('Erreur envoi message: ' + error.message);
-  // Update conversation last_message_at
-  await sb.from('conversations').update({ last_message_at: msg.created_at }).eq('id', conversationId);
+  // Update conversation last_message_at + réafficher la conv pour ceux qui l'avaient fermée
+  await sb.from('conversations').update({ last_message_at: msg.created_at, hidden_for: [] }).eq('id', conversationId);
   return data;
 }
 async function sbEditMessage(messageId, newContent) {
@@ -5375,6 +5609,16 @@ async function sbGetSavedGifs(username) {
 // Send DM to non-friend (inbox request system)
 async function sbSendInboxMessage(toUsername, content) {
   if (!currentUser) return;
+  // Réutilise une conversation existante entre les deux comptes si elle existe déjà
+  // (qu'elle soit en attente ou déjà acceptée) pour éviter les doublons de DM.
+  const { data: existing } = await sb.from('conversations').select('*')
+    .contains('participants', [currentUser.username, toUsername])
+    .is('group_name', null)
+    .maybeSingle();
+  if (existing && existing.participants.length === 2) {
+    await sbSendMessage(existing.id, content);
+    return existing;
+  }
   // Create a conversation with a "pending" flag
   const { data: conv, error } = await sb.from('conversations').insert({
     participants: [currentUser.username, toUsername],
@@ -5759,6 +6003,7 @@ async function renderConversationList() {
 
   const filtered = convs.filter(c => {
     if (c.is_pending && c.creator !== currentUser.username) return false; // Only show pending if you sent it
+    if ((c.hidden_for||[]).includes(currentUser.username)) return false; // Fermée par l'utilisateur
     const name = getConvDisplayName(c);
     return !searchVal || name.toLowerCase().includes(searchVal);
   });
@@ -5772,18 +6017,19 @@ async function renderConversationList() {
   const items = await Promise.all(filtered.map(async c => {
     const msgs = await sbGetMessages(c.id);
     const last = msgs[msgs.length - 1];
-    const name = getConvDisplayName(c);
     const isGroup = !!c.group_name;
     const otherUser = !isGroup ? c.participants.find(p => p !== currentUser.username) : null;
     let avatarHtml = '';
+    let name = getConvDisplayName(c);
     if (isGroup) {
       avatarHtml = `<div class="msg-conv-group-icon">👥</div>`;
     } else {
       const u = await sbGetUser(otherUser);
-      const av = u?.avatar || AVATAR_OPTIONS[0];
+      name = displayNameFor(u, otherUser);
+      const av = avatarFor(u, otherUser);
       const online = u ? isOnline(u) : false;
-      avatarHtml = `<div class="msg-conv-avatar-wrap"><img class="msg-conv-avatar" src="${escHtml(av)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
-        ${online ? '<div class="msg-conv-online"></div>' : ''}</div>`;
+      avatarHtml = `<div class="msg-conv-avatar-wrap"><img class="msg-conv-avatar" src="${escHtml(av)}" onerror="this.src='${UNKNOWN_USER_AVATAR}'">
+        ${online && !isUserUnavailable(u, otherUser) ? '<div class="msg-conv-online"></div>' : ''}</div>`;
     }
     const previewText = last ? (last.type === 'gif' ? '🖼️ GIF' : last.content.substring(0, 60)) : 'Aucun message';
     const active = currentConvId === c.id ? ' active' : '';
@@ -5797,6 +6043,7 @@ async function renderConversationList() {
         <span class="msg-conv-time">${last ? timeAgo(last.created_at) : ''}</span>
         ${c.is_pending ? '<span class="muted-badge">En attente</span>' : ''}
       </div>
+      <button class="msg-conv-close" data-tip="Fermer la conversation" onclick="event.stopPropagation(); closeConversationForMe('${c.id}');">✕</button>
     </div>` };
   }));
 
@@ -5805,6 +6052,20 @@ async function renderConversationList() {
 
 document.getElementById('msgConvSearch')?.addEventListener('input', renderConversationList);
 
+async function closeConversationForMe(convId) {
+  if (!currentUser) return;
+  const conv = await sbGetConversation(convId);
+  if (!conv) return;
+  const hidden = new Set(conv.hidden_for || []);
+  hidden.add(currentUser.username);
+  await sb.from('conversations').update({ hidden_for: [...hidden] }).eq('id', convId);
+  if (currentConvId === convId) {
+    currentConvId = null;
+    document.getElementById('msgChatArea')?.classList.remove('open');
+  }
+  renderConversationList();
+  showToast('💬 Conversation fermée.', '#94A3B8');
+}
 function getConvDisplayName(conv) {
   if (conv.group_name) return conv.group_name;
   const other = conv.participants?.find(p => p !== currentUser?.username);
@@ -5815,6 +6076,12 @@ async function openConversation(convId) {
   currentConvId = convId;
   const conv = await sbGetConversation(convId);
   if (!conv) return;
+  if (!currentUser || !(conv.participants || []).includes(currentUser.username)) {
+    // Sécurité : on ne doit jamais pouvoir afficher une conversation
+    // dont le compte connecté ne fait pas partie des participants.
+    currentConvId = null;
+    return;
+  }
 
   // Mark active in sidebar
   document.querySelectorAll('.msg-conv-item').forEach(el => el.classList.remove('active'));
@@ -5852,18 +6119,19 @@ async function openConversation(convId) {
   } else {
     const otherUsername = conv.participants.find(p => p !== currentUser?.username);
     const u = otherUsername ? await sbGetUser(otherUsername) : null;
-    const av = u?.avatar || AVATAR_OPTIONS[0];
-    headerAvatar.innerHTML = `<img class="msg-chat-header-avatar" src="${escHtml(av)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">`;
-    headerName.textContent = u?.display_name || otherUsername || 'Inconnu';
+    const unavailable = isUserUnavailable(u, otherUsername);
+    const av = avatarFor(u, otherUsername);
+    headerAvatar.innerHTML = `<img class="msg-chat-header-avatar" src="${escHtml(av)}" onerror="this.src='${UNKNOWN_USER_AVATAR}'">`;
+    headerName.textContent = displayNameFor(u, otherUsername);
     const online = u ? isOnline(u) : false;
-    headerSub.textContent = online ? '🟢 En ligne' : '⚪ Hors ligne';
+    headerSub.textContent = unavailable ? '' : (online ? '🟢 En ligne' : '⚪ Hors ligne');
     membersBtn.style.display = 'none';
     document.getElementById('groupMembersPanel').classList.remove('open');
 
     const blockBtn = document.getElementById('msgChatBlockBtn');
     const iBlockedThem = (currentUser?.blocked_users||[]).includes(otherUsername);
     const theyBlockedMe = (u?.blocked_users||[]).includes(currentUser?.username);
-    blockBtn.style.display = 'flex';
+    blockBtn.style.display = u ? 'flex' : 'none';
     blockBtn.style.color = iBlockedThem ? '#34D399' : '';
     blockBtn.title = iBlockedThem ? 'Débloquer' : 'Bloquer';
     blockBtn.onclick = async () => {
@@ -5876,7 +6144,11 @@ async function openConversation(convId) {
     };
 
     const inputZone = document.getElementById('msgInputZone');
-    if (theyBlockedMe || iBlockedThem) {
+    if (!u) {
+      inputZone.style.opacity = '0.5';
+      inputZone.style.pointerEvents = 'none';
+      headerSub.textContent = '🚫 Ce compte n\'existe plus';
+    } else if (theyBlockedMe || iBlockedThem) {
       inputZone.style.opacity = '0.5';
       inputZone.style.pointerEvents = 'none';
       headerSub.textContent = iBlockedThem ? '🚫 Tu as bloqué cet utilisateur' : '🚫 Impossible de lui envoyer un message';
@@ -5924,6 +6196,7 @@ const REACTION_EMOJIS = ['👍','❤️','😂','😮','😢','🔥'];
 
 async function renderMessages(convId) {
   if (convId !== currentConvId) return;
+  if (!currentUser) return;
   // Don't tear down the DOM (and reset playback) while a video/audio is actively playing
   const listEl = document.getElementById('msgMessagesList');
   if (listEl) {
@@ -5954,8 +6227,11 @@ async function renderMessages(convId) {
     if (!groupOpen) return;
     const lastMsg = groupMsgs[groupMsgs.length - 1];
     html += `<div class="msg-bubble-time">${new Date(lastMsg?.created_at).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })}</div>`;
-    if (groupIsMine && seenAt && lastMsg?.created_at && seenAt >= new Date(lastMsg.created_at) && lastMsg === msgs[msgs.length - 1]) {
-      html += `<div class="msg-bubble-seen">Vu</div>`;
+    if (groupIsMine && lastMsg?.created_at && lastMsg === msgs[msgs.length - 1]) {
+      const isSeen = seenAt && seenAt >= new Date(lastMsg.created_at);
+      html += isSeen
+        ? `<div class="msg-bubble-status status-seen">Vu <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12l5 5L18 5"/><path d="M7 12l5 5L24 5"/></svg></div>`
+        : `<div class="msg-bubble-status">Envoyé <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></div>`;
     }
     html += `</div></div>`; // close .msg-bubble-stack then .msg-bubble-group
     groupOpen = false;
@@ -6588,17 +6864,59 @@ async function muteGroupMember(convId, username, dur) {
 }
 
 // ============================================================
-// EMOJI PICKER
+// EMOJI PICKER (base complète, par catégories + recherche)
 // ============================================================
-const EMOJIS = ['😀','😂','😍','🥰','😎','🤔','😢','😡','🔥','💯','👍','👎','❤️','💜','✨','🎉','💀','😈','🤡','👀','🙏','🤝','💪','🚀','⚡','🎮','📜','🛡️','⚔️','🔮','🌙','⭐','💫','🌊','🎯','💎','🔑','👑','🤖','👾'];
+const EMOJI_KEYWORDS = {"😀": "grinning face", "😃": "smiling face with open mouth", "😄": "smiling face with open mouth and smiling eyes", "😁": "grinning face with smiling eyes", "😆": "smiling face with open mouth and tightly closed eyes", "😅": "smiling face with open mouth and cold sweat", "🤣": "rolling on the floor laughing", "😂": "face with tears of joy", "🙂": "slightly smiling face", "🙃": "upside down face", "😉": "winking face", "😊": "smiling face with smiling eyes", "😇": "smiling face with halo", "🥰": "smiling face with smiling eyes and three hearts", "😍": "smiling face with heart shaped eyes", "🤩": "grinning face with star eyes", "😘": "face throwing a kiss", "😗": "kissing face", "😚": "kissing face with closed eyes", "😙": "kissing face with smiling eyes", "😋": "face savouring delicious food", "😛": "face with stuck out tongue", "😜": "face with stuck out tongue and winking eye", "🤪": "grinning face with one large and one small eye", "😝": "face with stuck out tongue and tightly closed eyes", "🤑": "money mouth face", "🤗": "hugging face", "🤭": "smiling face with smiling eyes and hand covering mouth", "🤫": "face with finger covering closed lips", "🤔": "thinking face", "🤐": "zipper mouth face", "🤨": "face with one eyebrow raised", "😐": "neutral face", "😑": "expressionless face", "😶": "face without mouth", "😏": "smirking face", "😒": "unamused face", "🙄": "face with rolling eyes", "😬": "grimacing face", "🤥": "lying face", "😌": "relieved face", "😔": "pensive face", "😪": "sleepy face", "🤤": "drooling face", "😴": "sleeping face", "😷": "face with medical mask", "🤒": "face with thermometer", "🤕": "face with head bandage", "🤢": "nauseated face", "🤮": "face with open mouth vomiting", "🤧": "sneezing face", "🥵": "overheated face", "🥶": "freezing face", "🥴": "face with uneven eyes and wavy mouth", "😵": "dizzy face", "🤯": "shocked face with exploding head", "🤠": "face with cowboy hat", "🥳": "face with party horn and party hat", "🥸": "disguised face", "😎": "smiling face with sunglasses", "🤓": "nerd face", "🧐": "face with monocle", "😕": "confused face", "😟": "worried face", "🙁": "slightly frowning face", "☹️": "white frowning face", "😮": "face with open mouth", "😯": "hushed face", "😲": "astonished face", "😳": "flushed face", "🥺": "face with pleading eyes", "😦": "frowning face with open mouth", "😧": "anguished face", "😨": "fearful face", "😰": "face with open mouth and cold sweat", "😥": "disappointed but relieved face", "😢": "crying face", "😭": "loudly crying face", "😱": "face screaming in fear", "😖": "confounded face", "😣": "persevering face", "😞": "disappointed face", "😓": "face with cold sweat", "😩": "weary face", "😫": "tired face", "🥱": "yawning face", "😤": "face with look of triumph", "😡": "pouting face", "😠": "angry face", "🤬": "serious face with symbols covering mouth", "😈": "smiling face with horns", "👿": "imp", "💀": "skull", "☠️": "skull and crossbones", "💩": "pile of poo", "🤡": "clown face", "👹": "japanese ogre", "👺": "japanese goblin", "👻": "ghost", "👽": "extraterrestrial alien", "👾": "alien monster", "🤖": "robot face", "👋": "waving hand sign", "🤚": "raised back of hand", "🖐️": "raised hand with fingers splayed", "✋": "raised hand", "🖖": "raised hand with part between middle and ring fingers", "👌": "ok hand sign", "🤌": "pinched fingers", "🤏": "pinching hand", "✌️": "victory hand", "🤞": "hand with index and middle fingers crossed", "🤟": "i love you hand sign", "🤘": "sign of the horns", "🤙": "call me hand", "👈": "white left pointing backhand index", "👉": "white right pointing backhand index", "👆": "white up pointing backhand index", "🖕": "reversed hand with middle finger extended", "👇": "white down pointing backhand index", "☝️": "white up pointing index", "👍": "thumbs up sign", "👎": "thumbs down sign", "✊": "raised fist", "👊": "fisted hand sign", "🤛": "left facing fist", "🤜": "right facing fist", "👏": "clapping hands sign", "🙌": "person raising both hands in celebration", "👐": "open hands sign", "🤲": "palms up together", "🤝": "handshake", "🙏": "person with folded hands", "✍️": "writing hand", "💅": "nail polish", "🤳": "selfie", "💪": "flexed biceps", "🦾": "mechanical arm", "🦵": "leg", "🦿": "mechanical leg", "🦶": "foot", "👂": "ear", "🦻": "ear with hearing aid", "👃": "nose", "🧠": "brain", "🦷": "tooth", "🦴": "bone", "👀": "eyes", "👁️": "eye", "👅": "tongue", "👄": "mouth", "❤️": "heavy black heart", "🧡": "orange heart", "💛": "yellow heart", "💚": "green heart", "💙": "blue heart", "💜": "purple heart", "🖤": "black heart", "🤍": "white heart", "🤎": "brown heart", "💔": "broken heart", "❣️": "heavy heart exclamation mark ornament", "💕": "two hearts", "💞": "revolving hearts", "💓": "beating heart", "💗": "growing heart", "💖": "sparkling heart", "💘": "heart with arrow", "💝": "heart with ribbon", "💟": "heart decoration", "♥️": "black heart suit", "🐶": "dog face", "🐱": "cat face", "🐭": "mouse face", "🐹": "hamster face", "🐰": "rabbit face", "🦊": "fox face", "🐻": "bear face", "🐼": "panda face", "🐻‍❄️": "bear face snowflake", "🐨": "koala", "🐯": "tiger face", "🦁": "lion face", "🐮": "cow face", "🐷": "pig face", "🐽": "pig nose", "🐸": "frog face", "🐵": "monkey face", "🙈": "see no evil monkey", "🙉": "hear no evil monkey", "🙊": "speak no evil monkey", "🐒": "monkey", "🐔": "chicken", "🐧": "penguin", "🐦": "bird", "🐤": "baby chick", "🐣": "hatching chick", "🐥": "front facing baby chick", "🦆": "duck", "🦅": "eagle", "🦉": "owl", "🦇": "bat", "🐺": "wolf face", "🐗": "boar", "🐴": "horse face", "🦄": "unicorn face", "🐝": "honeybee", "🪱": "worm", "🐛": "bug", "🦋": "butterfly", "🐌": "snail", "🐞": "lady beetle", "🐜": "ant", "🪰": "fly", "🦟": "mosquito", "🦗": "cricket", "🕷️": "spider", "🕸️": "spider web", "🐢": "turtle", "🐍": "snake", "🦎": "lizard", "🦖": "t rex", "🦕": "sauropod", "🐙": "octopus", "🦑": "squid", "🦐": "shrimp", "🦞": "lobster", "🦀": "crab", "🐡": "blowfish", "🐠": "tropical fish", "🐟": "fish", "🐬": "dolphin", "🐳": "spouting whale", "🐋": "whale", "🦈": "shark", "🐊": "crocodile", "🐅": "tiger", "🐆": "leopard", "🦓": "zebra face", "🦍": "gorilla", "🦧": "orangutan", "🐘": "elephant", "🦛": "hippopotamus", "🦏": "rhinoceros", "🐪": "dromedary camel", "🐫": "bactrian camel", "🦒": "giraffe face", "🦘": "kangaroo", "🐃": "water buffalo", "🐂": "ox", "🐄": "cow", "🐎": "horse", "🐖": "pig", "🐏": "ram", "🐑": "sheep", "🦙": "llama", "🐐": "goat", "🦌": "deer", "🐕": "dog", "🐩": "poodle", "🐈": "cat", "🐓": "rooster", "🦃": "turkey", "🦤": "dodo", "🦚": "peacock", "🦜": "parrot", "🦢": "swan", "🦩": "flamingo", "🕊️": "dove of peace", "🐇": "rabbit", "🦝": "raccoon", "🦨": "skunk", "🦡": "badger", "🦫": "beaver", "🦦": "otter", "🦥": "sloth", "🐁": "mouse", "🐀": "rat", "🐿️": "chipmunk", "🦔": "hedgehog", "🍏": "green apple", "🍎": "red apple", "🍐": "pear", "🍊": "tangerine", "🍋": "lemon", "🍌": "banana", "🍉": "watermelon", "🍇": "grapes", "🍓": "strawberry", "🫐": "blueberries", "🍈": "melon", "🍒": "cherries", "🍑": "peach", "🥭": "mango", "🍍": "pineapple", "🥥": "coconut", "🥝": "kiwifruit", "🍅": "tomato", "🍆": "aubergine", "🥑": "avocado", "🥦": "broccoli", "🥬": "leafy green", "🥒": "cucumber", "🌶️": "hot pepper", "🫑": "bell pepper", "🌽": "ear of maize", "🥕": "carrot", "🫒": "olive", "🧄": "garlic", "🧅": "onion", "🥔": "potato", "🍠": "roasted sweet potato", "🥐": "croissant", "🥯": "bagel", "🍞": "bread", "🥖": "baguette bread", "🥨": "pretzel", "🧀": "cheese wedge", "🥚": "egg", "🍳": "cooking", "🧈": "butter", "🥞": "pancakes", "🧇": "waffle", "🥓": "bacon", "🥩": "cut of meat", "🍗": "poultry leg", "🍖": "meat on bone", "🌭": "hot dog", "🍔": "hamburger", "🍟": "french fries", "🍕": "slice of pizza", "🫓": "flatbread", "🥪": "sandwich", "🥙": "stuffed flatbread", "🧆": "falafel", "🌮": "taco", "🌯": "burrito", "🫔": "tamale", "🥗": "green salad", "🥘": "shallow pan of food", "🫕": "fondue", "🥫": "canned food", "🍝": "spaghetti", "🍜": "steaming bowl", "🍲": "pot of food", "🍛": "curry and rice", "🍣": "sushi", "🍱": "bento box", "🥟": "dumpling", "🦪": "oyster", "🍤": "fried shrimp", "🍙": "rice ball", "🍚": "cooked rice", "🍘": "rice cracker", "🍥": "fish cake with swirl design", "🥠": "fortune cookie", "🥮": "moon cake", "🍢": "oden", "🍡": "dango", "🍧": "shaved ice", "🍨": "ice cream", "🍦": "soft ice cream", "🥧": "pie", "🧁": "cupcake", "🍰": "shortcake", "🎂": "birthday cake", "🍮": "custard", "🍭": "lollipop", "🍬": "candy", "🍫": "chocolate bar", "🍿": "popcorn", "🍩": "doughnut", "🍪": "cookie", "🌰": "chestnut", "🥜": "peanuts", "🍯": "honey pot", "🥛": "glass of milk", "🍼": "baby bottle", "☕": "hot beverage", "🍵": "teacup without handle", "🧃": "beverage box", "🥤": "cup with straw", "🧋": "bubble tea", "🍶": "sake bottle and cup", "🍺": "beer mug", "🍻": "clinking beer mugs", "🥂": "clinking glasses", "🍷": "wine glass", "🥃": "tumbler glass", "🍸": "cocktail glass", "🍹": "tropical drink", "🧉": "mate drink", "🍾": "bottle with popping cork", "⚽": "soccer ball", "🏀": "basketball and hoop", "🏈": "american football", "⚾": "baseball", "🥎": "softball", "🎾": "tennis racquet and ball", "🏐": "volleyball", "🏉": "rugby football", "🥏": "flying disc", "🎱": "billiards", "🪀": "yo yo", "🏓": "table tennis paddle and ball", "🏸": "badminton racquet and shuttlecock", "🏒": "ice hockey stick and puck", "🏑": "field hockey stick and ball", "🥍": "lacrosse stick and ball", "🏏": "cricket bat and ball", "🪃": "boomerang", "🥅": "goal net", "⛳": "flag in hole", "🪁": "kite", "🏹": "bow and arrow", "🎣": "fishing pole and fish", "🤿": "diving mask", "🥊": "boxing glove", "🥋": "martial arts uniform", "🎽": "running shirt with sash", "🛹": "skateboard", "🛼": "roller skate", "🛷": "sled", "⛸️": "ice skate", "🥌": "curling stone", "🎿": "ski and ski boot", "⛷️": "skier", "🏂": "snowboarder", "🪂": "parachute", "🏋️": "weight lifter", "🤼": "wrestlers", "🤸": "person doing cartwheel", "⛹️": "person with ball", "🤺": "fencer", "🤾": "handball", "🏌️": "golfer", "🏇": "horse racing", "🧘": "person in lotus position", "🏄": "surfer", "🏊": "swimmer", "🤽": "water polo", "🚣": "rowboat", "🧗": "person climbing", "🚵": "mountain bicyclist", "🚴": "bicyclist", "🏆": "trophy", "🥇": "first place medal", "🥈": "second place medal", "🥉": "third place medal", "🏅": "sports medal", "🎖️": "military medal", "🏵️": "rosette", "🎗️": "reminder ribbon", "🎫": "ticket", "🎟️": "admission tickets", "🎪": "circus tent", "🤹": "juggling", "🎭": "performing arts", "🩰": "ballet shoes", "🎨": "artist palette", "🎬": "clapper board", "🎤": "microphone", "🎧": "headphone", "🎼": "musical score", "🎹": "musical keyboard", "🥁": "drum with drumsticks", "🎷": "saxophone", "🎺": "trumpet", "🎸": "guitar", "🪕": "banjo", "🎻": "violin", "🎲": "game die", "♟️": "black chess pawn", "🎯": "direct hit", "🎳": "bowling", "🎮": "video game", "🎰": "slot machine", "🧩": "jigsaw puzzle piece", "🚗": "automobile", "🚕": "taxi", "🚙": "recreational vehicle", "🚌": "bus", "🚎": "trolleybus", "🏎️": "racing car", "🚓": "police car", "🚑": "ambulance", "🚒": "fire engine", "🚐": "minibus", "🛻": "pickup truck", "🚚": "delivery truck", "🚛": "articulated lorry", "🚜": "tractor", "🦯": "probing cane", "🦽": "manual wheelchair", "🦼": "motorized wheelchair", "🛴": "scooter", "🚲": "bicycle", "🛵": "motor scooter", "🏍️": "racing motorcycle", "🛺": "auto rickshaw", "🚨": "police cars revolving light", "🚔": "oncoming police car", "🚍": "oncoming bus", "🚘": "oncoming automobile", "🚖": "oncoming taxi", "🚡": "aerial tramway", "🚠": "mountain cableway", "🚟": "suspension railway", "🚃": "railway car", "🚋": "tram car", "🚞": "mountain railway", "🚝": "monorail", "🚄": "high speed train", "🚅": "high speed train with bullet nose", "🚈": "light rail", "🚂": "steam locomotive", "🚆": "train", "🚇": "metro", "🚊": "tram", "🚉": "station", "✈️": "airplane", "🛫": "airplane departure", "🛬": "airplane arriving", "🛩️": "small airplane", "💺": "seat", "🛰️": "satellite", "🚀": "rocket", "🛸": "flying saucer", "🚁": "helicopter", "🛶": "canoe", "⛵": "sailboat", "🚤": "speedboat", "🛥️": "motor boat", "🛳️": "passenger ship", "⛴️": "ferry", "🚢": "ship", "⚓": "anchor", "🪝": "hook", "⛽": "fuel pump", "🚧": "construction sign", "🚦": "vertical traffic light", "🚥": "horizontal traffic light", "🗺️": "world map", "🗿": "moyai", "🗽": "statue of liberty", "🗼": "tokyo tower", "🏰": "european castle", "🏯": "japanese castle", "🏟️": "stadium", "🎡": "ferris wheel", "🎢": "roller coaster", "🎠": "carousel horse", "⛲": "fountain", "⛱️": "umbrella on ground", "🏖️": "beach with umbrella", "🏝️": "desert island", "🏜️": "desert", "🌋": "volcano", "⛰️": "mountain", "🏔️": "snow capped mountain", "🗻": "mount fuji", "🏕️": "camping", "⛺": "tent", "🏠": "house building", "🏡": "house with garden", "🏘️": "house buildings", "🏚️": "derelict house building", "🏗️": "building construction", "🏭": "factory", "🏢": "office building", "🏬": "department store", "🏣": "japanese post office", "🏤": "european post office", "🏥": "hospital", "🏦": "bank", "🏨": "hotel", "🏪": "convenience store", "🏫": "school", "🏩": "love hotel", "💒": "wedding", "🏛️": "classical building", "⛪": "church", "🕌": "mosque", "🕍": "synagogue", "🛕": "hindu temple", "🕋": "kaaba", "⌚": "watch", "📱": "mobile phone", "💻": "personal computer", "⌨️": "keyboard", "🖥️": "desktop computer", "🖨️": "printer", "🖱️": "three button mouse", "💽": "minidisc", "💾": "floppy disk", "💿": "optical disc", "📀": "dvd", "📷": "camera", "📸": "camera with flash", "📹": "video camera", "🎥": "movie camera", "📞": "telephone receiver", "☎️": "black telephone", "📟": "pager", "📠": "fax machine", "📺": "television", "📻": "radio", "🎙️": "studio microphone", "🎚️": "level slider", "🎛️": "control knobs", "🧭": "compass", "⏱️": "stopwatch", "⏲️": "timer clock", "⏰": "alarm clock", "🕰️": "mantelpiece clock", "⌛": "hourglass", "⏳": "hourglass with flowing sand", "📡": "satellite antenna", "🔋": "battery", "🔌": "electric plug", "💡": "electric light bulb", "🔦": "electric torch", "🕯️": "candle", "🪔": "diya lamp", "🧯": "fire extinguisher", "🛢️": "oil drum", "💸": "money with wings", "💵": "banknote with dollar sign", "💴": "banknote with yen sign", "💶": "banknote with euro sign", "💷": "banknote with pound sign", "🪙": "coin", "💰": "money bag", "💳": "credit card", "🧾": "receipt", "💎": "gem stone", "⚖️": "scales", "🪜": "ladder", "🧰": "toolbox", "🪛": "screwdriver", "🔧": "wrench", "🔨": "hammer", "⚒️": "hammer and pick", "🛠️": "hammer and wrench", "⛏️": "pick", "🪚": "carpentry saw", "🔩": "nut and bolt", "⚙️": "gear", "🪤": "mouse trap", "🧱": "brick", "⛓️": "chains", "🧲": "magnet", "🔫": "pistol", "💣": "bomb", "🧨": "firecracker", "🪓": "axe", "🔪": "hocho", "🗡️": "dagger knife", "⚔️": "crossed swords", "🛡️": "shield", "🚬": "smoking symbol", "⚰️": "coffin", "🪦": "headstone", "⚱️": "funeral urn", "🏺": "amphora", "🔮": "crystal ball", "📿": "prayer beads", "🧿": "nazar amulet", "💈": "barber pole", "⚗️": "alembic", "🔭": "telescope", "🔬": "microscope", "🕳️": "hole", "🩹": "adhesive bandage", "🩺": "stethoscope", "💊": "pill", "💉": "syringe", "🩸": "drop of blood", "🧬": "dna double helix", "🦠": "microbe", "🧫": "petri dish", "🧪": "test tube", "🌡️": "thermometer", "🧹": "broom", "🪠": "plunger", "🧺": "basket", "🧻": "roll of paper", "🚽": "toilet", "🚰": "potable water symbol", "🚿": "shower", "🛁": "bathtub", "🛀": "bath", "🧼": "bar of soap", "🪥": "toothbrush", "🪒": "razor", "🧽": "sponge", "🪣": "bucket", "🧴": "lotion bottle", "🛎️": "bellhop bell", "🔑": "key", "🗝️": "old key", "🚪": "door", "🪑": "chair", "🛋️": "couch and lamp", "🛏️": "bed", "🛌": "sleeping accommodation", "🧸": "teddy bear", "🪆": "nesting dolls", "🖼️": "frame with picture", "🪞": "mirror", "🪟": "window", "🛍️": "shopping bags", "🛒": "shopping trolley", "🎁": "wrapped present", "🎈": "balloon", "🎏": "carp streamer", "🎀": "ribbon", "🪄": "magic wand", "🪅": "pinata", "🎊": "confetti ball", "🎉": "party popper", "🎎": "japanese dolls", "🏮": "izakaya lantern", "🎐": "wind chime", "🧧": "red gift envelope", "✉️": "envelope", "📩": "envelope with downwards arrow above", "📨": "incoming envelope", "📧": "e mail symbol", "💌": "love letter", "📥": "inbox tray", "📤": "outbox tray", "📦": "package", "🏷️": "label", "🪧": "placard", "📪": "closed mailbox with lowered flag", "📫": "closed mailbox with raised flag", "📬": "open mailbox with raised flag", "📭": "open mailbox with lowered flag", "📮": "postbox", "📯": "postal horn", "📜": "scroll", "📃": "page with curl", "📄": "page facing up", "📑": "bookmark tabs", "📊": "bar chart", "📈": "chart with upwards trend", "📉": "chart with downwards trend", "📋": "clipboard", "📅": "calendar", "📆": "tear off calendar", "🗓️": "spiral calendar pad", "📇": "card index", "🗃️": "card file box", "🗳️": "ballot box with ballot", "🗄️": "file cabinet", "📌": "pushpin", "📍": "round pushpin", "📎": "paperclip", "🖇️": "linked paperclips", "📏": "straight ruler", "📐": "triangular ruler", "✂️": "black scissors", "🗑️": "wastebasket", "🔒": "lock", "🔓": "open lock", "🔏": "lock with ink pen", "🔐": "closed lock with key", "✨": "sparkles", "⭐": "white medium star", "🌟": "glowing star", "💫": "dizzy symbol", "⚡": "high voltage sign", "🔥": "fire", "💥": "collision symbol", "💢": "anger symbol", "💦": "splashing sweat symbol", "💨": "dash symbol", "💬": "speech balloon", "🗨️": "left speech bubble", "🗯️": "right anger bubble", "💭": "thought balloon", "💤": "sleeping symbol", "🔴": "large red circle", "🟠": "large orange circle", "🟡": "large yellow circle", "🟢": "large green circle", "🔵": "large blue circle", "🟣": "large purple circle", "🟤": "large brown circle", "⚫": "medium black circle", "⚪": "medium white circle", "🟥": "large red square", "🟧": "large orange square", "🟨": "large yellow square", "🟩": "large green square", "🟦": "large blue square", "🟪": "large purple square", "🟫": "large brown square", "⬛": "black large square", "⬜": "white large square", "◼️": "black medium square", "◻️": "white medium square", "◾": "black medium small square", "◽": "white medium small square", "▪️": "black small square", "▫️": "white small square", "🔶": "large orange diamond", "🔷": "large blue diamond", "🔸": "small orange diamond", "🔹": "small blue diamond", "🔺": "up pointing red triangle", "🔻": "down pointing red triangle", "💠": "diamond shape with a dot inside", "🔘": "radio button", "🔳": "white square button", "🔲": "black square button", "✅": "white heavy check mark", "❌": "cross mark", "❎": "negative squared cross mark", "➕": "heavy plus sign", "➖": "heavy minus sign", "➗": "heavy division sign", "✖️": "heavy multiplication x", "♾️": "permanent paper sign", "‼️": "double exclamation mark", "⁉️": "exclamation question mark", "❓": "black question mark ornament", "❔": "white question mark ornament", "❕": "white exclamation mark ornament", "❗": "heavy exclamation mark symbol", "〰️": "wavy dash", "💯": "hundred points symbol", "🔞": "no one under eighteen symbol", "📵": "no mobile phones", "🚫": "no entry sign", "✔️": "heavy check mark", "☑️": "ballot box with check", "🆗": "squared ok", "🆕": "squared new", "🆒": "squared cool", "🆓": "squared free", "🆖": "squared ng", "🆙": "squared up with exclamation mark", "🔝": "top with upwards arrow above", "🔜": "soon with rightwards arrow above", "🔛": "on with exclamation mark with left right arrow above", "🔙": "back with leftwards arrow above", "🔚": "end with leftwards arrow above"};
+const EMOJI_DB = {
+  'Smileys': ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','🙃','😉','😊','😇','🥰','😍','🤩','😘','😗','😚','😙','😋','😛','😜','🤪','😝','🤑','🤗','🤭','🤫','🤔','🤐','🤨','😐','😑','😶','😏','😒','🙄','😬','🤥','😌','😔','😪','🤤','😴','😷','🤒','🤕','🤢','🤮','🤧','🥵','🥶','🥴','😵','🤯','🤠','🥳','🥸','😎','🤓','🧐','😕','😟','🙁','☹️','😮','😯','😲','😳','🥺','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','🥱','😤','😡','😠','🤬','😈','👿','💀','☠️','💩','🤡','👹','👺','👻','👽','👾','🤖'],
+  'Gestes & Corps': ['👋','🤚','🖐️','✋','🖖','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','✍️','💅','🤳','💪','🦾','🦵','🦿','🦶','👂','🦻','👃','🧠','🦷','🦴','👀','👁️','👅','👄'],
+  'Coeurs': ['❤️','🧡','💛','💚','💙','💜','🖤','🤍','🤎','💔','❣️','💕','💞','💓','💗','💖','💘','💝','💟','♥️'],
+  'Animaux': ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐻‍❄️','🐨','🐯','🦁','🐮','🐷','🐽','🐸','🐵','🙈','🙉','🙊','🐒','🐔','🐧','🐦','🐤','🐣','🐥','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🪱','🐛','🦋','🐌','🐞','🐜','🪰','🦟','🦗','🕷️','🕸️','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🐊','🐅','🐆','🦓','🦍','🦧','🐘','🦛','🦏','🐪','🐫','🦒','🦘','🐃','🐂','🐄','🐎','🐖','🐏','🐑','🦙','🐐','🦌','🐕','🐩','🐈','🐓','🦃','🦤','🦚','🦜','🦢','🦩','🕊️','🐇','🦝','🦨','🦡','🦫','🦦','🦥','🐁','🐀','🐿️','🦔'],
+  'Nourriture': ['🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🍈','🍒','🍑','🥭','🍍','🥥','🥝','🍅','🍆','🥑','🥦','🥬','🥒','🌶️','🫑','🌽','🥕','🫒','🧄','🧅','🥔','🍠','🥐','🥯','🍞','🥖','🥨','🧀','🥚','🍳','🧈','🥞','🧇','🥓','🥩','🍗','🍖','🦴','🌭','🍔','🍟','🍕','🫓','🥪','🥙','🧆','🌮','🌯','🫔','🥗','🥘','🫕','🥫','🍝','🍜','🍲','🍛','🍣','🍱','🥟','🦪','🍤','🍙','🍚','🍘','🍥','🥠','🥮','🍢','🍡','🍧','🍨','🍦','🥧','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🌰','🥜','🍯','🥛','🍼','☕','🍵','🧃','🥤','🧋','🍶','🍺','🍻','🥂','🍷','🥃','🍸','🍹','🧉','🍾'],
+  'Activités': ['⚽','🏀','🏈','⚾','🥎','🎾','🏐','🏉','🥏','🎱','🪀','🏓','🏸','🏒','🏑','🥍','🏏','🪃','🥅','⛳','🪁','🏹','🎣','🤿','🥊','🥋','🎽','🛹','🛼','🛷','⛸️','🥌','🎿','⛷️','🏂','🪂','🏋️','🤼','🤸','⛹️','🤺','🤾','🏌️','🏇','🧘','🏄','🏊','🤽','🚣','🧗','🚵','🚴','🏆','🥇','🥈','🥉','🏅','🎖️','🏵️','🎗️','🎫','🎟️','🎪','🤹','🎭','🩰','🎨','🎬','🎤','🎧','🎼','🎹','🥁','🎷','🎺','🎸','🪕','🎻','🎲','♟️','🎯','🎳','🎮','🎰','🧩'],
+  'Voyage': ['🚗','🚕','🚙','🚌','🚎','🏎️','🚓','🚑','🚒','🚐','🛻','🚚','🚛','🚜','🦯','🦽','🦼','🛴','🚲','🛵','🏍️','🛺','🚨','🚔','🚍','🚘','🚖','🚡','🚠','🚟','🚃','🚋','🚞','🚝','🚄','🚅','🚈','🚂','🚆','🚇','🚊','🚉','✈️','🛫','🛬','🛩️','💺','🛰️','🚀','🛸','🚁','🛶','⛵','🚤','🛥️','🛳️','⛴️','🚢','⚓','🪝','⛽','🚧','🚦','🚥','🗺️','🗿','🗽','🗼','🏰','🏯','🏟️','🎡','🎢','🎠','⛲','⛱️','🏖️','🏝️','🏜️','🌋','⛰️','🏔️','🗻','🏕️','⛺','🏠','🏡','🏘️','🏚️','🏗️','🏭','🏢','🏬','🏣','🏤','🏥','🏦','🏨','🏪','🏫','🏩','💒','🏛️','⛪','🕌','🕍','🛕','🕋'],
+  'Objets': ['⌚','📱','💻','⌨️','🖥️','🖨️','🖱️','💽','💾','💿','📀','📷','📸','📹','🎥','📞','☎️','📟','📠','📺','📻','🎙️','🎚️','🎛️','🧭','⏱️','⏲️','⏰','🕰️','⌛','⏳','📡','🔋','🔌','💡','🔦','🕯️','🪔','🧯','🛢️','💸','💵','💴','💶','💷','🪙','💰','💳','🧾','💎','⚖️','🪜','🧰','🪛','🔧','🔨','⚒️','🛠️','⛏️','🪚','🔩','⚙️','🪤','🧱','⛓️','🧲','🔫','💣','🧨','🪓','🔪','🗡️','⚔️','🛡️','🚬','⚰️','🪦','⚱️','🏺','🔮','📿','🧿','💈','⚗️','🔭','🔬','🕳️','🩹','🩺','💊','💉','🩸','🧬','🦠','🧫','🧪','🌡️','🧹','🪠','🧺','🧻','🚽','🚰','🚿','🛁','🛀','🧼','🪥','🪒','🧽','🪣','🧴','🛎️','🔑','🗝️','🚪','🪑','🛋️','🛏️','🛌','🧸','🪆','🖼️','🪞','🪟','🛍️','🛒','🎁','🎈','🎏','🎀','🪄','🪅','🎊','🎉','🎎','🏮','🎐','🧧','✉️','📩','📨','📧','💌','📥','📤','📦','🏷️','🪧','📪','📫','📬','📭','📮','📯','📜','📃','📄','📑','📊','📈','📉','📋','📅','📆','🗓️','📇','🗃️','🗳️','🗄️','📋','📌','📍','📎','🖇️','📏','📐','✂️','🗑️','🔒','🔓','🔏','🔐','🔑'],
+  'Symboles': ['✨','⭐','🌟','💫','⚡','🔥','💥','💢','💦','💨','🕳️','💬','🗨️','🗯️','💭','💤','🔴','🟠','🟡','🟢','🔵','🟣','🟤','⚫','⚪','🟥','🟧','🟨','🟩','🟦','🟪','🟫','⬛','⬜','◼️','◻️','◾','◽','▪️','▫️','🔶','🔷','🔸','🔹','🔺','🔻','💠','🔘','🔳','🔲','✅','❌','❎','➕','➖','➗','✖️','♾️','‼️','⁉️','❓','❔','❕','❗','〰️','💯','🔞','📵','🚫','✔️','☑️','🆗','🆕','🆒','🆓','🆖','🆙','🔝','🔜','🔛','🔙','🔚']
+};
+const EMOJI_ALL = Object.values(EMOJI_DB).flat();
 const emojiPanel = document.getElementById('emojiPickerPanel');
-if (emojiPanel) {
-  emojiPanel.innerHTML = EMOJIS.map(e => `<button class="emoji-btn-item" onclick="insertEmoji('${e}')">${e}</button>`).join('');
+const emojiGridScroll = document.getElementById('emojiGridScroll');
+const FR_EMOJI_ALIASES = {
+  'chat':'cat','chien':'dog','coeur':'heart','cœur':'heart','triste':'crying sad','content':'smiling happy','heureux':'smiling happy',
+  'rire':'laughing tears joy','pleure':'crying','pleurer':'crying','amour':'love heart kiss','feu':'fire','argent':'money','fete':'party',
+  'fête':'party','soleil':'sun','lune':'moon','etoile':'star','étoile':'star','fleur':'flower','manger':'food','boire':'drink',
+  'voiture':'automobile car','avion':'airplane','musique':'music note','colere':'angry','colère':'angry','peur':'fearful scared',
+  'drapeau':'flag','main':'hand','oeil':'eye','œil':'eye','bouche':'mouth','attention':'warning sign','ok':'ok hand','merci':'pray folded hands',
+  'bisous':'kiss','bisou':'kiss','dormir':'sleeping','malade':'sick face','fort':'flexed biceps','football':'soccer ball',
+  'gateau':'cake','gâteau':'cake','fruit':'fruit','pizza':'pizza','bonbon':'candy','cadeau':'present gift','fusee':'rocket','fusée':'rocket'
+};
+function renderEmojiGrid(filter) {
+  if (!emojiGridScroll) return;
+  let q = (filter || '').trim().toLowerCase();
+  if (!q) {
+    let html = '';
+    for (const [cat, list] of Object.entries(EMOJI_DB)) {
+      html += `<div class="emoji-cat-label">${cat}</div>` + list.map(e => `<button class="emoji-btn-item" onclick="insertEmoji('${e}')">${e}</button>`).join('');
+    }
+    emojiGridScroll.innerHTML = html;
+  } else {
+    if(FR_EMOJI_ALIASES[q]) q = FR_EMOJI_ALIASES[q];
+    const results = EMOJI_ALL.filter(e => e.includes(filter.trim()) || (EMOJI_KEYWORDS[e]||'').includes(q));
+    if (!results.length) {
+      emojiGridScroll.innerHTML = `<div class="emoji-no-results">Aucun emoji trouvé</div>`;
+    } else {
+      emojiGridScroll.innerHTML = results.map(e => `<button class="emoji-btn-item" onclick="insertEmoji('${e}')">${e}</button>`).join('');
+    }
+  }
 }
+renderEmojiGrid('');
+document.getElementById('emojiSearchInput')?.addEventListener('input', (e) => renderEmojiGrid(e.target.value));
+document.getElementById('emojiSearchInput')?.addEventListener('click', (e) => e.stopPropagation());
 document.getElementById('msgEmojiBtn')?.addEventListener('click', (e) => {
   e.stopPropagation();
   document.getElementById('gifPickerPanel')?.classList.remove('open');
   emojiPanel?.classList.toggle('open');
+  if (emojiPanel?.classList.contains('open')) document.getElementById('emojiSearchInput')?.focus();
 });
 function insertEmoji(emoji) {
   const tb = document.getElementById('msgTextbox');
@@ -6606,7 +6924,6 @@ function insertEmoji(emoji) {
     tb.value += emoji;
     tb.focus();
   }
-  emojiPanel?.classList.remove('open');
 }
 
 // ============================================================
@@ -6908,9 +7225,7 @@ function updateSocialZone() {
   const zone = document.getElementById('navSocialZone');
   if (zone) zone.style.display = currentUser ? 'flex' : 'none';
   if (currentUser) {
-    if (window.Notification && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
+    maybeAskNotificationPermission();
     loadAndRenderNotifications();
     updateMsgBadge();
     renderFriendsPanel();
@@ -6919,6 +7234,22 @@ function updateSocialZone() {
   } else {
     clearInterval(notifPollingInterval);
   }
+}
+
+// On ne redemande la permission navigateur que si le compte n'a jamais répondu
+// (le choix est sauvegardé en base, pas juste dans le navigateur local).
+async function maybeAskNotificationPermission() {
+  if (!window.Notification || !currentUser) return;
+  if (currentUser.notif_choice) return; // déjà répondu une fois (granted/denied), on ne redemande jamais
+  if (Notification.permission !== 'default') {
+    // Le navigateur a déjà une réponse mais elle n'est pas encore enregistrée côté compte : on la sauvegarde
+    const updated = await sbUpdateUser(currentUser.username, { notif_choice: Notification.permission });
+    sessionLogin(updated);
+    return;
+  }
+  const result = await Notification.requestPermission();
+  const updated = await sbUpdateUser(currentUser.username, { notif_choice: result });
+  sessionLogin(updated);
 }
 
 init();
