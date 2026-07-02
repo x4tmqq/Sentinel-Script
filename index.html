@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sentinel Script</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -1041,6 +1041,13 @@
     color: var(--text-muted);
     white-space: nowrap;
   }
+  .exec-filter-group { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
+  .exec-filter-group-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+  .exec-filter-group-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .exec-status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .exec-status-dot.is-active { background: #57F287; box-shadow: 0 0 4px #57F287, 0 0 10px rgba(87,242,135,0.6); animation: execDotPulse 2s ease-in-out infinite; }
+  .exec-status-dot.is-obsolete { background: #ED4245; box-shadow: 0 0 4px #ED4245, 0 0 10px rgba(237,66,69,0.6); animation: execDotPulse 2s ease-in-out infinite; }
+  @keyframes execDotPulse { 0%,100%{opacity:1;} 50%{opacity:.55;} }
   .exec-platform-tag {
     font-size: 0.6rem;
     padding: 0.1rem 0.4rem;
@@ -1657,6 +1664,64 @@
   .msg-voice-wave-bar { width:3px;border-radius:2px;background:var(--text-dim);flex-shrink:0;transition:background 0.15s; }
   .msg-voice-wave-bar.played { background:var(--purple-light); }
   .msg-voice-time { font-size:0.65rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:34px;text-align:right;flex-shrink:0; }
+  .msg-voice-vol-wrap { position:relative;flex-shrink:0; }
+  .msg-voice-vol-btn { width:24px;height:24px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s; }
+  .msg-voice-vol-btn:hover { color:var(--purple-light); }
+  .msg-voice-vol-btn svg { width:14px;height:14px; }
+  .msg-voice-vol-popup { position:absolute;bottom:calc(100% + 8px);right:-6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.6rem 0.5rem;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:5; }
+  .msg-voice-vol-popup.open { display:block; }
+  .msg-voice-vol-slider { -webkit-appearance:slider-vertical;writing-mode:bt-lr;width:5px;height:70px;accent-color:var(--purple); }
+
+  /* ============ PLAYLIST PLAYER (dashboard) ============ */
+  .pl-player { background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;padding:1rem;display:flex;flex-direction:column;gap:0.8rem; }
+  .pl-now-playing { display:flex;align-items:center;gap:0.7rem; }
+  .pl-now-thumb { width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue,#3344cc));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
+  .pl-now-info { min-width:0;flex:1; }
+  .pl-now-title { font-size:0.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .pl-now-artist { font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0.1rem; }
+  .pl-seek-row { display:flex;align-items:center;gap:0.6rem; }
+  .pl-time { font-size:0.62rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:32px; }
+  .pl-seek-slider, .pl-vol-slider, .mini-seek-slider, .mini-vol-slider { -webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--border);flex:1;cursor:pointer;accent-color:var(--purple); }
+  .pl-controls-row { display:flex;align-items:center;justify-content:center;gap:0.9rem; }
+  .pl-ctrl-btn { width:34px;height:34px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s; }
+  .pl-ctrl-btn svg { width:16px;height:16px; }
+  .pl-ctrl-btn:hover { color:var(--text); }
+  .pl-ctrl-btn.active { color:var(--purple-light); }
+  .pl-play-main { width:44px;height:44px;background:var(--purple);color:#fff; }
+  .pl-play-main:hover { background:var(--purple-light);color:#fff; }
+  .pl-play-main svg { width:18px;height:18px; }
+  .pl-volume-row { display:flex;align-items:center;gap:0.6rem; }
+  .pl-vol-icon { background:none;border:none;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;width:20px;height:20px;flex-shrink:0; }
+  .pl-vol-icon svg { width:16px;height:16px; }
+  .pl-tracklist { max-height:230px;overflow-y:auto;display:flex;flex-direction:column;gap:0.15rem;margin-top:0.2rem; }
+  .pl-track-item { display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.6rem;border-radius:9px;cursor:pointer;transition:background .15s; }
+  .pl-track-item:hover { background:rgba(255,255,255,0.04); }
+  .pl-track-item.playing { background:rgba(124,58,237,0.12); }
+  .pl-track-num { font-size:0.7rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:18px;flex-shrink:0;text-align:center; }
+  .pl-track-item.playing .pl-track-num { color:var(--purple-light); }
+  .pl-track-name { flex:1;min-width:0;font-size:0.78rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .pl-track-item.playing .pl-track-name { color:var(--purple-light);font-weight:600; }
+  .pl-track-artist { font-size:0.68rem;color:var(--text-muted);flex-shrink:0;max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+
+  /* ============ MINI PLAYER (flottant) ============ */
+  .mini-player { position:fixed;bottom:1.2rem;right:1.2rem;z-index:500;font-family:'Inter',sans-serif; }
+  .mini-player-toggle { width:48px;height:48px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.4);transition:transform .15s; }
+  .mini-player-toggle:hover { transform:scale(1.06); }
+  .mini-player-body { position:absolute;bottom:58px;right:0;width:260px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:0.9rem;box-shadow:0 10px 30px rgba(0,0,0,0.45);display:none;flex-direction:column;gap:0.7rem; }
+  .mini-player.open .mini-player-body { display:flex; }
+  .mini-player-track { display:flex;align-items:center;gap:0.6rem; }
+  .mini-player-thumb { width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--purple),var(--blue,#3344cc));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
+  .mini-player-info { min-width:0;flex:1; }
+  .mini-player-title { font-size:0.78rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .mini-player-artist { font-size:0.66rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .mini-player-seek-row { display:flex; }
+  .mini-player-controls { display:flex;align-items:center;gap:0.4rem; }
+  .mini-ctrl-btn { width:28px;height:28px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:color .15s; }
+  .mini-ctrl-btn svg { width:13px;height:13px; }
+  .mini-ctrl-btn:hover { color:var(--text); }
+  .mini-play-main { width:32px;height:32px;background:var(--purple);color:#fff; }
+  .mini-play-main:hover { background:var(--purple-light);color:#fff; }
+  .mini-vol-slider { width:60px;flex-shrink:0; }
   .msg-link-card { display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.8rem;border-radius:12px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);color:#7DD3FC;text-decoration:none;font-size:0.8rem;word-break:break-all;max-width:260px; }
   .msg-link-card svg { width:15px;height:15px;flex-shrink:0; }
   .msg-bubble a.msg-inline-link { color:#7DD3FC;text-decoration:underline; }
@@ -1674,6 +1739,30 @@
   .msg-import-menu.open { opacity:1;visibility:visible;transform:translateY(0); }
   .msg-import-item { display:flex;align-items:center;gap:0.55rem;padding:0.55rem 0.75rem;font-size:0.78rem;color:var(--text-muted);cursor:none;transition:all 0.15s; }
   .msg-import-item:hover { background:rgba(124,58,237,0.1);color:var(--purple-light); }
+
+  /* PENDING MEDIA PANEL (Discord-style attachment preview before send) */
+  .msg-pending-panel { border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.03);margin-bottom:0.5rem;padding:0.6rem 0.7rem;animation:fadeSlide 0.18s ease; }
+  body.theme-light .msg-pending-panel { background:rgba(0,0,0,0.03); }
+  .msg-pending-header { display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);margin-bottom:0.5rem;font-weight:500; }
+  .msg-pending-clear { background:transparent;border:none;color:#F87171;font-size:0.7rem;cursor:none;padding:0.2rem 0.4rem;border-radius:6px;transition:background 0.15s; }
+  .msg-pending-clear:hover { background:rgba(248,113,113,0.1); }
+  .msg-pending-list { display:flex;flex-direction:column;gap:0.35rem;max-height:220px;overflow-y:auto; }
+  .msg-pending-item { display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.55rem;border-radius:9px;background:rgba(255,255,255,0.03);border:1px solid var(--border); }
+  .msg-pending-thumb { width:34px;height:34px;border-radius:7px;object-fit:cover;flex-shrink:0;background:rgba(124,58,237,0.1); }
+  .msg-pending-icon { width:34px;height:34px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.12);color:var(--purple-light); }
+  .msg-pending-icon svg { width:17px;height:17px; }
+  .msg-pending-info { flex:1;min-width:0;display:flex;flex-direction:column;gap:0.1rem; }
+  .msg-pending-name { font-size:0.76rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .msg-pending-size { font-size:0.66rem;color:var(--text-muted); }
+  .msg-pending-remove { background:transparent;border:none;color:var(--text-muted);cursor:none;flex-shrink:0;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.15s; }
+  .msg-pending-remove:hover { background:rgba(248,113,113,0.15);color:#F87171; }
+  .msg-pending-remove svg { width:13px;height:13px; }
+  .msg-pending-footer { display:flex;align-items:center;justify-content:space-between;margin-top:0.55rem;gap:0.5rem; }
+  .msg-pending-add { background:transparent;border:1px dashed var(--border);color:var(--text-muted);font-size:0.72rem;padding:0.4rem 0.7rem;border-radius:8px;cursor:none;transition:all 0.15s; }
+  .msg-pending-add:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light); }
+  .msg-pending-send { background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;color:#fff;font-size:0.78rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;cursor:none;transition:all 0.15s; }
+  .msg-pending-send:hover { filter:brightness(1.12); }
+  .msg-pending-send:disabled { opacity:0.5;filter:none; }
 
   /* VOICE RECORDER */
   .msg-recording-bar { display:none;align-items:center;gap:0.6rem;padding:0.45rem 0.85rem;border-radius:12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.35);margin-bottom:0.5rem; }
@@ -1971,68 +2060,6 @@
     .msg-sidebar { width:240px; }
     .group-members-panel { display:none!important; }
   }
-
-  /* ============================================================
-     MESSAGERIE — ADAPTATION MOBILE (style liste <-> conversation)
-     ============================================================ */
-  @media (max-width:768px) {
-    .msg-page-nav { padding:0 0.85rem;height:50px;gap:0.5rem; }
-    .msg-page-title { font-size:0.92rem; }
-    .msg-page-back { font-size:0.78rem;padding:0.3rem 0.6rem; }
-    .msg-page-new span { display:none; }
-    .msg-page-new { padding:0.4rem;width:32px;height:32px;justify-content:center; }
-
-    .msg-layout { position:relative;overflow:hidden; }
-    .msg-sidebar {
-      width:100%;
-      position:absolute; inset:0;
-      transition: transform 0.25s ease;
-      z-index:1;
-    }
-    .msg-main {
-      position:absolute; inset:0;
-      width:100%;
-      transform: translateX(100%);
-      transition: transform 0.25s ease;
-      background:var(--bg);
-      z-index:2;
-    }
-    /* Quand une conversation est ouverte : la liste glisse hors écran,
-       la conversation prend tout l'écran */
-    .msg-layout.mobile-chat-open .msg-sidebar { transform: translateX(-100%); }
-    .msg-layout.mobile-chat-open .msg-main { transform: translateX(0); }
-
-    .msg-chat-mobile-back {
-      display:flex!important;
-      width:32px;height:32px;
-      border-radius:8px;border:1px solid var(--border);
-      background:transparent;color:var(--text-muted);
-      align-items:center;justify-content:center;
-      cursor:none;flex-shrink:0;margin-right:0.2rem;
-    }
-    .msg-chat-mobile-back svg { width:16px;height:16px; }
-
-    .msg-chat-header { padding:0.65rem 0.75rem;gap:0.5rem; }
-    .msg-chat-header-name { font-size:0.85rem; }
-    .msg-chat-header-sub { font-size:0.62rem; }
-    .msg-chat-header-actions { gap:0.3rem; }
-    .msg-chat-header-btn { width:30px;height:30px; }
-
-    .msg-messages-area { padding:0.75rem 0.6rem; }
-    .msg-input-zone { padding:0.6rem 0.7rem; }
-    .msg-textbox { font-size:16px; min-height:40px;padding:0.55rem 0.85rem; }
-    .msg-sidebar-header { padding:0.7rem 0.85rem; }
-
-    .group-members-panel.open {
-      position:absolute; inset:0;
-      width:100%;
-      z-index:3;
-      border-left:none;
-    }
-  }
-  /* Le bouton retour "conversation -> liste" n'existe que sur mobile */
-  .msg-chat-mobile-back { display:none; }
-
   @media (prefers-reduced-motion:reduce) { .card-appear { animation:none; } }
 
 </style>
@@ -2438,6 +2465,47 @@
         </div>
       </div>
       <div class="dash-section">
+        <div class="dash-section-title" id="dashSectionMusic">🎵 Playlist</div>
+        <div class="pl-player">
+          <div class="pl-now-playing">
+            <div class="pl-now-thumb" id="plNowThumb">🎵</div>
+            <div class="pl-now-info">
+              <div class="pl-now-title" id="plNowTitle">Aucune musique</div>
+              <div class="pl-now-artist" id="plNowArtist">—</div>
+            </div>
+          </div>
+          <div class="pl-seek-row">
+            <span class="pl-time" id="plTimeCurrent">0:00</span>
+            <input type="range" class="pl-seek-slider" id="plSeekSlider" min="0" max="100" value="0" step="0.1">
+            <span class="pl-time" id="plTimeTotal">0:00</span>
+          </div>
+          <div class="pl-controls-row">
+            <button class="pl-ctrl-btn" id="plShuffleBtn" title="Aléatoire">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+            </button>
+            <button class="pl-ctrl-btn" id="plPrevBtn" title="Précédent">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg>
+            </button>
+            <button class="pl-ctrl-btn pl-play-main" id="plPlayBtn" title="Lecture/Pause">
+              <svg id="plPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            </button>
+            <button class="pl-ctrl-btn" id="plNextBtn" title="Suivant">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg>
+            </button>
+            <button class="pl-ctrl-btn" id="plLoopBtn" title="Boucle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            </button>
+          </div>
+          <div class="pl-volume-row">
+            <button class="pl-vol-icon" id="plMuteBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </button>
+            <input type="range" class="pl-vol-slider" id="plVolumeSlider" min="0" max="1" step="0.01" value="0.7">
+          </div>
+          <div class="pl-tracklist" id="plTracklist"></div>
+        </div>
+      </div>
+      <div class="dash-section">
         <div class="dash-section-title" id="dashSectionLang">Langue</div>
         <div class="lang-grid">
           <button class="lang-btn active" data-lang="fr"><span class="lang-flag">🇫🇷</span> Français</button>
@@ -2575,20 +2643,38 @@
       <h2 style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--text);" id="executorsTitle">Executors</h2>
       <p style="color:var(--text-muted);margin-top:0.5rem;" id="executorsSub">Les meilleurs executors pour tes scripts.</p>
     </section>
-    <div class="exec-filter-bar">
+    <div class="exec-filter-bar" style="flex-direction:column;align-items:stretch;gap:0.85rem;">
       <div class="exec-filter-search">
         <div class="exec-filter-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
         <input type="text" id="execSearch" placeholder="Rechercher un executor...">
       </div>
-      <div id="execFilterButtons">
-        <button class="exec-filter-btn active" data-efilter="all">Tous</button>
-        <button class="exec-filter-btn" data-efilter="free">Gratuit</button>
-        <button class="exec-filter-btn" data-efilter="paid">Payant</button>
-        <button class="exec-filter-btn" data-efilter="key">Key</button>
-        <button class="exec-filter-btn" data-efilter="keyless">Keyless</button>
-        <button class="exec-filter-btn" data-efilter="powerful">Puissant</button>
+      <div class="exec-filter-groups" style="display:flex;flex-wrap:wrap;gap:1.25rem;align-items:center;justify-content:space-between;">
+        <div class="exec-filter-group">
+          <span class="exec-filter-group-label" id="execGroupPlatformLabel">Plateforme</span>
+          <div class="exec-filter-group-btns" id="execFilterPlatformButtons">
+            <button class="exec-filter-btn active" data-egroup="platform" data-efilter="all">Toutes</button>
+            <button class="exec-filter-btn" data-egroup="platform" data-efilter="pc">🖥️ PC</button>
+            <button class="exec-filter-btn" data-egroup="platform" data-efilter="mobile">📱 Mobile</button>
+          </div>
+        </div>
+        <div class="exec-filter-group">
+          <span class="exec-filter-group-label" id="execGroupPriceLabel">Prix</span>
+          <div class="exec-filter-group-btns" id="execFilterPriceButtons">
+            <button class="exec-filter-btn active" data-egroup="price" data-efilter="all">Tous</button>
+            <button class="exec-filter-btn" data-egroup="price" data-efilter="free">Gratuit</button>
+            <button class="exec-filter-btn" data-egroup="price" data-efilter="paid">Payant</button>
+          </div>
+        </div>
+        <div class="exec-filter-group">
+          <span class="exec-filter-group-label" id="execGroupKeyLabel">Type</span>
+          <div class="exec-filter-group-btns" id="execFilterKeyButtons">
+            <button class="exec-filter-btn active" data-egroup="key" data-efilter="all">Tous</button>
+            <button class="exec-filter-btn" data-egroup="key" data-efilter="key">Key</button>
+            <button class="exec-filter-btn" data-egroup="key" data-efilter="keyless">Keyless</button>
+          </div>
+        </div>
+        <span class="exec-count-label" id="execCount">0 executors</span>
       </div>
-      <span class="exec-count-label" id="execCount">0 executors</span>
     </div>
     <div class="exec-grid" id="execGrid">
       <div class="exec-loading"><div class="exec-loading-spinner"></div>Chargement des executors...</div>
@@ -2678,7 +2764,7 @@
       Nouveau
     </button>
   </div>
-  <div class="msg-layout" id="msgLayout">
+  <div class="msg-layout">
     <!-- SIDEBAR -->
     <div class="msg-sidebar">
       <div class="msg-sidebar-header">
@@ -2704,9 +2790,6 @@
       <div id="msgChatArea" style="display:none;flex:1;display:none;flex-direction:column;overflow:hidden;">
         <!-- CHAT HEADER -->
         <div class="msg-chat-header" id="msgChatHeader">
-          <button class="msg-chat-mobile-back" id="msgChatMobileBack" title="Retour aux conversations">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-          </button>
           <div id="msgChatHeaderAvatar"></div>
           <div class="msg-chat-header-info">
             <div class="msg-chat-header-name" id="msgChatHeaderName">—</div>
@@ -2753,6 +2836,17 @@
             <span style="font-size:0.7rem;color:var(--text-muted);">🎙️ Enregistrement vocal...</span>
             <button class="msg-rec-cancel" id="msgRecCancelBtn">Annuler</button>
             <button class="msg-rec-send" id="msgRecSendBtn">Envoyer</button>
+          </div>
+          <div class="msg-pending-panel" id="msgPendingPanel" style="display:none;">
+            <div class="msg-pending-header">
+              <span id="msgPendingCount">0 fichier(s) sélectionné(s)</span>
+              <button class="msg-pending-clear" id="msgPendingClearBtn" title="Tout retirer">Tout retirer</button>
+            </div>
+            <div class="msg-pending-list" id="msgPendingList"></div>
+            <div class="msg-pending-footer">
+              <button class="msg-pending-add" id="msgPendingAddBtn" title="Ajouter un fichier">+ Ajouter</button>
+              <button class="msg-pending-send" id="msgPendingSendBtn">Envoyer <span id="msgPendingSendCount"></span></button>
+            </div>
           </div>
           <div class="msg-input-row" style="position:relative;">
             <div class="msg-import-wrap">
@@ -3167,7 +3261,6 @@ const L = {
     execFilterPaid:'Payant',
     execFilterKey:'Key',
     execFilterKeyless:'Keyless',
-    execFilterPowerful:'Puissant',
     execCountLabel:'executors',
     execLoading:'Chargement des executors...',
     execError:'Impossible de charger les executors. Réessaye plus tard.',
@@ -3346,7 +3439,6 @@ const L = {
     execFilterPaid:'Paid',
     execFilterKey:'Key',
     execFilterKeyless:'Keyless',
-    execFilterPowerful:'Powerful',
     execCountLabel:'executors',
     execLoading:'Loading executors...',
     execError:'Unable to load executors. Try again later.',
@@ -3489,15 +3581,13 @@ function applyTranslations(){
   setTxt('executorsSub', t('executorsSub'));
   const execSearch = document.getElementById('execSearch');
   if(execSearch) execSearch.placeholder = t('execSearchPlaceholder');
-  document.querySelectorAll('#execFilterButtons .exec-filter-btn').forEach(btn => {
+  document.querySelectorAll('.exec-filter-group-btns .exec-filter-btn').forEach(btn => {
     const key = btn.dataset.efilter;
     const map = {
-      'all': 'execFilterAll',
       'free': 'execFilterFree',
       'paid': 'execFilterPaid',
       'key': 'execFilterKey',
-      'keyless': 'execFilterKeyless',
-      'powerful': 'execFilterPowerful'
+      'keyless': 'execFilterKeyless'
     };
     if(map[key]) btn.textContent = t(map[key]);
   });
@@ -5105,7 +5195,9 @@ window.addEventListener('resize', initPageNav);
 // EXECUTORS API (avec fallback enrichi)
 // ============================================================
 let executorsCache = [];
-let execFilter = 'all';
+let execFilterPlatform = 'all';
+let execFilterPrice = 'all';
+let execFilterKey = 'all';
 let execSearch = '';
 
 // Fallback complet contenant tous les exécuteurs connus
@@ -5300,13 +5392,20 @@ function renderExecutors() {
       (ex.key && q.includes('key')) || 
       (!ex.key && q.includes('keyless')) ||
       (ex.price && q.includes(ex.price.toLowerCase()));
-    let matchFilter = true;
-    if (execFilter === 'free') matchFilter = ex.price === 'Free' || ex.price === 'Gratuit';
-    else if (execFilter === 'paid') matchFilter = ex.price !== 'Free' && ex.price !== 'Gratuit';
-    else if (execFilter === 'key') matchFilter = ex.key === true;
-    else if (execFilter === 'keyless') matchFilter = ex.key === false;
-    else if (execFilter === 'powerful') matchFilter = ex.successRate >= 90;
-    return matchSearch && matchFilter;
+    let matchPrice = true;
+    if (execFilterPrice === 'free') matchPrice = ex.price === 'Free' || ex.price === 'Gratuit';
+    else if (execFilterPrice === 'paid') matchPrice = ex.price !== 'Free' && ex.price !== 'Gratuit';
+
+    let matchKey = true;
+    if (execFilterKey === 'key') matchKey = ex.key === true;
+    else if (execFilterKey === 'keyless') matchKey = ex.key === false;
+
+    let matchPlatform = true;
+    const plat = (ex.platform || '').toLowerCase();
+    if (execFilterPlatform === 'pc') matchPlatform = /windows|mac|linux|pc/.test(plat);
+    else if (execFilterPlatform === 'mobile') matchPlatform = /android|ios|mobile/.test(plat);
+
+    return matchSearch && matchPrice && matchKey && matchPlatform;
   });
 
   document.getElementById('execCount').textContent = filtered.length + ' ' + t('execCountLabel');
@@ -5353,10 +5452,13 @@ function renderExecutors() {
     const uncPct = typeof ex.uncPercentage === 'number' ? ex.uncPercentage : null;
     const suncPct = typeof ex.suncPercentage === 'number' ? ex.suncPercentage : null;
 
+    const isActive = !!ex.updated && ex.status !== 'abandonné';
+    const statusDot = `<span class="exec-status-dot ${isActive ? 'is-active' : 'is-obsolete'}" title="${isActive ? t('badgeUpdated') : t('badgeOutdated')}"></span>`;
+
     return `<div class="exec-card">
       <div class="exec-card-top">
         <div>
-          <div class="exec-title">${escHtml(ex.name)}</div>
+          <div class="exec-title" style="display:flex;align-items:center;gap:0.5rem;">${statusDot}${escHtml(ex.name)}</div>
           <div class="exec-version">${escHtml(ex.version || '')}</div>
         </div>
         <div class="exec-badges">${badges.join('')}</div>
@@ -5408,11 +5510,15 @@ document.getElementById('execSearch').addEventListener('input', function() {
   renderExecutors();
 });
 
-document.querySelectorAll('#execFilterButtons .exec-filter-btn').forEach(btn => {
+document.querySelectorAll('.exec-filter-group-btns .exec-filter-btn').forEach(btn => {
   btn.addEventListener('click', function() {
-    document.querySelectorAll('#execFilterButtons .exec-filter-btn').forEach(b => b.classList.remove('active'));
+    const group = this.dataset.egroup;
+    const groupWrap = this.closest('.exec-filter-group-btns');
+    groupWrap.querySelectorAll('.exec-filter-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
-    execFilter = this.dataset.efilter;
+    if (group === 'platform') execFilterPlatform = this.dataset.efilter;
+    else if (group === 'price') execFilterPrice = this.dataset.efilter;
+    else if (group === 'key') execFilterKey = this.dataset.efilter;
     renderExecutors();
   });
 });
@@ -5625,7 +5731,11 @@ async function sbToggleReaction(messageId, emoji, username) {
 async function sbUploadMessageFile(conversationId, file) {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
   const path = `${conversationId}/${Date.now()}_${safeName}`;
-  const { error } = await sb.storage.from('sentinel-messages').upload(path, file, { cacheControl: '3600', upsert: false });
+  const { error } = await sb.storage.from('sentinel-messages').upload(path, file, {
+    cacheControl: '3600',
+    upsert: false,
+    contentType: file.type || 'application/octet-stream'
+  });
   if (error) throw new Error('Erreur upload: ' + error.message);
   const { data } = sb.storage.from('sentinel-messages').getPublicUrl(path);
   return data.publicUrl;
@@ -5886,7 +5996,7 @@ async function respondToMessageRequest(convId, action, otherUsername) {
       await sb.from('messages').delete().eq('conversation_id', convId);
       showToast('Demande refusée.', '#F87171');
       currentConvId = null;
-      document.getElementById('msgChatArea').style.display = 'none'; document.getElementById('msgLayout')?.classList.remove('mobile-chat-open');
+      document.getElementById('msgChatArea').style.display = 'none';
       document.getElementById('msgMainEmpty').style.display = '';
     } else if (action === 'block') {
       if (otherUsername) {
@@ -5900,7 +6010,7 @@ async function respondToMessageRequest(convId, action, otherUsername) {
       await sb.from('messages').delete().eq('conversation_id', convId);
       showToast('🚫 Utilisateur bloqué.', '#F87171');
       currentConvId = null;
-      document.getElementById('msgChatArea').style.display = 'none'; document.getElementById('msgLayout')?.classList.remove('mobile-chat-open');
+      document.getElementById('msgChatArea').style.display = 'none';
       document.getElementById('msgMainEmpty').style.display = '';
     }
     // Marque la notification liée comme lue si elle existe encore
@@ -6114,10 +6224,6 @@ document.getElementById('msgPageBack')?.addEventListener('click', () => {
   currentConvId = null;
 });
 
-document.getElementById('msgChatMobileBack')?.addEventListener('click', () => {
-  document.getElementById('msgLayout')?.classList.remove('mobile-chat-open');
-});
-
 document.getElementById('navMsgBtn')?.addEventListener('click', () => {
   if (!currentUser) { showToast('🔒 Connecte-toi pour accéder aux messages.', '#F87171'); return; }
   openMessagesPage();
@@ -6191,7 +6297,6 @@ async function closeConversationForMe(convId) {
   if (currentConvId === convId) {
     currentConvId = null;
     document.getElementById('msgChatArea')?.classList.remove('open');
-    document.getElementById('msgLayout')?.classList.remove('mobile-chat-open');
   }
   renderConversationList();
   showToast('💬 Conversation fermée.', '#94A3B8');
@@ -6224,7 +6329,6 @@ async function openConversation(convId) {
   chatArea.style.flexDirection = 'column';
   chatArea.style.flex = '1';
   chatArea.style.overflow = 'hidden';
-  document.getElementById('msgLayout')?.classList.add('mobile-chat-open');
 
   const isGroup = !!conv.group_name;
 
@@ -6460,7 +6564,7 @@ async function renderMessages(convId) {
       const bars = Array.from({length: 28}, () => 6 + Math.round(Math.random() * 16));
       bubbleInner = `<div class="msg-bubble${isMine ? ' mine' : ''}" style="padding:0;background:transparent;border:none;">
         <div class="msg-voice-card" data-voice-id="${m.id}">
-          <audio id="voiceAudio_${m.id}" src="${escHtml(m.content)}" preload="metadata" style="display:none;"></audio>
+          <audio id="voiceAudio_${m.id}" src="${escHtml(m.content)}" preload="metadata" style="display:none;" onerror="handleVoiceError('${m.id}')"></audio>
           <button class="msg-voice-play" id="voicePlayBtn_${m.id}" onclick="toggleVoicePlay('${m.id}')">
             <svg id="voicePlayIcon_${m.id}" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
           </button>
@@ -6468,6 +6572,14 @@ async function renderMessages(convId) {
             ${bars.map((h, idx) => `<div class="msg-voice-wave-bar" data-bar="${idx}" style="height:${h}px;"></div>`).join('')}
           </div>
           <span class="msg-voice-time" id="voiceTime_${m.id}">${formatDuration(m.duration_seconds)}</span>
+          <div class="msg-voice-vol-wrap">
+            <button class="msg-voice-vol-btn" id="voiceVolBtn_${m.id}" onclick="toggleVoiceVolPopup(event,'${m.id}')" title="Volume">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            </button>
+            <div class="msg-voice-vol-popup" id="voiceVolPopup_${m.id}">
+              <input type="range" min="0" max="1" step="0.01" class="msg-voice-vol-slider" id="voiceVolSlider_${m.id}" onclick="event.stopPropagation()" oninput="setVoiceVolume('${m.id}', this.value)">
+            </div>
+          </div>
         </div>
       </div>`;
     } else if (m.type === 'link') {
@@ -6685,20 +6797,19 @@ document.querySelectorAll('.msg-import-item').forEach(item => {
   });
 });
 ['msgFileInputImage', 'msgFileInputVideo', 'msgFileInputFile'].forEach(id => {
-  document.getElementById(id)?.addEventListener('change', async function () {
-    for (const file of this.files) { await sendFileMessage(file); }
+  document.getElementById(id)?.addEventListener('change', function () {
+    addPendingFiles(this.files);
     this.value = '';
   });
 });
-document.getElementById('msgFileInputFolder')?.addEventListener('change', async function () {
-  for (const file of this.files) { await sendFileMessage(file); }
+document.getElementById('msgFileInputFolder')?.addEventListener('change', function () {
+  addPendingFiles(this.files);
   this.value = '';
 });
 
 async function sendFileMessage(file) {
   if (!currentUser || !currentConvId) return;
   if (file.size > 25 * 1024 * 1024) { showToast('Fichier trop volumineux (25 Mo max).', '#F87171'); return; }
-  showToast('📤 Envoi en cours...', '#7C3AED');
   try {
     const url = await sbUploadMessageFile(currentConvId, file);
     let type = 'file';
@@ -6706,10 +6817,111 @@ async function sendFileMessage(file) {
     await sbSendMessage(currentConvId, url, type, {
       file_name: file.name, file_size: file.size, file_mime: file.type
     });
-    await renderMessages(currentConvId);
-    await renderConversationList();
   } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
 }
+
+// ============================================================
+// PENDING MEDIA QUEUE (aperçu façon Discord avant envoi, max 10)
+// ============================================================
+const MSG_PENDING_MAX = 10;
+let pendingMediaFiles = []; // { id, file, previewUrl }
+
+function pendingFileIconSvg(file) {
+  const mime = file.type || '';
+  if (mime.startsWith('video/')) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>';
+  }
+  if (mime.startsWith('audio/')) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+  }
+  const name = (file.name || '').toLowerCase();
+  if (/\.(zip|rar|7z)$/.test(name)) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>';
+  }
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' o';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
+}
+
+function addPendingFiles(fileList) {
+  if (!currentConvId) return;
+  const incoming = Array.from(fileList || []);
+  if (incoming.length === 0) return;
+  const room = MSG_PENDING_MAX - pendingMediaFiles.length;
+  if (room <= 0) { showToast(`Maximum ${MSG_PENDING_MAX} fichiers par envoi.`, '#F87171'); return; }
+  const toAdd = incoming.slice(0, room);
+  if (incoming.length > toAdd.length) showToast(`Maximum ${MSG_PENDING_MAX} fichiers par envoi.`, '#F87171');
+  toAdd.forEach(file => {
+    const isImg = file.type.startsWith('image/');
+    pendingMediaFiles.push({
+      id: 'pf_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+      file,
+      previewUrl: isImg ? URL.createObjectURL(file) : null
+    });
+  });
+  renderPendingPanel();
+}
+
+function removePendingFile(id) {
+  const item = pendingMediaFiles.find(p => p.id === id);
+  if (item?.previewUrl) URL.revokeObjectURL(item.previewUrl);
+  pendingMediaFiles = pendingMediaFiles.filter(p => p.id !== id);
+  renderPendingPanel();
+}
+
+function clearPendingFiles() {
+  pendingMediaFiles.forEach(p => { if (p.previewUrl) URL.revokeObjectURL(p.previewUrl); });
+  pendingMediaFiles = [];
+  renderPendingPanel();
+}
+
+function renderPendingPanel() {
+  const panel = document.getElementById('msgPendingPanel');
+  const list = document.getElementById('msgPendingList');
+  const countEl = document.getElementById('msgPendingCount');
+  const sendCountEl = document.getElementById('msgPendingSendCount');
+  if (!panel || !list) return;
+  if (pendingMediaFiles.length === 0) { panel.style.display = 'none'; list.innerHTML = ''; return; }
+  panel.style.display = 'block';
+  countEl.textContent = `${pendingMediaFiles.length}/${MSG_PENDING_MAX} fichier(s) sélectionné(s)`;
+  sendCountEl.textContent = `(${pendingMediaFiles.length})`;
+  list.innerHTML = pendingMediaFiles.map(p => `
+    <div class="msg-pending-item" data-pid="${p.id}">
+      ${p.previewUrl ? `<img class="msg-pending-thumb" src="${p.previewUrl}" alt="">` : `<div class="msg-pending-icon">${pendingFileIconSvg(p.file)}</div>`}
+      <div class="msg-pending-info">
+        <span class="msg-pending-name">${escHtml(p.file.name)}</span>
+        <span class="msg-pending-size">${formatFileSize(p.file.size)}</span>
+      </div>
+      <button class="msg-pending-remove" data-remove-pid="${p.id}" title="Retirer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  `).join('');
+  list.querySelectorAll('[data-remove-pid]').forEach(btn => {
+    btn.addEventListener('click', () => removePendingFile(btn.dataset.removePid));
+  });
+}
+
+document.getElementById('msgPendingClearBtn')?.addEventListener('click', clearPendingFiles);
+document.getElementById('msgPendingAddBtn')?.addEventListener('click', () => {
+  if (pendingMediaFiles.length >= MSG_PENDING_MAX) { showToast(`Maximum ${MSG_PENDING_MAX} fichiers par envoi.`, '#F87171'); return; }
+  document.getElementById('msgImportBtn')?.click();
+});
+document.getElementById('msgPendingSendBtn')?.addEventListener('click', async function () {
+  if (pendingMediaFiles.length === 0 || !currentConvId) return;
+  this.disabled = true;
+  showToast('📤 Envoi en cours...', '#7C3AED');
+  const toSend = [...pendingMediaFiles];
+  clearPendingFiles();
+  for (const p of toSend) { await sendFileMessage(p.file); }
+  await renderMessages(currentConvId);
+  await renderConversationList();
+  this.disabled = false;
+});
 
 // Drag & drop import
 const msgMessagesAreaEl = document.getElementById('msgMessagesArea');
@@ -6730,18 +6942,45 @@ let dragCounter = 0;
     if (dragCounter === 0) msgDropOverlay?.classList.remove('active');
   });
 });
-msgMessagesAreaEl?.addEventListener('drop', async (e) => {
+msgMessagesAreaEl?.addEventListener('drop', (e) => {
   e.preventDefault(); e.stopPropagation();
   dragCounter = 0;
   msgDropOverlay?.classList.remove('active');
   if (!currentConvId) return;
-  const files = Array.from(e.dataTransfer?.files || []);
-  for (const file of files) { await sendFileMessage(file); }
+  addPendingFiles(e.dataTransfer?.files || []);
 });
 
 // ============================================================
 // VOICE MESSAGES
 // ============================================================
+function getVoiceVolume() {
+  const v = parseFloat(localStorage.getItem('sentinel_voice_volume'));
+  return isNaN(v) ? 1 : v;
+}
+function setVoiceVolume(id, val) {
+  const v = parseFloat(val);
+  localStorage.setItem('sentinel_voice_volume', v);
+  document.querySelectorAll('audio[id^="voiceAudio_"]').forEach(a => { a.volume = v; });
+}
+function toggleVoiceVolPopup(e, id) {
+  e.stopPropagation();
+  const popup = document.getElementById('voiceVolPopup_' + id);
+  document.querySelectorAll('.msg-voice-vol-popup.open').forEach(p => { if (p !== popup) p.classList.remove('open'); });
+  const slider = document.getElementById('voiceVolSlider_' + id);
+  if (slider) slider.value = getVoiceVolume();
+  popup?.classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.msg-voice-vol-wrap')) {
+    document.querySelectorAll('.msg-voice-vol-popup.open').forEach(p => p.classList.remove('open'));
+  }
+});
+function handleVoiceError(id) {
+  console.error('[voice] erreur chargement audio pour message', id);
+  showToast("Ce message vocal n'a pas pu être chargé (bucket 'sentinel-messages' non public ou fichier manquant).", '#F87171');
+  const wave = document.getElementById('voiceWave_' + id);
+  if (wave) wave.style.opacity = '0.35';
+}
 // CUSTOM VOICE PLAYER (controls the hidden <audio>, animates the waveform bars)
 function toggleVoicePlay(id) {
   const audio = document.getElementById('voiceAudio_' + id);
@@ -6757,7 +6996,11 @@ function toggleVoicePlay(id) {
     }
   });
   if (audio.paused) {
-    audio.play();
+    audio.volume = getVoiceVolume();
+    audio.play().catch(err => {
+      console.error('[voice] lecture impossible:', err);
+      showToast('Impossible de lire ce message vocal (fichier introuvable ou bucket non public).', '#F87171');
+    });
     if (icon) icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
   } else {
     audio.pause();
@@ -6940,7 +7183,7 @@ document.getElementById('msgChatLeaveBtn')?.addEventListener('click', async () =
   const finishLeave = async () => {
     currentConvId = null;
     clearInterval(msgPollingInterval);
-    document.getElementById('msgChatArea').style.display = 'none'; document.getElementById('msgLayout')?.classList.remove('mobile-chat-open');
+    document.getElementById('msgChatArea').style.display = 'none';
     document.getElementById('msgMainEmpty').style.display = 'flex';
     document.getElementById('groupMembersPanel').classList.remove('open');
     await renderConversationList();
@@ -7402,5 +7645,37 @@ async function maybeAskNotificationPermission() {
 
 init();
 </script>
+<!-- MINI PLAYER (raccourci flottant, bas droite) -->
+<div class="mini-player" id="miniPlayer">
+  <button class="mini-player-toggle" id="miniPlayerToggle" title="Musique">🎵</button>
+  <div class="mini-player-body" id="miniPlayerBody">
+    <div class="mini-player-track">
+      <div class="mini-player-thumb">🎵</div>
+      <div class="mini-player-info">
+        <div class="mini-player-title" id="miniTitle">Aucune musique</div>
+        <div class="mini-player-artist" id="miniArtist">—</div>
+      </div>
+    </div>
+    <div class="mini-player-seek-row">
+      <input type="range" class="mini-seek-slider" id="miniSeekSlider" min="0" max="100" value="0" step="0.1">
+    </div>
+    <div class="mini-player-controls">
+      <button class="mini-ctrl-btn" id="miniPrevBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg>
+      </button>
+      <button class="mini-ctrl-btn mini-play-main" id="miniPlayBtn">
+        <svg id="miniPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+      </button>
+      <button class="mini-ctrl-btn" id="miniNextBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg>
+      </button>
+      <button class="mini-ctrl-btn" id="miniMuteBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+      <input type="range" class="mini-vol-slider" id="miniVolSlider" min="0" max="1" step="0.01" value="0.7">
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
