@@ -363,6 +363,16 @@
 
   /* MODAL DETAILS */
   .modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);z-index:8000;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:center;justify-content:center;padding:1rem; }
+  /* Modale de confirmation générique (changement de username, suppression de compte) */
+  .confirm-modal-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:20000;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;display:flex;align-items:center;justify-content:center;padding:1rem; }
+  .confirm-modal-overlay.open { opacity:1;visibility:visible; }
+  .confirm-modal-box { background:linear-gradient(180deg,#0d0d14,#0a0a12);border:1px solid var(--border);border-radius:18px;padding:1.75rem;width:100%;max-width:420px;box-shadow:0 24px 70px rgba(0,0,0,0.6);transform:scale(0.96);transition:transform .25s; }
+  .confirm-modal-overlay.open .confirm-modal-box { transform:scale(1); }
+  .confirm-modal-title { font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:0.6rem; }
+  .confirm-modal-text { font-size:0.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:1rem; }
+  .confirm-modal-field { margin-bottom:0.9rem; }
+  .confirm-modal-error { font-size:0.78rem;color:#F87171;margin-bottom:0.9rem; }
+  .confirm-modal-btns { display:flex;gap:0.6rem;justify-content:flex-end; }
   .modal-overlay.open { opacity:1;visibility:visible; }
   .modal { background:#0d0d14;border:1px solid rgba(124,58,237,0.25);border-radius:18px;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;transform:translateY(24px) scale(0.97);transition:transform .35s cubic-bezier(0.22,1,0.36,1);scrollbar-width:thin;scrollbar-color:rgba(124,58,237,0.3) transparent; }
   .modal::-webkit-scrollbar { width:4px; }
@@ -1041,13 +1051,6 @@
     color: var(--text-muted);
     white-space: nowrap;
   }
-  .exec-filter-group { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; }
-  .exec-filter-group-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
-  .exec-filter-group-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
-  .exec-status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
-  .exec-status-dot.is-active { background: #57F287; box-shadow: 0 0 4px #57F287, 0 0 10px rgba(87,242,135,0.6); animation: execDotPulse 2s ease-in-out infinite; }
-  .exec-status-dot.is-obsolete { background: #ED4245; box-shadow: 0 0 4px #ED4245, 0 0 10px rgba(237,66,69,0.6); animation: execDotPulse 2s ease-in-out infinite; }
-  @keyframes execDotPulse { 0%,100%{opacity:1;} 50%{opacity:.55;} }
   .exec-platform-tag {
     font-size: 0.6rem;
     padding: 0.1rem 0.4rem;
@@ -1059,6 +1062,498 @@
     font-family: 'JetBrains Mono', monospace;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  /* ============================================================
+     EXECUTOR STATUS DOT (custom SVG, no emoji)
+     ============================================================ */
+  .exec-status-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 0.35rem;
+  }
+  .exec-status-dot.active {
+    background: #22C55E;
+    box-shadow: 0 0 7px 2px rgba(34,197,94,0.55), 0 0 14px 4px rgba(34,197,94,0.2);
+  }
+  .exec-status-dot.obsolete {
+    background: #EF4444;
+    box-shadow: 0 0 7px 2px rgba(239,68,68,0.55), 0 0 14px 4px rgba(239,68,68,0.2);
+  }
+  /* Music playlist status dot — même style que exec-status-dot */
+  .music-status-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+    background: rgba(148,163,184,0.35);
+  }
+  .music-status-dot.unavailable {
+    background: #EF4444;
+    box-shadow: 0 0 7px 2px rgba(239,68,68,0.55), 0 0 14px 4px rgba(239,68,68,0.2);
+  }
+  .music-status-dot.loading {
+    background: #F59E0B;
+    box-shadow: 0 0 7px 2px rgba(245,158,11,0.55), 0 0 14px 4px rgba(245,158,11,0.2);
+    animation: musicStatusPulse 1s ease-in-out infinite;
+  }
+  .music-status-dot.playing {
+    background: #22C55E;
+    box-shadow: 0 0 7px 2px rgba(34,197,94,0.55), 0 0 14px 4px rgba(34,197,94,0.2);
+  }
+  @keyframes musicStatusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .exec-title-row {
+    display: flex;
+    align-items: center;
+  }
+
+  /* ============================================================
+     EXECUTOR NEW FILTER SYSTEM (Platform / Price / Key)
+     ============================================================ */
+  .exec-filter-categories {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .exec-filter-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .exec-filter-cat-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding: 0 0.1rem;
+  }
+  .exec-filter-cat-btns {
+    display: flex;
+    gap: 0.3rem;
+  }
+  .exec-filter-cat-btn {
+    padding: 0.35rem 0.75rem;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .exec-filter-cat-btn:hover {
+    background: rgba(124,58,237,0.08);
+    border-color: rgba(124,58,237,0.3);
+    color: var(--text);
+  }
+  .exec-filter-cat-btn.active {
+    background: rgba(124,58,237,0.14);
+    border-color: rgba(124,58,237,0.45);
+    color: var(--purple-light);
+    font-weight: 600;
+  }
+
+  /* ============================================================
+     MEDIA QUEUE (pre-send list like Discord)
+     ============================================================ */
+  .msg-media-queue {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.3);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .msg-media-queue.open { display: flex; }
+  .msg-media-queue-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .msg-media-queue-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .msg-media-queue-count {
+    font-size: 0.68rem;
+    color: var(--purple-light);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .msg-media-queue-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow-y: auto;
+  }
+  .msg-media-queue-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .msg-media-queue-item:last-child { border-bottom: none; }
+  .msg-media-queue-item:hover { background: rgba(255,255,255,0.03); }
+  .msg-media-queue-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .msg-media-queue-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  .msg-media-queue-icon svg { width: 18px; height: 18px; }
+  .msg-media-queue-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .msg-media-queue-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .msg-media-queue-meta {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 0.1rem;
+  }
+  .msg-media-queue-remove {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+  .msg-media-queue-remove:hover {
+    border-color: rgba(248,113,113,0.4);
+    background: rgba(248,113,113,0.1);
+    color: #F87171;
+  }
+  .msg-media-queue-send-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.85rem;
+    border-top: 1px solid var(--border);
+    background: rgba(255,255,255,0.01);
+    flex-shrink: 0;
+  }
+  .msg-media-queue-send-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 1rem;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.35);
+    border-radius: 8px;
+    color: var(--purple-light);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .msg-media-queue-send-btn:hover { background: rgba(124,58,237,0.28); box-shadow: 0 0 12px rgba(124,58,237,0.2); }
+  .msg-media-queue-send-btn svg { width: 14px; height: 14px; }
+  .msg-media-queue-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    cursor: none;
+    transition: all 0.15s;
+  }
+  .msg-media-queue-add-btn:hover { border-color: rgba(124,58,237,0.3); color: var(--purple-light); }
+
+  /* ============================================================
+     MUSIC PLAYER (Spotify-style, fixed bottom-right)
+     ============================================================ */
+  #musicPlayer {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 3000;
+    width: 320px;
+    background: rgba(13,13,20,0.97);
+    border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 40px rgba(124,58,237,0.12);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), opacity 0.3s;
+    transform: translateY(0);
+  }
+  body.theme-light #musicPlayer { background: rgba(255,255,255,0.97); border-color: rgba(124,58,237,0.25); }
+  #musicPlayer.player-minimized { transform: translateY(calc(100% - 52px)); }
+  .music-player-top {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 0.9rem 0.5rem;
+    cursor: none;
+  }
+  .music-player-toggle {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+    margin-left: auto;
+  }
+  .music-player-toggle:hover { color: var(--text); }
+  .music-player-toggle svg { width: 14px; height: 14px; }
+  .music-now-playing {
+    padding: 0 0.9rem 0.7rem;
+  }
+  .music-track-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.1rem;
+  }
+  .music-track-artist {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .music-progress-area {
+    padding: 0 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  .music-seek-slider {
+    width: 100%;
+    accent-color: var(--purple-light);
+    cursor: none;
+    height: 4px;
+    border-radius: 2px;
+  }
+  .music-time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 0.2rem;
+  }
+  .music-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 0.4rem 0.9rem 0.6rem;
+  }
+  .music-ctrl-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, transform 0.15s;
+    border-radius: 50%;
+    padding: 0.2rem;
+  }
+  .music-ctrl-btn:hover { color: var(--text); transform: scale(1.1); }
+  .music-ctrl-btn.active { color: var(--purple-light); }
+  .music-ctrl-btn svg { width: 18px; height: 18px; }
+  .music-play-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    border: none;
+    color: #fff;
+    cursor: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 0 16px rgba(124,58,237,0.4);
+  }
+  .music-play-btn:hover { transform: scale(1.08); box-shadow: 0 0 24px rgba(124,58,237,0.55); }
+  .music-play-btn svg { width: 20px; height: 20px; }
+  .music-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.9rem 0.75rem;
+  }
+  .music-volume-icon { color: var(--text-muted); display: flex; }
+  .music-volume-icon svg { width: 14px; height: 14px; }
+  .music-volume-slider {
+    flex: 1;
+    accent-color: var(--purple-light);
+    cursor: none;
+    height: 3px;
+  }
+  .music-player-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--purple-light);
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .music-track-indicator {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    margin-left: auto;
+  }
+  .music-track-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .music-track-dot.current {
+    background: var(--purple-light);
+    transform: scale(1.4);
+  }
+
+  /* Dashboard playlist section */
+  .dash-playlist-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    margin-top: 0.5rem;
+  }
+  .dash-playlist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    cursor: none;
+    transition: background 0.15s;
+  }
+  .dash-playlist-item:last-child { border-bottom: none; }
+  .dash-playlist-item:hover { background: rgba(124,58,237,0.06); }
+  .dash-playlist-item.playing { background: rgba(124,58,237,0.1); }
+  .dash-playlist-num {
+    font-size: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .dash-playlist-item.playing .dash-playlist-num {
+    color: var(--purple-light);
+  }
+  .dash-playlist-name {
+    flex: 1;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .dash-playlist-item.playing .dash-playlist-name { color: var(--purple-light); font-weight: 600; }
+  .dash-playlist-duration {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+  }
+  .dash-playlist-playing-anim {
+    display: none;
+    align-items: center;
+    gap: 2px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .dash-playlist-item.playing .dash-playlist-playing-anim { display: flex; }
+  .dash-playlist-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: var(--purple-light);
+    animation: playbarAnim 0.8s ease infinite alternate;
+  }
+  .dash-playlist-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .dash-playlist-bar:nth-child(2) { height: 10px; animation-delay: 0.2s; }
+  .dash-playlist-bar:nth-child(3) { height: 7px; animation-delay: 0.4s; }
+  @keyframes playbarAnim { from { transform: scaleY(0.5); } to { transform: scaleY(1); } }
+  .music-eq-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+    margin-right: 0.3rem;
+  }
+  .music-eq-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: var(--purple-light);
+    opacity: 0.8;
   }
 
   /* ============================================================
@@ -1664,64 +2159,6 @@
   .msg-voice-wave-bar { width:3px;border-radius:2px;background:var(--text-dim);flex-shrink:0;transition:background 0.15s; }
   .msg-voice-wave-bar.played { background:var(--purple-light); }
   .msg-voice-time { font-size:0.65rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:34px;text-align:right;flex-shrink:0; }
-  .msg-voice-vol-wrap { position:relative;flex-shrink:0; }
-  .msg-voice-vol-btn { width:24px;height:24px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .15s; }
-  .msg-voice-vol-btn:hover { color:var(--purple-light); }
-  .msg-voice-vol-btn svg { width:14px;height:14px; }
-  .msg-voice-vol-popup { position:absolute;bottom:calc(100% + 8px);right:-6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.6rem 0.5rem;display:none;box-shadow:0 6px 20px rgba(0,0,0,0.35);z-index:5; }
-  .msg-voice-vol-popup.open { display:block; }
-  .msg-voice-vol-slider { -webkit-appearance:slider-vertical;writing-mode:bt-lr;width:5px;height:70px;accent-color:var(--purple); }
-
-  /* ============ PLAYLIST PLAYER (dashboard) ============ */
-  .pl-player { background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;padding:1rem;display:flex;flex-direction:column;gap:0.8rem; }
-  .pl-now-playing { display:flex;align-items:center;gap:0.7rem; }
-  .pl-now-thumb { width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue,#3344cc));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
-  .pl-now-info { min-width:0;flex:1; }
-  .pl-now-title { font-size:0.85rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .pl-now-artist { font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0.1rem; }
-  .pl-seek-row { display:flex;align-items:center;gap:0.6rem; }
-  .pl-time { font-size:0.62rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:32px; }
-  .pl-seek-slider, .pl-vol-slider, .mini-seek-slider, .mini-vol-slider { -webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--border);flex:1;cursor:pointer;accent-color:var(--purple); }
-  .pl-controls-row { display:flex;align-items:center;justify-content:center;gap:0.9rem; }
-  .pl-ctrl-btn { width:34px;height:34px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s; }
-  .pl-ctrl-btn svg { width:16px;height:16px; }
-  .pl-ctrl-btn:hover { color:var(--text); }
-  .pl-ctrl-btn.active { color:var(--purple-light); }
-  .pl-play-main { width:44px;height:44px;background:var(--purple);color:#fff; }
-  .pl-play-main:hover { background:var(--purple-light);color:#fff; }
-  .pl-play-main svg { width:18px;height:18px; }
-  .pl-volume-row { display:flex;align-items:center;gap:0.6rem; }
-  .pl-vol-icon { background:none;border:none;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;width:20px;height:20px;flex-shrink:0; }
-  .pl-vol-icon svg { width:16px;height:16px; }
-  .pl-tracklist { max-height:230px;overflow-y:auto;display:flex;flex-direction:column;gap:0.15rem;margin-top:0.2rem; }
-  .pl-track-item { display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0.6rem;border-radius:9px;cursor:pointer;transition:background .15s; }
-  .pl-track-item:hover { background:rgba(255,255,255,0.04); }
-  .pl-track-item.playing { background:rgba(124,58,237,0.12); }
-  .pl-track-num { font-size:0.7rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;width:18px;flex-shrink:0;text-align:center; }
-  .pl-track-item.playing .pl-track-num { color:var(--purple-light); }
-  .pl-track-name { flex:1;min-width:0;font-size:0.78rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .pl-track-item.playing .pl-track-name { color:var(--purple-light);font-weight:600; }
-  .pl-track-artist { font-size:0.68rem;color:var(--text-muted);flex-shrink:0;max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-
-  /* ============ MINI PLAYER (flottant) ============ */
-  .mini-player { position:fixed;bottom:1.2rem;right:1.2rem;z-index:500;font-family:'Inter',sans-serif; }
-  .mini-player-toggle { width:48px;height:48px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.4);transition:transform .15s; }
-  .mini-player-toggle:hover { transform:scale(1.06); }
-  .mini-player-body { position:absolute;bottom:58px;right:0;width:260px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:0.9rem;box-shadow:0 10px 30px rgba(0,0,0,0.45);display:none;flex-direction:column;gap:0.7rem; }
-  .mini-player.open .mini-player-body { display:flex; }
-  .mini-player-track { display:flex;align-items:center;gap:0.6rem; }
-  .mini-player-thumb { width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--purple),var(--blue,#3344cc));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
-  .mini-player-info { min-width:0;flex:1; }
-  .mini-player-title { font-size:0.78rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .mini-player-artist { font-size:0.66rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .mini-player-seek-row { display:flex; }
-  .mini-player-controls { display:flex;align-items:center;gap:0.4rem; }
-  .mini-ctrl-btn { width:28px;height:28px;border-radius:50%;border:none;background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:color .15s; }
-  .mini-ctrl-btn svg { width:13px;height:13px; }
-  .mini-ctrl-btn:hover { color:var(--text); }
-  .mini-play-main { width:32px;height:32px;background:var(--purple);color:#fff; }
-  .mini-play-main:hover { background:var(--purple-light);color:#fff; }
-  .mini-vol-slider { width:60px;flex-shrink:0; }
   .msg-link-card { display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.8rem;border-radius:12px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);color:#7DD3FC;text-decoration:none;font-size:0.8rem;word-break:break-all;max-width:260px; }
   .msg-link-card svg { width:15px;height:15px;flex-shrink:0; }
   .msg-bubble a.msg-inline-link { color:#7DD3FC;text-decoration:underline; }
@@ -1739,30 +2176,6 @@
   .msg-import-menu.open { opacity:1;visibility:visible;transform:translateY(0); }
   .msg-import-item { display:flex;align-items:center;gap:0.55rem;padding:0.55rem 0.75rem;font-size:0.78rem;color:var(--text-muted);cursor:none;transition:all 0.15s; }
   .msg-import-item:hover { background:rgba(124,58,237,0.1);color:var(--purple-light); }
-
-  /* PENDING MEDIA PANEL (Discord-style attachment preview before send) */
-  .msg-pending-panel { border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.03);margin-bottom:0.5rem;padding:0.6rem 0.7rem;animation:fadeSlide 0.18s ease; }
-  body.theme-light .msg-pending-panel { background:rgba(0,0,0,0.03); }
-  .msg-pending-header { display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);margin-bottom:0.5rem;font-weight:500; }
-  .msg-pending-clear { background:transparent;border:none;color:#F87171;font-size:0.7rem;cursor:none;padding:0.2rem 0.4rem;border-radius:6px;transition:background 0.15s; }
-  .msg-pending-clear:hover { background:rgba(248,113,113,0.1); }
-  .msg-pending-list { display:flex;flex-direction:column;gap:0.35rem;max-height:220px;overflow-y:auto; }
-  .msg-pending-item { display:flex;align-items:center;gap:0.6rem;padding:0.4rem 0.55rem;border-radius:9px;background:rgba(255,255,255,0.03);border:1px solid var(--border); }
-  .msg-pending-thumb { width:34px;height:34px;border-radius:7px;object-fit:cover;flex-shrink:0;background:rgba(124,58,237,0.1); }
-  .msg-pending-icon { width:34px;height:34px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(124,58,237,0.12);color:var(--purple-light); }
-  .msg-pending-icon svg { width:17px;height:17px; }
-  .msg-pending-info { flex:1;min-width:0;display:flex;flex-direction:column;gap:0.1rem; }
-  .msg-pending-name { font-size:0.76rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-  .msg-pending-size { font-size:0.66rem;color:var(--text-muted); }
-  .msg-pending-remove { background:transparent;border:none;color:var(--text-muted);cursor:none;flex-shrink:0;width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.15s; }
-  .msg-pending-remove:hover { background:rgba(248,113,113,0.15);color:#F87171; }
-  .msg-pending-remove svg { width:13px;height:13px; }
-  .msg-pending-footer { display:flex;align-items:center;justify-content:space-between;margin-top:0.55rem;gap:0.5rem; }
-  .msg-pending-add { background:transparent;border:1px dashed var(--border);color:var(--text-muted);font-size:0.72rem;padding:0.4rem 0.7rem;border-radius:8px;cursor:none;transition:all 0.15s; }
-  .msg-pending-add:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light); }
-  .msg-pending-send { background:linear-gradient(135deg,#7C3AED,#6D28D9);border:none;color:#fff;font-size:0.78rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;cursor:none;transition:all 0.15s; }
-  .msg-pending-send:hover { filter:brightness(1.12); }
-  .msg-pending-send:disabled { opacity:0.5;filter:none; }
 
   /* VOICE RECORDER */
   .msg-recording-bar { display:none;align-items:center;gap:0.6rem;padding:0.45rem 0.85rem;border-radius:12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.35);margin-bottom:0.5rem; }
@@ -2155,8 +2568,8 @@
     <div class="profile-roles" id="profileRoles"></div>
     <div class="profile-status"><span class="profile-status-dot" id="profileStatusDot"></span><span id="profileStatusText">En ligne</span></div>
     <div class="profile-meta-grid">
-      <div class="profile-meta-item"><div class="profile-meta-label">ID Utilisateur</div><div class="profile-meta-value" id="profileUserId">—</div></div>
-      <div class="profile-meta-item"><div class="profile-meta-label">Membre depuis</div><div class="profile-meta-value" id="profileJoined">—</div></div>
+      <div class="profile-meta-item"><div class="profile-meta-label" id="profileUserIdLabel">ID Utilisateur</div><div class="profile-meta-value" id="profileUserId">—</div></div>
+      <div class="profile-meta-item"><div class="profile-meta-label" id="profileJoinedLabel">Membre depuis</div><div class="profile-meta-value" id="profileJoined">—</div></div>
       <div class="profile-meta-item"><div class="profile-meta-label">Rôle</div><div class="profile-meta-value" id="profileRoleName">Membre</div></div>
       <div class="profile-meta-item"><div class="profile-meta-label">Permissions</div><div class="profile-meta-value" id="profilePerms">0/6</div></div>
     </div>
@@ -2165,6 +2578,26 @@
 </div>
 
 <!-- MODAL DETAILS -->
+<div class="confirm-modal-overlay" id="confirmModalOverlay">
+  <div class="confirm-modal-box">
+    <div class="confirm-modal-title" id="confirmModalTitle">—</div>
+    <div class="confirm-modal-text" id="confirmModalText">—</div>
+    <div class="confirm-modal-field" id="confirmModalPwField" style="display:none;">
+      <label class="edit-label" id="confirmModalPwLabel">Mot de passe</label>
+      <input type="password" class="edit-input" id="confirmModalPwInput" autocomplete="current-password">
+    </div>
+    <div class="confirm-modal-field" id="confirmModalTypedField" style="display:none;">
+      <label class="edit-label" id="confirmModalTypedLabel">Confirmation</label>
+      <input type="text" class="edit-input" id="confirmModalTypedInput" autocomplete="off">
+    </div>
+    <div class="confirm-modal-error" id="confirmModalError" style="display:none;"></div>
+    <div class="confirm-modal-btns">
+      <button class="delete-no-btn" id="confirmModalCancelBtn">Annuler</button>
+      <button class="delete-yes-btn" id="confirmModalConfirmBtn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal" id="modalBox">
     <div id="modalBannerWrap"></div>
@@ -2331,10 +2764,6 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
               <span id="deleteAccountLabel">Supprimer le compte</span>
             </button>
-            <div class="delete-confirm" id="deleteConfirm">
-              <div class="delete-confirm-text">⚠️ Cette action est <strong>irréversible</strong>. Toutes tes données seront supprimées.</div>
-              <div class="delete-confirm-btns"><button class="delete-yes-btn" id="deleteYesBtn">Supprimer définitivement</button><button class="delete-no-btn" id="deleteNoBtn">Annuler</button></div>
-            </div>
           </div>
         </div>
         <div id="dashAccountGuest">
@@ -2446,63 +2875,28 @@
           </button>
           <div class="notif-pref-list" id="notifComing">
             <div class="notif-pref-row">
-              <div><div class="notif-pref-label">💬 Messages privés</div><div class="notif-pref-desc">Recevoir une notification pour chaque nouveau message</div></div>
+              <div><div class="notif-pref-label" id="notifPrefMsgLabel">💬 Messages privés</div><div class="notif-pref-desc" id="notifPrefMsgDesc">Recevoir une notification pour chaque nouveau message</div></div>
               <label class="notif-switch"><input type="checkbox" id="notifPrefMsg"><span class="notif-switch-track"></span></label>
             </div>
             <div class="notif-pref-row">
-              <div><div class="notif-pref-label">🤝 Demandes d'amis</div><div class="notif-pref-desc">Être notifié des nouvelles demandes d'amis</div></div>
+              <div><div class="notif-pref-label" id="notifPrefFriendLabel">🤝 Demandes d'amis</div><div class="notif-pref-desc" id="notifPrefFriendDesc">Être notifié des nouvelles demandes d'amis</div></div>
               <label class="notif-switch"><input type="checkbox" id="notifPrefFriend"><span class="notif-switch-track"></span></label>
             </div>
             <div class="notif-pref-row">
-              <div><div class="notif-pref-label">❤️ Likes &amp; votes</div><div class="notif-pref-desc">Être notifié des likes sur tes scripts/commentaires</div></div>
+              <div><div class="notif-pref-label" id="notifPrefVoteLabel">❤️ Likes &amp; votes</div><div class="notif-pref-desc" id="notifPrefVoteDesc">Être notifié des likes sur tes scripts/commentaires</div></div>
               <label class="notif-switch"><input type="checkbox" id="notifPrefVote"><span class="notif-switch-track"></span></label>
             </div>
             <div class="notif-pref-row">
-              <div><div class="notif-pref-label">🔊 Son de notification</div><div class="notif-pref-desc">Jouer un son à la réception d'une notification</div></div>
+              <div><div class="notif-pref-label" id="notifPrefSoundLabel">🔊 Son de notification</div><div class="notif-pref-desc" id="notifPrefSoundDesc">Jouer un son à la réception d'une notification</div></div>
               <label class="notif-switch"><input type="checkbox" id="notifPrefSound"><span class="notif-switch-track"></span></label>
             </div>
           </div>
         </div>
       </div>
       <div class="dash-section">
-        <div class="dash-section-title" id="dashSectionMusic">🎵 Playlist</div>
-        <div class="pl-player">
-          <div class="pl-now-playing">
-            <div class="pl-now-thumb" id="plNowThumb">🎵</div>
-            <div class="pl-now-info">
-              <div class="pl-now-title" id="plNowTitle">Aucune musique</div>
-              <div class="pl-now-artist" id="plNowArtist">—</div>
-            </div>
-          </div>
-          <div class="pl-seek-row">
-            <span class="pl-time" id="plTimeCurrent">0:00</span>
-            <input type="range" class="pl-seek-slider" id="plSeekSlider" min="0" max="100" value="0" step="0.1">
-            <span class="pl-time" id="plTimeTotal">0:00</span>
-          </div>
-          <div class="pl-controls-row">
-            <button class="pl-ctrl-btn" id="plShuffleBtn" title="Aléatoire">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-            </button>
-            <button class="pl-ctrl-btn" id="plPrevBtn" title="Précédent">
-              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg>
-            </button>
-            <button class="pl-ctrl-btn pl-play-main" id="plPlayBtn" title="Lecture/Pause">
-              <svg id="plPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-            </button>
-            <button class="pl-ctrl-btn" id="plNextBtn" title="Suivant">
-              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg>
-            </button>
-            <button class="pl-ctrl-btn" id="plLoopBtn" title="Boucle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-            </button>
-          </div>
-          <div class="pl-volume-row">
-            <button class="pl-vol-icon" id="plMuteBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-            </button>
-            <input type="range" class="pl-vol-slider" id="plVolumeSlider" min="0" max="1" step="0.01" value="0.7">
-          </div>
-          <div class="pl-tracklist" id="plTracklist"></div>
+        <div class="dash-section-title">🎵 Playlist</div>
+        <div class="dash-playlist-section" id="dashPlaylist">
+          <!-- Items rendered by JS -->
         </div>
       </div>
       <div class="dash-section">
@@ -2552,7 +2946,7 @@
         <button class="btn-login" id="navLoginBtn">Connexion</button>
         <button class="btn-signup" id="navSignupBtn">S'inscrire</button>
       </div>
-      <div class="nav-user-pill" id="navUserPill">
+      <div class="nav-user-pill" id="navUserPill" onclick="openProfile(currentUser && currentUser.username)" style="cursor:pointer;">
         <img class="nav-avatar" id="navAvatar" src="" alt="avatar">
         <span class="nav-username" id="navUsername"></span>
       </div>
@@ -2643,37 +3037,42 @@
       <h2 style="font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--text);" id="executorsTitle">Executors</h2>
       <p style="color:var(--text-muted);margin-top:0.5rem;" id="executorsSub">Les meilleurs executors pour tes scripts.</p>
     </section>
-    <div class="exec-filter-bar" style="flex-direction:column;align-items:stretch;gap:0.85rem;">
-      <div class="exec-filter-search">
-        <div class="exec-filter-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-        <input type="text" id="execSearch" placeholder="Rechercher un executor...">
-      </div>
-      <div class="exec-filter-groups" style="display:flex;flex-wrap:wrap;gap:1.25rem;align-items:center;justify-content:space-between;">
-        <div class="exec-filter-group">
-          <span class="exec-filter-group-label" id="execGroupPlatformLabel">Plateforme</span>
-          <div class="exec-filter-group-btns" id="execFilterPlatformButtons">
-            <button class="exec-filter-btn active" data-egroup="platform" data-efilter="all">Toutes</button>
-            <button class="exec-filter-btn" data-egroup="platform" data-efilter="pc">🖥️ PC</button>
-            <button class="exec-filter-btn" data-egroup="platform" data-efilter="mobile">📱 Mobile</button>
-          </div>
-        </div>
-        <div class="exec-filter-group">
-          <span class="exec-filter-group-label" id="execGroupPriceLabel">Prix</span>
-          <div class="exec-filter-group-btns" id="execFilterPriceButtons">
-            <button class="exec-filter-btn active" data-egroup="price" data-efilter="all">Tous</button>
-            <button class="exec-filter-btn" data-egroup="price" data-efilter="free">Gratuit</button>
-            <button class="exec-filter-btn" data-egroup="price" data-efilter="paid">Payant</button>
-          </div>
-        </div>
-        <div class="exec-filter-group">
-          <span class="exec-filter-group-label" id="execGroupKeyLabel">Type</span>
-          <div class="exec-filter-group-btns" id="execFilterKeyButtons">
-            <button class="exec-filter-btn active" data-egroup="key" data-efilter="all">Tous</button>
-            <button class="exec-filter-btn" data-egroup="key" data-efilter="key">Key</button>
-            <button class="exec-filter-btn" data-egroup="key" data-efilter="keyless">Keyless</button>
-          </div>
+    <div class="exec-filter-bar" style="flex-direction:column;gap:0.75rem;align-items:flex-start;">
+      <div style="display:flex;align-items:center;gap:0.75rem;width:100%;flex-wrap:wrap;">
+        <div class="exec-filter-search" style="min-width:200px;">
+          <div class="exec-filter-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <input type="text" id="execSearch" placeholder="Rechercher un executor...">
         </div>
         <span class="exec-count-label" id="execCount">0 executors</span>
+      </div>
+      <div class="exec-filter-categories" id="execFilterButtons">
+        <!-- Platform -->
+        <div class="exec-filter-category">
+          <div class="exec-filter-cat-label">Plateforme</div>
+          <div class="exec-filter-cat-btns">
+            <button class="exec-filter-cat-btn active" data-ecat="platform" data-efilter="platform-all">Tous</button>
+            <button class="exec-filter-cat-btn" data-ecat="platform" data-efilter="platform-pc">PC</button>
+            <button class="exec-filter-cat-btn" data-ecat="platform" data-efilter="platform-mobile">Mobile</button>
+          </div>
+        </div>
+        <!-- Price -->
+        <div class="exec-filter-category">
+          <div class="exec-filter-cat-label">Prix</div>
+          <div class="exec-filter-cat-btns">
+            <button class="exec-filter-cat-btn active" data-ecat="price" data-efilter="price-all">Tous</button>
+            <button class="exec-filter-cat-btn" data-ecat="price" data-efilter="price-free">Gratuit</button>
+            <button class="exec-filter-cat-btn" data-ecat="price" data-efilter="price-paid">Payant</button>
+          </div>
+        </div>
+        <!-- Key -->
+        <div class="exec-filter-category">
+          <div class="exec-filter-cat-label">Système</div>
+          <div class="exec-filter-cat-btns">
+            <button class="exec-filter-cat-btn active" data-ecat="key" data-efilter="key-all">Tous</button>
+            <button class="exec-filter-cat-btn" data-ecat="key" data-efilter="key-key">Key</button>
+            <button class="exec-filter-cat-btn" data-ecat="key" data-efilter="key-keyless">Keyless</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="exec-grid" id="execGrid">
@@ -2739,7 +3138,7 @@
 <!-- FRIENDS PANEL -->
 <div class="friends-panel" id="friendsPanel">
   <div class="friends-panel-header">
-    <span class="friends-panel-title">👥 Amis</span>
+    <span class="friends-panel-title" id="friendsPanelTitle">👥 Amis</span>
   </div>
   <div class="friends-search-wrap" style="position:relative;">
     <div class="friends-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
@@ -2747,7 +3146,7 @@
     <div class="friends-search-result" id="friendsSearchResult" style="display:none;"></div>
   </div>
   <div class="friends-list" id="friendsList">
-    <div class="friends-empty">Aucun ami pour l'instant.<br>Recherche quelqu'un ci-dessus.</div>
+    <div class="friends-empty" id="friendsEmptyDefault">Aucun ami pour l'instant.<br>Recherche quelqu'un ci-dessus.</div>
   </div>
 </div>
 
@@ -2826,6 +3225,24 @@
         </div>
         <!-- INPUT -->
         <div class="msg-input-zone" id="msgInputZone">
+          <!-- MEDIA QUEUE (shown when media files are staged) -->
+          <div class="msg-media-queue" id="msgMediaQueue">
+            <div class="msg-media-queue-header">
+              <span class="msg-media-queue-title">Médias à envoyer</span>
+              <span class="msg-media-queue-count" id="msgMediaQueueCount">0 / 10</span>
+            </div>
+            <div class="msg-media-queue-list" id="msgMediaQueueList"></div>
+            <div class="msg-media-queue-send-bar">
+              <button class="msg-media-queue-add-btn" id="msgMediaQueueAddBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 5v14M5 12h14"/></svg>
+                Ajouter
+              </button>
+              <button class="msg-media-queue-send-btn" id="msgMediaQueueSendBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Envoyer (<span id="msgMediaQueueSendCount">0</span>)
+              </button>
+            </div>
+          </div>
           <div class="msg-input-above">
             <img class="msg-input-above-avatar" id="msgInputAvatar" src="" alt="">
             <span class="msg-input-above-pseudo" id="msgInputPseudo"></span>
@@ -2836,17 +3253,6 @@
             <span style="font-size:0.7rem;color:var(--text-muted);">🎙️ Enregistrement vocal...</span>
             <button class="msg-rec-cancel" id="msgRecCancelBtn">Annuler</button>
             <button class="msg-rec-send" id="msgRecSendBtn">Envoyer</button>
-          </div>
-          <div class="msg-pending-panel" id="msgPendingPanel" style="display:none;">
-            <div class="msg-pending-header">
-              <span id="msgPendingCount">0 fichier(s) sélectionné(s)</span>
-              <button class="msg-pending-clear" id="msgPendingClearBtn" title="Tout retirer">Tout retirer</button>
-            </div>
-            <div class="msg-pending-list" id="msgPendingList"></div>
-            <div class="msg-pending-footer">
-              <button class="msg-pending-add" id="msgPendingAddBtn" title="Ajouter un fichier">+ Ajouter</button>
-              <button class="msg-pending-send" id="msgPendingSendBtn">Envoyer <span id="msgPendingSendCount"></span></button>
-            </div>
           </div>
           <div class="msg-input-row" style="position:relative;">
             <div class="msg-import-wrap">
@@ -2951,6 +3357,51 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- MUSIC PLAYER (fixed bottom-right, always visible) -->
+<div id="musicPlayer">
+  <div class="music-player-top">
+    <span class="music-player-label">🎵 Playlist</span>
+    <div class="music-track-indicator" id="musicTrackIndicator"></div>
+    <button class="music-player-toggle" id="musicPlayerToggleBtn" title="Réduire/Agrandir">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline id="musicToggleIcon" points="18 15 12 9 6 15"/></svg>
+    </button>
+  </div>
+  <div class="music-now-playing" id="musicNowPlaying">
+    <div class="music-track-name" id="musicTrackName">Aucune piste</div>
+    <div class="music-track-artist" id="musicTrackArtist">—</div>
+  </div>
+  <div class="music-progress-area">
+    <input type="range" class="music-seek-slider" id="musicSeek" min="0" max="100" value="0" step="0.1">
+    <div class="music-time-row">
+      <span id="musicCurTime">0:00</span>
+      <span id="musicDurTime">0:00</span>
+    </div>
+  </div>
+  <div class="music-controls">
+    <button class="music-ctrl-btn" id="musicShuffleBtn" title="Aléatoire">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+    </button>
+    <button class="music-ctrl-btn" id="musicPrevBtn" title="Précédent">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+    </button>
+    <button class="music-play-btn" id="musicPlayBtn" title="Lecture/Pause">
+      <svg id="musicPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+    </button>
+    <button class="music-ctrl-btn" id="musicNextBtn" title="Suivant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+    </button>
+    <button class="music-ctrl-btn" id="musicLoopBtn" title="Répéter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    </button>
+  </div>
+  <div class="music-volume-row">
+    <span class="music-volume-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path id="musicVolumeWave" d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span>
+    <input type="range" class="music-volume-slider" id="musicVolume" min="0" max="1" step="0.01" value="0.8">
+  </div>
+</div>
+<!-- Hidden audio element for music player -->
+<audio id="musicAudio" preload="metadata"></audio>
 
 <script>
 // ============================================================
@@ -3249,6 +3700,32 @@ const L = {
     statusOffline:'Hors ligne',
     userId:'ID Utilisateur',
     memberSince:'Membre depuis',
+    confirmBtnLabel:'Confirmer',
+    cancelBtnLabel:'Annuler',
+    usernameConfirmTitle:'Changer de nom d\u2019utilisateur ?',
+    usernameConfirmText:'Es-tu sûr de vouloir changer ton nom d\u2019utilisateur ? Cette action mettra à jour ton nom partout sur le site (commentaires, messages, votes...). Entre ton mot de passe pour confirmer.',
+    deleteConfirmModalTitle:'Supprimer définitivement ton compte ?',
+    deleteConfirmModalText:'Cette action est irréversible : ton compte, tes messages et tes données seront supprimés définitivement. Pour confirmer, tape exactement <strong>delete/{username}/{password}/</strong> en remplaçant {password} par ton vrai mot de passe.',
+    deleteConfirmTypedLabel:'Confirmation',
+    wrongPasswordError:'Mot de passe incorrect.',
+    deleteConfirmFormatError:'Le format doit être exactement : delete/{username}/ton_mot_de_passe/',
+    notifPrefMsgLabel:'💬 Messages privés',
+    notifPrefMsgDesc:'Recevoir une notification pour chaque nouveau message',
+    notifPrefFriendLabel:'🤝 Demandes d\u2019amis',
+    notifPrefFriendDesc:'Être notifié des nouvelles demandes d\u2019amis',
+    notifPrefVoteLabel:'❤️ Likes & votes',
+    notifPrefVoteDesc:'Être notifié des likes sur tes scripts/commentaires',
+    notifPrefSoundLabel:'🔊 Son de notification',
+    notifPrefSoundDesc:'Jouer un son à la réception d\u2019une notification',
+    friendsPanelTitle:'👥 Amis',
+    friendsSearchPlaceholder:'Rechercher un utilisateur...',
+    friendsPendingLabel:'Demandes reçues',
+    friendsListLabel:'Amis',
+    friendOnline:'En ligne',
+    friendOffline:'Hors ligne',
+    friendMsgTitle:'Envoyer un message',
+    friendRemoveTitle:'Retirer',
+    friendsEmpty:'Aucun ami pour l\u2019instant.<br>Recherche quelqu\u2019un ci-dessus.',
     roleLabel:'Rôle',
     permsLabel:'Permissions',
     viewProfile:'Voir le profil',
@@ -3261,6 +3738,7 @@ const L = {
     execFilterPaid:'Payant',
     execFilterKey:'Key',
     execFilterKeyless:'Keyless',
+    execFilterPowerful:'Puissant',
     execCountLabel:'executors',
     execLoading:'Chargement des executors...',
     execError:'Impossible de charger les executors. Réessaye plus tard.',
@@ -3427,6 +3905,32 @@ const L = {
     statusOffline:'Offline',
     userId:'User ID',
     memberSince:'Member since',
+    confirmBtnLabel:'Confirm',
+    cancelBtnLabel:'Cancel',
+    usernameConfirmTitle:'Change your username?',
+    usernameConfirmText:'Are you sure you want to change your username? This will update your name everywhere on the site (comments, messages, votes...). Enter your password to confirm.',
+    deleteConfirmModalTitle:'Permanently delete your account?',
+    deleteConfirmModalText:'This action is irreversible: your account, messages and data will be permanently deleted. To confirm, type exactly <strong>delete/{username}/{password}/</strong> replacing {password} with your real password.',
+    deleteConfirmTypedLabel:'Confirmation',
+    wrongPasswordError:'Incorrect password.',
+    deleteConfirmFormatError:'The format must be exactly: delete/{username}/your_password/',
+    notifPrefMsgLabel:'💬 Private messages',
+    notifPrefMsgDesc:'Get notified for every new message',
+    notifPrefFriendLabel:'🤝 Friend requests',
+    notifPrefFriendDesc:'Get notified about new friend requests',
+    notifPrefVoteLabel:'❤️ Likes & votes',
+    notifPrefVoteDesc:'Get notified about likes on your scripts/comments',
+    notifPrefSoundLabel:'🔊 Notification sound',
+    notifPrefSoundDesc:'Play a sound when a notification arrives',
+    friendsPanelTitle:'👥 Friends',
+    friendsSearchPlaceholder:'Search a user...',
+    friendsPendingLabel:'Received requests',
+    friendsListLabel:'Friends',
+    friendOnline:'Online',
+    friendOffline:'Offline',
+    friendMsgTitle:'Send a message',
+    friendRemoveTitle:'Remove',
+    friendsEmpty:'No friends yet.<br>Search for someone above.',
     roleLabel:'Role',
     permsLabel:'Permissions',
     viewProfile:'View profile',
@@ -3439,6 +3943,7 @@ const L = {
     execFilterPaid:'Paid',
     execFilterKey:'Key',
     execFilterKeyless:'Keyless',
+    execFilterPowerful:'Powerful',
     execCountLabel:'executors',
     execLoading:'Loading executors...',
     execError:'Unable to load executors. Try again later.',
@@ -3570,6 +4075,14 @@ function applyTranslations(){
   setTxt('editUsernameLabel',t('editUsernameLabel')); setTxt('editBioLabel',t('editBioLabel'));
   setTxt('editSaveLabel',t('editSaveLabel')); setTxt('editUploadLabel',t('editUploadLabel'));
   setTxt('switchAccountLabel',t('switchAccountLabel')); setTxt('logoutLabel',t('logoutLabel')); setTxt('deleteAccountLabel',t('deleteAccountLabel'));
+  setTxt('profileUserIdLabel',t('userId')); setTxt('profileJoinedLabel',t('memberSince'));
+  setTxt('notifPrefMsgLabel',t('notifPrefMsgLabel')); setTxt('notifPrefMsgDesc',t('notifPrefMsgDesc'));
+  setTxt('notifPrefFriendLabel',t('notifPrefFriendLabel')); setTxt('notifPrefFriendDesc',t('notifPrefFriendDesc'));
+  setTxt('notifPrefVoteLabel',t('notifPrefVoteLabel')); setTxt('notifPrefVoteDesc',t('notifPrefVoteDesc'));
+  setTxt('notifPrefSoundLabel',t('notifPrefSoundLabel')); setTxt('notifPrefSoundDesc',t('notifPrefSoundDesc'));
+  setTxt('friendsPanelTitle',t('friendsPanelTitle'));
+  const fsi=document.getElementById('friendsSearchInput'); if(fsi) fsi.placeholder=t('friendsSearchPlaceholder');
+  const fed=document.getElementById('friendsEmptyDefault'); if(fed) fed.innerHTML=t('friendsEmpty');
   const ct=document.getElementById('commentTextarea'); if(ct) ct.placeholder=t('commentPlaceholder');
   const cs=document.getElementById('commentSubmit'); if(cs) cs.textContent=t('commentPublish');
   const cl=document.getElementById('commentLoginLink'); if(cl) cl.textContent=t('commentLoginLink');
@@ -3581,15 +4094,8 @@ function applyTranslations(){
   setTxt('executorsSub', t('executorsSub'));
   const execSearch = document.getElementById('execSearch');
   if(execSearch) execSearch.placeholder = t('execSearchPlaceholder');
-  document.querySelectorAll('.exec-filter-group-btns .exec-filter-btn').forEach(btn => {
-    const key = btn.dataset.efilter;
-    const map = {
-      'free': 'execFilterFree',
-      'paid': 'execFilterPaid',
-      'key': 'execFilterKey',
-      'keyless': 'execFilterKeyless'
-    };
-    if(map[key]) btn.textContent = t(map[key]);
+  document.querySelectorAll('#execFilterButtons .exec-filter-cat-btn').forEach(btn => {
+    // Category labels don't need translation for now — they're language-neutral
   });
   // Help
   setTxt('helpTitle', t('helpTitle'));
@@ -4488,12 +4994,61 @@ document.getElementById('editProfileBtn').addEventListener('click', ()=>{
   }
 });
 document.getElementById('editUploadBtn').addEventListener('click', ()=>document.getElementById('editAvatarFile').click());
-setupPwToggle('editUsernamePassword','editUsernamePwToggle','editUsernamePwIcon');
-document.getElementById('editUsername').addEventListener('input', ()=>{
-  const changed = currentUser && document.getElementById('editUsername').value.trim().toLowerCase() !== currentUser.username.toLowerCase();
-  document.getElementById('editUsernamePwField').style.display = changed ? '' : 'none';
-});
+// Le champ mot de passe inline a été remplacé par la vraie modale de confirmation
+// (voir openConfirmModal + usernameConfirmTitle) qui s'ouvre automatiquement au clic sur Enregistrer.
 document.getElementById('editAvatarFile').addEventListener('change', e=>{ const f=e.target.files[0]; if(!f) return; readImageFile(f, url=>{ editSelectedAvatar=url; document.getElementById('editAvatarPreview').src=url; document.querySelectorAll('#editAvatarOpts img').forEach(i=>i.classList.remove('selected')); }); });
+
+// ============================================================
+// MODALE DE CONFIRMATION GÉNÉRIQUE (username, suppression compte)
+// ============================================================
+const confirmModalOverlay = document.getElementById('confirmModalOverlay');
+function closeConfirmModal(){
+  confirmModalOverlay.classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('confirmModalError').style.display='none';
+  document.getElementById('confirmModalPwInput').value='';
+  document.getElementById('confirmModalTypedInput').value='';
+}
+document.getElementById('confirmModalCancelBtn').addEventListener('click', closeConfirmModal);
+confirmModalOverlay.addEventListener('click', e=>{ if(e.target===confirmModalOverlay) closeConfirmModal(); });
+let _confirmModalHandler = null;
+function openConfirmModal({title, text, requirePassword=false, passwordLabel, requireTyped=false, typedLabel, typedPlaceholder='', confirmLabel, onConfirm}){
+  document.getElementById('confirmModalTitle').textContent = title;
+  document.getElementById('confirmModalText').innerHTML = text;
+  const pwField = document.getElementById('confirmModalPwField');
+  const typedField = document.getElementById('confirmModalTypedField');
+  pwField.style.display = requirePassword ? '' : 'none';
+  typedField.style.display = requireTyped ? '' : 'none';
+  if(passwordLabel) document.getElementById('confirmModalPwLabel').textContent = passwordLabel;
+  if(typedLabel) document.getElementById('confirmModalTypedLabel').textContent = typedLabel;
+  document.getElementById('confirmModalTypedInput').placeholder = typedPlaceholder;
+  document.getElementById('confirmModalConfirmBtn').textContent = confirmLabel || t('confirmBtnLabel');
+  document.getElementById('confirmModalCancelBtn').textContent = t('cancelBtnLabel');
+  document.getElementById('confirmModalError').style.display='none';
+  document.getElementById('confirmModalPwInput').value='';
+  document.getElementById('confirmModalTypedInput').value='';
+  _confirmModalHandler = onConfirm;
+  confirmModalOverlay.classList.add('open'); document.body.style.overflow='hidden';
+  setTimeout(()=>{ (requirePassword ? document.getElementById('confirmModalPwInput') : document.getElementById('confirmModalTypedInput'))?.focus(); }, 50);
+}
+document.getElementById('confirmModalConfirmBtn').addEventListener('click', async ()=>{
+  if(!_confirmModalHandler) return;
+  const errEl = document.getElementById('confirmModalError');
+  errEl.style.display='none';
+  const password = document.getElementById('confirmModalPwInput').value;
+  const typed = document.getElementById('confirmModalTypedInput').value;
+  const btn = document.getElementById('confirmModalConfirmBtn');
+  btn.disabled = true;
+  try{
+    await _confirmModalHandler({password, typed});
+    closeConfirmModal();
+  }catch(e){
+    errEl.textContent = e.message;
+    errEl.style.display='';
+  }finally{
+    btn.disabled = false;
+  }
+});
 
 document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
   if(!currentUser) return;
@@ -4503,25 +5058,31 @@ document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
   const newAvatar = editSelectedAvatar||currentUser.avatar;
   if(!newDisplay||!newUsername){ showToast('⚠️ Remplis tous les champs.','#F87171'); return; }
   if(!/^[a-zA-Z0-9_]{3,20}$/.test(newUsername)){ showToast('⚠️ Nom invalide.','#F87171'); return; }
-  if(newUsername.toLowerCase()!==currentUser.username.toLowerCase()){
+  const usernameChanged = newUsername.toLowerCase()!==currentUser.username.toLowerCase();
+  if(usernameChanged){
     const exists = await sbUserExists(newUsername);
     if(exists){ showToast('⚠️ Nom déjà pris.','#F87171'); return; }
   }
-  try{
-    const avatarChanged = newAvatar && newAvatar !== currentUser.avatar;
-    const newHistory = avatarChanged
-      ? [currentUser.avatar, ...(currentUser.avatar_history||[])].filter(Boolean).slice(0,8)
-      : (currentUser.avatar_history||[]);
+  const avatarChanged = newAvatar && newAvatar !== currentUser.avatar;
+  const newHistory = avatarChanged
+    ? [currentUser.avatar, ...(currentUser.avatar_history||[])].filter(Boolean).slice(0,8)
+    : (currentUser.avatar_history||[]);
+
+  async function applyProfileChanges(){
+    // IMPORTANT : on doit renommer partout AILLEURS (votes, comments, friends, ...) AVANT
+    // de renommer la ligne dans "users", sinon la contrainte de clé étrangère
+    // "votes_username_fkey" (qui référence users.username) bloque le renommage
+    // avec l'erreur 23503 tant que les votes pointent encore vers l'ancien nom.
+    if(usernameChanged){
+      await sbRenameUsernameEverywhere(currentUser.username, newUsername);
+    }
     const updated = await sbUpdateUser(currentUser.username, {
       display_name: newDisplay,
       bio: newBio,
       avatar: newAvatar,
       avatar_history: newHistory,
-      ...(newUsername.toLowerCase()!==currentUser.username.toLowerCase()?{username:newUsername.toLowerCase()}:{})
+      ...(usernameChanged?{username:newUsername.toLowerCase()}:{})
     });
-    if(newUsername.toLowerCase()!==currentUser.username.toLowerCase()){
-      await sbRenameUsernameEverywhere(currentUser.username, newUsername);
-    }
     sessionLogin(updated);
     document.getElementById('navAvatar').src = newAvatar;
     document.getElementById('dashAccountAvatar').src = newAvatar;
@@ -4529,23 +5090,55 @@ document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
     updateAuthUI();
     showToast(t('toastProfileUpdated'),'#34D399');
     document.getElementById('editProfilePanel').classList.remove('open'); editProfileOpen=false;
+  }
+
+  if(usernameChanged){
+    // Vraie interface de confirmation au milieu de l'écran, avec mot de passe requis.
+    openConfirmModal({
+      title: t('usernameConfirmTitle'),
+      text: t('usernameConfirmText'),
+      requirePassword: true,
+      confirmLabel: t('confirmBtnLabel'),
+      onConfirm: async ({password})=>{
+        if(!password) throw new Error(t('wrongPasswordError'));
+        const verified = await sbVerifyUser(currentUser.username, password);
+        if(!verified) throw new Error(t('wrongPasswordError'));
+        await applyProfileChanges();
+      }
+    });
+    return;
+  }
+
+  try{
+    await applyProfileChanges();
   }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
 });
 
 document.getElementById('logoutBtn').addEventListener('click', ()=>{ sessionLogout(); userVotes={}; dashOverlay.classList.remove('open'); showToast(t('toastLoggedOut'),'#FCD34D'); updateAuthUI(); updateVoteUI(); });
 document.getElementById('switchAccountBtn').addEventListener('click', ()=>{ sessionLogout(); userVotes={}; dashOverlay.classList.remove('open'); setTimeout(()=>openAuth('login'),200); updateAuthUI(); });
 
-const deleteConfirmEl = document.getElementById('deleteConfirm');
-document.getElementById('deleteAccountBtn').addEventListener('click', ()=>deleteConfirmEl.classList.toggle('open'));
-document.getElementById('deleteNoBtn').addEventListener('click', ()=>deleteConfirmEl.classList.remove('open'));
-document.getElementById('deleteYesBtn').addEventListener('click', async ()=>{
+document.getElementById('deleteAccountBtn').addEventListener('click', ()=>{
   if(!currentUser) return;
-  try{
-    await sbDeleteUser(currentUser.username);
-    sessionLogout(); userVotes={};
-    deleteConfirmEl.classList.remove('open'); dashOverlay.classList.remove('open');
-    showToast(t('toastAccountDeleted'),'#F87171'); updateAuthUI(); updateVoteUI();
-  }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
+  const uname = currentUser.username;
+  openConfirmModal({
+    title: t('deleteConfirmModalTitle'),
+    text: t('deleteConfirmModalText').replace('{username}', escHtml(uname)),
+    requireTyped: true,
+    typedLabel: t('deleteConfirmTypedLabel'),
+    typedPlaceholder: `delete/${uname}/••••••••/`,
+    confirmLabel: t('deleteAccountLabel'),
+    onConfirm: async ({typed})=>{
+      const m = /^delete\/([^/]+)\/(.+)\/$/.exec((typed||'').trim());
+      if(!m || m[1].toLowerCase() !== uname.toLowerCase()) throw new Error(t('deleteConfirmFormatError'));
+      const password = m[2];
+      const verified = await sbVerifyUser(uname, password);
+      if(!verified) throw new Error(t('wrongPasswordError'));
+      await sbDeleteUser(uname);
+      sessionLogout(); userVotes={};
+      dashOverlay.classList.remove('open');
+      showToast(t('toastAccountDeleted'),'#F87171'); updateAuthUI(); updateVoteUI();
+    }
+  });
 });
 
 document.querySelectorAll('.lang-btn').forEach(btn=>{
@@ -4762,11 +5355,7 @@ const profileOverlay = document.getElementById('profileOverlay');
 let profileUser = null;
 
 async function openProfile(username){
-  if(username === currentUser?.username){
-    dashOverlay.classList.add('open');
-    return;
-  }
-  const u = await sbGetUser(username);
+  const u = username === currentUser?.username ? currentUser : await sbGetUser(username);
   if(!u){ showToast('Utilisateur introuvable','#F87171'); return; }
   profileUser = u;
   document.getElementById('profileAvatar').src = u.avatar||AVATAR_OPTIONS[0];
@@ -4793,7 +5382,7 @@ async function openProfile(username){
   const online = isOnline(u);
   document.getElementById('profileStatusDot').className = 'profile-status-dot '+(online?'profile-status-online':'profile-status-offline');
   document.getElementById('profileStatusText').textContent = online ? t('statusOnline') : t('statusOffline');
-  document.getElementById('profileUserId').textContent = u.id || '—';
+  document.getElementById('profileUserId').textContent = u.account_number ? ('#'+u.account_number) : '—';
   document.getElementById('profileJoined').textContent = u.created_at ? new Date(u.created_at).toLocaleDateString('fr') : '—';
   document.getElementById('profileRoleName').textContent = roleName;
   document.getElementById('profilePerms').textContent = getPermLevel(u)+'/6';
@@ -4831,8 +5420,8 @@ function openAdminPanel(){
   adminOverlay.classList.add('open'); document.body.style.overflow='hidden';
   switchAdminTab('votes');
 }
-document.getElementById('adminClose').addEventListener('click', ()=>{ adminOverlay.classList.remove('open'); document.body.style.overflow=''; });
-adminOverlay.addEventListener('click', e=>{ if(e.target===adminOverlay){ adminOverlay.classList.remove('open'); document.body.style.overflow=''; } });
+document.getElementById('adminClose').addEventListener('click', ()=>{ adminOverlay.classList.remove('open'); document.body.style.overflow=''; closeAdminCommentFilterMenu(); });
+adminOverlay.addEventListener('click', e=>{ if(e.target===adminOverlay){ adminOverlay.classList.remove('open'); document.body.style.overflow=''; closeAdminCommentFilterMenu(); } });
 
 document.querySelectorAll('.admin-tab').forEach(tab=>tab.addEventListener('click',()=>switchAdminTab(tab.dataset.atab)));
 function switchAdminTab(tab){
@@ -4980,17 +5569,55 @@ function buildAdminCommentFilterDropdown(){
 }
 function selectAdminCommentFilter(sid){
   adminCommentFilterValue = sid;
-  document.getElementById('adminCommentFilterWrap')?.classList.remove('open');
+  closeAdminCommentFilterMenu();
   buildAdminCommentFilterDropdown();
   renderAdminComments();
 }
+// La .admin-panel a "overflow:hidden" (pour ses coins arrondis), ce qui coupait
+// le menu déroulant. On "téléporte" le menu dans <body> en position fixed
+// tant qu'il est ouvert, pour qu'il puisse dépasser du cadre de l'admin panel.
+function positionAdminCommentFilterMenu(){
+  const trigger = document.getElementById('adminCommentFilterTrigger');
+  const menu = document.getElementById('adminCommentFilterMenu');
+  if(!trigger || !menu) return;
+  const r = trigger.getBoundingClientRect();
+  menu.style.position = 'fixed';
+  menu.style.left = r.left + 'px';
+  menu.style.top = (r.bottom + 6) + 'px';
+  menu.style.width = r.width + 'px';
+  menu.style.right = 'auto';
+}
+function openAdminCommentFilterMenu(){
+  const wrap = document.getElementById('adminCommentFilterWrap');
+  const menu = document.getElementById('adminCommentFilterMenu');
+  if(!wrap || !menu) return;
+  wrap.classList.add('open');
+  if(menu.parentElement !== document.body) document.body.appendChild(menu);
+  positionAdminCommentFilterMenu();
+}
+function closeAdminCommentFilterMenu(){
+  const wrap = document.getElementById('adminCommentFilterWrap');
+  const menu = document.getElementById('adminCommentFilterMenu');
+  if(!wrap || !menu) return;
+  wrap.classList.remove('open');
+  menu.style.position = '';
+  menu.style.left = '';
+  menu.style.top = '';
+  menu.style.width = '';
+  menu.style.right = '';
+  if(menu.parentElement !== wrap) wrap.appendChild(menu);
+}
 document.getElementById('adminCommentFilterTrigger')?.addEventListener('click', (e)=>{
   e.stopPropagation();
-  document.getElementById('adminCommentFilterWrap')?.classList.toggle('open');
+  const wrap = document.getElementById('adminCommentFilterWrap');
+  if(wrap?.classList.contains('open')) closeAdminCommentFilterMenu();
+  else openAdminCommentFilterMenu();
 });
 document.addEventListener('click', (e)=>{
-  if(!e.target.closest('#adminCommentFilterWrap')) document.getElementById('adminCommentFilterWrap')?.classList.remove('open');
+  if(!e.target.closest('#adminCommentFilterWrap') && !e.target.closest('#adminCommentFilterMenu')) closeAdminCommentFilterMenu();
 });
+window.addEventListener('resize', ()=>{ if(document.getElementById('adminCommentFilterWrap')?.classList.contains('open')) positionAdminCommentFilterMenu(); });
+document.getElementById('adminOverlay')?.addEventListener('scroll', ()=>{ if(document.getElementById('adminCommentFilterWrap')?.classList.contains('open')) positionAdminCommentFilterMenu(); });
 
 let editingScriptId = null;
 
@@ -5152,13 +5779,6 @@ function switchPage(pageId) {
     section.classList.toggle('active', section.id === 'page-' + pageId);
   });
   currentPage = pageId;
-  // Scroll smooth vers le haut de la zone de contenu lors du changement de catégorie
-  const pageNav = document.getElementById('pageNavInner')?.closest('.page-nav') || document.getElementById('pageNavInner');
-  if (pageNav && typeof pageNav.scrollIntoView === 'function') {
-    pageNav.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
   // Si la page est Executors, charger les executors
   if (pageId === 'executors') {
     loadExecutors();
@@ -5195,9 +5815,6 @@ window.addEventListener('resize', initPageNav);
 // EXECUTORS API (avec fallback enrichi)
 // ============================================================
 let executorsCache = [];
-let execFilterPlatform = 'all';
-let execFilterPrice = 'all';
-let execFilterKey = 'all';
 let execSearch = '';
 
 // Fallback complet contenant tous les exécuteurs connus
@@ -5381,31 +5998,46 @@ function mapWeaoExecutor(ex) {
   };
 }
 
+function getExecActiveFilters() {
+  const platformBtn = document.querySelector('#execFilterButtons .exec-filter-cat-btn[data-ecat="platform"].active');
+  const priceBtn = document.querySelector('#execFilterButtons .exec-filter-cat-btn[data-ecat="price"].active');
+  const keyBtn = document.querySelector('#execFilterButtons .exec-filter-cat-btn[data-ecat="key"].active');
+  return {
+    platform: platformBtn ? platformBtn.dataset.efilter : 'platform-all',
+    price: priceBtn ? priceBtn.dataset.efilter : 'price-all',
+    key: keyBtn ? keyBtn.dataset.efilter : 'key-all'
+  };
+}
+
 function renderExecutors() {
   const grid = document.getElementById('execGrid');
   const q = execSearch.toLowerCase().trim();
+  const filters = getExecActiveFilters();
+
   let filtered = executorsCache.filter(ex => {
     const name = (ex.name || '').toLowerCase();
     const desc = (ex.description || '').toLowerCase();
-    const price = (ex.price || '').toLowerCase();
-    const matchSearch = q === '' || name.includes(q) || desc.includes(q) || price.includes(q) || 
-      (ex.key && q.includes('key')) || 
-      (!ex.key && q.includes('keyless')) ||
-      (ex.price && q.includes(ex.price.toLowerCase()));
-    let matchPrice = true;
-    if (execFilterPrice === 'free') matchPrice = ex.price === 'Free' || ex.price === 'Gratuit';
-    else if (execFilterPrice === 'paid') matchPrice = ex.price !== 'Free' && ex.price !== 'Gratuit';
+    const matchSearch = q === '' || name.includes(q) || desc.includes(q);
 
-    let matchKey = true;
-    if (execFilterKey === 'key') matchKey = ex.key === true;
-    else if (execFilterKey === 'keyless') matchKey = ex.key === false;
-
+    // Platform filter
     let matchPlatform = true;
-    const plat = (ex.platform || '').toLowerCase();
-    if (execFilterPlatform === 'pc') matchPlatform = /windows|mac|linux|pc/.test(plat);
-    else if (execFilterPlatform === 'mobile') matchPlatform = /android|ios|mobile/.test(plat);
+    if (filters.platform === 'platform-pc') {
+      matchPlatform = !ex.platform || ex.platform.toLowerCase().includes('pc') || ex.platform.toLowerCase().includes('windows') || ex.platform.toLowerCase().includes('desktop');
+    } else if (filters.platform === 'platform-mobile') {
+      matchPlatform = ex.platform && (ex.platform.toLowerCase().includes('mobile') || ex.platform.toLowerCase().includes('android') || ex.platform.toLowerCase().includes('ios'));
+    }
 
-    return matchSearch && matchPrice && matchKey && matchPlatform;
+    // Price filter
+    let matchPrice = true;
+    if (filters.price === 'price-free') matchPrice = ex.price === 'Free' || ex.price === 'Gratuit';
+    else if (filters.price === 'price-paid') matchPrice = ex.price !== 'Free' && ex.price !== 'Gratuit';
+
+    // Key filter
+    let matchKey = true;
+    if (filters.key === 'key-key') matchKey = ex.key === true;
+    else if (filters.key === 'key-keyless') matchKey = ex.key === false;
+
+    return matchSearch && matchPlatform && matchPrice && matchKey;
   });
 
   document.getElementById('execCount').textContent = filtered.length + ' ' + t('execCountLabel');
@@ -5452,13 +6084,13 @@ function renderExecutors() {
     const uncPct = typeof ex.uncPercentage === 'number' ? ex.uncPercentage : null;
     const suncPct = typeof ex.suncPercentage === 'number' ? ex.suncPercentage : null;
 
-    const isActive = !!ex.updated && ex.status !== 'abandonné';
-    const statusDot = `<span class="exec-status-dot ${isActive ? 'is-active' : 'is-obsolete'}" title="${isActive ? t('badgeUpdated') : t('badgeOutdated')}"></span>`;
-
     return `<div class="exec-card">
       <div class="exec-card-top">
         <div>
-          <div class="exec-title" style="display:flex;align-items:center;gap:0.5rem;">${statusDot}${escHtml(ex.name)}</div>
+          <div class="exec-title-row">
+            <span class="exec-status-dot ${ex.updated ? 'active' : 'obsolete'}" title="${ex.updated ? t('badgeUpdated') : t('badgeOutdated')}"></span>
+            <div class="exec-title">${escHtml(ex.name)}</div>
+          </div>
           <div class="exec-version">${escHtml(ex.version || '')}</div>
         </div>
         <div class="exec-badges">${badges.join('')}</div>
@@ -5510,15 +6142,12 @@ document.getElementById('execSearch').addEventListener('input', function() {
   renderExecutors();
 });
 
-document.querySelectorAll('.exec-filter-group-btns .exec-filter-btn').forEach(btn => {
+document.querySelectorAll('#execFilterButtons .exec-filter-cat-btn').forEach(btn => {
   btn.addEventListener('click', function() {
-    const group = this.dataset.egroup;
-    const groupWrap = this.closest('.exec-filter-group-btns');
-    groupWrap.querySelectorAll('.exec-filter-btn').forEach(b => b.classList.remove('active'));
+    const cat = this.dataset.ecat;
+    // Deactivate other buttons in same category
+    document.querySelectorAll(`#execFilterButtons .exec-filter-cat-btn[data-ecat="${cat}"]`).forEach(b => b.classList.remove('active'));
     this.classList.add('active');
-    if (group === 'platform') execFilterPlatform = this.dataset.efilter;
-    else if (group === 'price') execFilterPrice = this.dataset.efilter;
-    else if (group === 'key') execFilterKey = this.dataset.efilter;
     renderExecutors();
   });
 });
@@ -5731,11 +6360,7 @@ async function sbToggleReaction(messageId, emoji, username) {
 async function sbUploadMessageFile(conversationId, file) {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
   const path = `${conversationId}/${Date.now()}_${safeName}`;
-  const { error } = await sb.storage.from('sentinel-messages').upload(path, file, {
-    cacheControl: '3600',
-    upsert: false,
-    contentType: file.type || 'application/octet-stream'
-  });
+  const { error } = await sb.storage.from('sentinel-messages').upload(path, file, { cacheControl: '3600', upsert: false });
   if (error) throw new Error('Erreur upload: ' + error.message);
   const { data } = sb.storage.from('sentinel-messages').getPublicUrl(path);
   return data.publicUrl;
@@ -6065,7 +6690,7 @@ async function renderFriendsPanel() {
 
   let html = '';
   if (pending.length > 0) {
-    html += `<div class="friends-section-label">Demandes reçues (${pending.length})</div>`;
+    html += `<div class="friends-section-label">${t('friendsPendingLabel')} (${pending.length})</div>`;
     for (const req of pending) {
       const u = await sbGetUser(req.requester);
       if (!u) continue;
@@ -6086,7 +6711,7 @@ async function renderFriendsPanel() {
   }
 
   if (friendUsernames.length > 0) {
-    html += `<div class="friends-section-label">Amis (${friendUsernames.length})</div>`;
+    html += `<div class="friends-section-label">${t('friendsListLabel')} (${friendUsernames.length})</div>`;
     for (const fname of friendUsernames) {
       const u = await sbGetUser(fname);
       if (!u) continue;
@@ -6098,13 +6723,13 @@ async function renderFriendsPanel() {
         </div>
         <div class="friend-info">
           <div class="friend-name">${escHtml(u.display_name || u.username)}</div>
-          <div class="friend-status-text">${online ? '🟢 En ligne' : '⚪ Hors ligne'}</div>
+          <div class="friend-status-text">${online ? '🟢 '+t('friendOnline') : '⚪ '+t('friendOffline')}</div>
         </div>
         <div class="friend-actions">
-          <button class="friend-action-btn" title="Envoyer un message" onclick="openDmWithFriend('${escHtml(fname)}')">
+          <button class="friend-action-btn" title="${t('friendMsgTitle')}" onclick="openDmWithFriend('${escHtml(fname)}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </button>
-          <button class="friend-action-btn" title="Retirer" onclick="removeFriendDirect('${escHtml(fname)}')">
+          <button class="friend-action-btn" title="${t('friendRemoveTitle')}" onclick="removeFriendDirect('${escHtml(fname)}')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
@@ -6113,7 +6738,7 @@ async function renderFriendsPanel() {
   }
 
   if (pending.length === 0 && friendUsernames.length === 0) {
-    html = '<div class="friends-empty">Aucun ami pour l\'instant.<br>Recherche quelqu\'un ci-dessus.</div>';
+    html = `<div class="friends-empty">${t('friendsEmpty')}</div>`;
   }
 
   list.innerHTML = html;
@@ -6505,9 +7130,9 @@ async function renderMessages(convId) {
     if (!sameAsPrev) {
       closeGroup();
       html += `<div class="msg-bubble-group${isMine ? ' mine' : ''}">
-        <img class="msg-bubble-avatar" src="${escHtml(m.sender_avatar || AVATAR_OPTIONS[0])}" title="${escHtml(m.sender_username)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+        <img class="msg-bubble-avatar" src="${escHtml(m.sender_avatar || AVATAR_OPTIONS[0])}" title="${escHtml(m.sender_username)}" onerror="this.src='${AVATAR_OPTIONS[0]}'" onclick="openProfile('${escHtml(m.sender_username)}')" style="cursor:pointer;">
         <div class="msg-bubble-stack">
-          ${!isMine ? `<div class="msg-bubble-sender">${escHtml(m.sender_display || m.sender_username)}</div>` : ''}`;
+          ${!isMine ? `<div class="msg-bubble-sender" onclick="openProfile('${escHtml(m.sender_username)}')" style="cursor:pointer;">${escHtml(m.sender_display || m.sender_username)}</div>` : ''}`;
       groupOpen = true;
       groupIsMine = isMine;
       lastSender = m.sender_username;
@@ -6564,7 +7189,7 @@ async function renderMessages(convId) {
       const bars = Array.from({length: 28}, () => 6 + Math.round(Math.random() * 16));
       bubbleInner = `<div class="msg-bubble${isMine ? ' mine' : ''}" style="padding:0;background:transparent;border:none;">
         <div class="msg-voice-card" data-voice-id="${m.id}">
-          <audio id="voiceAudio_${m.id}" src="${escHtml(m.content)}" preload="metadata" style="display:none;" onerror="handleVoiceError('${m.id}')"></audio>
+          <audio id="voiceAudio_${m.id}" src="${escHtml(m.content)}" preload="metadata" style="display:none;"></audio>
           <button class="msg-voice-play" id="voicePlayBtn_${m.id}" onclick="toggleVoicePlay('${m.id}')">
             <svg id="voicePlayIcon_${m.id}" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
           </button>
@@ -6572,14 +7197,6 @@ async function renderMessages(convId) {
             ${bars.map((h, idx) => `<div class="msg-voice-wave-bar" data-bar="${idx}" style="height:${h}px;"></div>`).join('')}
           </div>
           <span class="msg-voice-time" id="voiceTime_${m.id}">${formatDuration(m.duration_seconds)}</span>
-          <div class="msg-voice-vol-wrap">
-            <button class="msg-voice-vol-btn" id="voiceVolBtn_${m.id}" onclick="toggleVoiceVolPopup(event,'${m.id}')" title="Volume">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            </button>
-            <div class="msg-voice-vol-popup" id="voiceVolPopup_${m.id}">
-              <input type="range" min="0" max="1" step="0.01" class="msg-voice-vol-slider" id="voiceVolSlider_${m.id}" onclick="event.stopPropagation()" oninput="setVoiceVolume('${m.id}', this.value)">
-            </div>
-          </div>
         </div>
       </div>`;
     } else if (m.type === 'link') {
@@ -6768,12 +7385,127 @@ async function notifyConversationMessage(convId, content) {
 // ============================================================
 // FILE / IMAGE / VIDEO / VOICE UPLOAD
 // ============================================================
+// ============================================================
+// MEDIA QUEUE SYSTEM
+// ============================================================
+let mediaQueue = []; // Array of { file, previewUrl, type, name, size }
+const MAX_MEDIA_QUEUE = 10;
+
+function formatBytesShort(bytes) {
+  if (!bytes) return '';
+  if (bytes < 1024) return bytes + 'o';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + 'Ko';
+  return (bytes / (1024 * 1024)).toFixed(1) + 'Mo';
+}
+
+function getMediaTypeIcon(file) {
+  if (!file) return '';
+  const mime = file.type || '';
+  if (mime.startsWith('image/')) {
+    return '<!-- img preview -->';
+  }
+  if (mime.startsWith('video/')) {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" stroke-width="2"><rect x="2" y="7" width="15" height="10" rx="2"/><polygon points="17 9 22 6 22 18 17 15"/></svg>`;
+  }
+  if (mime.startsWith('audio/')) {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
+  }
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="var(--purple-light)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+}
+
+function renderMediaQueue() {
+  const queueEl = document.getElementById('msgMediaQueue');
+  const listEl = document.getElementById('msgMediaQueueList');
+  const countEl = document.getElementById('msgMediaQueueCount');
+  const sendCountEl = document.getElementById('msgMediaQueueSendCount');
+  if (!queueEl || !listEl) return;
+
+  if (mediaQueue.length === 0) {
+    queueEl.classList.remove('open');
+    return;
+  }
+  queueEl.classList.add('open');
+  if (countEl) countEl.textContent = mediaQueue.length + ' / ' + MAX_MEDIA_QUEUE;
+  if (sendCountEl) sendCountEl.textContent = mediaQueue.length;
+
+  listEl.innerHTML = mediaQueue.map((item, idx) => {
+    const isImg = item.file.type.startsWith('image/');
+    const iconHtml = isImg && item.previewUrl
+      ? `<img src="${escHtml(item.previewUrl)}" alt="${escHtml(item.name)}">`
+      : getMediaTypeIcon(item.file);
+    return `<div class="msg-media-queue-item">
+      <div class="msg-media-queue-icon">${iconHtml}</div>
+      <div class="msg-media-queue-info">
+        <div class="msg-media-queue-name">${escHtml(item.name)}</div>
+        <div class="msg-media-queue-meta">${formatBytesShort(item.size)} · ${item.type}</div>
+      </div>
+      <button class="msg-media-queue-remove" onclick="removeFromMediaQueue(${idx})" title="Retirer">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function removeFromMediaQueue(idx) {
+  mediaQueue.splice(idx, 1);
+  renderMediaQueue();
+}
+
+async function addFilesToQueue(files) {
+  for (const file of Array.from(files)) {
+    if (mediaQueue.length >= MAX_MEDIA_QUEUE) {
+      showToast(`Max ${MAX_MEDIA_QUEUE} fichiers à la fois.`, '#F87171');
+      break;
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      showToast(`${file.name} est trop volumineux (25 Mo max).`, '#F87171');
+      continue;
+    }
+    let previewUrl = null;
+    if (file.type.startsWith('image/')) {
+      previewUrl = await new Promise(res => {
+        const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file);
+      });
+    }
+    let type = 'file';
+    if (file.type.startsWith('image/')) type = file.name.toLowerCase().endsWith('.gif') ? 'gif' : 'image';
+    else if (file.type.startsWith('video/')) type = 'video';
+    else if (file.type.startsWith('audio/')) type = 'voice';
+    mediaQueue.push({ file, previewUrl, type, name: file.name, size: file.size });
+  }
+  renderMediaQueue();
+}
+
+async function sendMediaQueue() {
+  if (!currentUser || !currentConvId || mediaQueue.length === 0) return;
+  const items = [...mediaQueue];
+  mediaQueue = [];
+  renderMediaQueue();
+  showToast(`📤 Envoi de ${items.length} fichier(s)...`, '#7C3AED');
+  for (const item of items) {
+    try {
+      const url = await sbUploadMessageFile(currentConvId, item.file);
+      let msgType = 'file';
+      if (item.type === 'image' || item.type === 'gif') msgType = item.type;
+      await sbSendMessage(currentConvId, url, msgType, {
+        file_name: item.file.name, file_size: item.file.size, file_mime: item.file.type
+      });
+    } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+  }
+  await renderMessages(currentConvId);
+  await renderConversationList();
+}
+
+document.getElementById('msgMediaQueueSendBtn')?.addEventListener('click', sendMediaQueue);
+document.getElementById('msgMediaQueueAddBtn')?.addEventListener('click', () => {
+  // Trigger the import menu to add more files
+  document.getElementById('msgImportMenu')?.classList.toggle('open');
+});
+
 document.getElementById('msgImportBtn')?.addEventListener('click', (e) => {
   e.stopPropagation();
   document.getElementById('msgImportMenu')?.classList.toggle('open');
 });
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('#msgImportBtn') && !e.target.closest('#msgImportMenu')) {
+  if (!e.target.closest('#msgImportBtn') && !e.target.closest('#msgImportMenu') && !e.target.closest('#msgMediaQueueAddBtn')) {
     document.getElementById('msgImportMenu')?.classList.remove('open');
   }
 });
@@ -6797,19 +7529,21 @@ document.querySelectorAll('.msg-import-item').forEach(item => {
   });
 });
 ['msgFileInputImage', 'msgFileInputVideo', 'msgFileInputFile'].forEach(id => {
-  document.getElementById(id)?.addEventListener('change', function () {
-    addPendingFiles(this.files);
+  document.getElementById(id)?.addEventListener('change', async function () {
+    await addFilesToQueue(this.files);
     this.value = '';
   });
 });
-document.getElementById('msgFileInputFolder')?.addEventListener('change', function () {
-  addPendingFiles(this.files);
+document.getElementById('msgFileInputFolder')?.addEventListener('change', async function () {
+  await addFilesToQueue(this.files);
   this.value = '';
 });
 
 async function sendFileMessage(file) {
+  // Used for drag & drop only — adds to queue and auto-sends immediately (single file)
   if (!currentUser || !currentConvId) return;
   if (file.size > 25 * 1024 * 1024) { showToast('Fichier trop volumineux (25 Mo max).', '#F87171'); return; }
+  showToast('📤 Envoi en cours...', '#7C3AED');
   try {
     const url = await sbUploadMessageFile(currentConvId, file);
     let type = 'file';
@@ -6817,111 +7551,10 @@ async function sendFileMessage(file) {
     await sbSendMessage(currentConvId, url, type, {
       file_name: file.name, file_size: file.size, file_mime: file.type
     });
+    await renderMessages(currentConvId);
+    await renderConversationList();
   } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
 }
-
-// ============================================================
-// PENDING MEDIA QUEUE (aperçu façon Discord avant envoi, max 10)
-// ============================================================
-const MSG_PENDING_MAX = 10;
-let pendingMediaFiles = []; // { id, file, previewUrl }
-
-function pendingFileIconSvg(file) {
-  const mime = file.type || '';
-  if (mime.startsWith('video/')) {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>';
-  }
-  if (mime.startsWith('audio/')) {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
-  }
-  const name = (file.name || '').toLowerCase();
-  if (/\.(zip|rar|7z)$/.test(name)) {
-    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>';
-  }
-  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
-}
-
-function formatFileSize(bytes) {
-  if (bytes < 1024) return bytes + ' o';
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
-  return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
-}
-
-function addPendingFiles(fileList) {
-  if (!currentConvId) return;
-  const incoming = Array.from(fileList || []);
-  if (incoming.length === 0) return;
-  const room = MSG_PENDING_MAX - pendingMediaFiles.length;
-  if (room <= 0) { showToast(`Maximum ${MSG_PENDING_MAX} fichiers par envoi.`, '#F87171'); return; }
-  const toAdd = incoming.slice(0, room);
-  if (incoming.length > toAdd.length) showToast(`Maximum ${MSG_PENDING_MAX} fichiers par envoi.`, '#F87171');
-  toAdd.forEach(file => {
-    const isImg = file.type.startsWith('image/');
-    pendingMediaFiles.push({
-      id: 'pf_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
-      file,
-      previewUrl: isImg ? URL.createObjectURL(file) : null
-    });
-  });
-  renderPendingPanel();
-}
-
-function removePendingFile(id) {
-  const item = pendingMediaFiles.find(p => p.id === id);
-  if (item?.previewUrl) URL.revokeObjectURL(item.previewUrl);
-  pendingMediaFiles = pendingMediaFiles.filter(p => p.id !== id);
-  renderPendingPanel();
-}
-
-function clearPendingFiles() {
-  pendingMediaFiles.forEach(p => { if (p.previewUrl) URL.revokeObjectURL(p.previewUrl); });
-  pendingMediaFiles = [];
-  renderPendingPanel();
-}
-
-function renderPendingPanel() {
-  const panel = document.getElementById('msgPendingPanel');
-  const list = document.getElementById('msgPendingList');
-  const countEl = document.getElementById('msgPendingCount');
-  const sendCountEl = document.getElementById('msgPendingSendCount');
-  if (!panel || !list) return;
-  if (pendingMediaFiles.length === 0) { panel.style.display = 'none'; list.innerHTML = ''; return; }
-  panel.style.display = 'block';
-  countEl.textContent = `${pendingMediaFiles.length}/${MSG_PENDING_MAX} fichier(s) sélectionné(s)`;
-  sendCountEl.textContent = `(${pendingMediaFiles.length})`;
-  list.innerHTML = pendingMediaFiles.map(p => `
-    <div class="msg-pending-item" data-pid="${p.id}">
-      ${p.previewUrl ? `<img class="msg-pending-thumb" src="${p.previewUrl}" alt="">` : `<div class="msg-pending-icon">${pendingFileIconSvg(p.file)}</div>`}
-      <div class="msg-pending-info">
-        <span class="msg-pending-name">${escHtml(p.file.name)}</span>
-        <span class="msg-pending-size">${formatFileSize(p.file.size)}</span>
-      </div>
-      <button class="msg-pending-remove" data-remove-pid="${p.id}" title="Retirer">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-  `).join('');
-  list.querySelectorAll('[data-remove-pid]').forEach(btn => {
-    btn.addEventListener('click', () => removePendingFile(btn.dataset.removePid));
-  });
-}
-
-document.getElementById('msgPendingClearBtn')?.addEventListener('click', clearPendingFiles);
-document.getElementById('msgPendingAddBtn')?.addEventListener('click', () => {
-  if (pendingMediaFiles.length >= MSG_PENDING_MAX) { showToast(`Maximum ${MSG_PENDING_MAX} fichiers par envoi.`, '#F87171'); return; }
-  document.getElementById('msgImportBtn')?.click();
-});
-document.getElementById('msgPendingSendBtn')?.addEventListener('click', async function () {
-  if (pendingMediaFiles.length === 0 || !currentConvId) return;
-  this.disabled = true;
-  showToast('📤 Envoi en cours...', '#7C3AED');
-  const toSend = [...pendingMediaFiles];
-  clearPendingFiles();
-  for (const p of toSend) { await sendFileMessage(p.file); }
-  await renderMessages(currentConvId);
-  await renderConversationList();
-  this.disabled = false;
-});
 
 // Drag & drop import
 const msgMessagesAreaEl = document.getElementById('msgMessagesArea');
@@ -6942,45 +7575,18 @@ let dragCounter = 0;
     if (dragCounter === 0) msgDropOverlay?.classList.remove('active');
   });
 });
-msgMessagesAreaEl?.addEventListener('drop', (e) => {
+msgMessagesAreaEl?.addEventListener('drop', async (e) => {
   e.preventDefault(); e.stopPropagation();
   dragCounter = 0;
   msgDropOverlay?.classList.remove('active');
   if (!currentConvId) return;
-  addPendingFiles(e.dataTransfer?.files || []);
+  const files = Array.from(e.dataTransfer?.files || []);
+  for (const file of files) { await sendFileMessage(file); }
 });
 
 // ============================================================
 // VOICE MESSAGES
 // ============================================================
-function getVoiceVolume() {
-  const v = parseFloat(localStorage.getItem('sentinel_voice_volume'));
-  return isNaN(v) ? 1 : v;
-}
-function setVoiceVolume(id, val) {
-  const v = parseFloat(val);
-  localStorage.setItem('sentinel_voice_volume', v);
-  document.querySelectorAll('audio[id^="voiceAudio_"]').forEach(a => { a.volume = v; });
-}
-function toggleVoiceVolPopup(e, id) {
-  e.stopPropagation();
-  const popup = document.getElementById('voiceVolPopup_' + id);
-  document.querySelectorAll('.msg-voice-vol-popup.open').forEach(p => { if (p !== popup) p.classList.remove('open'); });
-  const slider = document.getElementById('voiceVolSlider_' + id);
-  if (slider) slider.value = getVoiceVolume();
-  popup?.classList.toggle('open');
-}
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.msg-voice-vol-wrap')) {
-    document.querySelectorAll('.msg-voice-vol-popup.open').forEach(p => p.classList.remove('open'));
-  }
-});
-function handleVoiceError(id) {
-  console.error('[voice] erreur chargement audio pour message', id);
-  showToast("Ce message vocal n'a pas pu être chargé (bucket 'sentinel-messages' non public ou fichier manquant).", '#F87171');
-  const wave = document.getElementById('voiceWave_' + id);
-  if (wave) wave.style.opacity = '0.35';
-}
 // CUSTOM VOICE PLAYER (controls the hidden <audio>, animates the waveform bars)
 function toggleVoicePlay(id) {
   const audio = document.getElementById('voiceAudio_' + id);
@@ -6996,11 +7602,7 @@ function toggleVoicePlay(id) {
     }
   });
   if (audio.paused) {
-    audio.volume = getVoiceVolume();
-    audio.play().catch(err => {
-      console.error('[voice] lecture impossible:', err);
-      showToast('Impossible de lire ce message vocal (fichier introuvable ou bucket non public).', '#F87171');
-    });
+    audio.play();
     if (icon) icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
   } else {
     audio.pause();
@@ -7643,39 +8245,244 @@ async function maybeAskNotificationPermission() {
   sessionLogin(updated);
 }
 
+// ============================================================
+// MUSIC PLAYER
+// ============================================================
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/x4tmqq/Sentinel-Script/main/';
+const MUSIC_TRACKS = [
+  { name: 'A New Kind of Love', artist: 'Frou Frou', file: 'A New Kind Of Love - Demo - Frou Frou.mp3' },
+  { name: 'Black Cat', artist: 'BMW', file: 'BMW - Black Cat.mp3' },
+  { name: 'Sley9ueve', artist: 'BZLM 3', file: 'BZLM 3 - Sley9ueve.mp3' },
+  { name: 'Part 2', artist: 'EGO - Sley9ueve', file: 'EGO. Part 2 - Sley9ueve.mp3' },
+  { name: '91%', artist: 'FREESTYLE - 2zg', file: 'FREESTYLE 91% - 2zg.mp3' },
+  { name: 'Grah grah', artist: 'Sley9ueve', file: 'Grah grah - Sley9ueve.mp3' },
+  { name: 'REVER', artist: 'HLD - zny', file: 'HLD - REVER - zny.mp3' },
+  { name: "L'ANCIEN", artist: 'HLD', file: "L'ANCIEN - HLD.mp3" },
+  { name: 'Mister You', artist: 'Maghrebins', file: 'Maghrebins - Mister You.mp3' },
+  { name: 'Medusa', artist: 'Saif', file: 'Medusa - Saif.mp3' },
+  { name: 'Money in the Bank', artist: 'La Rvfleuze', file: 'Money in the Bank - La Rvfleuze.mp3' },
+  { name: "N'Brik N'Brik", artist: 'DJ Hamida', file: "N'Brik N'Brik - DJ Hamida.mp3" },
+  { name: 'Paradis', artist: '$outhMafia', file: 'Paradis - $outhMafia.mp3' },
+  { name: 'Pinkpantheress 3', artist: 'B67', file: 'Pinkpantheress 3 - B67.mp3' },
+  { name: 'Pour Minji', artist: 'Sley9ueve', file: 'Pour Minji - Sley9ueve.mp3' },
+  { name: 'RR 9.1', artist: 'Koba LaD', file: 'RR 9.1 - Koba LaD.mp3' },
+  { name: 'Seklenland, Pt.1', artist: 'HLD', file: 'Seklenland, Pt.1 - HLD.mp3' },
+  { name: 'Tek Tek (feat. MHD)', artist: 'DYSTINCT', file: 'Tek Tek (feat. MHD) - DYSTINCT.mp3' },
+  { name: 'Strangers', artist: 'proderics', file: 'strangers - proderics.mp3' }
+];
+
+let musicCurrentIdx = Store.get('musicTrackIdx', 0);
+let musicShuffle = Store.get('musicShuffle', false);
+let musicLoop = Store.get('musicLoop', false);
+let musicMinimized = Store.get('musicMinimized', false);
+let musicShuffleHistory = [];
+// Certains morceaux ne se jouent pas (fichier manquant/erreur réseau, ex: Médusa, Black Cat).
+// On garde en mémoire les index en erreur pour afficher un status rouge "indisponible".
+let musicUnavailable = new Set(Store.get('musicUnavailable', []));
+let musicLoadingCurrent = false;
+
+const musicAudio = document.getElementById('musicAudio');
+
+function musicTrackStatusClass(idx) {
+  if (musicUnavailable.has(idx)) return 'unavailable';
+  if (idx === musicCurrentIdx) {
+    if (musicLoadingCurrent) return 'loading';
+    if (!musicAudio.paused && !musicAudio.ended) return 'playing';
+  }
+  return '';
+}
+
+function musicFormatTime(sec) {
+  sec = Math.round(sec || 0);
+  return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+}
+
+function loadTrack(idx, autoplay) {
+  if (idx < 0) idx = MUSIC_TRACKS.length - 1;
+  if (idx >= MUSIC_TRACKS.length) idx = 0;
+  musicCurrentIdx = idx;
+  Store.set('musicTrackIdx', idx);
+  const track = MUSIC_TRACKS[idx];
+  const url = GITHUB_RAW_BASE + encodeURIComponent(track.file);
+  musicLoadingCurrent = true;
+  musicAudio.src = url;
+  musicAudio.load();
+  document.getElementById('musicTrackName').textContent = track.name;
+  document.getElementById('musicTrackArtist').textContent = track.artist;
+  document.getElementById('musicSeek').value = 0;
+  document.getElementById('musicCurTime').textContent = '0:00';
+  document.getElementById('musicDurTime').textContent = '0:00';
+  updateMusicTrackDots();
+  renderDashPlaylist();
+  if (autoplay) musicAudio.play().catch(() => {});
+  else { document.getElementById('musicPlayIcon').innerHTML = '<polygon points="6 4 20 12 6 20 6 4"/>'; }
+}
+
+function updateMusicTrackDots() {
+  const container = document.getElementById('musicTrackIndicator');
+  if (!container) return;
+  const total = MUSIC_TRACKS.length;
+  const show = Math.min(total, 9);
+  // Show a window of dots centered on current track
+  let start = Math.max(0, musicCurrentIdx - Math.floor(show / 2));
+  if (start + show > total) start = total - show;
+  container.innerHTML = Array.from({ length: show }, (_, i) => {
+    const trackIdx = start + i;
+    return `<div class="music-track-dot ${trackIdx === musicCurrentIdx ? 'current' : ''}"></div>`;
+  }).join('');
+}
+
+function renderDashPlaylist() {
+  const el = document.getElementById('dashPlaylist');
+  if (!el) return;
+  el.innerHTML = MUSIC_TRACKS.map((track, idx) => `
+    <div class="dash-playlist-item ${idx === musicCurrentIdx ? 'playing' : ''}" onclick="loadTrack(${idx}, true)">
+      <span class="dash-playlist-num">${idx + 1}</span>
+      <div class="dash-playlist-playing-anim">
+        <div class="dash-playlist-bar"></div>
+        <div class="dash-playlist-bar"></div>
+        <div class="dash-playlist-bar"></div>
+      </div>
+      <span class="music-status-dot ${musicTrackStatusClass(idx)}"></span>
+      <div class="dash-playlist-name">${escHtml(track.name)} — ${escHtml(track.artist)}</div>
+    </div>
+  `).join('');
+}
+
+function applyMusicMinimized() {
+  const player = document.getElementById('musicPlayer');
+  const icon = document.getElementById('musicToggleIcon');
+  if (!player || !icon) return;
+  player.classList.toggle('player-minimized', musicMinimized);
+  icon.setAttribute('points', musicMinimized ? '6 9 12 15 18 9' : '18 15 12 9 6 15');
+}
+
+document.getElementById('musicPlayerToggleBtn')?.addEventListener('click', () => {
+  musicMinimized = !musicMinimized;
+  Store.set('musicMinimized', musicMinimized);
+  applyMusicMinimized();
+});
+
+document.getElementById('musicPlayBtn')?.addEventListener('click', () => {
+  if (musicAudio.paused) {
+    musicAudio.play().catch(() => {});
+  } else {
+    musicAudio.pause();
+  }
+});
+
+musicAudio.addEventListener('play', () => {
+  document.getElementById('musicPlayIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  renderDashPlaylist();
+});
+musicAudio.addEventListener('pause', () => {
+  document.getElementById('musicPlayIcon').innerHTML = '<polygon points="6 4 20 12 6 20 6 4"/>';
+  renderDashPlaylist();
+});
+musicAudio.addEventListener('waiting', () => {
+  musicLoadingCurrent = true;
+  renderDashPlaylist();
+});
+musicAudio.addEventListener('canplay', () => {
+  musicLoadingCurrent = false;
+  musicUnavailable.delete(musicCurrentIdx);
+  Store.set('musicUnavailable', Array.from(musicUnavailable));
+  renderDashPlaylist();
+});
+musicAudio.addEventListener('error', () => {
+  musicLoadingCurrent = false;
+  musicUnavailable.add(musicCurrentIdx);
+  Store.set('musicUnavailable', Array.from(musicUnavailable));
+  renderDashPlaylist();
+});
+musicAudio.addEventListener('loadedmetadata', () => {
+  document.getElementById('musicDurTime').textContent = musicFormatTime(musicAudio.duration);
+  document.getElementById('musicSeek').max = 100;
+});
+musicAudio.addEventListener('timeupdate', () => {
+  if (musicAudio.duration) {
+    const pct = (musicAudio.currentTime / musicAudio.duration) * 100;
+    document.getElementById('musicSeek').value = pct;
+    document.getElementById('musicCurTime').textContent = musicFormatTime(musicAudio.currentTime);
+  }
+});
+musicAudio.addEventListener('ended', () => {
+  if (musicLoop) {
+    musicAudio.currentTime = 0;
+    musicAudio.play().catch(() => {});
+  } else {
+    musicNext();
+  }
+});
+
+document.getElementById('musicSeek')?.addEventListener('input', function() {
+  if (musicAudio.duration) {
+    musicAudio.currentTime = (this.value / 100) * musicAudio.duration;
+  }
+});
+
+document.getElementById('musicVolume')?.addEventListener('input', function() {
+  musicAudio.volume = this.value;
+});
+
+document.getElementById('musicPrevBtn')?.addEventListener('click', () => {
+  // If more than 3 seconds in, restart; else go to previous
+  if (musicAudio.currentTime > 3) {
+    musicAudio.currentTime = 0;
+  } else {
+    loadTrack(musicCurrentIdx - 1, !musicAudio.paused);
+  }
+});
+
+document.getElementById('musicNextBtn')?.addEventListener('click', musicNext);
+
+function musicNext() {
+  if (musicShuffle) {
+    let next;
+    do { next = Math.floor(Math.random() * MUSIC_TRACKS.length); }
+    while (next === musicCurrentIdx && MUSIC_TRACKS.length > 1);
+    loadTrack(next, true);
+  } else {
+    loadTrack(musicCurrentIdx + 1, true);
+  }
+}
+
+document.getElementById('musicShuffleBtn')?.addEventListener('click', function() {
+  musicShuffle = !musicShuffle;
+  Store.set('musicShuffle', musicShuffle);
+  this.classList.toggle('active', musicShuffle);
+});
+
+document.getElementById('musicLoopBtn')?.addEventListener('click', function() {
+  musicLoop = !musicLoop;
+  Store.set('musicLoop', musicLoop);
+  this.classList.toggle('active', musicLoop);
+});
+
+// Init music player
+(function initMusicPlayer() {
+  const player = document.getElementById('musicPlayer');
+  if (!player) return;
+  // Restore volume
+  const vol = Store.get('musicVolume', 0.8);
+  musicAudio.volume = vol;
+  const volSlider = document.getElementById('musicVolume');
+  if (volSlider) volSlider.value = vol;
+  musicAudio.addEventListener('volumechange', () => Store.set('musicVolume', musicAudio.volume));
+  // Restore shuffle/loop
+  const shuffleBtn = document.getElementById('musicShuffleBtn');
+  const loopBtn = document.getElementById('musicLoopBtn');
+  if (shuffleBtn) shuffleBtn.classList.toggle('active', musicShuffle);
+  if (loopBtn) loopBtn.classList.toggle('active', musicLoop);
+  // Apply minimized
+  applyMusicMinimized();
+  // Load track (no autoplay on init)
+  const savedIdx = Math.max(0, Math.min(musicCurrentIdx, MUSIC_TRACKS.length - 1));
+  loadTrack(savedIdx, false);
+  renderDashPlaylist();
+})();
+
 init();
 </script>
-<!-- MINI PLAYER (raccourci flottant, bas droite) -->
-<div class="mini-player" id="miniPlayer">
-  <button class="mini-player-toggle" id="miniPlayerToggle" title="Musique">🎵</button>
-  <div class="mini-player-body" id="miniPlayerBody">
-    <div class="mini-player-track">
-      <div class="mini-player-thumb">🎵</div>
-      <div class="mini-player-info">
-        <div class="mini-player-title" id="miniTitle">Aucune musique</div>
-        <div class="mini-player-artist" id="miniArtist">—</div>
-      </div>
-    </div>
-    <div class="mini-player-seek-row">
-      <input type="range" class="mini-seek-slider" id="miniSeekSlider" min="0" max="100" value="0" step="0.1">
-    </div>
-    <div class="mini-player-controls">
-      <button class="mini-ctrl-btn" id="miniPrevBtn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="5" y="4" width="2" height="16"/></svg>
-      </button>
-      <button class="mini-ctrl-btn mini-play-main" id="miniPlayBtn">
-        <svg id="miniPlayIcon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-      </button>
-      <button class="mini-ctrl-btn" id="miniNextBtn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="2" height="16"/></svg>
-      </button>
-      <button class="mini-ctrl-btn" id="miniMuteBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-      </button>
-      <input type="range" class="mini-vol-slider" id="miniVolSlider" min="0" max="1" step="0.01" value="0.7">
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
