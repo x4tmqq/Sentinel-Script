@@ -390,8 +390,10 @@
   body.theme-nexus #grid-cursor-glow { display:none; }
   #grid-cursor-glow.active { opacity:1; }
 
-  .cursor { position:fixed;width:12px;height:12px;background:var(--purple-light);border-radius:50%;pointer-events:none;z-index:2147483647;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s; }
-  .cursor-ring { position:fixed;width:36px;height:36px;border:1px solid rgba(182,124,58,0.5);border-radius:50%;pointer-events:none;z-index:2147483646;transform:translate(-50%,-50%); }
+  .cursor { position:fixed;width:12px;height:12px;background:var(--purple-light);border-radius:50%;pointer-events:none;z-index:2147483647;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s;box-shadow:0 0 8px 2px rgba(182,124,58,0.6); }
+  body.theme-light .cursor { background:#b67c3a;mix-blend-mode:multiply;box-shadow:0 0 0 2px rgba(182,124,58,0.5),0 0 10px 2px rgba(182,124,58,0.35); }
+  .cursor-ring { position:fixed;width:36px;height:36px;border:2px solid rgba(182,124,58,0.7);border-radius:50%;pointer-events:none;z-index:2147483646;transform:translate(-50%,-50%); }
+  body.theme-light .cursor-ring { border-color:rgba(182,124,58,0.8);background:rgba(182,124,58,0.04); }
   .cursor-light { position:fixed;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(182,124,58,0.06) 0%,rgba(90,110,130,0.025) 40%,transparent 68%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);will-change:left,top; }
   @keyframes cursorSpin { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
   /* Cursor: Plasma */
@@ -509,8 +511,47 @@
 
   .wrapper { position:relative;z-index:2; }
 
-  nav { position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:90000;padding:0 1rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;background:rgba(0,0,0,0.55);backdrop-filter:blur(32px) saturate(160%);-webkit-backdrop-filter:blur(32px) saturate(160%);border:1px solid var(--border);border-radius:999px;transition:background 0.3s;min-width:0;max-width:calc(100vw - 32px);width:auto; }
-  body.theme-light nav { background:rgba(255,255,255,0.55); }
+  nav {
+    position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:90000;
+    padding:0 1rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;
+    background:rgba(0,0,0,0.42);
+    backdrop-filter:blur(40px) saturate(200%) brightness(1.08);
+    -webkit-backdrop-filter:blur(40px) saturate(200%) brightness(1.08);
+    border:1px solid rgba(255,255,255,0.13);
+    border-radius:999px;
+    box-shadow:0 4px 32px rgba(0,0,0,0.28), 0 1.5px 0 rgba(255,255,255,0.08) inset, 0 -1px 0 rgba(0,0,0,0.18) inset;
+    transition:top 0.38s cubic-bezier(.4,0,.2,1), background 0.3s, opacity 0.38s, box-shadow 0.3s, height 0.38s, border-radius 0.38s, padding 0.38s, width 0.38s;
+    min-width:0;max-width:calc(100vw - 32px);width:auto;
+  }
+  nav.nav-slim {
+    top:0 !important;
+    height:6px !important;
+    border-radius:0 0 16px 16px !important;
+    padding:0 !important;
+    overflow:hidden;
+    background:rgba(0,0,0,0.85) !important;
+    border-color:transparent !important;
+    box-shadow:none !important;
+    width:100% !important;
+    max-width:100% !important;
+    left:0 !important;
+    transform:none !important;
+    opacity:0.7;
+  }
+  nav.nav-slim:hover {
+    height:52px !important;
+    border-radius:0 0 999px 999px !important;
+    padding:0 1rem !important;
+    overflow:visible;
+    background:rgba(0,0,0,0.72) !important;
+    border-color:rgba(255,255,255,0.13) !important;
+    box-shadow:0 4px 32px rgba(0,0,0,0.28), 0 1.5px 0 rgba(255,255,255,0.08) inset !important;
+    opacity:1;
+  }
+  nav.nav-slim > * { opacity:0; transition:opacity 0.2s; pointer-events:none; }
+  nav.nav-slim:hover > * { opacity:1; pointer-events:auto; }
+  body.theme-light nav { background:rgba(255,255,255,0.62);border-color:rgba(0,0,0,0.1);box-shadow:0 4px 32px rgba(0,0,0,0.10),0 1.5px 0 rgba(255,255,255,0.9) inset; }
+  body.theme-light nav.nav-slim { background:rgba(220,220,220,0.92) !important; }
   body.theme-midnight nav { background:rgba(13,13,26,0.72)!important; }
   body.theme-nexus nav { background:rgba(0,0,0,0.65); }
   body.theme-water nav { background:rgba(4,24,40,0.62); }
@@ -561,13 +602,13 @@
   .nav-sep { width:1px;height:22px;background:var(--border);margin:0 0.2rem;flex-shrink:0; }
 
   .nav-user-zone { display:flex;align-items:center;gap:0.4rem; }
-  .nav-auth-btns { display:flex;align-items:center;gap:0.35rem; }
-  .btn-login { display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;transition:all 0.2s; }
-  .btn-login:hover { border-color:rgba(182,124,58,0.4);color:var(--purple-light); }
-  .btn-login svg { width:16px;height:16px; }
-  .btn-signup { display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(182,124,58,0.15);border:1px solid rgba(182,124,58,0.35);border-radius:8px;color:var(--purple-light);cursor:pointer;transition:all 0.2s; }
+  .nav-auth-btns { display:flex;align-items:center;gap:0.35rem;flex-shrink:0;flex-wrap:nowrap; }
+  .btn-login { display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0 0.85rem;height:34px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;transition:all 0.2s;white-space:nowrap;font-size:0.78rem;font-weight:600;font-family:'Inter',sans-serif; }
+  .btn-login:hover { border-color:rgba(182,124,58,0.4);color:var(--purple-light);background:rgba(182,124,58,0.07); }
+  .btn-login svg { width:15px;height:15px;flex-shrink:0; }
+  .btn-signup { display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0 0.85rem;height:34px;background:rgba(182,124,58,0.15);border:1px solid rgba(182,124,58,0.4);border-radius:8px;color:var(--purple-light);cursor:pointer;transition:all 0.2s;white-space:nowrap;font-size:0.78rem;font-weight:600;font-family:'Inter',sans-serif; }
   .btn-signup:hover { background:rgba(182,124,58,0.28);box-shadow:0 0 12px rgba(182,124,58,0.25); }
-  .btn-signup svg { width:16px;height:16px; }
+  .btn-signup svg { width:15px;height:15px;flex-shrink:0; }
   .nav-user-pill { display:none;align-items:center;gap:0;padding:0;background:transparent;border:none;border-radius:999px;cursor:pointer;transition:all 0.2s; }
   .nav-user-pill:hover .nav-avatar { border-color:rgba(182,124,58,0.7);box-shadow:0 0 10px rgba(182,124,58,0.3); }
   .nav-user-pill.visible { display:flex; }
@@ -699,10 +740,12 @@
   .no-results-title { font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;color:var(--text);margin-bottom:0.35rem; }
   .no-results-sub { font-size:0.82rem; }
 
-  .filters { display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:3.5rem; }
-  .filter-btn { padding:0.45rem 1.1rem;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.2s; }
-  .filter-btn:hover,.filter-btn.active { background:rgba(182,124,58,0.12);border-color:rgba(182,124,58,0.35);color:var(--purple-light); }
-  .filter-btn.active { box-shadow:0 0 12px rgba(182,124,58,0.15); }
+  .filters { display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:3.5rem;padding:0.45rem 0.6rem;background:rgba(255,255,255,0.03);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(255,255,255,0.07);border-radius:999px;width:fit-content;margin-left:auto;margin-right:auto;box-shadow:0 2px 16px rgba(0,0,0,0.12),0 1px 0 rgba(255,255,255,0.06) inset; }
+  body.theme-light .filters { background:rgba(255,255,255,0.65);border-color:rgba(0,0,0,0.08);box-shadow:0 2px 12px rgba(0,0,0,0.07); }
+  .filter-btn { padding:0.45rem 1.1rem;border-radius:20px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);color:var(--text-muted);font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:all 0.22s;box-shadow:0 1px 0 rgba(255,255,255,0.06) inset; }
+  body.theme-light .filter-btn { background:rgba(255,255,255,0.55);border-color:rgba(0,0,0,0.09);box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+  .filter-btn:hover,.filter-btn.active { background:rgba(182,124,58,0.18);border-color:rgba(182,124,58,0.45);color:var(--purple-light);backdrop-filter:blur(20px) saturate(200%);-webkit-backdrop-filter:blur(20px) saturate(200%); }
+  .filter-btn.active { box-shadow:0 0 14px rgba(182,124,58,0.22),0 1px 0 rgba(255,255,255,0.1) inset; }
 
   .cards-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;overflow:hidden;transition:height 0.35s cubic-bezier(.4,0,.2,1); }
   .card { background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;position:relative;overflow:hidden;cursor:pointer;will-change:transform;transition:border-color .3s,box-shadow .3s,background .2s; }
@@ -3213,10 +3256,20 @@
           Signalements
           <span class="admin-tab-badge red" id="adminTabBadgeReports"></span>
         </button>
+        <div class="admin-nav-label">Communauté</div>
+        <button class="admin-tab" data-atab="community">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Bannière Discord
+        </button>
         <div class="admin-nav-label">Staff</div>
         <button class="admin-tab" data-atab="modchat">
           Chat Modérateurs
           <span class="admin-tab-badge" id="adminTabBadgeModchat" style="display:none;"></span>
+        </button>
+        <button class="admin-tab" data-atab="logs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Journaux (Logs)
+          <span class="admin-tab-badge" id="adminTabBadgeLogs" style="display:none;"></span>
         </button>
       </div>
 
@@ -3382,6 +3435,55 @@
               <button class="admin-btn admin-btn-gold" onclick="sendModchatMsg()" style="flex-shrink:0;padding:0 1rem;">Envoyer</button>
             </div>
           </div>
+        </div>
+
+        <!-- BANNIÈRE COMMUNAUTÉ -->
+        <div class="admin-section" id="atab-community">
+          <div class="admin-section-header">
+            <div>
+              <div class="admin-section-title">💬 Bannière "Rejoins la communauté"</div>
+              <div class="admin-section-sub">Modifie le contenu de la bannière Discord affichée sur la page principale</div>
+            </div>
+          </div>
+          <div class="admin-form-section">
+            <div class="admin-field"><label class="admin-label">Titre de la bannière</label><input class="admin-input" id="communityBannerTitle" placeholder="Ex: Rejoins la communauté"></div>
+            <div class="admin-field"><label class="admin-label">Description</label><textarea class="admin-input" id="communityBannerDesc" rows="3" placeholder="Ex: Accède aux scripts en exclusivité..."></textarea></div>
+            <div class="admin-field"><label class="admin-label">Texte du bouton</label><input class="admin-input" id="communityBannerBtn" placeholder="Ex: Rejoindre"></div>
+            <div class="admin-field"><label class="admin-label">Lien Discord</label><input class="admin-input" id="communityBannerLink" placeholder="https://discord.gg/..."></div>
+            <div class="admin-field"><label class="admin-label">Nombre de membres (affiché)</label><input class="admin-input" id="communityBannerCount" type="number" placeholder="Ex: 14"></div>
+            <button class="admin-btn admin-btn-purple admin-btn-full" onclick="adminSaveBanner()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Sauvegarder la bannière
+            </button>
+          </div>
+          <div id="communityBannerPreview" style="margin-top:1.5rem;padding:1.25rem;background:rgba(182,124,58,0.06);border:1px solid rgba(182,124,58,0.2);border-radius:12px;">
+            <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;">Aperçu</div>
+            <div id="communityPreviewTitle" style="font-size:1.1rem;font-weight:700;color:var(--text);"></div>
+            <div id="communityPreviewDesc" style="font-size:0.85rem;color:var(--text-muted);margin-top:0.4rem;"></div>
+          </div>
+        </div>
+
+        <!-- JOURNAUX (LOGS) -->
+        <div class="admin-section" id="atab-logs">
+          <div class="admin-section-header">
+            <div>
+              <div class="admin-section-title">📋 Journaux d'activité</div>
+              <div class="admin-section-sub">Historique des actions admin et événements système</div>
+            </div>
+            <button class="admin-btn" onclick="adminClearLogs()" style="border-color:rgba(239,68,68,0.3);color:#F87171;background:rgba(239,68,68,0.06);margin-left:auto;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Vider les logs
+            </button>
+          </div>
+          <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;">
+            <button class="admin-btn log-filter-btn active" data-logtype="all" onclick="filterAdminLogs('all',this)" style="font-size:0.75rem;padding:0.25rem 0.7rem;">Tout</button>
+            <button class="admin-btn log-filter-btn" data-logtype="ban" onclick="filterAdminLogs('ban',this)" style="font-size:0.75rem;padding:0.25rem 0.7rem;">Bans</button>
+            <button class="admin-btn log-filter-btn" data-logtype="script" onclick="filterAdminLogs('script',this)" style="font-size:0.75rem;padding:0.25rem 0.7rem;">Scripts</button>
+            <button class="admin-btn log-filter-btn" data-logtype="comment" onclick="filterAdminLogs('comment',this)" style="font-size:0.75rem;padding:0.25rem 0.7rem;">Commentaires</button>
+            <button class="admin-btn log-filter-btn" data-logtype="user" onclick="filterAdminLogs('user',this)" style="font-size:0.75rem;padding:0.25rem 0.7rem;">Utilisateurs</button>
+            <button class="admin-btn log-filter-btn" data-logtype="vote" onclick="filterAdminLogs('vote',this)" style="font-size:0.75rem;padding:0.25rem 0.7rem;">Votes</button>
+          </div>
+          <div id="adminLogsList" style="display:flex;flex-direction:column;gap:0.4rem;max-height:480px;overflow-y:auto;"></div>
         </div>
 
       </div><!-- /admin-body -->
@@ -3726,7 +3828,7 @@
   <div class="nav-left">
     <!-- Logo -->
     <div class="nav-logo-wrap">
-      <img src="1784476720491_image.png" alt="Sentinel Script" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img src="SentinelScripticon.png" alt="Sentinel Script" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="nav-logo-icon" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
@@ -3768,11 +3870,13 @@
     </div>
     <!-- Auth buttons (guest) -->
     <div class="nav-auth-btns" id="navAuthBtns">
-      <button class="btn-login nav-tooltip" id="navLoginBtn" data-tip="Connexion">
+      <button class="btn-login" id="navLoginBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span>Connexion</span>
       </button>
-      <button class="btn-signup nav-tooltip" id="navSignupBtn" data-tip="S'inscrire">
+      <button class="btn-signup" id="navSignupBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        <span>S'inscrire</span>
       </button>
     </div>
     <!-- User pill -->
@@ -5036,6 +5140,7 @@ async function sbVerifyUser(username, password){
   return data;
 }
 async function sbGetUser(username){
+  if(!username) return null;
   const { data, error } = await sb.from('users').select('*').eq('username', username.toLowerCase()).maybeSingle();
   if(error) console.error('[sbGetUser]', error);
   return data || null;
@@ -5580,6 +5685,34 @@ document.addEventListener('mousemove', e=>{
   mx=e.clientX; my=e.clientY;
   if(gridCursorGlow && !gridCursorGlow.classList.contains('active')) gridCursorGlow.classList.add('active');
 });
+
+// ── Navbar auto-hide on scroll ───────────────────────────────────────────────
+(function(){
+  const nav = document.querySelector('nav');
+  if(!nav) return;
+  let lastY = 0, ticking = false, navSlimmed = false;
+  const NAV_HEIGHT = 52; // px, must match CSS
+  const THRESHOLD = NAV_HEIGHT + 40; // how far down before hiding
+
+  function checkNav(){
+    const y = window.pageYOffset || document.documentElement.scrollTop;
+    const goingDown = y > lastY;
+    lastY = y;
+
+    if(y > THRESHOLD && goingDown && !navSlimmed){
+      nav.classList.add('nav-slim');
+      navSlimmed = true;
+    } else if((y <= THRESHOLD || !goingDown) && navSlimmed){
+      nav.classList.remove('nav-slim');
+      navSlimmed = false;
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(checkNav); ticking=true; }
+  }, {passive:true});
+})();
 (function loop(){
   cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px';
   cursorLight.style.left=mx+'px'; cursorLight.style.top=my+'px';
@@ -6972,6 +7105,107 @@ document.getElementById('adminClose').addEventListener('click', ()=>{ adminOverl
 adminOverlay.addEventListener('click', e=>{ if(e.target===adminOverlay){ adminOverlay.classList.remove('open'); document.body.style.overflow=''; closeAdminCommentFilterMenu(); } });
 
 document.querySelectorAll('.admin-tab').forEach(tab=>tab.addEventListener('click',()=>switchAdminTab(tab.dataset.atab)));
+// ── COMMUNITY BANNER EDITOR ───────────────────────────────────────────────
+const BANNER_STORAGE_KEY = 'sentinel_admin_banner';
+function loadAdminBannerEditor(){
+  const saved = (function(){ try{ return JSON.parse(localStorage.getItem(BANNER_STORAGE_KEY)||'null'); }catch(e){return null;} })();
+  const def = {
+    title: (document.getElementById('bannerTitle')||{}).textContent || 'Rejoins la communaute',
+    desc: 'Accede aux scripts en exclusivite, recois les mises a jour en premier. Contacte @x4tmq.',
+    btnText: (document.getElementById('joinLabel')||{}).textContent || 'Rejoindre',
+    link: 'https://discord.gg/vTE8NQPsUb',
+    count: (document.getElementById('memberCountBanner')||{}).textContent || '14'
+  };
+  const data = saved || def;
+  const setv = function(id,val){ var el=document.getElementById(id); if(el) el.value=val||''; };
+  setv('communityBannerTitle', data.title);
+  setv('communityBannerDesc', data.desc);
+  setv('communityBannerBtn', data.btnText);
+  setv('communityBannerLink', data.link);
+  setv('communityBannerCount', data.count);
+  updateBannerPreview();
+  ['communityBannerTitle','communityBannerDesc'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.addEventListener('input',updateBannerPreview);
+  });
+}
+function updateBannerPreview(){
+  var title=(document.getElementById('communityBannerTitle')||{}).value||'';
+  var desc=(document.getElementById('communityBannerDesc')||{}).value||'';
+  var pt=document.getElementById('communityPreviewTitle'); if(pt) pt.textContent=title;
+  var pd=document.getElementById('communityPreviewDesc'); if(pd) pd.textContent=desc;
+}
+function adminSaveBanner(){
+  var g=function(id){ return ((document.getElementById(id)||{}).value||'').trim(); };
+  var data={title:g('communityBannerTitle'),desc:g('communityBannerDesc'),btnText:g('communityBannerBtn'),link:g('communityBannerLink'),count:g('communityBannerCount')};
+  if(!data.title){ showToast('Le titre est requis.','#F87171'); return; }
+  localStorage.setItem(BANNER_STORAGE_KEY,JSON.stringify(data));
+  var st=function(id,val){ var el=document.getElementById(id); if(el) el.textContent=val; };
+  st('bannerTitle',data.title); st('joinLabel',data.btnText); st('memberCountBanner',data.count);
+  var descEl=document.getElementById('bannerDescEl');
+  if(descEl) descEl.innerHTML=escHtml(data.desc).replace('@x4tmq','<strong style="color:var(--purple-light)">@x4tmq</strong>');
+  var linkEl=document.querySelector('.discord-join-btn'); if(linkEl&&data.link) linkEl.href=data.link;
+  addAdminLog('community','Banniere mise a jour: "'+data.title+'"',currentUser&&currentUser.username);
+  showToast('Banniere sauvegardee et appliquee !','#10B981');
+}
+(function applySavedBanner(){
+  try{
+    var data=JSON.parse(localStorage.getItem(BANNER_STORAGE_KEY)||'null'); if(!data) return;
+    var st=function(id,val){ var el=document.getElementById(id); if(el) el.textContent=val; };
+    if(data.title) st('bannerTitle',data.title);
+    if(data.btnText) st('joinLabel',data.btnText);
+    if(data.count) st('memberCountBanner',data.count);
+    if(data.desc){ var d=document.getElementById('bannerDescEl'); if(d) d.innerHTML=escHtml(data.desc).replace('@x4tmq','<strong style="color:var(--purple-light)">@x4tmq</strong>'); }
+    if(data.link){ var lk=document.querySelector('.discord-join-btn'); if(lk) lk.href=data.link; }
+  }catch(e){}
+})();
+
+// ── ADMIN LOGS SYSTEM ─────────────────────────────────────────────────────
+const ADMIN_LOGS_KEY = 'sentinel_admin_logs';
+var LOG_ICONS = {ban:'HAMMER',script:'SCROLL',comment:'MSG',user:'PERSON',vote:'THUMB',community:'COMMUNITY',report:'FLAG',system:'GEAR'};
+var LOG_EMOJI = {ban:'🔨',script:'📜',comment:'💬',user:'👤',vote:'👍',community:'📣',report:'🚩',system:'⚙️'};
+function getAdminLogs(){ try{ return JSON.parse(localStorage.getItem(ADMIN_LOGS_KEY)||'[]'); }catch(e){ return []; } }
+function saveAdminLogs(logs){ try{ localStorage.setItem(ADMIN_LOGS_KEY,JSON.stringify(logs.slice(-500))); }catch(e){} }
+function addAdminLog(type,message,actor){
+  var logs=getAdminLogs();
+  logs.push({type:type||'system',message:message,actor:actor||(currentUser&&currentUser.username)||'?',ts:new Date().toISOString()});
+  saveAdminLogs(logs);
+  var badge=document.getElementById('adminTabBadgeLogs');
+  if(badge){ badge.textContent=logs.length; badge.style.display=logs.length?'':'none'; }
+}
+var currentLogFilter='all';
+function filterAdminLogs(type,btn){
+  currentLogFilter=type;
+  document.querySelectorAll('.log-filter-btn').forEach(function(b){ b.classList.toggle('active',b===btn); });
+  renderAdminLogs();
+}
+function renderAdminLogs(){
+  var el=document.getElementById('adminLogsList'); if(!el) return;
+  var logs=getAdminLogs().slice().reverse();
+  var filtered=currentLogFilter==='all'?logs:logs.filter(function(l){ return l.type===currentLogFilter; });
+  var badge=document.getElementById('adminTabBadgeLogs');
+  if(badge){ badge.textContent=logs.length||''; badge.style.display=logs.length?'':'none'; }
+  if(!filtered.length){ el.innerHTML='<div style="color:var(--text-dim);font-size:0.82rem;text-align:center;padding:2rem;">Aucun journal.</div>'; return; }
+  el.innerHTML=filtered.map(function(log){
+    var icon=LOG_EMOJI[log.type]||'📌';
+    var time=log.ts?new Date(log.ts).toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+    return '<div style="display:flex;align-items:flex-start;gap:0.65rem;padding:0.6rem 0.75rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;font-size:0.8rem;margin-bottom:0.25rem;">'
+      +'<span style="font-size:1rem;flex-shrink:0;margin-top:0.05rem;">'+icon+'</span>'
+      +'<div style="flex:1;min-width:0;">'
+      +'<div style="color:var(--text);line-height:1.4;">'+escHtml(log.message)+'</div>'
+      +'<div style="color:var(--text-muted);margin-top:0.2rem;font-size:0.72rem;">Par <strong>'+escHtml(log.actor)+'</strong> &middot; '+time+'</div>'
+      +'</div>'
+      +'<span style="font-size:0.68rem;color:var(--text-dim);white-space:nowrap;flex-shrink:0;background:rgba(255,255,255,0.04);padding:0.15rem 0.45rem;border-radius:4px;">'+escHtml(log.type)+'</span>'
+      +'</div>';
+  }).join('');
+}
+function adminClearLogs(){
+  if(!confirm('Vider tous les journaux ? Action irreversible.')) return;
+  localStorage.removeItem(ADMIN_LOGS_KEY);
+  renderAdminLogs();
+  showToast('Journaux vides.','#64748B');
+}
+
+
 // MODCHAT
 let modchatRealtimeChannel = null;
 const MODCHAT_KEY = 'sentinel_modchat';
@@ -7080,6 +7314,8 @@ function switchAdminTab(tab){
     if(badge) badge.style.display='none';
     loadModchatMessages();
   }
+  if(tab==='community') loadAdminBannerEditor();
+  if(tab==='logs') renderAdminLogs();
 }
 
 async function renderAdminVotes(){
@@ -7380,10 +7616,12 @@ async function adminPermBan(username){
   if(username===OWNER_USERNAME) return;
   await sbUpdateUser(username, {banned:true, ban_reason:'Banni par admin', ban_until:null});
   if(currentUser?.username===username){ sessionLogout(); updateAuthUI(); }
+  addAdminLog('ban', 'Ban permanent: @'+username, currentUser&&currentUser.username);
   showToast(`🔨 ${username} banni définitivement.`,'#F87171'); renderAdminUsers();
 }
 async function adminUnban(username){
   await sbUpdateUser(username, {banned:false, ban_until:null, ban_reason:null});
+  addAdminLog('ban', 'Déban: @'+username, currentUser&&currentUser.username);
   showToast(`🔓 ${username} débanni.`,'#34D399'); renderAdminUsers();
 }
 function adminTempBanOpen(username){ tempBanTargetUser=username; document.getElementById('tempBanUsername').value=username; document.getElementById('tempBanForm').style.display='block'; }
@@ -7403,7 +7641,8 @@ async function adminGiveAdmin(username){ if(getPermLevel(currentUser)<5) return;
 async function adminRevokeAdmin(username){ if(getPermLevel(currentUser)<5) return; await sbUpdateUser(username,{role:'member'}); showToast(`⊘ Admin retiré à ${username}.`,'#F87171'); renderAdminUsers(); }
 async function adminCertify(username){ if(getPermLevel(currentUser)<5) return; await sbUpdateUser(username,{role:'certified'}); showToast(`✓ ${username} certifié !`,'#E0B67A'); renderAdminUsers(); }
 async function adminUncertify(username){ if(getPermLevel(currentUser)<5) return; await sbUpdateUser(username,{role:'member'}); showToast(`⊘ Certification retirée.`,'#F87171'); renderAdminUsers(); }
-async function adminDeleteUser(username){ if(!canDeleteUsers(currentUser) || username===OWNER_USERNAME) return; await sbDeleteUser(username); showToast(`🗑️ ${username} supprimé.`,'#F87171'); renderAdminUsers(); }
+async function adminDeleteUser(username){ if(!canDeleteUsers(currentUser) || username===OWNER_USERNAME) return; await sbDeleteUser(username); addAdminLog('user','Utilisateur supprimé: @'+username, currentUser&&currentUser.username);
+  showToast(`🗑️ ${username} supprimé.`,'#F87171'); renderAdminUsers(); }
 
 async function renderAdminScripts(){
   const canEdit = canManageScripts(currentUser);
@@ -7577,6 +7816,7 @@ async function adminDeleteScript(sid){
     onYes: async () => {
       await sbDeleteScript(sid);
       await sbLoadScripts(); renderAllCards(); renderAdminScripts();
+      addAdminLog('script','Script supprimé: '+sid, currentUser&&currentUser.username);
       showToast('🗑️ Script supprimé.','#F87171');
     }
   });
@@ -7604,6 +7844,7 @@ async function adminDeleteCommentById(id, sid){
   await sbDeleteComment(id);
   renderAdminComments();
   if(currentModalSid===sid) loadAndRenderComments(sid);
+  addAdminLog('comment','Commentaire supprimé: '+id, currentUser&&currentUser.username);
   showToast('🗑️ Commentaire supprimé.','#F87171');
 }
 
