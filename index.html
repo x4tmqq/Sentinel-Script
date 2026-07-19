@@ -49,37 +49,314 @@
   body.theme-midnight .auth-input:focus { border-color:rgba(167,139,250,0.5);box-shadow:0 0 0 3px rgba(100,80,200,0.12); }
   body.theme-midnight .auth-submit { background:linear-gradient(135deg,#7b5fc4,#4a5f78);box-shadow:0 4px 20px rgba(100,80,200,0.3); }
   body.theme-nexus { --bg:#000000;--surface:#111114;--border:rgba(255,255,255,0.12);--text:#ffffff;--text-muted:#9a9aa6;--text-dim:#3a3a44;--purple:#B67C3A;--purple-light:#E0B67A;--blue:#5A6E82;--cyan:#7A968C; }
-  body.theme-water { --bg:#01111e;--surface:#041828;--border:rgba(56,189,248,0.14);--text:#e0f4ff;--text-muted:#5b8fa8;--text-dim:#1a3a52;--purple:#0ea5e9;--purple-light:#38bdf8;--blue:#0369a1;--cyan:#7dd3fc;--green:#34d399; }
-  body.theme-water nav { background:rgba(4,18,34,0.62); }
-  body.theme-water .card { background:rgba(4,24,40,0.85);border-color:rgba(56,189,248,0.12); }
-  body.theme-water .card:hover { border-color:rgba(56,189,248,0.4);box-shadow:0 0 28px rgba(56,189,248,0.14); }
-  body.theme-water .filter-btn { background:rgba(4,24,40,0.8);border-color:rgba(56,189,248,0.15);color:var(--text-muted); }
-  body.theme-water .filter-btn.active { background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.4);color:#38bdf8; }
-  body.theme-water .copy-btn { background:rgba(56,189,248,0.1);border-color:rgba(56,189,248,0.28);color:#38bdf8; }
-  body.theme-water .copy-btn:hover { background:rgba(56,189,248,0.2);border-color:rgba(56,189,248,0.55);box-shadow:0 0 16px rgba(56,189,248,0.2); }
-  body.theme-water .dash-open-btn:hover { background:rgba(56,189,248,0.14);border-color:rgba(56,189,248,0.4);color:#38bdf8; }
-  body.theme-water .hero-title .line2 { background:linear-gradient(90deg,#38bdf8,#7dd3fc);-webkit-background-clip:text;background-clip:text; }
-  body.theme-water .page-tab.active { color:#38bdf8; }
-  body.theme-water .page-tab-slider { background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.28); }
-  body.theme-water .page-tab-underline { background:linear-gradient(90deg,#38bdf8,#7dd3fc); }
-  body.theme-water .script-block::before { background:linear-gradient(90deg,transparent,rgba(56,189,248,0.35),transparent); }
-  body.theme-water .script-label { color:#38bdf8;text-shadow:0 0 8px rgba(56,189,248,0.5); }
-  body.theme-water ::-webkit-scrollbar-thumb { background:rgba(56,189,248,0.35); }
-  body.theme-water * { scrollbar-color:rgba(56,189,248,0.35) transparent; }
-  body.theme-water .stat-num { color:#38bdf8; }
-  body.theme-water .cursor { background:#7dd3fc; }
-  body.theme-water .cursor-ring { border-color:rgba(56,189,248,0.5); }
-  body.theme-water .cursor-light { background:radial-gradient(circle,rgba(56,189,248,0.09) 0%,rgba(14,165,233,0.04) 40%,transparent 68%); }
-  body.theme-water #grid-cursor-glow { background-image:linear-gradient(rgba(56,189,248,0.15) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,0.15) 1px,transparent 1px); }
-  body.theme-water::after { background-image:linear-gradient(rgba(56,189,248,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,0.04) 1px,transparent 1px); }
-  body.theme-water .auth-modal { background:#041828;border-color:rgba(56,189,248,0.25); }
-  body.theme-water .auth-submit { background:linear-gradient(135deg,#0369a1,#0ea5e9);box-shadow:0 4px 20px rgba(56,189,248,0.25); }
-  body.theme-water .auth-input:focus { border-color:rgba(56,189,248,0.5);box-shadow:0 0 0 3px rgba(56,189,248,0.12); }
-  body.theme-water .btn-signup { background:rgba(56,189,248,0.14);border-color:rgba(56,189,248,0.35);color:#38bdf8; }
-  body.theme-water .pref-btn:hover { background:rgba(56,189,248,0.1);border-color:rgba(56,189,248,0.3); }
-  body.theme-water .discord-banner { background:linear-gradient(135deg,rgba(4,24,40,0.9) 0%,rgba(3,105,161,0.3) 100%); }
-  #water-canvas { display:none;position:fixed;inset:0;z-index:0;pointer-events:none; }
-  body.theme-water #water-canvas { display:block; }
+  /* ═══════════════════════════════════════════════════════
+     WATER THEME — Deep Ocean / Bioluminescence
+     ═══════════════════════════════════════════════════════ */
+  body.theme-water {
+    --bg:#010d18;
+    --surface:#030f1e;
+    --border:rgba(56,189,248,0.12);
+    --text:#cce8f9;
+    --text-muted:#4e86a4;
+    --text-dim:#0e2a3d;
+    --purple:#06b6d4;
+    --purple-light:#22d3ee;
+    --blue:#0284c7;
+    --cyan:#67e8f9;
+    --green:#2dd4bf;
+  }
+
+  /* Animated deep ocean background layers */
+  body.theme-water { background: #010d18; }
+  body.theme-water::before {
+    content:'';
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background: linear-gradient(180deg, #010d18 0%, #010e1b 40%, #010c17 100%);
+  }
+  /* Override the default gold grid with water grid */
+  body.theme-water::after {
+    background-image:
+      linear-gradient(rgba(6,182,212,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6,182,212,0.035) 1px, transparent 1px);
+    background-size:60px 60px;
+  }
+
+  /* Light rays / particles disabled for Water theme */
+  body.theme-water #water-canvas { display:none !important; }
+
+  /* Nav */
+  body.theme-water nav {
+    background:rgba(1,13,24,0.72) !important;
+    border-color:rgba(6,182,212,0.18) !important;
+    box-shadow: 0 0 0 1px rgba(6,182,212,0.06), 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  /* Cards */
+  body.theme-water .card {
+    background:rgba(3,15,30,0.88);
+    border-color:rgba(6,182,212,0.1);
+  }
+  body.theme-water .card:hover {
+    border-color:rgba(34,211,238,0.45);
+    box-shadow:0 0 40px rgba(6,182,212,0.14), 0 12px 40px rgba(0,0,0,0.6);
+    background:rgba(3,18,36,0.95);
+  }
+  body.theme-water .card::before {
+    background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(6,182,212,0.08) 0%,transparent 60%);
+  }
+
+  /* Filter buttons */
+  body.theme-water .filter-btn {
+    background:rgba(3,15,30,0.8);
+    border-color:rgba(6,182,212,0.14);
+    color:var(--text-muted);
+  }
+  body.theme-water .filter-btn:hover,
+  body.theme-water .filter-btn.active {
+    background:rgba(6,182,212,0.12);
+    border-color:rgba(34,211,238,0.45);
+    color:#22d3ee;
+  }
+  body.theme-water .filter-btn.active { box-shadow:0 0 12px rgba(6,182,212,0.18); }
+
+  /* Copy / action buttons */
+  body.theme-water .copy-btn {
+    background:rgba(6,182,212,0.09);
+    border-color:rgba(6,182,212,0.28);
+    color:#22d3ee;
+  }
+  body.theme-water .copy-btn:hover {
+    background:rgba(6,182,212,0.18);
+    border-color:rgba(34,211,238,0.6);
+    box-shadow:0 0 18px rgba(6,182,212,0.22);
+  }
+
+  /* Dash / admin nav buttons */
+  body.theme-water .dash-open-btn:hover {
+    background:rgba(6,182,212,0.12);
+    border-color:rgba(34,211,238,0.45);
+    color:#22d3ee;
+    box-shadow:0 0 12px rgba(6,182,212,0.2);
+  }
+
+  /* Hero title accent */
+  body.theme-water .hero-title .line2 {
+    background:linear-gradient(90deg,#22d3ee,#67e8f9,#a5f3fc);
+    -webkit-background-clip:text;background-clip:text;
+    filter: drop-shadow(0 0 20px rgba(6,182,212,0.4));
+  }
+
+  /* Hero sub */
+  body.theme-water .hero-sub { color:#4e86a4; }
+
+  /* Page tabs */
+  body.theme-water .page-tab.active { color:#22d3ee; }
+  body.theme-water .page-tab:hover { color:#cce8f9; }
+  body.theme-water .page-tab-slider {
+    background:rgba(6,182,212,0.1);
+    border-color:rgba(34,211,238,0.28);
+  }
+  body.theme-water .page-tab-underline {
+    background:linear-gradient(90deg,#22d3ee,#67e8f9);
+    box-shadow:0 0 10px rgba(6,182,212,0.5);
+  }
+
+  /* Script blocks */
+  body.theme-water .script-block { background:#020c18;border-color:rgba(6,182,212,0.08); }
+  body.theme-water .script-block::before {
+    background:linear-gradient(90deg,transparent,rgba(34,211,238,0.35),transparent);
+  }
+  body.theme-water .script-label { color:#22d3ee;text-shadow:0 0 10px rgba(6,182,212,0.6); }
+
+  /* Scrollbar */
+  body.theme-water ::-webkit-scrollbar-thumb { background:rgba(6,182,212,0.3); }
+  body.theme-water * { scrollbar-color:rgba(6,182,212,0.3) transparent; }
+
+  /* Stats */
+  body.theme-water .stat-num { color:#22d3ee; }
+  body.theme-water .stat-label { color:#4e86a4; }
+  body.theme-water .stat-divider { background:rgba(6,182,212,0.15); }
+
+  /* Cursor */
+  body.theme-water .cursor { background:#67e8f9;box-shadow:0 0 10px rgba(6,182,212,0.7); }
+  body.theme-water .cursor-ring { border-color:rgba(6,182,212,0.55); }
+  body.theme-water .cursor-light {
+    background:radial-gradient(circle,rgba(6,182,212,0.1) 0%,rgba(2,132,199,0.04) 40%,transparent 68%);
+  }
+
+  /* Grid glow */
+  body.theme-water #grid-cursor-glow {
+    background-image:
+      linear-gradient(rgba(6,182,212,0.18) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(6,182,212,0.18) 1px,transparent 1px);
+  }
+
+  /* Auth modal */
+  body.theme-water .auth-modal { background:#010d18;border-color:rgba(34,211,238,0.22); }
+  body.theme-water .auth-submit {
+    background:linear-gradient(135deg,#0284c7,#0891b2);
+    box-shadow:0 4px 24px rgba(6,182,212,0.3);
+  }
+  body.theme-water .auth-input:focus {
+    border-color:rgba(34,211,238,0.5);
+    box-shadow:0 0 0 3px rgba(6,182,212,0.1);
+  }
+  body.theme-water .btn-signup {
+    background:rgba(6,182,212,0.12);
+    border-color:rgba(34,211,238,0.35);
+    color:#22d3ee;
+  }
+  body.theme-water .btn-signup:hover {
+    background:rgba(6,182,212,0.25);
+    box-shadow:0 0 14px rgba(6,182,212,0.25);
+  }
+
+  /* Pref buttons */
+  body.theme-water .pref-btn:hover {
+    background:rgba(6,182,212,0.08);
+    border-color:rgba(34,211,238,0.28);
+    color:#cce8f9;
+  }
+  body.theme-water .pref-btn svg { color:#22d3ee; }
+
+  /* Discord banner */
+  body.theme-water .discord-banner {
+    background:linear-gradient(135deg,rgba(1,13,24,0.95) 0%,rgba(2,60,100,0.4) 100%);
+    border-color:rgba(6,182,212,0.14);
+  }
+
+  /* Account action buttons */
+  body.theme-water .account-action-btn:hover { background:rgba(6,182,212,0.08); }
+
+  /* Nav icon buttons */
+  body.theme-water .nav-icon-btn:hover,
+  body.theme-water .nav-icon-btn.active { color:#22d3ee; }
+
+  /* Nav search focus */
+  body.theme-water .nav-search-input:focus {
+    border-color:rgba(34,211,238,0.45);
+    background:rgba(6,182,212,0.07);
+    box-shadow:0 0 0 3px rgba(6,182,212,0.1);
+  }
+  body.theme-water .nav-search-dropdown {
+    background:rgba(1,13,24,0.97);
+    border-color:rgba(6,182,212,0.18);
+  }
+  body.theme-water .nav-search-item:hover { background:rgba(6,182,212,0.1); }
+
+  /* Section labels */
+  body.theme-water .section-label { color:#22d3ee; }
+
+  /* Info card title */
+  body.theme-water .info-card-title { color:#22d3ee; }
+
+  /* Credit card hover */
+  body.theme-water .credit-card:hover { background:rgba(6,182,212,0.04); }
+  body.theme-water .credit-avatar {
+    background:linear-gradient(135deg,rgba(6,182,212,0.25),rgba(2,132,199,0.2));
+    border-color:rgba(6,182,212,0.25);
+    color:#22d3ee;
+  }
+  body.theme-water .credit-card.credit-owner {
+    background:linear-gradient(90deg,rgba(6,182,212,0.07) 0%,transparent 100%);
+    border-bottom-color:rgba(6,182,212,0.18);
+  }
+  body.theme-water .credit-card.credit-owner .credit-avatar {
+    box-shadow:0 0 14px rgba(6,182,212,0.25);
+  }
+  body.theme-water .credit-role { background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.22);color:#22d3ee; }
+  body.theme-water .credit-owner-badge { color:#22d3ee; }
+
+  /* Score/vote buttons */
+  body.theme-water .vote-btn:hover.like-btn { background:rgba(45,212,191,0.1);border-color:rgba(45,212,191,0.35);color:#2dd4bf; }
+
+  /* Modal details */
+  body.theme-water .modal { background:#010d18;border-color:rgba(6,182,212,0.18); }
+  body.theme-water .modal-copy-btn {
+    background:rgba(6,182,212,0.1);
+    border-color:rgba(34,211,238,0.3);
+    color:#22d3ee;
+  }
+  body.theme-water .modal-copy-btn:hover {
+    background:rgba(6,182,212,0.2);
+    box-shadow:0 0 18px rgba(6,182,212,0.22);
+  }
+
+  /* Dashboard panel */
+  body.theme-water .dashboard-panel { background:#010d18;border-color:rgba(6,182,212,0.16); }
+  body.theme-water .dash-header { border-bottom-color:rgba(6,182,212,0.12); }
+  body.theme-water .dash-section-title { color:#4e86a4; }
+  body.theme-water .dash-stat-num { color:#22d3ee; }
+
+  /* Admin panel */
+  body.theme-water .admin-panel { background:#010d18;border-color:rgba(6,182,212,0.16); }
+  body.theme-water .admin-tab.active {
+    background:rgba(6,182,212,0.12);
+    border-color:rgba(34,211,238,0.3);
+    color:#22d3ee;
+  }
+  body.theme-water .admin-tab:hover { background:rgba(6,182,212,0.07);color:#cce8f9; }
+
+  /* Form inputs focus */
+  body.theme-water .admin-input:focus,
+  body.theme-water .admin-select:focus { border-color:rgba(34,211,238,0.45); }
+
+  /* Hero scroll hint */
+  body.theme-water .scroll-arrow { color:#22d3ee; }
+
+  /* Welcome box */
+  body.theme-water .welcome-box {
+    background:#010d18;
+    border-color:rgba(34,211,238,0.25);
+    box-shadow:0 0 80px rgba(6,182,212,0.12);
+  }
+  body.theme-water .welcome-btn {
+    background:rgba(6,182,212,0.12);
+    border-color:rgba(34,211,238,0.3);
+    color:#22d3ee;
+  }
+  body.theme-water .welcome-btn:hover {
+    background:rgba(6,182,212,0.22);
+    box-shadow:0 0 18px rgba(6,182,212,0.22);
+  }
+
+  /* Section search input */
+  body.theme-water #searchInput:focus {
+    border-color:rgba(34,211,238,0.4);
+    background:rgba(6,182,212,0.05);
+    box-shadow:0 0 0 3px rgba(6,182,212,0.08);
+  }
+
+  /* Wallpaper input focus */
+  body.theme-water .wallpaper-input:focus { border-color:rgba(34,211,238,0.45); }
+
+  /* Page nav bg */
+  body.theme-water .page-nav-inner {
+    background:rgba(3,15,30,0.7);
+    border-color:rgba(6,182,212,0.12);
+  }
+
+  /* Toast */
+  body.theme-water .toast { border-color:rgba(6,182,212,0.3); }
+
+  /* Online indicator */
+  body.theme-water .nav-online-indicator {
+    background:rgba(45,212,191,0.08);
+    border-color:rgba(45,212,191,0.22);
+  }
+  body.theme-water .nav-online-dot { background:#2dd4bf;box-shadow:0 0 6px rgba(45,212,191,0.7); }
+  body.theme-water .nav-online-count { color:#2dd4bf; }
+
+  /* Copy btn copied state */
+  body.theme-water .copy-btn.copied { background:rgba(45,212,191,0.12);border-color:rgba(45,212,191,0.35);color:#2dd4bf; }
+
+  /* Watermark grid cursor glow */
+  body.theme-water #grid-cursor-glow {
+    background-image:
+      linear-gradient(rgba(6,182,212,0.16) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(6,182,212,0.16) 1px,transparent 1px);
+  }
+  #water-canvas { display:none !important;position:fixed;inset:0;z-index:0;pointer-events:none; }
   .water-ripple { position:fixed;border-radius:50%;pointer-events:none;z-index:1;transform:translate(-50%,-50%) scale(0);animation:waterRipple .7s ease-out forwards; }
   @keyframes waterRipple { 0%{transform:translate(-50%,-50%) scale(0);opacity:.8;} 100%{transform:translate(-50%,-50%) scale(4);opacity:0;} }
 
@@ -116,13 +393,24 @@
   .cursor { position:fixed;width:12px;height:12px;background:var(--purple-light);border-radius:50%;pointer-events:none;z-index:2147483647;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s; }
   .cursor-ring { position:fixed;width:36px;height:36px;border:1px solid rgba(182,124,58,0.5);border-radius:50%;pointer-events:none;z-index:2147483646;transform:translate(-50%,-50%); }
   .cursor-light { position:fixed;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(182,124,58,0.06) 0%,rgba(90,110,130,0.025) 40%,transparent 68%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);will-change:left,top; }
-  body.cursor-prisme .cursor { width:9px;height:9px;background:#86EFAC;border-radius:2px;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 9px rgba(134,239,172,0.65); }
-  body.cursor-prisme .cursor-ring { width:30px;height:30px;border:2px solid rgba(34,197,94,0.6);border-radius:2px;background:transparent;animation:cursorSpin 3.4s linear infinite; }
-  body.cursor-prisme .cursor-light { background:radial-gradient(circle,rgba(34,197,94,0.16) 0%,rgba(21,128,61,0.07) 35%,transparent 65%); }
-  body.cursor-comete .cursor { width:8px;height:8px;background:#FDBA74;border-radius:2px;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 8px rgba(253,186,116,0.7); }
-  body.cursor-comete .cursor-ring { width:28px;height:28px;border-radius:50%;border:2.5px solid rgba(249,115,22,0.18);border-top-color:#F97316;border-right-color:#F97316;animation:cursorSpin 0.9s linear infinite; }
-  body.cursor-comete .cursor-light { background:radial-gradient(circle,rgba(249,115,22,0.16) 0%,rgba(194,65,12,0.07) 35%,transparent 65%); }
   @keyframes cursorSpin { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
+  /* Cursor: Plasma */
+  /* Nova cursor — like Zen but with a soft inner fill and a slow pulsing outer ring */
+  body.cursor-nova .cursor { width:7px;height:7px;background:rgba(180,140,255,0.18);border:1.5px solid #C4B5FD;border-radius:50%;transform:translate(-50%,-50%); }
+  body.cursor-nova .cursor-ring { width:38px;height:38px;border:1px solid rgba(196,181,253,0.28);border-radius:50%;animation:novaPulse 2.6s ease-in-out infinite; }
+  body.cursor-nova .cursor-light { background:radial-gradient(circle,rgba(196,181,253,0.07) 0%,transparent 65%); }
+  @keyframes novaPulse { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.7;} 50%{transform:translate(-50%,-50%) scale(1.18);opacity:0.35;} }
+  @keyframes plasmaPulse { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.7;} 50%{transform:translate(-50%,-50%) scale(1.35);opacity:0.3;} }
+  /* Cursor: Glitch */
+  /* glitch cursor removed */
+  body.cursor-glitch .cursor-light { background:radial-gradient(circle,rgba(248,250,252,0.1) 0%,transparent 60%); }
+  @keyframes glitchBlink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+  /* Cursor: Zen */
+  body.cursor-zen .cursor { width:6px;height:6px;background:rgba(255,255,255,0);border:2px solid #E2E8F0;border-radius:50%;transform:translate(-50%,-50%); }
+  body.cursor-zen .cursor-ring { width:40px;height:40px;border:1px solid rgba(226,232,240,0.22);border-radius:50%; }
+  body.cursor-zen .cursor-light { background:radial-gradient(circle,rgba(226,232,240,0.06) 0%,transparent 65%); }
+  /* No-animations mode */
+  body.no-animations *, body.no-animations *::before, body.no-animations *::after { animation-duration:0.001s !important; transition-duration:0.001s !important; }
   .custom-wallpaper-layer { position:fixed;inset:-40px;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .5s; }
   .custom-wallpaper-layer.active { opacity:1; }
   .custom-wallpaper-reveal { opacity:0 !important; }
@@ -221,17 +509,17 @@
 
   .wrapper { position:relative;z-index:2; }
 
-  nav { position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:500;padding:0 1rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;background:rgba(0,0,0,0.55);backdrop-filter:blur(32px) saturate(160%);-webkit-backdrop-filter:blur(32px) saturate(160%);border:1px solid var(--border);border-radius:999px;transition:background 0.3s;min-width:0;max-width:calc(100vw - 32px);width:auto; }
+  nav { position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:90000;padding:0 1rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;background:rgba(0,0,0,0.55);backdrop-filter:blur(32px) saturate(160%);-webkit-backdrop-filter:blur(32px) saturate(160%);border:1px solid var(--border);border-radius:999px;transition:background 0.3s;min-width:0;max-width:calc(100vw - 32px);width:auto; }
   body.theme-light nav { background:rgba(255,255,255,0.55); }
   body.theme-midnight nav { background:rgba(13,13,26,0.72)!important; }
   body.theme-nexus nav { background:rgba(0,0,0,0.65); }
   body.theme-water nav { background:rgba(4,24,40,0.62); }
   .nav-left { display:flex;align-items:center;gap:0.5rem; }
   .nav-center { display:flex;align-items:center; }
-  .nav-right { display:flex;align-items:center;gap:0.4rem; }
+  .nav-right { display:flex;align-items:center;gap:0.65rem; }
 
   .nav-global-search { position:relative;display:flex;align-items:center; }
-  .nav-search-input { width:180px;padding:0.38rem 0.85rem 0.38rem 2.1rem;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none;transition:all .22s;cursor:pointer; }
+  .nav-search-input { width:180px;padding:0.54rem 0.85rem 0.54rem 2.1rem;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none;transition:all .22s;cursor:pointer; }
   .nav-search-input::placeholder { color:var(--text-muted); }
   .nav-search-input:focus { width:240px;background:rgba(182,124,58,0.07);border-color:rgba(182,124,58,0.4);box-shadow:0 0 0 3px rgba(182,124,58,0.1); }
   body.theme-water .nav-search-input:focus { border-color:rgba(56,189,248,0.45);background:rgba(56,189,248,0.07);box-shadow:0 0 0 3px rgba(56,189,248,0.12); }
@@ -254,17 +542,20 @@
   .nav-search-kbd { display:inline-flex;align-items:center;justify-content:center;padding:0.1rem 0.35rem;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:4px;font-size:0.65rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-left:auto;flex-shrink:0; }
 
   /* Logo */
-  .nav-logo-wrap { display:flex;align-items:center;gap:0.55rem;margin-right:0.5rem; }
-  .nav-logo-img { width:34px;height:34px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(182,124,58,0.4)); }
-  .nav-logo-icon { width:32px;height:32px;background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(182,124,58,0.3); }
-  .nav-logo-icon svg { width:17px;height:17px;color:#fff; }
+  .nav-logo-wrap { display:flex;align-items:center;gap:0.45rem;margin-right:0.5rem; }
+  .nav-logo-img { width:30px;height:30px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(182,124,58,0.4)); }
+  .nav-logo-icon { width:30px;height:30px;background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 14px rgba(182,124,58,0.3); }
+  .nav-logo-icon svg { width:16px;height:16px;color:#fff; }
+  .nav-brand-text { font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.82);letter-spacing:0.01em;white-space:nowrap;line-height:1; }
+  body.theme-light .nav-brand-text { color:rgba(15,23,42,0.72); }
 
   /* Nav icon buttons (new style) */
   .dash-open-btn { display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);cursor:pointer;transition:all 0.2s;position:relative; }
   .dash-open-btn:hover { background:rgba(182,124,58,0.12);border-color:rgba(182,124,58,0.4);color:var(--purple-light);box-shadow:0 0 12px rgba(182,124,58,0.2); }
   .dash-open-btn svg { width:16px;height:16px;flex-shrink:0; }
-  .dash-open-btn.admin-btn-style { background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.22);color:#F87171; }
-  .dash-open-btn.admin-btn-style:hover { background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.5);box-shadow:0 0 12px rgba(239,68,68,0.2); }
+  .dash-text-btn { width:auto;padding:0 0.75rem;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:600;letter-spacing:0.01em; }
+  .dash-open-btn.admin-btn-style { background:rgba(255,255,255,0.05);border-color:var(--border);color:var(--text-muted); }
+  .dash-open-btn.admin-btn-style:hover { background:rgba(182,124,58,0.12);border-color:rgba(182,124,58,0.4);color:var(--purple-light);box-shadow:0 0 12px rgba(182,124,58,0.2); }
 
   /* Nav separator */
   .nav-sep { width:1px;height:22px;background:var(--border);margin:0 0.2rem;flex-shrink:0; }
@@ -283,18 +574,25 @@
   .nav-avatar { width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid rgba(182,124,58,0.4);flex-shrink:0;background:rgba(182,124,58,0.2);transition:all 0.2s; }
   .nav-username { display:none; }
 
+  /* Social links in nav */
+  .nav-social-link { display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);text-decoration:none;transition:all 0.2s;flex-shrink:0; }
+  .nav-social-link:hover { background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:var(--text);box-shadow:0 0 10px rgba(255,255,255,0.08); }
   /* Discord nav button - icon only */
   .nav-discord { display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.28);border-radius:8px;color:#8B9CF4;text-decoration:none;transition:all 0.2s;cursor:pointer;position:relative;flex-shrink:0; }
   .nav-discord:hover { background:rgba(88,101,242,0.22);border-color:rgba(88,101,242,0.6);color:#A5B4FC;box-shadow:0 0 14px rgba(88,101,242,0.3); }
   .nav-discord svg { width:17px;height:17px; }
   .discord-dot { position:absolute;top:6px;right:6px;width:6px;height:6px;background:#57F287;border-radius:50%;animation:pg 2s ease-in-out infinite; }
   #navDiscordLabel { display:none; }
+  /* Online users indicator */
+  .nav-online-indicator { display:flex;align-items:center;gap:0.35rem;padding:0.3rem 0.6rem;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:999px;cursor:default;flex-shrink:0; }
+  .nav-online-dot { width:7px;height:7px;background:#10B981;border-radius:50%;box-shadow:0 0 6px rgba(16,185,129,0.7);animation:onlinePulse 2.2s ease-in-out infinite;flex-shrink:0; }
+  @keyframes onlinePulse { 0%,100%{opacity:1;box-shadow:0 0 6px rgba(16,185,129,0.7);} 50%{opacity:.6;box-shadow:0 0 12px rgba(16,185,129,0.4);} }
+  .nav-online-count { font-size:0.68rem;font-weight:600;color:#34D399;font-family:'JetBrains Mono',monospace; }
   @keyframes pg { 0%,100%{opacity:1;box-shadow:0 0 4px #57F287;} 50%{opacity:.5;box-shadow:0 0 10px #57F287;} }
 
   /* Tooltip on nav icons */
   .nav-tooltip { position:relative; }
-  .nav-tooltip::after { content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;font-size:0.68rem;font-family:'Inter',sans-serif;white-space:nowrap;padding:0.28rem 0.55rem;border-radius:4px;pointer-events:none;opacity:0;transition:opacity 0.2s;z-index:9999;border:1px solid rgba(255,255,255,0.1); }
-  .nav-tooltip:hover::after { opacity:1; }
+  /* Tooltip handled by JS custom-tooltip only - no CSS ::after to prevent duplicates */
 
   .hero { min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 3rem;position:relative; }
 
@@ -847,6 +1145,14 @@
   .cursor-preview-prisme .cursor-preview-ring { width:24px;height:24px;border:2px solid rgba(34,197,94,0.6);border-radius:6px; }
   .cursor-preview-comete .cursor-preview-dot { width:7px;height:7px;background:#FDBA74;border-radius:2px;transform:rotate(45deg);box-shadow:0 0 7px rgba(253,186,116,0.7); }
   .cursor-preview-comete .cursor-preview-ring { width:24px;height:24px;border-radius:50%;border:2px solid rgba(249,115,22,0.18);border-top-color:#F97316;border-right-color:#F97316; }
+  .cursor-preview-plasma .cursor-preview-dot { width:8px;height:8px;background:transparent;border-radius:50%;box-shadow:0 0 0 2px #E879F9,0 0 10px rgba(232,121,249,0.8); }
+  .cursor-preview-plasma .cursor-preview-ring { width:22px;height:22px;border:2px solid rgba(232,121,249,0.5);border-radius:50%; }
+  .cursor-preview-glitch .cursor-preview-dot { width:2px;height:14px;background:#F8FAFC;border-radius:1px; }
+  .cursor-preview-glitch .cursor-preview-ring { width:20px;height:20px;border:1.5px solid rgba(248,250,252,0.3);border-radius:2px;transform:rotate(45deg); }
+  .cursor-preview-zen .cursor-preview-dot { width:6px;height:6px;background:transparent;border:1.5px solid #E2E8F0;border-radius:50%; }
+  .cursor-preview-zen .cursor-preview-ring { width:28px;height:28px;border:1px solid rgba(226,232,240,0.22);border-radius:50%; }
+  .cursor-preview-nova .cursor-preview-dot { width:7px;height:7px;background:rgba(180,140,255,0.18);border:1.5px solid #C4B5FD;border-radius:50%; }
+  .cursor-preview-nova .cursor-preview-ring { width:28px;height:28px;border:1px solid rgba(196,181,253,0.28);border-radius:50%; }
   .theme-preview { height:60px;width:100%;display:block;position:relative;overflow:hidden; }
   .theme-preview-midnight { background:linear-gradient(160deg,#0d0d1a 0%,#1a1060 100%); }
   .theme-preview-midnight .star { position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0.8; }
@@ -2887,35 +3193,28 @@
       <div class="admin-sidebar">
         <div class="admin-nav-label">Contenu</div>
         <button class="admin-tab active" data-atab="votes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           Votes
           <span class="admin-tab-badge" id="adminTabBadgeVotes"></span>
         </button>
         <button class="admin-tab" data-atab="scripts">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
           Scripts
         </button>
         <button class="admin-tab" data-atab="comments">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Commentaires
         </button>
         <button class="admin-tab" data-atab="info">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
           Info & Crédits
         </button>
         <div class="admin-nav-label">Membres</div>
         <button class="admin-tab" data-atab="users">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Utilisateurs
         </button>
         <button class="admin-tab" data-atab="reports">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
           Signalements
           <span class="admin-tab-badge red" id="adminTabBadgeReports"></span>
         </button>
         <div class="admin-nav-label">Staff</div>
         <button class="admin-tab" data-atab="modchat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="13" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="17" cy="10" r="1" fill="currentColor" stroke="none"/></svg>
           Chat Modérateurs
           <span class="admin-tab-badge" id="adminTabBadgeModchat" style="display:none;"></span>
         </button>
@@ -3305,7 +3604,6 @@
         <div class="dash-section-title" id="dashSectionPrefs">Préférences</div>
         <div class="pref-btns">
           <button class="pref-btn" id="appearanceBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             <span id="appearanceBtnLabel">Apparence</span> <span class="pref-arrow">›</span>
           </button>
           <div class="sub-panel" id="appearancePanel">
@@ -3321,13 +3619,6 @@
             <div class="theme-group">
               <div class="theme-group-label" id="themeGroupOther">✦ Autres thèmes</div>
               <div class="theme-grid-other">
-                <div class="theme-option" data-theme="midnight">
-                  <div class="theme-preview theme-preview-midnight">
-                    <div class="star star-1"></div><div class="star star-2"></div><div class="star star-3"></div><div class="star star-4"></div><div class="star star-5"></div><div class="star star-6"></div><div class="star star-7"></div><div class="star star-8"></div><div class="star star-9"></div>
-                    <div class="midnight-accent"></div>
-                  </div>
-                  <div class="theme-label" id="themeNameMidnight">Minuit</div>
-                </div>
                 <div class="theme-option" data-theme="nexus">
                   <div class="theme-preview theme-preview-nexus"><div class="nexus-dots-preview"></div><div class="nexus-accent"></div></div>
                   <div class="theme-label" id="themeNameNexus">Nexus</div>
@@ -3346,17 +3637,30 @@
             <div class="theme-group">
               <div class="theme-group-label" id="themeGroupCursor">✦ Curseur</div>
               <div class="theme-grid-other">
-                <div class="cursor-option selected" data-cursor="classic">
-                  <div class="cursor-preview cursor-preview-classic"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNameClassic">L'original</div>
+                <div class="cursor-option" data-cursor="zen">
+                  <div class="cursor-preview cursor-preview-zen"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label">Zen</div>
                 </div>
-                <div class="cursor-option" data-cursor="prisme">
-                  <div class="cursor-preview cursor-preview-prisme"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNamePrisme">Prisme</div>
+                <div class="cursor-option" data-cursor="nova">
+                  <div class="cursor-preview cursor-preview-nova"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label">Nova</div>
                 </div>
-                <div class="cursor-option" data-cursor="comete">
-                  <div class="cursor-preview cursor-preview-comete"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
-                  <div class="theme-label" id="cursorNameComete">Comète</div>
+              </div>
+              <!-- Cursor settings -->
+              <div class="theme-group" style="margin-top:0.9rem;">
+                <div class="theme-group-label">✦ Options du curseur</div>
+                <div style="display:flex;flex-direction:column;gap:0.55rem;margin-top:0.5rem;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.75rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:3px;">
+                    <span style="font-size:0.82rem;color:var(--text-muted);">Transparence du curseur</span>
+                    <div style="display:flex;align-items:center;gap:0.6rem;">
+                      <input type="range" id="cursorOpacitySlider" min="20" max="100" value="100" style="width:90px;accent-color:var(--purple-light);">
+                      <span id="cursorOpacityValue" style="font-size:0.72rem;color:var(--purple-light);font-family:'JetBrains Mono',monospace;min-width:2.5rem;text-align:right;">100%</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.75rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:3px;">
+                    <span style="font-size:0.82rem;color:var(--text-muted);">Animations activées</span>
+                    <button id="animToggleBtn" onclick="toggleAnimations()" style="padding:0.25rem 0.7rem;border-radius:3px;font-size:0.75rem;font-weight:600;border:1px solid;cursor:pointer;transition:all .18s;"></button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -3384,7 +3688,6 @@
             </div>
           </div>
           <button class="pref-btn" id="notifPrefBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span id="notifBtnLabel">Notifications</span> <span class="pref-arrow">›</span>
           </button>
           <div class="notif-pref-list" id="notifComing">
@@ -3423,19 +3726,20 @@
   <div class="nav-left">
     <!-- Logo -->
     <div class="nav-logo-wrap">
-      <img src="SentinelScripticon.png" alt="Sentinel Script" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <img src="1784476720491_image.png" alt="Sentinel Script" class="nav-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
       <div class="nav-logo-icon" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </div>
+      <span class="nav-brand-text">Sentinel Script</span>
     </div>
     <div class="nav-sep"></div>
     <!-- Dashboard -->
-    <button class="dash-open-btn nav-tooltip" id="dashOpenBtn" data-tip="Dashboard">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <button class="dash-open-btn dash-text-btn nav-tooltip" id="dashOpenBtn" data-tip="Dashboard">
+      Dashboard
     </button>
     <!-- Admin -->
-    <button class="dash-open-btn admin-btn-style nav-tooltip" id="navAdminBtn" style="display:none;" data-tip="Admin" onclick="openAdminPanel()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+    <button class="dash-open-btn dash-text-btn admin-btn-style nav-tooltip" id="navAdminBtn" style="display:none;" data-tip="Admin" onclick="openAdminPanel()">
+      Admin
     </button>
   </div>
 
@@ -3476,10 +3780,23 @@
       <img class="nav-avatar" id="navAvatar" src="" alt="avatar">
       <span class="nav-username" id="navUsername"></span>
     </div>
+    <!-- Online users indicator -->
+    <div class="nav-online-indicator nav-tooltip" data-tip="Membres inscrits" id="navOnlineIndicator">
+      <span class="nav-online-dot"></span>
+      <span class="nav-online-count" id="navOnlineCount">—</span>
+    </div>
     <div class="nav-sep"></div>
-    <!-- Discord icon -->
-    <a href="https://discord.gg/vTE8NQPsUb" target="_blank" rel="noopener" class="nav-discord nav-tooltip" data-tip="Discord">
-      <svg viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978Z"/></svg>
+    <!-- YouTube icon -->
+    <a href="https://www.youtube.com/@SentinelScript-aaa" target="_blank" rel="noopener" class="nav-social-link nav-tooltip" data-tip="YouTube" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+    <!-- TikTok icon -->
+    <a href="https://www.tiktok.com/@sentinel.script" target="_blank" rel="noopener" class="nav-social-link nav-tooltip" data-tip="TikTok" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.23 8.23 0 0 0 4.83 1.54V6.78a4.85 4.85 0 0 1-1.07-.09z"/></svg>
+    </a>
+    <!-- Discord icon (no separator before it) -->
+    <a href="https://discord.gg/vTE8NQPsUb" target="_blank" rel="noopener" class="nav-discord nav-tooltip" data-tip="Discord" aria-label="Discord">
+      <svg viewBox="0 0 71 55" fill="currentColor" width="17" height="17"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1987C17.3451 26.2838 20.1717 23.0721 23.7259 23.0721C27.3081 23.0721 30.1626 26.3115 30.1066 30.1987C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1987C40.9371 26.2838 43.7636 23.0721 47.3178 23.0721C50.9 23.0721 53.7545 26.3115 53.6985 30.1987C53.6985 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
       <div class="discord-dot"></div>
       <span id="navDiscordLabel" style="display:none;"></span>
     </a>
@@ -3495,7 +3812,6 @@
       <div class="page-nav-inner" id="pageNavInner">
         <button class="page-tab active" data-page="scripts">Scripts</button>
         <button class="page-tab" data-page="executors">Executors</button>
-        <button class="page-tab" data-page="help">Help</button>
         <button class="page-tab" data-page="info" id="infoPageTab">Info</button>
         <div class="page-tab-slider" id="pageTabSlider"></div>
         <div class="page-tab-underline" id="pageTabUnderline"></div>
@@ -3974,8 +4290,9 @@ let currentUser = Store.get('session', null);
 let welcomeShown = Store.getBool('welcomeShown', false);
 
 function isLoggedIn(){ return !!currentUser; }
-function sessionLogin(u){ currentUser = u; Store.set('session', u); }
+function sessionLogin(u){ currentUser = u; Store.set('session', u); startPresence(); }
 function sessionLogout(){
+  stopPresence();
   currentUser = null; Store.del('session');
   try { clearInterval(msgPollingInterval); } catch {}
   currentConvId = null;
@@ -4001,10 +4318,30 @@ function getRoleBadgeClass(u){
   return ROLE_BADGE_CLASS[u.role] || 'profile-role-member';
 }
 
+// Presence tracking: store last_seen in Supabase user metadata (updated_at on activity)
+// A user is "online" if their updated_at is within the last 5 minutes
 function isOnline(u){
   if(!u) return false;
-  if(u.username === OWNER_USERNAME) return true;
-  return Math.random() < 0.8;
+  if(!u.updated_at) return false;
+  const lastSeen = new Date(u.updated_at).getTime();
+  const now = Date.now();
+  return (now - lastSeen) < 5 * 60 * 1000; // 5 minutes
+}
+// Broadcast presence: update current user's updated_at every 2 minutes while active
+async function broadcastPresence(){
+  if(!currentUser) return;
+  try {
+    await sb.from('users').update({ updated_at: new Date().toISOString() }).eq('username', currentUser.username);
+  } catch(e) {}
+}
+let presenceInterval = null;
+function startPresence(){
+  broadcastPresence();
+  if(presenceInterval) clearInterval(presenceInterval);
+  presenceInterval = setInterval(broadcastPresence, 2 * 60 * 1000);
+}
+function stopPresence(){
+  if(presenceInterval){ clearInterval(presenceInterval); presenceInterval = null; }
 }
 
 function certifiedSVG(){
@@ -5284,35 +5621,87 @@ function initWater(){
   waterBubbles=[];
   waterCanvas.width=window.innerWidth;
   waterCanvas.height=window.innerHeight;
-  for(let i=0;i<55;i++) waterBubbles.push(mkBubble(true));
+  for(let i=0;i<70;i++) waterBubbles.push(mkBubble(true));
 }
 function mkBubble(rand){
-  const r=Math.random()*14+4;
+  const r=Math.random()*10+2;
+  const type=Math.random()<0.3?'glow':Math.random()<0.5?'dot':'ring';
   return {
     x:Math.random()*waterCanvas.width,
     y:rand?Math.random()*waterCanvas.height:waterCanvas.height+r+10,
-    r,
-    speed:Math.random()*0.55+0.18,
-    drift:Math.random()*0.6-0.3,
-    op:Math.random()*0.32+0.06,
+    r, type,
+    speed:Math.random()*0.45+0.1,
+    drift:Math.random()*0.5-0.25,
+    op:Math.random()*0.28+0.05,
     wobble:Math.random()*Math.PI*2,
-    wobbleSpeed:Math.random()*0.025+0.008,
-    pop:false,popFrame:0
+    wobbleSpeed:Math.random()*0.02+0.005,
+    hue:180+Math.random()*40, // cyan to teal
+    pop:false,popFrame:0,
+    size:r
   };
 }
+let waterTime=0;
 function drawWaterFrame(){
   waterCtx.clearRect(0,0,waterCanvas.width,waterCanvas.height);
-  const now=performance.now()/1000;
+  waterTime+=0.004;
+  const W=waterCanvas.width, H=waterCanvas.height;
+
+  // Light shafts from above
+  const numRays=5;
+  for(let i=0;i<numRays;i++){
+    const cx=W*(0.1+i*0.2)+Math.sin(waterTime*0.5+i)*60;
+    const rayGrad=waterCtx.createLinearGradient(cx,0,cx+80,H*0.85);
+    rayGrad.addColorStop(0,'rgba(6,182,212,0.055)');
+    rayGrad.addColorStop(0.4,'rgba(6,182,212,0.022)');
+    rayGrad.addColorStop(1,'rgba(6,182,212,0)');
+    waterCtx.save();
+    waterCtx.beginPath();
+    waterCtx.moveTo(cx-30,0);
+    waterCtx.lineTo(cx+30,0);
+    waterCtx.lineTo(cx+120,H*0.85);
+    waterCtx.lineTo(cx-120,H*0.85);
+    waterCtx.closePath();
+    waterCtx.fillStyle=rayGrad;
+    waterCtx.fill();
+    waterCtx.restore();
+  }
+
+  // Ambient glow blobs at bottom
+  for(let i=0;i<3;i++){
+    const bx=W*(0.2+i*0.3)+Math.sin(waterTime*0.3+i*2)*40;
+    const by=H*0.75+Math.cos(waterTime*0.2+i)*30;
+    const bg=waterCtx.createRadialGradient(bx,by,0,bx,by,W*0.18);
+    bg.addColorStop(0,i===1?'rgba(45,212,191,0.06)':'rgba(6,182,212,0.055)');
+    bg.addColorStop(1,'rgba(6,182,212,0)');
+    waterCtx.save();
+    waterCtx.beginPath();
+    waterCtx.arc(bx,by,W*0.18,0,Math.PI*2);
+    waterCtx.fillStyle=bg;
+    waterCtx.fill();
+    waterCtx.restore();
+  }
+
   for(const b of waterBubbles){
     if(b.pop){
-      const prog=b.popFrame/12;
+      const prog=b.popFrame/14;
       waterCtx.save();
-      waterCtx.globalAlpha=(1-prog)*0.55;
-      waterCtx.strokeStyle='rgba(125,211,252,0.7)';
-      waterCtx.lineWidth=1.5;
+      waterCtx.globalAlpha=(1-prog)*0.6;
+      const c=`hsla(${b.hue},90%,70%,0.8)`;
+      waterCtx.strokeStyle=c;
+      waterCtx.lineWidth=1.2;
       waterCtx.beginPath();
-      waterCtx.arc(b.x,b.y,b.r*(1+prog*2),0,Math.PI*2);
+      waterCtx.arc(b.x,b.y,b.r*(1+prog*2.5),0,Math.PI*2);
       waterCtx.stroke();
+      // Micro sparks
+      for(let s=0;s<4;s++){
+        const ang=Math.PI*2/4*s+waterTime;
+        const sx=b.x+Math.cos(ang)*(b.r*(1+prog*3));
+        const sy=b.y+Math.sin(ang)*(b.r*(1+prog*3));
+        waterCtx.beginPath();
+        waterCtx.arc(sx,sy,1.5*(1-prog),0,Math.PI*2);
+        waterCtx.fillStyle=c;
+        waterCtx.fill();
+      }
       waterCtx.restore();
       b.popFrame++;
       continue;
@@ -5320,24 +5709,49 @@ function drawWaterFrame(){
     b.wobble+=b.wobbleSpeed;
     b.x+=Math.sin(b.wobble)*b.drift;
     b.y-=b.speed;
-    const grad=waterCtx.createRadialGradient(b.x-b.r*0.3,b.y-b.r*0.3,b.r*0.1,b.x,b.y,b.r);
-    grad.addColorStop(0,'rgba(200,240,255,0.55)');
-    grad.addColorStop(0.5,'rgba(56,189,248,'+b.op+')');
-    grad.addColorStop(1,'rgba(14,165,233,0.02)');
+
     waterCtx.save();
-    waterCtx.globalAlpha=b.op+0.08;
-    waterCtx.beginPath();
-    waterCtx.arc(b.x,b.y,b.r,0,Math.PI*2);
-    waterCtx.fillStyle=grad;
-    waterCtx.fill();
-    waterCtx.strokeStyle='rgba(125,211,252,'+(b.op*1.6)+')';
-    waterCtx.lineWidth=0.8;
-    waterCtx.stroke();
+    if(b.type==='glow'){
+      // Bioluminescent glow orb
+      const g=waterCtx.createRadialGradient(b.x-b.r*0.25,b.y-b.r*0.25,b.r*0.05,b.x,b.y,b.r*2);
+      g.addColorStop(0,`hsla(${b.hue},100%,80%,${b.op*2})`);
+      g.addColorStop(0.3,`hsla(${b.hue},90%,60%,${b.op})`);
+      g.addColorStop(1,'rgba(6,182,212,0)');
+      waterCtx.beginPath();
+      waterCtx.arc(b.x,b.y,b.r*2,0,Math.PI*2);
+      waterCtx.fillStyle=g;
+      waterCtx.fill();
+      // Core
+      waterCtx.beginPath();
+      waterCtx.arc(b.x,b.y,b.r*0.4,0,Math.PI*2);
+      waterCtx.fillStyle=`hsla(${b.hue},100%,90%,${b.op*2.5})`;
+      waterCtx.fill();
+    } else if(b.type==='ring'){
+      // Hollow bubble
+      waterCtx.globalAlpha=b.op+0.05;
+      waterCtx.beginPath();
+      waterCtx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      waterCtx.strokeStyle=`hsla(${b.hue},80%,72%,0.65)`;
+      waterCtx.lineWidth=0.8;
+      waterCtx.stroke();
+      // Highlight
+      waterCtx.beginPath();
+      waterCtx.arc(b.x-b.r*0.3,b.y-b.r*0.3,b.r*0.18,0,Math.PI*2);
+      waterCtx.fillStyle=`rgba(200,245,255,0.5)`;
+      waterCtx.fill();
+    } else {
+      // Simple dot particle
+      waterCtx.globalAlpha=b.op;
+      waterCtx.beginPath();
+      waterCtx.arc(b.x,b.y,b.r*0.5,0,Math.PI*2);
+      waterCtx.fillStyle=`hsla(${b.hue},80%,70%,0.9)`;
+      waterCtx.fill();
+    }
     waterCtx.restore();
-    if(b.y<-b.r*2){ Object.assign(b,mkBubble(false)); }
+    if(b.y<-b.r*3){ Object.assign(b,mkBubble(false)); }
   }
-  waterBubbles=waterBubbles.filter(b=>!b.pop||b.popFrame<13);
-  while(waterBubbles.length<55) waterBubbles.push(mkBubble(false));
+  waterBubbles=waterBubbles.filter(b=>!b.pop||b.popFrame<15);
+  while(waterBubbles.length<70) waterBubbles.push(mkBubble(false));
   waterRAF=requestAnimationFrame(drawWaterFrame);
 }
 function startWater(){ if(waterActive)return; waterActive=true; initWater(); waterRAF=requestAnimationFrame(drawWaterFrame); }
@@ -5354,7 +5768,7 @@ document.addEventListener('click',e=>{
   setTimeout(()=>el.remove(),750);
 });
 
-let currentTheme = Store.get('theme','nexus');
+let currentTheme = Store.get('theme','nexus'); // default: Nexus
 function applyTheme(theme){
   const cursorClasses = Array.from(document.body.classList).filter(c=>c.startsWith('cursor-'));
   document.body.classList.add('theme-transitioning');
@@ -5381,16 +5795,71 @@ document.getElementById('basicSplitBtn').addEventListener('click', function(e){
 document.querySelectorAll('.theme-option').forEach(opt=>opt.addEventListener('click',()=>applyTheme(opt.dataset.theme)));
 applyTheme(currentTheme);
 
-let currentCursorStyle = Store.get('cursorStyle','classic');
-if(!['classic','prisme','comete'].includes(currentCursorStyle)) currentCursorStyle = 'classic';
+let currentCursorStyle = Store.get('cursorStyle','zen');
+if(!['zen','nova'].includes(currentCursorStyle)) currentCursorStyle = 'zen';
 function applyCursorStyle(style){
-  document.body.classList.remove('cursor-classic','cursor-prisme','cursor-comete','cursor-minimal','cursor-visee','cursor-orbite','cursor-encre');
+  document.body.classList.remove('cursor-classic','cursor-prisme','cursor-comete','cursor-minimal','cursor-visee','cursor-orbite','cursor-encre','cursor-plasma','cursor-glitch','cursor-zen','cursor-nova');
   document.body.classList.add('cursor-'+style);
   currentCursorStyle = style; Store.set('cursorStyle', style);
   document.querySelectorAll('.cursor-option').forEach(opt=>opt.classList.toggle('selected', opt.dataset.cursor===style));
 }
 document.querySelectorAll('.cursor-option').forEach(opt=>opt.addEventListener('click',()=>applyCursorStyle(opt.dataset.cursor)));
 applyCursorStyle(currentCursorStyle);
+
+// Cursor opacity
+let cursorOpacity = parseInt(Store.get('cursorOpacity','100'));
+function applyCursorOpacity(v){
+  cursorOpacity = v;
+  Store.set('cursorOpacity', v);
+  const els = document.querySelectorAll('.cursor,.cursor-ring,.cursor-light');
+  els.forEach(el => el.style.opacity = (v/100));
+  const sl = document.getElementById('cursorOpacitySlider');
+  const vl = document.getElementById('cursorOpacityValue');
+  if(sl) sl.value = v;
+  if(vl) vl.textContent = v+'%';
+}
+// 12. Disable browser right-click context menu
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const sl = document.getElementById('cursorOpacitySlider');
+  if(sl){ sl.value=cursorOpacity; sl.addEventListener('input',()=>applyCursorOpacity(parseInt(sl.value))); }
+  applyCursorOpacity(cursorOpacity);
+  updateAnimToggleBtn();
+});
+
+// Animations toggle
+let animEnabled = Store.get('animEnabled','1') !== '0';
+function toggleAnimations(){
+  animEnabled = !animEnabled;
+  Store.set('animEnabled', animEnabled ? '1' : '0');
+  applyAnimState();
+  updateAnimToggleBtn();
+}
+function applyAnimState(){
+  if(animEnabled){
+    document.body.style.setProperty('--anim-duration-factor','1');
+    document.body.classList.remove('no-animations');
+  } else {
+    document.body.classList.add('no-animations');
+  }
+}
+function updateAnimToggleBtn(){
+  const btn = document.getElementById('animToggleBtn');
+  if(!btn) return;
+  if(animEnabled){
+    btn.textContent='ON';
+    btn.style.background='rgba(52,211,153,0.15)';
+    btn.style.borderColor='rgba(52,211,153,0.4)';
+    btn.style.color='#34D399';
+  } else {
+    btn.textContent='OFF';
+    btn.style.background='rgba(100,116,139,0.1)';
+    btn.style.borderColor='rgba(100,116,139,0.3)';
+    btn.style.color='var(--text-muted)';
+  }
+}
+applyAnimState();
 
 const wallpaperBaseEl = document.getElementById('customWallpaperBase');
 const wpUrlInput = document.getElementById('wallpaperUrlInput');
@@ -6442,7 +6911,7 @@ async function openProfile(username){
   const online = isOnline(u);
   document.getElementById('profileStatusDot').className = 'profile-status-dot '+(online?'profile-status-online':'profile-status-offline');
   document.getElementById('profileStatusText').textContent = online ? t('statusOnline') : t('statusOffline');
-  document.getElementById('profileUserId').textContent = u.account_number ? ('#'+u.account_number) : '—';
+  document.getElementById('profileUserId').textContent = (u.username === OWNER_USERNAME) ? '#0' : (u.account_number ? ('#'+u.account_number) : '—');
   document.getElementById('profileJoined').textContent = u.created_at ? new Date(u.created_at).toLocaleDateString('fr') : '—';
   document.getElementById('profileRoleName').textContent = roleName;
   document.getElementById('profilePerms').textContent = getPermLevel(u)+'/6';
@@ -7140,9 +7609,15 @@ async function adminDeleteCommentById(id, sid){
 
 async function loadStats(){
   const count = await sbCountUsers();
-  setTxt('statMemberCount', count || 14);
-  setTxt('memberCountBanner', count || 14);
+  const displayCount = count || 14;
+  setTxt('statMemberCount', displayCount);
+  setTxt('memberCountBanner', displayCount);
+  // navOnlineCount shows total registered users (not "currently online" which can't be tracked reliably)
+  const navOnlineEl = document.getElementById('navOnlineCount');
+  if(navOnlineEl) navOnlineEl.textContent = displayCount;
 }
+// Refresh stats every 60s
+setInterval(loadStats, 60000);
 
 let currentPage = 'scripts';
 
@@ -8065,7 +8540,7 @@ async function renderFriendsPanel() {
         </div>
         <div class="friend-info">
           <div class="friend-name">${escHtml(u.display_name || u.username)}</div>
-          <div class="friend-status-text">${online ? '🟢 '+t('friendOnline') : '⚪ '+t('friendOffline')}</div>
+          <div class="friend-status-text" style="display:flex;align-items:center;gap:0.35rem;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0;background:${online?'#34D399':'#64748B'};${online?'box-shadow:0 0 5px #34D399;':''};"></span>${online ? t('friendOnline') : t('friendOffline')}</div>
         </div>
         <div class="friend-actions">
           <button class="friend-action-btn" title="${t('friendMsgTitle')}" onclick="openDmWithFriend('${escHtml(fname)}')">
