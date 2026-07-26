@@ -15554,65 +15554,7 @@ b=h
 end)
 end
 
-local h=(aA.Folder or"Temp").."/"..g..".key"
-
-if aA.KeySystem.KeyValidator then
-if aA.KeySystem.SaveKey and isfile(h)then
-local i=readfile(h)
-local l=aA.KeySystem.KeyValidator(i)
-
-if l then
-b=true
-else
 loadKeysystem()
-end
-else
-loadKeysystem()
-end
-elseif not aA.KeySystem.API then
-if aA.KeySystem.SaveKey and isfile(h)then
-local i=readfile(h)
-local l=(type(aA.KeySystem.Key)=="table")and table.find(aA.KeySystem.Key,i)
-or tostring(aA.KeySystem.Key)==tostring(i)
-
-if l then
-b=true
-else
-loadKeysystem()
-end
-else
-loadKeysystem()
-end
-else
-if isfile(h)then
-local i=readfile(h)
-local l=false
-
-for m,p in next,aA.KeySystem.API do
-local r=aa.Services[p.Type]
-if r then
-local u={}
-for v,x in next,r.Args do
-table.insert(u,p[x])
-end
-
-local v=r.New(table.unpack(u))
-local x=v.Verify(i)
-if x then
-l=true
-break
-end
-end
-end
-
-b=l
-if not l then
-loadKeysystem()
-end
-else
-loadKeysystem()
-end
-end
 
 repeat
 task.wait()
