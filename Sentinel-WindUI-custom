@@ -15561,68 +15561,13 @@ task.wait()
 until b
 end
 
-function aa.CreateWindow(az,aA)
-    local aB=a.load'ae'
+local h=aB(aA)
 
-    if not am:IsStudio()and writefile then
-        if not isfolder"WindUI"then
-            makefolder"WindUI"
-        end
-        if aA.Folder then
-            makefolder(aA.Folder)
-        else
-            makefolder(aA.Title)
-        end
-    end
+aa.Transparent=aA.Transparent
+aa.Window=h
 
-    aA.WindUI=aa
-    aA.Window=aa.Window
-    aA.Parent=aa.ScreenGui.Window
-
-    if aa.Window then
-        warn"You cannot create more than one window"
-        return
-    end
-
-    local b=true
-
-    local d=aa.Themes[aA.Theme or"Dark"]
-    as.SetTheme(d)
-
-    local h=aB(aA)
-    h:Close()
-
-    aa.Transparent=aA.Transparent 
-    aa.Window=h
-
-    if aA.Acrylic then
-        au.init()
-    end
-
-    local f=gethwid or function()
-        return ak.LocalPlayer.UserId
-    end
-    local g=f()
-
-    if aA.KeySystem then
-        b=false
-
-        local function loadKeysystem()
-            ar.new(aA,g,function(h)
-                b=h
-            end)
-        end
-
-        loadKeysystem()
-
-        repeat
-            task.wait()
-        until b
-
-        h:Open()
-    end
-
-    return h
+if aA.Acrylic then
+au.init()
 end
 
 
