@@ -1067,7 +1067,7 @@
 
       background-image:
         radial-gradient(
-          rgba(255,255,255,.10) 1px,
+          rgba(255,255,255,.06) 1px,
           transparent 1px
         );
 
@@ -1088,43 +1088,6 @@
         );
     }
 
-    /* ligne de vague horizontale animée — visible sur fond noir */
-    .dark-ambient::after{
-      content:'';
-
-      position:absolute;
-      inset:0;
-
-      background-image:
-        linear-gradient(
-          180deg,
-          transparent 0%,
-          rgba(255,255,255,.025) 48%,
-          rgba(255,255,255,.055) 50%,
-          rgba(255,255,255,.025) 52%,
-          transparent 100%
-        );
-
-      background-size:100% 400px;
-
-      animation:
-        waveScroll
-        18s
-        linear
-        infinite;
-
-      pointer-events:none;
-    }
-
-    @keyframes waveScroll{
-      0%{
-        background-position:0 -400px;
-      }
-      100%{
-        background-position:0 200%;
-      }
-    }
-
     /* grand spotlight central, façon faisceau doux — en gris clair
        plutôt qu'en bleu-noir, pour qu'il se voie vraiment sur fond
        noir. Offset sous la couture pour ne jamais créer de bande. */
@@ -1143,9 +1106,9 @@
       background:
         radial-gradient(
           ellipse 50% 50% at 50% 0%,
-          rgba(255,255,255,.22) 0%,
-          rgba(210,214,228,.11) 32%,
-          rgba(160,164,180,.05) 58%,
+          rgba(220,222,232,.16) 0%,
+          rgba(170,174,190,.09) 32%,
+          rgba(120,124,140,.04) 58%,
           transparent 78%
         );
 
@@ -1176,8 +1139,8 @@
       background:
         radial-gradient(
           ellipse,
-          rgba(255,255,255,.13) 0%,
-          rgba(220,224,235,.06) 46%,
+          rgba(200,204,216,.16) 0%,
+          rgba(150,154,168,.08) 46%,
           transparent 74%
         );
 
@@ -1199,8 +1162,8 @@
       background:
         radial-gradient(
           ellipse,
-          rgba(180,184,200,.10) 0%,
-          rgba(140,144,160,.05) 50%,
+          rgba(120,124,138,.16) 0%,
+          rgba(90,94,108,.07) 50%,
           transparent 76%
         );
 
@@ -1222,8 +1185,8 @@
       background:
         radial-gradient(
           ellipse,
-          rgba(130,134,150,.09) 0%,
-          rgba(100,104,118,.04) 50%,
+          rgba(70,73,84,.18) 0%,
+          rgba(50,53,62,.08) 50%,
           transparent 76%
         );
 
@@ -1233,75 +1196,6 @@
         ease-in-out
         infinite
         alternate;
-    }
-
-    /* vagues supplémentaires — gris moyen pour se voir sur fond noir */
-    .dblob-d{
-      top:20%;
-      right:6%;
-
-      width:38%;
-      height:34%;
-
-      background:
-        radial-gradient(
-          ellipse,
-          rgba(200,204,218,.08) 0%,
-          rgba(160,164,180,.04) 50%,
-          transparent 76%
-        );
-
-      animation:
-        db4
-        23s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    .dblob-e{
-      top:80%;
-      left:30%;
-
-      width:42%;
-      height:30%;
-
-      background:
-        radial-gradient(
-          ellipse,
-          rgba(170,174,190,.07) 0%,
-          rgba(130,134,148,.03) 50%,
-          transparent 76%
-        );
-
-      animation:
-        db5
-        17s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    @keyframes db4{
-      0%{
-        opacity:.4;
-        transform:scale(1) translate(0,0);
-      }
-      100%{
-        opacity:.75;
-        transform:scale(1.12) translate(-10px,-6px);
-      }
-    }
-
-    @keyframes db5{
-      0%{
-        opacity:.35;
-        transform:scale(1) translate(0,0);
-      }
-      100%{
-        opacity:.65;
-        transform:scale(1.08) translate(7px,-10px);
-      }
     }
 
     @keyframes db1{
@@ -1830,6 +1724,195 @@
       border-top:
         1px solid
         rgba(255,255,255,.06);
+    }
+
+    /* ── GET KEY BUTTON ── */
+
+    .btn-key{
+      position:relative;
+      overflow:hidden;
+      font-family:'Inter',sans-serif;
+      font-size:12px;
+      font-weight:700;
+      padding:10px 20px;
+      border-radius:100px;
+      border:1px solid rgba(88,101,242,.55);
+      cursor:pointer;
+      letter-spacing:.03em;
+      white-space:nowrap;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      color:#fff;
+      background:linear-gradient(135deg,rgba(88,101,242,.55) 0%,rgba(66,80,210,.35) 100%);
+      backdrop-filter:blur(20px) saturate(180%);
+      -webkit-backdrop-filter:blur(20px) saturate(180%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.22),
+        0 4px 16px rgba(88,101,242,.22);
+      transition:box-shadow .2s,transform .15s,background .2s,opacity .2s;
+    }
+
+    .btn-key:hover{
+      background:linear-gradient(135deg,rgba(88,101,242,.72) 0%,rgba(66,80,210,.52) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.3),
+        0 6px 24px rgba(88,101,242,.38);
+      transform:translateY(-1px);
+    }
+
+    .btn-key:disabled{
+      opacity:.6;
+      cursor:default;
+      transform:none;
+    }
+
+    .btn-key svg{
+      width:13px;
+      height:13px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      flex-shrink:0;
+    }
+
+    /* ── KEY REVEAL BOX ── */
+
+    .key-reveal{
+      display:none;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+      padding:10px 14px;
+      background:rgba(88,101,242,.08);
+      border:1px solid rgba(88,101,242,.25);
+      border-radius:10px;
+      width:100%;
+    }
+
+    .key-reveal.visible{
+      display:flex;
+    }
+
+    .key-reveal-icon{
+      flex-shrink:0;
+      color:#7289da;
+    }
+
+    .key-reveal-icon svg{
+      width:14px;
+      height:14px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .key-reveal-text{
+      flex:1;
+      font-family:'Courier New',monospace;
+      font-size:12px;
+      font-weight:700;
+      color:#a0b4ff;
+      letter-spacing:.04em;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .key-reveal-copy{
+      flex-shrink:0;
+      background:none;
+      border:none;
+      cursor:pointer;
+      color:rgba(160,180,255,.6);
+      padding:2px;
+      border-radius:4px;
+      display:flex;
+      align-items:center;
+      transition:color .2s;
+    }
+
+    .key-reveal-copy:hover{
+      color:#a0b4ff;
+    }
+
+    .key-reveal-copy svg{
+      width:13px;
+      height:13px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .key-error{
+      display:none;
+      margin-top:8px;
+      font-size:11px;
+      color:#ff8080;
+      gap:6px;
+      align-items:center;
+    }
+
+    .key-error.visible{
+      display:flex;
+    }
+
+    .key-error svg{
+      width:12px;
+      height:12px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      flex-shrink:0;
+    }
+
+    /* ── DISCORD OAUTH LOADING OVERLAY ── */
+
+    .discord-loading-overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:9990;
+      background:rgba(3,3,4,.82);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .discord-loading-overlay.visible{
+      display:flex;
+    }
+
+    .discord-loading-spinner{
+      width:40px;
+      height:40px;
+      border:3px solid rgba(114,137,218,.18);
+      border-top-color:#7289da;
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{ transform:rotate(360deg); }
+    }
+
+    .discord-loading-text{
+      font-size:14px;
+      font-weight:600;
+      color:rgba(220,225,255,.7);
+      letter-spacing:.02em;
     }
 
 
@@ -4696,6 +4779,14 @@
   </div>
 
 
+  <!-- ── DISCORD OAUTH LOADING ── -->
+
+  <div class="discord-loading-overlay" id="discordLoadingOverlay">
+    <div class="discord-loading-spinner"></div>
+    <div class="discord-loading-text" id="discordLoadingText">Vérification Discord en cours…</div>
+  </div>
+
+
   <!-- ── HERO ── -->
 
   <section
@@ -4843,8 +4934,6 @@
       <div class="dblob dblob-a"></div>
       <div class="dblob dblob-b"></div>
       <div class="dblob dblob-c"></div>
-      <div class="dblob dblob-d"></div>
-      <div class="dblob dblob-e"></div>
     </div>
 
     <div class="section-label">
@@ -4936,6 +5025,22 @@
             </button>
 
 
+            <button
+              class="btn-key"
+              type="button"
+              onclick="handleGetKey('examination')"
+              id="keyBtn_examination"
+            >
+
+              <svg viewBox="0 0 24 24">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+              </svg>
+
+              Get Key
+
+            </button>
+
+
             <a
               href="https://www.roblox.com/fr/games/10165583746/Examination"
               target="_blank"
@@ -4966,6 +5071,22 @@
 
             </a>
 
+          </div>
+
+
+          <div class="key-reveal" id="keyReveal_examination">
+            <div class="key-reveal-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </div>
+            <span class="key-reveal-text" id="keyText_examination"></span>
+            <button class="key-reveal-copy" title="Copier la clé" onclick="copyKey('examination')">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+
+          <div class="key-error" id="keyError_examination">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="keyErrorText_examination"></span>
           </div>
 
         </div>
@@ -5050,6 +5171,23 @@
               </svg>
 
               Copy script
+
+            </button>
+
+
+            <button
+              class="btn-key"
+              type="button"
+              disabled
+              title="Pas de clé pour ce script"
+              style="opacity:.35;cursor:not-allowed"
+            >
+
+              <svg viewBox="0 0 24 24">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+              </svg>
+
+              No Key
 
             </button>
 
@@ -5172,6 +5310,22 @@
             </button>
 
 
+            <button
+              class="btn-key"
+              type="button"
+              onclick="handleGetKey('mm2')"
+              id="keyBtn_mm2"
+            >
+
+              <svg viewBox="0 0 24 24">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+              </svg>
+
+              Get Key
+
+            </button>
+
+
             <a
               href="https://www.roblox.com/fr/games/142823291/Murder-Mystery-2"
               target="_blank"
@@ -5204,6 +5358,22 @@
 
           </div>
 
+
+          <div class="key-reveal" id="keyReveal_mm2">
+            <div class="key-reveal-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </div>
+            <span class="key-reveal-text" id="keyText_mm2"></span>
+            <button class="key-reveal-copy" title="Copier la clé" onclick="copyKey('mm2')">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+
+          <div class="key-error" id="keyError_mm2">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="keyErrorText_mm2"></span>
+          </div>
+
         </div>
 
       </div>
@@ -5225,8 +5395,6 @@
       <div class="dblob dblob-a"></div>
       <div class="dblob dblob-b"></div>
       <div class="dblob dblob-c"></div>
-      <div class="dblob dblob-d"></div>
-      <div class="dblob dblob-e"></div>
     </div>
 
     <div class="executors-header">
@@ -5526,8 +5694,6 @@
       <div class="dblob dblob-a"></div>
       <div class="dblob dblob-b"></div>
       <div class="dblob dblob-c"></div>
-      <div class="dblob dblob-d"></div>
-      <div class="dblob dblob-e"></div>
     </div>
 
     <div class="why-sentinel-inner">
@@ -8925,7 +9091,7 @@
     }
 
 
-    /* ── inscription ── */
+    /* ── inscription (CORRIGÉE AVEC LA FONCTION RPC) ── */
 
     async function handleSignup(e){
       e.preventDefault();
@@ -8947,14 +9113,20 @@
 
       try{
 
-        // le username doit être unique
-        const { data: existing } = await sb
-          .from('profiles')
-          .select('username')
-          .ilike('username',username)
-          .maybeSingle();
+        // 🔥 CORRECTION : Utilisation de la fonction RPC sécurisée
+        // au lieu d'un SELECT direct sur la table profiles
+        const { data: usernameExists, error: checkError } = await sb.rpc(
+          'check_username_exists',
+          { p_username: username }
+        );
 
-        if(existing){
+        if(checkError){
+          console.error('Erreur lors de la vérification du username:', checkError);
+          setAuthError('signupError','Erreur technique, réessaie plus tard.');
+          return false;
+        }
+
+        if(usernameExists === true){
           setAuthError('signupError','Ce nom d\'utilisateur est déjà pris.');
           return false;
         }
@@ -8998,6 +9170,7 @@
         hideAuthOverlay();
 
       }catch(err){
+        console.error('Erreur lors de l\'inscription:', err);
         setAuthError('signupError','Erreur réseau, réessaie.');
       }finally{
         submitBtn.disabled = false;
@@ -9008,7 +9181,7 @@
     }
 
 
-    /* ── connexion ── */
+    /* ── connexion (CORRIGÉE AVEC LA FONCTION RPC) ── */
 
     async function handleLogin(e){
       e.preventDefault();
@@ -9023,6 +9196,24 @@
       submitBtn.textContent = 'Connexion...';
 
       try{
+
+        // 🔥 CORRECTION : On vérifie d'abord que le username existe
+        // en utilisant la fonction RPC sécurisée
+        const { data: usernameExists, error: checkError } = await sb.rpc(
+          'check_username_exists',
+          { p_username: username }
+        );
+
+        if(checkError){
+          console.error('Erreur lors de la vérification du username:', checkError);
+          setAuthError('loginError','Erreur technique, réessaie plus tard.');
+          return false;
+        }
+
+        if(usernameExists === false){
+          setAuthError('loginError','Nom d\'utilisateur ou mot de passe incorrect.');
+          return false;
+        }
 
         const email = usernameToInternalEmail(username);
 
@@ -9039,7 +9230,12 @@
         await loadCurrentUser();
         hideAuthOverlay();
 
+        if(typeof restoreDiscordKeySession === 'function'){
+          restoreDiscordKeySession();
+        }
+
       }catch(err){
+        console.error('Erreur lors de la connexion:', err);
         setAuthError('loginError','Erreur réseau, réessaie.');
       }finally{
         submitBtn.disabled = false;
@@ -9069,6 +9265,9 @@
       toggleAccountMenu(false);
       document.getElementById('accountWidget').style.display = 'none';
       document.getElementById('accountDivider').style.display = 'none';
+      if(typeof clearSavedKeySession === 'function'){
+        clearSavedKeySession();
+      }
       showAuthOverlay();
     }
 
@@ -9275,6 +9474,7 @@
         closeProfileModal();
 
       }catch(err){
+        console.error('Erreur lors de la sauvegarde du profil:', err);
         setAuthError('profileEditError','Erreur lors de l\'envoi de l\'image.');
       }finally{
         saveBtn.disabled = false;
@@ -9286,16 +9486,254 @@
     /* ── point d'entrée : session existante → site débloqué,
        sinon → overlay d'auth (connexion par défaut) ── */
 
+    /* Promise résolue quand initAuthGate a terminé — handleOAuthCallback l'attend */
+    let _sentinelReadyResolve;
+    window._sentinelReady = new Promise(res => { _sentinelReadyResolve = res; });
+
     (async function initAuthGate(){
       const { data:{ session } } = await sb.auth.getSession();
+
+      console.log('[GetKey] initAuthGate → session Sentinel trouvée:', !!session);
 
       if(session){
         const ok = await loadCurrentUser();
         if(!ok){
+          console.log('[GetKey] loadCurrentUser a échoué → affichage overlay.');
           showAuthOverlay();
+        }else if(typeof restoreDiscordKeySession === 'function'){
+          restoreDiscordKeySession();
         }
       }else{
+        console.log('[GetKey] Pas de session Sentinel au chargement → affichage overlay (reconnexion requise).');
         showAuthOverlay();
+      }
+      _sentinelReadyResolve();
+    })();
+
+  </script>
+
+
+  <!-- ═══════════════════ SYSTÈME GET KEY (Discord OAuth) ═══════════════════ -->
+
+  <script>
+
+    /* ── CONFIG ── */
+    const DISCORD_CLIENT_ID   = '1451684958090428579';
+    const DISCORD_REDIRECT_URI = 'https://x4tmqq.github.io/Sentinel-Script/';
+    const EDGE_FUNCTION_URL   = 'https://fzuocfhzzvscjhcxuzog.supabase.co/functions/v1/get-key';
+
+    /* ── Liste des scripts qui ont une clé (garde synchro avec les boutons "Get Key" du HTML) ── */
+    const KEY_SCRIPT_IDS = ['examination', 'mm2'];
+
+    const KEY_SESSION_STORAGE_KEY = 'sentinelKeySession';
+
+    /* ── Sauvegarde le session_token (survit à la fermeture de l'onglet, contrairement à sessionStorage) ── */
+    function saveKeySession(sessionToken){
+      if(!sessionToken) return;
+      try{
+        localStorage.setItem(KEY_SESSION_STORAGE_KEY, JSON.stringify({
+          token: sessionToken,
+          savedAt: Date.now()
+        }));
+      }catch(e){}
+    }
+
+    function getSavedKeySessionToken(){
+      try{
+        const raw = localStorage.getItem(KEY_SESSION_STORAGE_KEY);
+        if(!raw) return null;
+        const parsed = JSON.parse(raw);
+        return parsed && parsed.token ? parsed.token : null;
+      }catch(e){
+        return null;
+      }
+    }
+
+    function clearSavedKeySession(){
+      try{ localStorage.removeItem(KEY_SESSION_STORAGE_KEY); }catch(e){}
+    }
+
+    /* ── Redemande une clé via un session_token existant (pas de redirection Discord) ── */
+    async function fetchKeyWithSession(scriptId, sessionToken){
+      try{
+        const res  = await fetch(EDGE_FUNCTION_URL, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ script_id: scriptId, session_token: sessionToken }),
+        });
+        const data = await res.json();
+
+        console.log('[GetKey] fetchKeyWithSession(', scriptId, ') → status:', res.status, '| body:', data);
+
+        if(res.ok && data.key){
+          showKey(scriptId, data.key);
+          if(data.session_token) saveKeySession(data.session_token);
+          return true;
+        }
+
+        if(data.expired){
+          console.log('[GetKey] session_token expiré, on le supprime du localStorage.');
+          clearSavedKeySession();
+        }
+        return false;
+
+      }catch(err){
+        console.error('[GetKey] Erreur restauration clé:', err);
+        return false;
+      }
+    }
+
+    /* ── Au chargement (une fois connecté au compte Sentinel), réaffiche
+       automatiquement les clés déjà obtenues si la session Discord est
+       encore valide (< 15 min) ── */
+    async function restoreDiscordKeySession(){
+      const sessionToken = getSavedKeySessionToken();
+      console.log('[GetKey] restoreDiscordKeySession → session_token en localStorage:', sessionToken);
+      if(!sessionToken) return;
+
+      for(const scriptId of KEY_SCRIPT_IDS){
+        const btn = document.getElementById('keyBtn_' + scriptId);
+        /* on saute les scripts déjà révélés ou sans bouton dans cette page */
+        if(!btn || btn.disabled) continue;
+
+        await fetchKeyWithSession(scriptId, sessionToken);
+      }
+    }
+
+    /* ── Affichage de la clé dans la carte ── */
+    function showKey(scriptId, keyValue){
+      const reveal = document.getElementById('keyReveal_' + scriptId);
+      const text   = document.getElementById('keyText_'   + scriptId);
+      const btn    = document.getElementById('keyBtn_'    + scriptId);
+
+      if(text)   text.textContent = keyValue;
+      if(reveal) reveal.classList.add('visible');
+      if(btn){
+        btn.textContent = '✓ Clé obtenue';
+        btn.disabled    = true;
+        btn.style.opacity = '.5';
+      }
+    }
+
+    /* ── Affichage d'une erreur dans la carte ── */
+    function showKeyError(scriptId, message){
+      const errEl  = document.getElementById('keyError_'     + scriptId);
+      const errTxt = document.getElementById('keyErrorText_' + scriptId);
+      const btn    = document.getElementById('keyBtn_'       + scriptId);
+
+      if(errTxt) errTxt.textContent = message;
+      if(errEl)  errEl.classList.add('visible');
+      if(btn){
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Get Key`;
+      }
+    }
+
+    /* ── Copier la clé ── */
+    function copyKey(scriptId){
+      const text = document.getElementById('keyText_' + scriptId);
+      if(!text || !text.textContent) return;
+      navigator.clipboard.writeText(text.textContent).catch(() => {});
+    }
+
+    /* ── Loader overlay Discord ── */
+    function showDiscordLoading(msg){
+      const overlay = document.getElementById('discordLoadingOverlay');
+      const txt     = document.getElementById('discordLoadingText');
+      if(overlay) overlay.classList.add('visible');
+      if(txt && msg) txt.textContent = msg;
+    }
+
+    function hideDiscordLoading(){
+      const overlay = document.getElementById('discordLoadingOverlay');
+      if(overlay) overlay.classList.remove('visible');
+    }
+
+    /* ── Bouton "Get Key" cliqué ── */
+    function handleGetKey(scriptId){
+      console.log('[GetKey] handleGetKey(', scriptId, ') → scriptId encodé dans state OAuth, redirection vers Discord…');
+
+      /* On passe le scriptId dans le paramètre "state" de l'URL OAuth :
+         Discord nous le renvoie intact dans ?state= au retour.
+         Pas de sessionStorage → ça marche même si la redirection
+         change de fenêtre/onglet (mini-browser Discord, etc.). */
+      const params = new URLSearchParams({
+        client_id:     DISCORD_CLIENT_ID,
+        redirect_uri:  DISCORD_REDIRECT_URI,
+        response_type: 'code',
+        scope:         'identify guilds.members.read',
+        state:         scriptId,
+      });
+
+      /* Redirige vers Discord */
+      window.location.href = 'https://discord.com/api/oauth2/authorize?' + params.toString();
+    }
+
+    /* ── Gestion du retour OAuth (code dans l'URL) ── */
+    (async function handleOAuthCallback(){
+      const urlParams = new URLSearchParams(window.location.search);
+      const code      = urlParams.get('code');
+      /* scriptId récupéré depuis ?state= (envoyé par Discord au retour OAuth)
+         — plus fiable que sessionStorage qui se perd en cas de changement de contexte */
+      const scriptId  = urlParams.get('state');
+
+      console.log('[GetKey] handleOAuthCallback → code:', code, '| scriptId (state OAuth):', scriptId);
+
+      if(!code || !scriptId){
+        console.log('[GetKey] Pas de code OU pas de scriptId → on arrête ici, rien ne sera affiché.');
+        return;   /* pas un retour OAuth, rien à faire */
+      }
+
+      /* Nettoie l'URL (retire ?code=...) sans recharger la page */
+      const cleanUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
+
+      /* (plus de sessionStorage à nettoyer — le scriptId vient du ?state= OAuth) */
+
+      /* Attend que Sentinel ait fini de charger l'utilisateur (sinon showKey trouve le DOM mais il est masqué) */
+      await window._sentinelReady;
+      showDiscordLoading('Vérification Discord en cours…');
+
+      /* Désactive le bouton pendant la requête */
+      const btn = document.getElementById('keyBtn_' + scriptId);
+      if(btn){
+        btn.disabled = true;
+        btn.textContent = 'Vérification…';
+      }
+
+      try{
+        console.log('[GetKey] Appel de l\'edge function avec code + script_id =', scriptId);
+
+        const res = await fetch(EDGE_FUNCTION_URL, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ code, script_id: scriptId }),
+        });
+
+        const data = await res.json();
+
+        console.log('[GetKey] Réponse edge function → status:', res.status, '| body:', data);
+
+        hideDiscordLoading();
+
+        if(res.ok && data.key){
+          console.log('[GetKey] Clé reçue, affichage en cours pour', scriptId);
+          showKey(scriptId, data.key);
+          if(data.session_token){
+            saveKeySession(data.session_token);
+            console.log('[GetKey] session_token sauvegardé dans localStorage.');
+          }else{
+            console.log('[GetKey] ⚠️ Aucun session_token dans la réponse — l\'edge function déployée ne semble pas être la nouvelle version.');
+          }
+        }else{
+          console.log('[GetKey] Pas de clé dans la réponse, affichage erreur:', data.error);
+          showKeyError(scriptId, data.error || 'Erreur inconnue.');
+        }
+
+      }catch(err){
+        hideDiscordLoading();
+        showKeyError(scriptId, 'Erreur réseau. Réessaie.');
+        console.error('[GetKey] Erreur réseau lors de l\'appel edge function:', err);
       }
     })();
 
