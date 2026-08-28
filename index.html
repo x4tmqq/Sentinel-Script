@@ -9556,9 +9556,13 @@
     /* ── Redemande une clé via un session_token existant (pas de redirection Discord) ── */
     async function fetchKeyWithSession(scriptId, sessionToken){
       try{
+        const { data: { session: sbSession } } = await sb.auth.getSession();
         const res  = await fetch(EDGE_FUNCTION_URL, {
           method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${sbSession?.access_token ?? ''}`,
+          },
           body:    JSON.stringify({ script_id: scriptId, session_token: sessionToken }),
         });
         const data = await res.json();
@@ -9704,9 +9708,13 @@
       try{
         console.log('[GetKey] Appel de l\'edge function avec code + script_id =', scriptId);
 
+        const { data: { session: sbSession } } = await sb.auth.getSession();
         const res = await fetch(EDGE_FUNCTION_URL, {
           method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${sbSession?.access_token ?? ''}`,
+          },
           body:    JSON.stringify({ code, script_id: scriptId }),
         });
 
