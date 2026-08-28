@@ -1,4 +1,3 @@
-cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -38,7 +37,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
     /* ── GRAIN DE FILM GLOBAL ── */
-
+    /* Texture bruitée fixe, très subtile, posée sur toute la page
+       (claire ET sombre) — signature des sites "premium" type
+       projectreal.gg. Pointer-events désactivé pour ne rien bloquer. */
     body::after{
       content:'';
 
@@ -300,6 +301,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       }
     }
 
+    /* Voile statique qui absorbe le scintillement des blobs animés
+       en bas du hero, pour garantir une couleur de raccord fixe et
+       identique à celle du début du dégradé de transition. */
     .hero-fade-mask{
       position:absolute;
       inset:0;
@@ -1035,7 +1039,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── AMBIANCE SOMBRE PARTAGÉE ── */
+    /* ── AMBIANCE SOMBRE PARTAGÉE (équivalent des blobs + spotlights
+       + grille fine d'un site premium type projectreal.gg, mais en
+       noir/bleu nuit — jamais de violet) ── */
 
     .dark-ambient{
       position:absolute;
@@ -1045,9 +1051,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       pointer-events:none;
 
+      /* négatif : passe TOUJOURS derrière le contenu en flux normal
+         de la section (labels, cartes, grilles), même sans z-index
+         explicite sur ce contenu */
       z-index:-1;
     }
 
+    /* grille de points fine, texture technique très présente sur
+       les sites d'executors premium */
     .dark-ambient::before{
       content:'';
 
@@ -1077,6 +1088,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         );
     }
 
+    /* grand spotlight central, façon faisceau doux — en gris clair
+       plutôt qu'en bleu-noir, pour qu'il se voie vraiment sur fond
+       noir. Offset sous la couture pour ne jamais créer de bande. */
     .spotlight{
       position:absolute;
 
@@ -1228,6 +1242,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     .scripts-section{
       position:relative;
 
+      /* noir plat en surface : rien ne dépasse la teinte de fin du
+         dégradé au niveau de la couture (y=0) — les halos sont
+         décalés vers le bas pour qu'aucun ne touche y=0 */
       background:#030304;
 
       padding:80px 0 80px;
@@ -1373,6 +1390,8 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     .card-body{
       padding:
         32px 36px;
+
+      min-width:0;
 
       display:flex;
 
@@ -1734,7 +1753,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.22),
         0 4px 16px rgba(88,101,242,.22);
-      transition:box-shadow .2s,transform .15s,background .2s,opacity .2s,border-color .2s;
+      transition:box-shadow .2s,transform .15s,background .2s,opacity .2s;
     }
 
     .btn-key:hover{
@@ -1762,294 +1781,103 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       flex-shrink:0;
     }
 
-
-    /* ── KEY STATUS ANIMATION (check / cross) ── */
-
-    .key-status-anim{
-      display:none;
-
-      position:fixed;
-      inset:0;
-
-      z-index:9998;
-
-      pointer-events:none;
-
-      align-items:center;
-      justify-content:center;
-    }
-
-    .key-status-anim.visible{
-      display:flex;
-    }
-
-    .key-status-icon{
-      width:72px;
-      height:72px;
-
-      border-radius:50%;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      opacity:0;
-
-      transform:scale(.5);
-
-      transition:
-        opacity .3s cubic-bezier(.22,1,.36,1),
-        transform .3s cubic-bezier(.22,1,.36,1);
-    }
-
-    .key-status-icon.success{
-      background:rgba(92,255,138,.12);
-
-      border:
-        2px solid
-        rgba(92,255,138,.45);
-
-      box-shadow:
-        0 0 32px rgba(92,255,138,.3),
-        0 0 64px rgba(92,255,138,.15);
-
-      color:#5cff8a;
-    }
-
-    .key-status-icon.error{
-      background:rgba(255,80,80,.12);
-
-      border:
-        2px solid
-        rgba(255,80,80,.45);
-
-      box-shadow:
-        0 0 32px rgba(255,80,80,.3),
-        0 0 64px rgba(255,80,80,.15);
-
-      color:#ff5050;
-    }
-
-    .key-status-icon.show{
-      opacity:1;
-
-      transform:scale(1);
-    }
-
-    .key-status-icon svg{
-      width:36px;
-      height:36px;
-
-      stroke:currentColor;
-
-      fill:none;
-
-      stroke-width:2.5;
-
-      stroke-linecap:round;
-
-      stroke-linejoin:round;
-    }
-
-
-    /* ── KEY REVEAL BOX (liquid glass) ── */
+    /* ── KEY REVEAL BOX ── */
 
     .key-reveal{
       display:none;
-
       position:relative;
-
-      margin-top:12px;
-
-      padding:14px 16px;
-
-      border-radius:16px;
-
-      border:
-        1px solid
-        rgba(255,255,255,.22);
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(255,255,255,.16),
-          rgba(255,255,255,.05) 50%,
-          rgba(255,255,255,.12)
-        );
-
-      backdrop-filter:
-        blur(24px)
-        saturate(180%)
-        brightness(1.12);
-
-      -webkit-backdrop-filter:
-        blur(24px)
-        saturate(180%)
-        brightness(1.12);
-
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.42),
-        inset 0 -1px 0 rgba(0,0,0,.16),
-        0 5px 18px rgba(0,0,0,.22);
-
+      align-items:center;
+      gap:10px;
+      margin-top:10px;
+      padding:10px 46px 10px 14px;
+      box-sizing:border-box;
       width:100%;
-
-      opacity:0;
-
-      transform:
-        translateY(8px);
-
-      transition:
-        opacity .35s ease,
-        transform .35s
-        cubic-bezier(.22,1,.36,1);
+      max-width:100%;
+      min-width:0;
+      overflow:hidden;
+      background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 50%,rgba(255,255,255,.08));
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:13px;
+      backdrop-filter:blur(18px) saturate(160%);
+      -webkit-backdrop-filter:blur(18px) saturate(160%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.22),
+        inset 0 -1px 0 rgba(0,0,0,.08),
+        0 6px 20px rgba(0,0,0,.14);
     }
 
     .key-reveal.visible{
-      display:block;
-      opacity:1;
-      transform:translateY(0);
-    }
-
-    .key-reveal-header{
       display:flex;
-
-      align-items:center;
-
-      justify-content:space-between;
-
-      margin-bottom:8px;
-    }
-
-    .key-reveal-label{
-      font-size:9px;
-
-      font-weight:800;
-
-      letter-spacing:.14em;
-
-      text-transform:uppercase;
-
-      color:
-        rgba(160,170,220,.5);
-    }
-
-    .key-reveal-copy-btn{
-      background:
-        rgba(255,255,255,.08);
-
-      border:
-        1px solid
-        rgba(255,255,255,.18);
-
-      border-radius:8px;
-
-      cursor:pointer;
-
-      color:
-        rgba(160,180,255,.8);
-
-      padding:
-        4px 8px;
-
-      display:inline-flex;
-
-      align-items:center;
-
-      gap:5px;
-
-      font-family:'Inter',sans-serif;
-
-      font-size:10px;
-
-      font-weight:700;
-
-      letter-spacing:.05em;
-
-      transition:
-        background .2s,
-        color .2s,
-        transform .15s;
-
-      white-space:nowrap;
-    }
-
-    .key-reveal-copy-btn:hover{
-      background:
-        rgba(255,255,255,.16);
-
-      color:#fff;
-
-      transform:
-        translateY(-1px);
-    }
-
-    .key-reveal-copy-btn svg{
-      width:11px;
-      height:11px;
-
-      stroke:currentColor;
-
-      fill:none;
-
-      stroke-width:2;
-
-      stroke-linecap:round;
-
-      stroke-linejoin:round;
-
-      flex-shrink:0;
-    }
-
-    .key-reveal-row{
-      display:flex;
-
-      align-items:center;
-
-      gap:8px;
     }
 
     .key-reveal-icon{
       flex-shrink:0;
-
+      display:flex;
+      align-items:center;
+      justify-content:center;
       color:#7289da;
     }
 
     .key-reveal-icon svg{
       width:14px;
       height:14px;
-
       stroke:currentColor;
-
       fill:none;
-
       stroke-width:2;
-
       stroke-linecap:round;
-
       stroke-linejoin:round;
     }
 
     .key-reveal-text{
-      flex:1;
-
-      font-family:
-        'Courier New',
-        monospace;
-
+      flex:1 1 auto;
+      min-width:0;
+      max-width:100%;
+      font-family:'Courier New',monospace;
       font-size:12px;
-
       font-weight:700;
-
       color:#a0b4ff;
-
       letter-spacing:.04em;
-
       overflow:hidden;
-
       text-overflow:ellipsis;
-
       white-space:nowrap;
+    }
+
+    .key-reveal-copy{
+      position:absolute;
+      top:50%;
+      right:8px;
+      transform:translateY(-50%);
+      width:28px;
+      height:28px;
+      flex:0 0 28px;
+      box-sizing:border-box;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      cursor:pointer;
+      color:rgba(220,225,255,.68);
+      padding:0;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:color .2s ease,background .2s ease,transform .15s ease,border-color .2s ease;
+    }
+
+    .key-reveal-copy:hover{
+      color:#fff;
+      background:rgba(255,255,255,.16);
+      border-color:rgba(255,255,255,.28);
+      transform:translateY(-50%) scale(1.05);
+    }
+
+    .key-reveal-copy svg{
+      width:13px;
+      height:13px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
     }
 
     .key-error{
@@ -2076,11 +1904,10 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       flex-shrink:0;
     }
 
-
     /* ── DISCORD OAUTH LOADING OVERLAY ── */
 
     .discord-loading-overlay{
-      display:none;
+      display:flex;
       position:fixed;
       inset:0;
       z-index:9990;
@@ -2091,32 +1918,133 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       justify-content:center;
       flex-direction:column;
       gap:16px;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .42s cubic-bezier(.22,1,.36,1),visibility 0s linear .42s;
     }
 
     .discord-loading-overlay.visible{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transition:opacity .42s cubic-bezier(.22,1,.36,1),visibility 0s linear 0s;
+    }
+
+    .discord-loading-stage{
+      position:relative;
+      width:52px;
+      height:52px;
       display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .discord-loading-spinner,
+    .verification-icon{
+      position:absolute;
+      inset:0;
+      margin:auto;
+      width:42px;
+      height:42px;
+      box-sizing:border-box;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
     }
 
     .discord-loading-spinner{
-      width:40px;
-      height:40px;
       border:3px solid rgba(114,137,218,.18);
       border-top-color:#7289da;
-      border-radius:50%;
       animation:spin .8s linear infinite;
+      opacity:1;
+      transform:scale(1) rotate(0);
+      transition:opacity .38s cubic-bezier(.22,1,.36,1),transform .48s cubic-bezier(.22,1,.36,1);
     }
 
-    @keyframes spin{
-      to{ transform:rotate(360deg); }
+    .verification-icon{
+      opacity:0;
+      transform:scale(.55) rotate(-12deg);
+      border:2px solid transparent;
+      background:rgba(255,255,255,.055);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+      transition:opacity .42s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.16,1.25,.3,1),background .3s ease,border-color .3s ease,box-shadow .3s ease;
+    }
+
+    .verification-icon.success{
+      color:#5cff8a;
+      border-color:rgba(92,255,138,.5);
+      background:rgba(92,255,138,.08);
+      box-shadow:0 0 0 6px rgba(92,255,138,.045),0 0 32px rgba(92,255,138,.2),inset 0 1px 0 rgba(255,255,255,.2);
+    }
+
+    .verification-icon.error{
+      color:#ff5c68;
+      border-color:rgba(255,92,104,.5);
+      background:rgba(255,92,104,.08);
+      box-shadow:0 0 0 6px rgba(255,92,104,.045),0 0 32px rgba(255,92,104,.2),inset 0 1px 0 rgba(255,255,255,.2);
+    }
+
+    .discord-loading-overlay.result .discord-loading-spinner{
+      opacity:0;
+      transform:scale(.72) rotate(90deg);
+      animation:none;
+    }
+
+    .discord-loading-overlay.result .verification-icon{
+      opacity:1;
+      transform:scale(1) rotate(0);
+    }
+
+    .verification-icon svg{
+      width:24px;
+      height:24px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:2.4;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .verification-icon.success svg path{
+      stroke-dasharray:30;
+      stroke-dashoffset:30;
+      animation:drawCheck .5s .14s cubic-bezier(.22,1,.36,1) forwards;
+    }
+
+    .verification-icon.error svg path{
+      stroke-dasharray:40;
+      stroke-dashoffset:40;
+      animation:drawError .5s .14s cubic-bezier(.22,1,.36,1) forwards;
     }
 
     .discord-loading-text{
-      font-size:14px;
+      font-size:13px;
       font-weight:600;
-      color:rgba(220,225,255,.7);
-      letter-spacing:.02em;
+      color:rgba(235,238,255,.85);
+      letter-spacing:.01em;
+      opacity:1;
+      transform:translateY(0);
+      transition:opacity .24s ease,transform .24s ease;
     }
 
+    .discord-loading-text.changing{
+      opacity:0;
+      transform:translateY(4px);
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    @keyframes drawCheck{
+      to{stroke-dashoffset:0}
+    }
+
+    @keyframes drawError{
+      to{stroke-dashoffset:0}
+    }
 
     /* ── EXECUTORS ── */
 
@@ -3835,6 +3763,8 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
     /* ═══════════════════ SYSTÈME DE COMPTE ═══════════════════ */
 
+    /* ── overlay bloquant (inscription / connexion) ── */
+
     .auth-overlay{
       position:fixed;
       inset:0;
@@ -4076,7 +4006,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── widget compte ── */
+    /* ── widget compte (dans l'île du haut) ── */
 
     .account-widget{
       position:relative;
@@ -4785,6 +4715,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       <div class="island-socials">
 
         <!-- TikTok -->
+
         <a
           href="https://tiktok.com/@sentinel.script"
           target="_blank"
@@ -4792,15 +4723,21 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           class="island-social"
           aria-label="Sentinel TikTok"
         >
+
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
+
             <path d="M19.59 6.69a4.83 4.83 0 01-3.77-3.77A4.83 4.83 0 0115.5 2h-3.7v13.09a2.96 2.96 0 11-2.96-2.96c.31 0 .61.05.89.14V8.5a6.67 6.67 0 00-.89-.06A6.66 6.66 0 001.67 15.1a6.66 6.66 0 006.66 6.66A6.66 6.66 0 0015 15.1V8.46a8.5 8.5 0 004.97 1.6V6.37a4.84 4.84 0 01-.38.32z"/>
+
           </svg>
+
         </a>
 
+
         <!-- YouTube -->
+
         <a
           href="https://www.youtube.com/@SentinelScript-aaa"
           target="_blank"
@@ -4808,15 +4745,21 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           class="island-social"
           aria-label="Sentinel YouTube"
         >
+
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
+
             <path d="M23.5 6.2a3.01 3.01 0 00-2.12-2.13C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.57A3.01 3.01 0 00.5 6.2 31.3 31.3 0 000 12a31.3 31.3 0 00.5 5.8 3.01 3.01 0 002.12 2.13c1.88.57 9.38.57 9.38.57s7.5 0 9.38-.57a3.01 3.01 0 002.12-2.13A31.3 31.3 0 0024 12a31.3 31.3 0 00-.5-5.8zM9.75 15.5v-7L16 12l-6.25 3.5z"/>
+
           </svg>
+
         </a>
 
+
         <!-- Discord -->
+
         <a
           href="https://discord.gg/vTE8NQPsUb"
           target="_blank"
@@ -4824,12 +4767,16 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           class="island-social"
           aria-label="Sentinel Discord"
         >
+
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
+
             <path d="M19.54 5.17A16.9 16.9 0 0015.2 3.8l-.53 1.08a15.7 15.7 0 00-3.34-.36c-1.14 0-2.25.12-3.34.36L7.46 3.8a16.9 16.9 0 00-4.34 1.37C.37 9.22-.37 13.2.01 17.13a16.8 16.8 0 005.17 2.6l1.25-1.7c-.69-.26-1.35-.58-1.98-.96l.48-.37c3.82 1.77 7.96 1.77 11.74 0l.48.37c-.63.38-1.29.7-1.98.96l1.25 1.7a16.8 16.8 0 005.17-2.6c.44-4.55-.75-8.5-2.05-11.96zM8.02 14.7c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.09 1.05 2.08 2.34c0 1.29-.92 2.34-2.08 2.34zm7.96 0c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.08 1.05 2.08 2.34-.92 2.08-2.08 2.08z"/>
+
           </svg>
+
         </a>
 
       </div>
@@ -4844,31 +4791,38 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           class="island-stat"
           title="Membres actuellement en ligne"
         >
+
           <span
             class="status-dot"
             id="activeStatusDot"
           ></span>
+
           <span
             class="island-number"
             id="activeMembers"
           >
             —
           </span>
+
         </div>
+
 
         <div
           class="island-stat"
           title="Membres au total"
         >
+
           <span
             class="status-dot inactive"
           ></span>
+
           <span
             class="island-number"
             id="totalMembers"
           >
             —
           </span>
+
         </div>
 
       </div>
@@ -4958,17 +4912,13 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
   <!-- ── DISCORD OAUTH LOADING ── -->
 
   <div class="discord-loading-overlay" id="discordLoadingOverlay">
-    <div class="discord-loading-spinner"></div>
-    <div class="discord-loading-text" id="discordLoadingText">Vérification Discord en cours…</div>
-  </div>
-
-
-  <!-- ── KEY STATUS ANIMATION ── -->
-
-  <div class="key-status-anim" id="keyStatusAnim">
-    <div class="key-status-icon" id="keyStatusIcon">
-      <svg id="keyStatusSvg" viewBox="0 0 24 24"></svg>
+    <div class="discord-loading-stage">
+      <div class="discord-loading-spinner"></div>
+      <div class="verification-icon" id="verificationIcon">
+        <svg id="verificationIconSvg" viewBox="0 0 24 24"></svg>
+      </div>
     </div>
+    <div class="discord-loading-text" id="discordLoadingText">Vérification Discord en cours…</div>
   </div>
 
 
@@ -4980,12 +4930,19 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
   >
 
     <div class="hero-bg">
+
       <div class="blob b1"></div>
+
       <div class="blob b2"></div>
+
       <div class="blob b3"></div>
+
       <div class="blob b4"></div>
+
       <div class="hero-fade-mask"></div>
+
     </div>
+
 
     <div class="hero-content">
 
@@ -4993,6 +4950,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         class="hero-title"
         aria-label="Sentinel"
       >
+
         <span>S</span>
         <span>e</span>
         <span>n</span>
@@ -5001,11 +4959,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         <span>n</span>
         <span>e</span>
         <span>l</span>
+
       </div>
+
 
       <div class="hero-desc">
         Copy, paste, dominate.
       </div>
+
 
       <div class="hero-cta">
 
@@ -5016,28 +4977,36 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           View scripts
         </a>
 
+
         <a
           href="https://discord.gg/vTE8NQPsUb"
           target="_blank"
           rel="noopener noreferrer"
           class="btn-discord"
         >
+
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
+
             <path d="M19.54 5.17A16.9 16.9 0 0015.2 3.8l-.53 1.08a15.7 15.7 0 00-3.34-.36c-1.14 0-2.25.12-3.34.36L7.46 3.8a16.9 16.9 0 00-4.34 1.37C.37 9.22-.37 13.2.01 17.13a16.8 16.8 0 005.17 2.6l1.25-1.7c-.69-.26-1.35-.58-1.98-.96l.48-.37c3.82 1.77 7.96 1.77 11.74 0l.48.37c-.63.38-1.29.7-1.98.96l1.25 1.7a16.8 16.8 0 005.17-2.6c.44-4.55-.75-8.5-2.05-11.96zM8.02 14.7c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.09 1.05 2.08 2.34c0 1.29-.92 2.34-2.08 2.34zm7.96 0c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.08 1.05 2.08 2.34-.92 2.08-2.08 2.08z"/>
+
           </svg>
+
           Join Discord
+
         </a>
 
       </div>
+
 
       <div class="availability">
 
         <div class="availability-title">
           Available on these websites
         </div>
+
 
         <div class="availability-links">
 
@@ -5049,11 +5018,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             aria-label="ScriptBlox"
             title="ScriptBlox"
           >
+
             <img
               src="https://scriptblox.com/favicon.ico"
               alt="ScriptBlox"
             >
+
           </a>
+
 
           <a
             href="https://rscripts.net"
@@ -5063,10 +5035,12 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             aria-label="RScripts"
             title="RScripts"
           >
+
             <img
               src="https://rscripts.net/favicon.ico"
               alt="RScripts"
             >
+
           </a>
 
         </div>
@@ -5101,9 +5075,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       Available scripts
     </div>
 
+
     <div class="section-title">
       Pick your script.
     </div>
+
 
     <div class="scripts-grid">
 
@@ -5116,30 +5092,42 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       >
 
         <div class="card-thumb">
+
           <img
             src="https://tr.rbxcdn.com/180DAY-b0582dc7b3cf299043e010ea079893ba/768/432/Image/Webp/noFilter"
             alt="Examination"
             loading="lazy"
           >
+
           <div class="thumb-overlay"></div>
+
         </div>
+
 
         <div class="card-body">
 
           <div>
+
             <div class="card-meta">
+
               <div class="card-dot"></div>
+
               Roblox Script
+
             </div>
+
 
             <div class="card-name">
               Examination
             </div>
 
+
             <div class="card-script-preview">
               loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Examination/.../Examination-Main [obf]"))()
             </div>
+
           </div>
+
 
           <div class="card-actions">
 
@@ -5150,12 +5138,27 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               data-script='loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Examination/refs/heads/main/Examination-Main%20[obf]"))()'
               data-script-name="Examination"
             >
+
               <svg viewBox="0 0 24 24">
-                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+
+                <rect
+                  x="9"
+                  y="9"
+                  width="13"
+                  height="13"
+                  rx="2"
+                />
+
+                <path
+                  d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                />
+
               </svg>
+
               Copy script
+
             </button>
+
 
             <button
               class="btn-key"
@@ -5163,11 +5166,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               onclick="handleGetKey('examination')"
               id="keyBtn_examination"
             >
+
               <svg viewBox="0 0 24 24">
                 <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
               </svg>
+
               Get Key
+
             </button>
+
 
             <a
               href="https://www.roblox.com/fr/games/10165583746/Examination"
@@ -5175,65 +5182,50 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               rel="noopener noreferrer"
               class="btn-glass"
             >
+
               <svg viewBox="0 0 24 24">
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
+
+                <path
+                  d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"
+                />
+
+                <polyline
+                  points="15 3 21 3 21 9"
+                />
+
+                <line
+                  x1="10"
+                  y1="14"
+                  x2="21"
+                  y2="3"
+                />
+
               </svg>
+
               Join game
+
             </a>
 
           </div>
 
 
           <div class="key-reveal" id="keyReveal_examination">
-
-            <div class="key-reveal-header">
-
-              <div class="key-reveal-label">
-                Script Key
-              </div>
-
-              <button
-                class="key-reveal-copy-btn"
-                onclick="copyKey('examination')"
-              >
-                <svg viewBox="0 0 24 24">
-                  <rect x="9" y="9" width="13" height="13" rx="2"/>
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                </svg>
-                Copy
-              </button>
-
+            <div class="key-reveal-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
             </div>
-
-            <div class="key-reveal-row">
-
-              <div class="key-reveal-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-                </svg>
-              </div>
-
-              <span
-                class="key-reveal-text"
-                id="keyText_examination"
-              ></span>
-
-            </div>
-
+            <span class="key-reveal-text" id="keyText_examination"></span>
+            <button class="key-reveal-copy" title="Copier la clé" onclick="copyKey('examination')">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
           </div>
 
           <div class="key-error" id="keyError_examination">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <span id="keyErrorText_examination"></span>
           </div>
 
         </div>
+
       </div>
 
 
@@ -5250,30 +5242,42 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       >
 
         <div class="card-thumb">
+
           <img
             src="https://tr.rbxcdn.com/180DAY-d73149aeb59a17a4c1a97b8336e834f6/500/280/Image/Jpeg/noFilter"
             alt="Ink Game"
             loading="lazy"
           >
+
           <div class="thumb-overlay"></div>
+
         </div>
+
 
         <div class="card-body">
 
           <div>
+
             <div class="card-meta">
+
               <div class="card-dot"></div>
+
               Roblox Script
+
             </div>
+
 
             <div class="card-name">
               Ink Game
             </div>
 
+
             <div class="card-script-preview">
               loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Ink-Game/.../InkGame-Main [obf]"))()
             </div>
+
           </div>
+
 
           <div class="card-actions">
 
@@ -5284,12 +5288,27 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               data-script='loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'
               data-script-name="Ink Game"
             >
+
               <svg viewBox="0 0 24 24">
-                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+
+                <rect
+                  x="9"
+                  y="9"
+                  width="13"
+                  height="13"
+                  rx="2"
+                />
+
+                <path
+                  d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                />
+
               </svg>
+
               Copy script
+
             </button>
+
 
             <button
               class="btn-key"
@@ -5298,11 +5317,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               title="Pas de clé pour ce script"
               style="opacity:.35;cursor:not-allowed"
             >
+
               <svg viewBox="0 0 24 24">
                 <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
               </svg>
+
               No Key
+
             </button>
+
 
             <a
               href="https://www.roblox.com/fr/games/99567941238278/Ink-Game"
@@ -5310,17 +5333,34 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               rel="noopener noreferrer"
               class="btn-glass"
             >
+
               <svg viewBox="0 0 24 24">
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
+
+                <path
+                  d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"
+                />
+
+                <polyline
+                  points="15 3 21 3 21 9"
+                />
+
+                <line
+                  x1="10"
+                  y1="14"
+                  x2="21"
+                  y2="3"
+                />
+
               </svg>
+
               Join game
+
             </a>
 
           </div>
 
         </div>
+
       </div>
 
 
@@ -5337,30 +5377,42 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       >
 
         <div class="card-thumb">
+
           <img
             src="https://tr.rbxcdn.com/180DAY-0a5d0d27fd60272237a869af29cbccb1/768/432/Image/Webp/noFilter"
             alt="Murder Mystery 2"
             loading="lazy"
           >
+
           <div class="thumb-overlay"></div>
+
         </div>
+
 
         <div class="card-body">
 
           <div>
+
             <div class="card-meta">
+
               <div class="card-dot"></div>
+
               Roblox Script
+
             </div>
+
 
             <div class="card-name">
               Murder Mystery 2
             </div>
 
+
             <div class="card-script-preview">
               loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/MM2/.../MM2-Main [obf]"))()
             </div>
+
           </div>
+
 
           <div class="card-actions">
 
@@ -5371,12 +5423,27 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               data-script='loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/MM2/refs/heads/main/MM2-Main%20[obf]"))()'
               data-script-name="Murder Mystery 2"
             >
+
               <svg viewBox="0 0 24 24">
-                <rect x="9" y="9" width="13" height="13" rx="2"/>
-                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+
+                <rect
+                  x="9"
+                  y="9"
+                  width="13"
+                  height="13"
+                  rx="2"
+                />
+
+                <path
+                  d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
+                />
+
               </svg>
+
               Copy script
+
             </button>
+
 
             <button
               class="btn-key"
@@ -5384,11 +5451,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               onclick="handleGetKey('mm2')"
               id="keyBtn_mm2"
             >
+
               <svg viewBox="0 0 24 24">
                 <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
               </svg>
+
               Get Key
+
             </button>
+
 
             <a
               href="https://www.roblox.com/fr/games/142823291/Murder-Mystery-2"
@@ -5396,65 +5467,50 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               rel="noopener noreferrer"
               class="btn-glass"
             >
+
               <svg viewBox="0 0 24 24">
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-                <polyline points="15 3 21 3 21 9"/>
-                <line x1="10" y1="14" x2="21" y2="3"/>
+
+                <path
+                  d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"
+                />
+
+                <polyline
+                  points="15 3 21 3 21 9"
+                />
+
+                <line
+                  x1="10"
+                  y1="14"
+                  x2="21"
+                  y2="3"
+                />
+
               </svg>
+
               Join game
+
             </a>
 
           </div>
 
 
           <div class="key-reveal" id="keyReveal_mm2">
-
-            <div class="key-reveal-header">
-
-              <div class="key-reveal-label">
-                Script Key
-              </div>
-
-              <button
-                class="key-reveal-copy-btn"
-                onclick="copyKey('mm2')"
-              >
-                <svg viewBox="0 0 24 24">
-                  <rect x="9" y="9" width="13" height="13" rx="2"/>
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                </svg>
-                Copy
-              </button>
-
+            <div class="key-reveal-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
             </div>
-
-            <div class="key-reveal-row">
-
-              <div class="key-reveal-icon">
-                <svg viewBox="0 0 24 24">
-                  <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-                </svg>
-              </div>
-
-              <span
-                class="key-reveal-text"
-                id="keyText_mm2"
-              ></span>
-
-            </div>
-
+            <span class="key-reveal-text" id="keyText_mm2"></span>
+            <button class="key-reveal-copy" title="Copier la clé" onclick="copyKey('mm2')">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
           </div>
 
           <div class="key-error" id="keyError_mm2">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <span id="keyErrorText_mm2"></span>
           </div>
 
         </div>
+
       </div>
 
     </div>
@@ -5482,9 +5538,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         Executor database
       </div>
 
+
       <div class="executors-title">
         Available Executors
       </div>
+
 
       <div class="executors-description">
         Compare executors from strongest to weakest, organized by platform and execution type using WEAO's public status data.
@@ -5494,118 +5552,266 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
 
     <!-- WINDOWS -->
+
     <div
       class="executor-category"
       data-category="windows"
     >
+
       <button
         class="executor-category-toggle"
         type="button"
         aria-expanded="false"
       >
-        <div class="executor-category-number">1</div>
-        <div class="executor-category-title">Windows Scripts Executor</div>
+
+        <div class="executor-category-number">
+          1
+        </div>
+
+
+        <div class="executor-category-title">
+          Windows Scripts Executor
+        </div>
+
+
         <div class="executor-category-line"></div>
+
+
         <div class="executor-category-arrow">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"/>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <polyline
+              points="6 9 12 15 18 9"
+            />
+
           </svg>
+
         </div>
+
       </button>
+
+
       <div class="executor-grid-wrapper">
+
         <div class="executor-grid-wrapper-inner">
-          <div class="executor-grid" id="executorWindows">
-            <div class="executor-loading">Loading executors...</div>
+
+          <div
+            class="executor-grid"
+            id="executorWindows"
+          >
+
+            <div class="executor-loading">
+              Loading executors...
+            </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
 
     <!-- MAC -->
+
     <div
       class="executor-category"
       data-category="mac"
     >
+
       <button
         class="executor-category-toggle"
         type="button"
         aria-expanded="false"
       >
-        <div class="executor-category-number">2</div>
-        <div class="executor-category-title">Mac Scripts Executor</div>
+
+        <div class="executor-category-number">
+          2
+        </div>
+
+
+        <div class="executor-category-title">
+          Mac Scripts Executor
+        </div>
+
+
         <div class="executor-category-line"></div>
+
+
         <div class="executor-category-arrow">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"/>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <polyline
+              points="6 9 12 15 18 9"
+            />
+
           </svg>
+
         </div>
+
       </button>
+
+
       <div class="executor-grid-wrapper">
+
         <div class="executor-grid-wrapper-inner">
-          <div class="executor-grid" id="executorMac">
-            <div class="executor-loading">Loading executors...</div>
+
+          <div
+            class="executor-grid"
+            id="executorMac"
+          >
+
+            <div class="executor-loading">
+              Loading executors...
+            </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
 
     <!-- MOBILE -->
+
     <div
       class="executor-category"
       data-category="mobile"
     >
+
       <button
         class="executor-category-toggle"
         type="button"
         aria-expanded="false"
       >
-        <div class="executor-category-number">3</div>
-        <div class="executor-category-title">Mobile Scripts Executor</div>
+
+        <div class="executor-category-number">
+          3
+        </div>
+
+
+        <div class="executor-category-title">
+          Mobile Scripts Executor
+        </div>
+
+
         <div class="executor-category-line"></div>
+
+
         <div class="executor-category-arrow">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"/>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <polyline
+              points="6 9 12 15 18 9"
+            />
+
           </svg>
+
         </div>
+
       </button>
+
+
       <div class="executor-grid-wrapper">
+
         <div class="executor-grid-wrapper-inner">
-          <div class="executor-grid" id="executorMobile">
-            <div class="executor-loading">Loading executors...</div>
+
+          <div
+            class="executor-grid"
+            id="executorMobile"
+          >
+
+            <div class="executor-loading">
+              Loading executors...
+            </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
 
     <!-- WINDOWS EXTERNAL -->
+
     <div
       class="executor-category"
       data-category="windowsExternal"
     >
+
       <button
         class="executor-category-toggle"
         type="button"
         aria-expanded="false"
       >
-        <div class="executor-category-number">4</div>
-        <div class="executor-category-title">Windows External Exploits</div>
+
+        <div class="executor-category-number">
+          4
+        </div>
+
+
+        <div class="executor-category-title">
+          Windows External Exploits
+        </div>
+
+
         <div class="executor-category-line"></div>
+
+
         <div class="executor-category-arrow">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9"/>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <polyline
+              points="6 9 12 15 18 9"
+            />
+
           </svg>
+
         </div>
+
       </button>
+
+
       <div class="executor-grid-wrapper">
+
         <div class="executor-grid-wrapper-inner">
-          <div class="executor-grid" id="executorWindowsExternal">
-            <div class="executor-loading">Loading executors...</div>
+
+          <div
+            class="executor-grid"
+            id="executorWindowsExternal"
+          >
+
+            <div class="executor-loading">
+              Loading executors...
+            </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
   </section>
@@ -5630,15 +5836,29 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       <div class="why-sentinel-heading">
 
         <div class="why-sentinel-main-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3l7 3v5c0 4.5-2.7 8.3-7 10-4.3-1.7-7-5.5-7-10V6l7-3z"/>
-            <path d="M9 12l2 2 4-4"/>
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M12 3l7 3v5c0 4.5-2.7 8.3-7 10-4.3-1.7-7-5.5-7-10V6l7-3z"
+            />
+
+            <path
+              d="M9 12l2 2 4-4"
+            />
+
           </svg>
+
         </div>
+
 
         <div class="why-sentinel-label">
           Why Sentinel
         </div>
+
 
         <div class="why-sentinel-title">
           Why you'll choose Sentinel.
@@ -5646,71 +5866,223 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       </div>
 
+
       <div class="why-sentinel-grid">
 
+
         <!-- CARD 1 -->
+
         <div class="why-sentinel-card">
+
           <div class="why-sentinel-card-content">
-            <div class="why-sentinel-card-label">Always up</div>
-            <div class="why-sentinel-card-title">Up. And stays up.</div>
-            <div class="why-sentinel-card-text">Game patches happen. We ship a fix within hours, often the same day.</div>
-            <div class="why-sentinel-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 3l7 3v5c0 4.5-2.7 8.3-7 10-4.3-1.7-7-5.5-7-10V6l7-3z"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
+
+            <div class="why-sentinel-card-label">
+              Always up
             </div>
+
+
+            <div class="why-sentinel-card-title">
+              Up. And stays up.
+            </div>
+
+
+            <div class="why-sentinel-card-text">
+              Game patches happen. We ship a fix within hours, often the same day.
+            </div>
+
+
+            <div
+              class="why-sentinel-card-icon"
+              aria-hidden="true"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  d="M12 3l7 3v5c0 4.5-2.7 8.3-7 10-4.3-1.7-7-5.5-7-10V6l7-3z"
+                />
+
+                <path
+                  d="M9 12l2 2 4-4"
+                />
+
+              </svg>
+
+            </div>
+
           </div>
+
         </div>
+
 
         <!-- CARD 2 -->
+
         <div class="why-sentinel-card">
+
           <div class="why-sentinel-card-content">
-            <div class="why-sentinel-card-label">Built to last</div>
-            <div class="why-sentinel-card-title">Stay ahead of detection.</div>
-            <div class="why-sentinel-card-text">Our scripts focus on reliability and fast maintenance. When something changes, we adapt instead of letting old versions sit there.</div>
-            <div class="why-sentinel-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/>
-              </svg>
+
+            <div class="why-sentinel-card-label">
+              Built to last
             </div>
+
+
+            <div class="why-sentinel-card-title">
+              Stay ahead of detection.
+            </div>
+
+
+            <div class="why-sentinel-card-text">
+              Our scripts focus on reliability and fast maintenance. When something changes, we adapt instead of letting old versions sit there.
+            </div>
+
+
+            <div
+              class="why-sentinel-card-icon"
+              aria-hidden="true"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"
+                />
+
+              </svg>
+
+            </div>
+
           </div>
+
         </div>
+
 
         <!-- CARD 3 -->
+
         <div class="why-sentinel-card">
+
           <div class="why-sentinel-card-content">
-            <div class="why-sentinel-card-label">Clean by design</div>
-            <div class="why-sentinel-card-title">Nothing gets in the way.</div>
-            <div class="why-sentinel-card-text">Everything is organized around the things that actually matter: scripts, executors, statuses and quick access.</div>
-            <div class="why-sentinel-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M4 5h16"/>
-                <path d="M4 12h16"/>
-                <path d="M4 19h16"/>
-                <circle cx="8" cy="5" r="1"/>
-                <circle cx="15" cy="12" r="1"/>
-                <circle cx="10" cy="19" r="1"/>
-              </svg>
+
+            <div class="why-sentinel-card-label">
+              Clean by design
             </div>
+
+
+            <div class="why-sentinel-card-title">
+              Nothing gets in the way.
+            </div>
+
+
+            <div class="why-sentinel-card-text">
+              Everything is organized around the things that actually matter: scripts, executors, statuses and quick access.
+            </div>
+
+
+            <div
+              class="why-sentinel-card-icon"
+              aria-hidden="true"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+              >
+
+                <path
+                  d="M4 5h16"
+                />
+
+                <path
+                  d="M4 12h16"
+                />
+
+                <path
+                  d="M4 19h16"
+                />
+
+                <circle
+                  cx="8"
+                  cy="5"
+                  r="1"
+                />
+
+                <circle
+                  cx="15"
+                  cy="12"
+                  r="1"
+                />
+
+                <circle
+                  cx="10"
+                  cy="19"
+                  r="1"
+                />
+
+              </svg>
+
+            </div>
+
           </div>
+
         </div>
 
+
         <!-- CARD 4 -->
+
         <div class="why-sentinel-card">
+
           <div class="why-sentinel-card-content">
-            <div class="why-sentinel-card-label">One place</div>
-            <div class="why-sentinel-card-title">Everything. All together.</div>
-            <div class="why-sentinel-card-text">Windows, Mac and mobile executors are brought together in one clean experience so you can find what matches your setup instantly.</div>
-            <div class="why-sentinel-card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <rect x="7" y="2" width="10" height="20" rx="2"/>
-                <path d="M10 18h4"/>
-                <path d="M9 5h6"/>
-              </svg>
+
+            <div class="why-sentinel-card-label">
+              One place
             </div>
+
+
+            <div class="why-sentinel-card-title">
+              Everything. All together.
+            </div>
+
+
+            <div class="why-sentinel-card-text">
+              Windows, Mac and mobile executors are brought together in one clean experience so you can find what matches your setup instantly.
+            </div>
+
+
+            <div
+              class="why-sentinel-card-icon"
+              aria-hidden="true"
+            >
+
+              <svg
+                viewBox="0 0 24 24"
+              >
+
+                <rect
+                  x="7"
+                  y="2"
+                  width="10"
+                  height="20"
+                  rx="2"
+                />
+
+                <path
+                  d="M10 18h4"
+                />
+
+                <path
+                  d="M9 5h6"
+                />
+
+              </svg>
+
+            </div>
+
           </div>
+
         </div>
+
 
       </div>
 
@@ -5733,16 +6105,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     id="notificationSound"
     preload="auto"
   >
+
     <source
       src="https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/SentinelNotifSound.mp3"
       type="audio/mpeg"
     >
+
   </audio>
 
 
   <script>
 
-    /* ── SMOOTH SCROLL ── */
+     
 
     document
       .querySelector(
@@ -5766,20 +6140,23 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       );
 
 
-    /* ── ISLAND SAFE FRAME ── */
+     
 
     var island =
       document.getElementById(
         'topIsland'
       );
 
+
     var islandFrame =
       document.getElementById(
         'islandSafeFrame'
       );
 
+
     var islandSafeDistance =
       10;
+
 
     var islandFrameTimeout =
       null;
@@ -5798,12 +6175,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           x - rect.right
         );
 
+
       var dy =
         Math.max(
           rect.top - y,
           0,
           y - rect.bottom
         );
+
 
       return Math.sqrt(
         (
@@ -5825,11 +6204,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         !island ||
         !islandFrame
       ){
+
         return;
+
       }
+
 
       var rect =
         island.getBoundingClientRect();
+
 
       var distance =
         getDistanceToRect(
@@ -5838,17 +6221,22 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           rect
         );
 
+
       var shouldShow =
         distance <=
         islandSafeDistance;
+
 
       if(
         event.clientY <=
         10
       ){
+
         shouldShow =
           true;
+
       }
+
 
       if(
         shouldShow
@@ -5857,12 +6245,17 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         if(
           islandFrameTimeout
         ){
+
           clearTimeout(
             islandFrameTimeout
           );
+
+
           islandFrameTimeout =
             null;
+
         }
+
 
         islandFrame.classList.add(
           'visible'
@@ -5873,11 +6266,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         islandFrameTimeout =
           setTimeout(
             function(){
+
               islandFrame.classList.remove(
                 'visible'
               );
+
               islandFrameTimeout =
                 null;
+
             },
             90
           );
@@ -5896,7 +6292,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     );
 
 
-    /* ── COLLAPSIBLE EXECUTOR SECTIONS ── */
+     
 
     document
       .querySelectorAll(
@@ -5910,11 +6306,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               '.executor-category-toggle'
             );
 
+
           if(
             !toggle
           ){
+
             return;
+
           }
+
 
           toggle.addEventListener(
             'click',
@@ -5925,6 +6325,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                   'open'
                 );
 
+
               if(
                 isOpen
               ){
@@ -5932,6 +6333,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                 category.classList.remove(
                   'open'
                 );
+
 
                 toggle.setAttribute(
                   'aria-expanded',
@@ -5943,6 +6345,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                 category.classList.add(
                   'open'
                 );
+
 
                 toggle.setAttribute(
                   'aria-expanded',
@@ -5958,7 +6361,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       );
 
 
-    /* ── NOTIFICATION ── */
+     
 
     function showNotification(
       title,
@@ -5971,24 +6374,31 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'notificationContainer'
         );
 
+
       if(
         !container
       ){
+
         return;
+
       }
+
 
       var notification =
         document.createElement(
           'div'
         );
 
+
       notification.className =
         'notification';
+
 
       var icon =
         document.createElement(
           'div'
         );
+
 
       icon.className =
         'notification-icon ' +
@@ -5997,6 +6407,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             ? 'success'
             : 'error'
         );
+
 
       if(
         type === 'success'
@@ -6017,67 +6428,86 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }
 
+
       var content =
         document.createElement(
           'div'
         );
 
+
       content.className =
         'notification-content';
+
 
       var titleElement =
         document.createElement(
           'div'
         );
 
+
       titleElement.className =
         'notification-title';
 
+
       titleElement.textContent =
         title;
+
 
       var messageElement =
         document.createElement(
           'div'
         );
 
+
       messageElement.className =
         'notification-message';
 
+
       messageElement.textContent =
         message;
+
 
       content.appendChild(
         titleElement
       );
 
+
       content.appendChild(
         messageElement
       );
+
 
       notification.appendChild(
         icon
       );
 
+
       notification.appendChild(
         content
       );
+
 
       container.appendChild(
         notification
       );
 
+
       requestAnimationFrame(
         function(){
+
           requestAnimationFrame(
             function(){
+
               notification.classList.add(
                 'show'
               );
+
             }
           );
+
         }
       );
+
 
       setTimeout(
         function(){
@@ -6086,9 +6516,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             'show'
           );
 
+
           notification.classList.add(
             'hide'
           );
+
 
           setTimeout(
             function(){
@@ -6116,7 +6548,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── NOTIFICATION SOUND ── */
+     
 
     function playNotificationSound(){
 
@@ -6125,19 +6557,25 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'notificationSound'
         );
 
+
       if(
         !sound
       ){
+
         return;
+
       }
+
 
       try{
 
         sound.currentTime =
           0;
 
+
         var playPromise =
           sound.play();
+
 
         if(
           playPromise &&
@@ -6147,10 +6585,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
           playPromise.catch(
             function(error){
-              console.warn(
-                'Notification sound blocked:',
-                error
-              );
+
             }
           );
 
@@ -6158,17 +6593,12 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }catch(error){
 
-        console.warn(
-          'Notification sound error:',
-          error
-        );
-
       }
 
     }
 
 
-    /* ── FALLBACK COPY ── */
+     
 
     function fallbackCopyText(
       text
@@ -6179,50 +6609,65 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'textarea'
         );
 
+
       textarea.value =
         text;
+
 
       textarea.setAttribute(
         'readonly',
         ''
       );
 
+
       textarea.style.position =
         'fixed';
+
 
       textarea.style.left =
         '-999999px';
 
+
       textarea.style.top =
         '-999999px';
+
 
       textarea.style.width =
         '1px';
 
+
       textarea.style.height =
         '1px';
+
 
       textarea.style.opacity =
         '0';
 
+
       textarea.style.pointerEvents =
         'none';
+
 
       document.body.appendChild(
         textarea
       );
 
+
       textarea.focus();
 
+
       textarea.select();
+
 
       textarea.setSelectionRange(
         0,
         textarea.value.length
       );
 
+
       var successful =
         false;
+
 
       try{
 
@@ -6233,26 +6678,24 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }catch(error){
 
-        console.warn(
-          'Fallback clipboard failed:',
-          error
-        );
 
         successful =
           false;
 
       }
 
+
       document.body.removeChild(
         textarea
       );
+
 
       return successful;
 
     }
 
 
-    /* ── MODERN CLIPBOARD ── */
+     
 
     async function copyWithClipboardAPI(
       text
@@ -6263,8 +6706,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         typeof navigator.clipboard.writeText !==
           'function'
       ){
+
         return false;
+
       }
+
 
       try{
 
@@ -6272,14 +6718,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           text
         );
 
+
         return true;
 
       }catch(error){
 
-        console.warn(
-          'navigator.clipboard.writeText failed:',
-          error
-        );
 
         return false;
 
@@ -6288,7 +6731,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── COPY SCRIPT ── */
+     
 
     async function handleCopyScript(
       button
@@ -6298,19 +6741,24 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         !button ||
         button.disabled
       ){
+
         return;
+
       }
+
 
       var script =
         button.getAttribute(
           'data-script'
         );
 
+
       var scriptName =
         button.getAttribute(
           'data-script-name'
         ) ||
         'Script';
+
 
       if(
         !script ||
@@ -6323,17 +6771,22 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'error'
         );
 
+
         playNotificationSound();
+
 
         return;
 
       }
 
+
       var originalHTML =
         button.innerHTML;
 
+
       button.disabled =
         true;
+
 
       button.innerHTML =
         '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0">' +
@@ -6341,13 +6794,16 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         '<path d="M12 7v5l3 2"></path>' +
         '</svg> Copying...';
 
+
       var copied =
         false;
+
 
       copied =
         await copyWithClipboardAPI(
           script
         );
+
 
       if(
         !copied
@@ -6360,6 +6816,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }
 
+
       if(
         copied
       ){
@@ -6369,11 +6826,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           '<polyline points="20 6 9 17 4 12"></polyline>' +
           '</svg> Copied!';
 
+
         button.style.background =
           '#0f2414';
 
+
         button.style.borderColor =
           'rgba(80,200,100,.25)';
+
 
         showNotification(
           'Script copied',
@@ -6382,7 +6842,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'success'
         );
 
+
         playNotificationSound();
+
 
         setTimeout(
           function(){
@@ -6390,11 +6852,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             button.innerHTML =
               originalHTML;
 
+
             button.style.background =
               '';
 
+
             button.style.borderColor =
               '';
+
 
             button.disabled =
               false;
@@ -6403,25 +6868,31 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           2000
         );
 
+
       }else{
 
         button.innerHTML =
           originalHTML;
 
+
         button.style.background =
           '';
+
 
         button.style.borderColor =
           '';
 
+
         button.disabled =
           false;
+
 
         showNotification(
           'Copy failed',
           'The browser blocked clipboard access.',
           'error'
         );
+
 
         playNotificationSound();
 
@@ -6430,7 +6901,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── ATTACH COPY EVENTS ── */
+     
 
     document
       .querySelectorAll(
@@ -6442,9 +6913,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           button.addEventListener(
             'click',
             function(){
+
               handleCopyScript(
                 button
               );
+
             }
           );
 
@@ -6452,12 +6925,13 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       );
 
 
-    /* ── SCROLL REVEAL ── */
+     
 
     var cards =
       document.querySelectorAll(
         '.script-card'
       );
+
 
     var observer =
       new IntersectionObserver(
@@ -6476,14 +6950,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                   ) ||
                   0;
 
+
                 setTimeout(
                   function(){
+
                     entry.target.classList.add(
                       'visible'
                     );
+
                   },
                   delay
                 );
+
 
                 observer.unobserve(
                   entry.target
@@ -6500,16 +6978,19 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         }
       );
 
+
     cards.forEach(
       function(card){
+
         observer.observe(
           card
         );
+
       }
     );
 
 
-    /* ── DISCORD MEMBER COUNTS ── */
+     
 
     var discordInvite =
       'vTE8NQPsUb';
@@ -6523,8 +7004,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         typeof number !==
         'number'
       ){
+
         return '—';
+
       }
+
 
       return number.toLocaleString(
         'fr-FR'
@@ -6541,6 +7025,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         '?with_counts=true',
         {
           method:'GET',
+
           cache:'no-store'
         }
       )
@@ -6550,11 +7035,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           if(
             !response.ok
           ){
+
             throw new Error(
               'Discord API error: ' +
               response.status
             );
+
           }
+
 
           return response.json();
 
@@ -6566,41 +7054,52 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           var active =
             data.approximate_presence_count;
 
+
           var total =
             data.approximate_member_count;
+
 
           var activeElement =
             document.getElementById(
               'activeMembers'
             );
 
+
           var totalElement =
             document.getElementById(
               'totalMembers'
             );
+
 
           var activeDot =
             document.getElementById(
               'activeStatusDot'
             );
 
+
           if(
             activeElement
           ){
+
             activeElement.textContent =
               formatNumber(
                 active
               );
+
           }
+
 
           if(
             totalElement
           ){
+
             totalElement.textContent =
               formatNumber(
                 total
               );
+
           }
+
 
           if(
             activeDot
@@ -6616,6 +7115,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                 'active'
               );
 
+
               activeDot.classList.remove(
                 'inactive'
               );
@@ -6625,6 +7125,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               activeDot.classList.remove(
                 'active'
               );
+
 
               activeDot.classList.add(
                 'inactive'
@@ -6639,49 +7140,58 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       .catch(
         function(error){
 
-          console.warn(
-            'Discord member count unavailable:',
-            error
-          );
 
           var activeElement =
             document.getElementById(
               'activeMembers'
             );
 
+
           var totalElement =
             document.getElementById(
               'totalMembers'
             );
+
 
           var activeDot =
             document.getElementById(
               'activeStatusDot'
             );
 
+
           if(
             activeElement
           ){
+
             activeElement.textContent =
               '—';
+
           }
+
 
           if(
             totalElement
           ){
+
             totalElement.textContent =
               '—';
+
           }
+
 
           if(
             activeDot
           ){
+
             activeDot.classList.remove(
               'active'
             );
+
+
             activeDot.classList.add(
               'inactive'
             );
+
           }
 
         }
@@ -6692,13 +7202,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
     updateDiscordStats();
 
+
     setInterval(
       updateDiscordStats,
       60000
     );
 
 
-    /* ── WEAO ONLY ── */
+     
 
     var weaoEndpoint =
       'https://weao.xyz/api/status/exploits';
@@ -6710,7 +7221,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         weaoEndpoint,
         {
           method:'GET',
+
           cache:'no-store',
+
           headers:{
             'Accept':
               'application/json'
@@ -6723,11 +7236,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           if(
             !response.ok
           ){
+
             throw new Error(
               'WEAO HTTP ' +
               response.status
             );
+
           }
+
 
           return response.json();
 
@@ -6741,10 +7257,13 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               data
             )
           ){
+
             throw new Error(
               'WEAO returned invalid data'
             );
+
           }
+
 
           return data;
 
@@ -6754,7 +7273,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── PERCENTAGE ── */
+     
 
     function normalizePercentage(
       value
@@ -6765,13 +7284,17 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           value
         );
 
+
       if(
         !Number.isFinite(
           number
         )
       ){
+
         return 0;
+
       }
+
 
       return Math.max(
         0,
@@ -6786,7 +7309,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── SCORE ── */
+     
 
     function getExecutorScore(
       executor
@@ -6797,10 +7320,12 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor.uncPercentage
         );
 
+
       var sunc =
         normalizePercentage(
           executor.suncPercentage
         );
+
 
       return Math.round(
         (
@@ -6813,7 +7338,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── PLATFORM ── */
+     
 
     function normalizePlatform(
       executor
@@ -6838,16 +7363,21 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         );
 
+
       return (
         platform.includes(
           'windows'
         ) ||
+
         platform ===
           'win' ||
+
         platform ===
           'win32' ||
+
         platform ===
           'win64' ||
+
         platform.includes(
           'pc'
         )
@@ -6865,13 +7395,16 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         );
 
+
       return (
         platform.includes(
           'mac'
         ) ||
+
         platform.includes(
           'osx'
         ) ||
+
         platform.includes(
           'macos'
         )
@@ -6889,22 +7422,28 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         );
 
+
       return (
         platform.includes(
           'android'
         ) ||
+
         platform.includes(
           'ios'
         ) ||
+
         platform.includes(
           'iphone'
         ) ||
+
         platform.includes(
           'ipad'
         ) ||
+
         platform.includes(
           'mobile'
         ) ||
+
         platform.includes(
           'phone'
         )
@@ -6913,7 +7452,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── TYPES ── */
+     
 
     function normalizeExecutorType(
       executor
@@ -6939,10 +7478,12 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         );
 
+
       return (
         type.includes(
           'wexternal'
         ) ||
+
         type.includes(
           'external'
         )
@@ -6960,24 +7501,31 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         );
 
+
       if(
         isExternalExecutor(
           executor
         )
       ){
+
         return false;
+
       }
+
 
       return (
         type.includes(
           'wexecutor'
         ) ||
+
         type.includes(
           'internal'
         ) ||
+
         type.includes(
           'executor'
         ) ||
+
         type ===
           ''
       );
@@ -6985,7 +7533,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── CATEGORY ── */
+     
 
     function categorizeExecutor(
       executor
@@ -6999,8 +7547,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         )
       ){
+
         return 'windowsExternal';
+
       }
+
 
       if(
         isWindowsPlatform(
@@ -7010,8 +7561,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         )
       ){
+
         return 'windows';
+
       }
+
 
       if(
         isMacPlatform(
@@ -7021,8 +7575,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         )
       ){
+
         return 'mac';
+
       }
+
 
       if(
         isMobilePlatform(
@@ -7032,15 +7589,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         )
       ){
+
         return 'mobile';
+
       }
+
 
       return null;
 
     }
 
 
-    /* ── PLATFORM TEXT ── */
+     
 
     function getPlatformText(
       executor
@@ -7050,6 +7610,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         normalizePlatform(
           executor
         );
+
 
       if(
         platform.includes(
@@ -7062,8 +7623,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         platform ===
           'win64'
       ){
+
         return 'Windows';
+
       }
+
 
       if(
         platform.includes(
@@ -7076,16 +7640,22 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'macos'
         )
       ){
+
         return 'Mac';
+
       }
+
 
       if(
         platform.includes(
           'android'
         )
       ){
+
         return 'Android';
+
       }
+
 
       if(
         platform.includes(
@@ -7098,8 +7668,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'ipad'
         )
       ){
+
         return 'iOS';
+
       }
+
 
       if(
         platform.includes(
@@ -7109,8 +7682,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'phone'
         )
       ){
+
         return 'Mobile';
+
       }
+
 
       return (
         executor.platform ||
@@ -7120,7 +7696,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── DELTA ── */
+     
 
     function getExecutorDisplayName(
       executor
@@ -7132,14 +7708,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'Unknown Executor'
         );
 
+
       if(
         originalName
           .trim()
           .toLowerCase() !==
         'delta'
       ){
+
         return originalName;
+
       }
+
 
       return (
         'Delta (' +
@@ -7152,7 +7732,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── TYPE TEXT ── */
+     
 
     function getTypeText(
       executor
@@ -7163,15 +7743,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor
         )
       ){
+
         return 'External';
+
       }
+
 
       return 'Internal';
 
     }
 
 
-    /* ── STATUS ── */
+     
 
     function getStatusText(
       executor
@@ -7181,12 +7764,16 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         executor.updateStatus ===
         true
       ){
+
         return 'Updated';
+
       }
+
 
       return 'Outdated';
 
     }
+
 
     function getStatusClass(
       executor
@@ -7196,15 +7783,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         executor.updateStatus ===
         true
       ){
+
         return 'success';
+
       }
+
 
       return 'error';
 
     }
 
 
-    /* ── DETECTION ── */
+     
 
     function getDetectedText(
       executor
@@ -7214,12 +7804,16 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         executor.detected ===
         true
       ){
+
         return 'Detected';
+
       }
+
 
       return 'Undetected';
 
     }
+
 
     function getDetectedClass(
       executor
@@ -7229,15 +7823,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         executor.detected ===
         true
       ){
+
         return 'error';
+
       }
+
 
       return 'success';
 
     }
 
 
-    /* ── PAYMENT ── */
+     
 
     function getPaymentText(
       executor
@@ -7247,8 +7844,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         executor.free ===
         true
       ){
+
         return 'Free';
+
       }
+
 
       if(
         executor.cost !==
@@ -7260,17 +7860,20 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         ).trim() !==
           ''
       ){
+
         return String(
           executor.cost
         );
+
       }
+
 
       return 'Paid';
 
     }
 
 
-    /* ── TAGS ── */
+     
 
     function createExecutorTags(
       executor
@@ -7278,92 +7881,119 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       var tags = [];
 
+
       if(
         executor.free ===
         true
       ){
+
         tags.push({
           text:'Free',
           className:'green'
         });
+
       }else{
+
         tags.push({
           text:'Paid',
           className:'violet'
         });
+
       }
+
 
       if(
         executor.keysystem ===
         true
       ){
+
         tags.push({
           text:'Key',
           className:'gray'
         });
+
       }else{
+
         tags.push({
           text:'Keyless',
           className:'green'
         });
+
       }
+
 
       if(
         executor.multiInject ===
         true
       ){
+
         tags.push({
           text:'Multi Inject',
           className:'violet'
         });
+
       }
+
 
       if(
         executor.beta ===
         true
       ){
+
         tags.push({
           text:'Beta',
           className:'gray'
         });
+
       }
+
 
       if(
         executor.updateStatus ===
         true
       ){
+
         tags.push({
           text:'Updated',
           className:'green'
         });
+
       }else{
+
         tags.push({
           text:'Outdated',
           className:'red'
         });
+
       }
+
 
       if(
         executor.detected ===
         true
       ){
+
         tags.push({
           text:'Detected',
           className:'red'
         });
+
       }else{
+
         tags.push({
           text:'Undetected',
           className:'green'
         });
+
       }
+
 
       return tags;
 
     }
 
 
-    /* ── PERFORMANCE CIRCLE ── */
+     
 
     function createPerformanceCircle(
       label,
@@ -7375,16 +8005,20 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'div'
         );
 
+
       item.className =
         'performance-item';
+
 
       var circle =
         document.createElement(
           'div'
         );
 
+
       circle.className =
         'performance-circle';
+
 
       var angle =
         (
@@ -7393,53 +8027,64 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         ) *
         360;
 
+
       circle.style.setProperty(
         '--progress-angle',
         angle +
         'deg'
       );
 
+
       var value =
         document.createElement(
           'div'
         );
 
+
       value.className =
         'performance-circle-value';
+
 
       value.textContent =
         percentage +
         '%';
 
+
       circle.appendChild(
         value
       );
+
 
       var circleLabel =
         document.createElement(
           'div'
         );
 
+
       circleLabel.className =
         'performance-circle-label';
 
+
       circleLabel.textContent =
         label;
+
 
       item.appendChild(
         circle
       );
 
+
       item.appendChild(
         circleLabel
       );
+
 
       return item;
 
     }
 
 
-    /* ── INFO BOX ── */
+     
 
     function createInfoBox(
       label,
@@ -7452,35 +8097,45 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'div'
         );
 
+
       box.className =
         'executor-info';
+
 
       var labelElement =
         document.createElement(
           'div'
         );
 
+
       labelElement.className =
         'executor-info-label';
 
+
       labelElement.textContent =
         label;
+
 
       var valueElement =
         document.createElement(
           'div'
         );
 
+
       valueElement.className =
         'executor-info-value';
+
 
       if(
         valueClass
       ){
+
         valueElement.classList.add(
           valueClass
         );
+
       }
+
 
       valueElement.textContent =
         value === undefined ||
@@ -7491,20 +8146,23 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               value
             );
 
+
       box.appendChild(
         labelElement
       );
 
+
       box.appendChild(
         valueElement
       );
+
 
       return box;
 
     }
 
 
-    /* ── EXECUTOR CARD ── */
+     
 
     function createExecutorCard(
       executor
@@ -7515,88 +8173,108 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'div'
         );
 
+
       card.className =
         'executor-card';
+
 
       var content =
         document.createElement(
           'div'
         );
 
+
       content.className =
         'executor-card-content';
+
 
       var isExternal =
         isExternalExecutor(
           executor
         );
 
+
       var unc =
         normalizePercentage(
           executor.uncPercentage
         );
+
 
       var sunc =
         normalizePercentage(
           executor.suncPercentage
         );
 
-      /* HEAD */
+
+       
 
       var head =
         document.createElement(
           'div'
         );
 
+
       head.className =
         'executor-head';
+
 
       var nameWrap =
         document.createElement(
           'div'
         );
 
+
       nameWrap.className =
         'executor-name-wrap';
+
 
       var name =
         document.createElement(
           'div'
         );
 
+
       name.className =
         'executor-name';
+
 
       name.textContent =
         getExecutorDisplayName(
           executor
         );
 
+
       var type =
         document.createElement(
           'div'
         );
 
+
       type.className =
         'executor-type';
+
 
       type.textContent =
         getTypeText(
           executor
         );
 
+
       nameWrap.appendChild(
         name
       );
+
 
       nameWrap.appendChild(
         type
       );
 
+
       var updateIndicator =
         document.createElement(
           'div'
         );
+
 
       updateIndicator.className =
         'executor-update-indicator ' +
@@ -7607,24 +8285,29 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             : 'outdated'
         );
 
+
       updateIndicator.title =
         getStatusText(
           executor
         );
 
+
       head.appendChild(
         nameWrap
       );
+
 
       head.appendChild(
         updateIndicator
       );
 
+
       content.appendChild(
         head
       );
 
-      /* UNC / sUNC */
+
+       
 
       if(
         !isExternal
@@ -7635,8 +8318,10 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             'div'
           );
 
+
         performance.className =
           'executor-performance';
+
 
         performance.appendChild(
           createPerformanceCircle(
@@ -7645,6 +8330,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           )
         );
 
+
         performance.appendChild(
           createPerformanceCircle(
             'sUNC',
@@ -7652,21 +8338,25 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           )
         );
 
+
         content.appendChild(
           performance
         );
 
       }
 
-      /* TAGS */
+
+       
 
       var tags =
         document.createElement(
           'div'
         );
 
+
       tags.className =
         'executor-tags';
+
 
       createExecutorTags(
         executor
@@ -7678,12 +8368,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               'span'
             );
 
+
           tagElement.className =
             'executor-tag ' +
             tag.className;
 
+
           tagElement.textContent =
             tag.text;
+
 
           tags.appendChild(
             tagElement
@@ -7692,19 +8385,23 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         }
       );
 
+
       content.appendChild(
         tags
       );
 
-      /* INFO */
+
+       
 
       var info =
         document.createElement(
           'div'
         );
 
+
       info.className =
         'executor-info-grid';
+
 
       info.appendChild(
         createInfoBox(
@@ -7712,6 +8409,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           executor.version
         )
       );
+
 
       info.appendChild(
         createInfoBox(
@@ -7721,6 +8419,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           )
         )
       );
+
 
       info.appendChild(
         createInfoBox(
@@ -7734,6 +8433,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         )
       );
 
+
       info.appendChild(
         createInfoBox(
           'Detection',
@@ -7745,6 +8445,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           )
         )
       );
+
 
       if(
         executor.free !==
@@ -7762,6 +8463,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         );
 
       }
+
 
       if(
         executor.rbxversion !==
@@ -7783,6 +8485,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }
 
+
       if(
         executor.multiInject ===
         true
@@ -7797,6 +8500,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         );
 
       }
+
 
       if(
         executor.beta ===
@@ -7813,19 +8517,23 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }
 
+
       content.appendChild(
         info
       );
 
-      /* LINKS */
+
+       
 
       var links =
         document.createElement(
           'div'
         );
 
+
       links.className =
         'executor-links';
+
 
       if(
         executor.websitelink
@@ -7836,20 +8544,26 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             'a'
           );
 
+
         website.className =
           'executor-link';
+
 
         website.href =
           executor.websitelink;
 
+
         website.target =
           '_blank';
+
 
         website.rel =
           'noopener noreferrer';
 
+
         website.title =
           'Website';
+
 
         website.innerHTML =
           '<svg viewBox="0 0 24 24">' +
@@ -7858,11 +8572,13 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           '<path d="M21 14v5a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h5"></path>' +
           '</svg>';
 
+
         links.appendChild(
           website
         );
 
       }
+
 
       if(
         executor.discordlink
@@ -7873,31 +8589,39 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             'a'
           );
 
+
         discord.className =
           'executor-link';
+
 
         discord.href =
           executor.discordlink;
 
+
         discord.target =
           '_blank';
+
 
         discord.rel =
           'noopener noreferrer';
 
+
         discord.title =
           'Discord';
+
 
         discord.innerHTML =
           '<svg viewBox="0 0 24 24">' +
           '<path d="M19.54 5.17A16.9 16.9 0 0015.2 3.8l-.53 1.08a15.7 15.7 0 00-3.34-.36c-1.14 0-2.25.12-3.34.36L7.46 3.8a16.9 16.9 0 00-4.34 1.37C.37 9.22-.37 13.2.01 17.13a16.8 16.8 0 005.17 2.6l1.25-1.7c-.69-.26-1.35-.58-1.98-.96l.48-.37c3.82 1.77 7.96 1.77 11.74 0l.48.37c-.63.38-1.29.7-1.98.96l1.25 1.7a16.8 16.8 0 005.17-2.6c.44-4.55-.75-8.5-2.05-11.96zM8.02 14.7c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.09 1.05 2.08 2.34c0 1.29-.92 2.34-2.08 2.34zm7.96 0c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.08 1.05 2.08 2.34-.92 2.08-2.08 2.08z"/>' +
           '</svg>';
 
+
         links.appendChild(
           discord
         );
 
       }
+
 
       if(
         executor.purchaselink &&
@@ -7910,29 +8634,37 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
             'a'
           );
 
+
         purchase.className =
           'executor-link executor-buy-link';
+
 
         purchase.href =
           executor.purchaselink;
 
+
         purchase.target =
           '_blank';
+
 
         purchase.rel =
           'noopener noreferrer';
 
+
         purchase.title =
           'Purchase';
 
+
         purchase.textContent =
           'Buy';
+
 
         links.appendChild(
           purchase
         );
 
       }
+
 
       if(
         links.children.length >
@@ -7945,16 +8677,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       }
 
+
       card.appendChild(
         content
       );
+
 
       return card;
 
     }
 
 
-    /* ── CLEAR EXECUTOR CONTAINER ── */
+     
 
     function clearExecutorContainer(
       element
@@ -7963,21 +8697,26 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       if(
         !element
       ){
+
         return;
+
       }
+
 
       while(
         element.firstChild
       ){
+
         element.removeChild(
           element.firstChild
         );
+
       }
 
     }
 
 
-    /* ── MESSAGE ── */
+     
 
     function showExecutorMessage(
       element,
@@ -7989,16 +8728,20 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         element
       );
 
+
       var messageElement =
         document.createElement(
           'div'
         );
 
+
       messageElement.className =
         className;
 
+
       messageElement.textContent =
         message;
+
 
       element.appendChild(
         messageElement
@@ -8007,7 +8750,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── SORT ── */
+     
 
     function sortExecutors(
       executors
@@ -8021,15 +8764,18 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               a
             );
 
+
           var externalB =
             isExternalExecutor(
               b
             );
 
+
           if(
             externalA &&
             externalB
           ){
+
             return String(
               a.title ||
               ''
@@ -8039,67 +8785,84 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                 ''
               )
             );
+
           }
+
 
           var scoreA =
             getExecutorScore(
               a
             );
 
+
           var scoreB =
             getExecutorScore(
               b
             );
 
+
           if(
             scoreB !==
             scoreA
           ){
+
             return (
               scoreB -
               scoreA
             );
+
           }
+
 
           var uncA =
             normalizePercentage(
               a.uncPercentage
             );
 
+
           var uncB =
             normalizePercentage(
               b.uncPercentage
             );
 
+
           if(
             uncB !==
             uncA
           ){
+
             return (
               uncB -
               uncA
             );
+
           }
+
 
           var suncA =
             normalizePercentage(
               a.suncPercentage
             );
 
+
           var suncB =
             normalizePercentage(
               b.suncPercentage
             );
 
+
           if(
             suncB !==
             suncA
           ){
+
             return (
               suncB -
               suncA
             );
+
           }
+
 
           return String(
             a.title ||
@@ -8117,7 +8880,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── RENDER CATEGORY ── */
+     
 
     function renderExecutorCategory(
       element,
@@ -8127,6 +8890,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       clearExecutorContainer(
         element
       );
+
 
       if(
         executors.length ===
@@ -8139,28 +8903,33 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'No executor available in this category.'
         );
 
+
         return;
 
       }
+
 
       sortExecutors(
         executors
       );
 
+
       executors.forEach(
         function(executor){
+
           element.appendChild(
             createExecutorCard(
               executor
             )
           );
+
         }
       );
 
     }
 
 
-    /* ── RENDER EXECUTORS ── */
+     
 
     function renderExecutors(
       data
@@ -8171,27 +8940,34 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           'executorWindows'
         );
 
+
       var mac =
         document.getElementById(
           'executorMac'
         );
+
 
       var mobile =
         document.getElementById(
           'executorMobile'
         );
 
+
       var windowsExternal =
         document.getElementById(
           'executorWindowsExternal'
         );
 
+
       var categories = {
+
         windows:[],
         mac:[],
         mobile:[],
         windowsExternal:[]
+
       };
+
 
       data.forEach(
         function(executor){
@@ -8201,36 +8977,43 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
               executor
             );
 
+
           if(
             category &&
             categories[
               category
             ]
           ){
+
             categories[
               category
             ].push(
               executor
             );
+
           }
 
         }
       );
+
 
       renderExecutorCategory(
         windows,
         categories.windows
       );
 
+
       renderExecutorCategory(
         mac,
         categories.mac
       );
 
+
       renderExecutorCategory(
         mobile,
         categories.mobile
       );
+
 
       renderExecutorCategory(
         windowsExternal,
@@ -8240,9 +9023,33 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── LOAD EXECUTORS ── */
+     
 
     function loadExecutors(){
+
+      var windows =
+        document.getElementById(
+          'executorWindows'
+        );
+
+
+      var mac =
+        document.getElementById(
+          'executorMac'
+        );
+
+
+      var mobile =
+        document.getElementById(
+          'executorMobile'
+        );
+
+
+      var windowsExternal =
+        document.getElementById(
+          'executorWindowsExternal'
+        );
+
 
       fetchWEAO()
         .then(
@@ -8253,10 +9060,13 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
                 data
               )
             ){
+
               throw new Error(
                 'Invalid WEAO response'
               );
+
             }
+
 
             renderExecutors(
               data
@@ -8267,36 +9077,32 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         .catch(
           function(error){
 
-            console.warn(
-              'WEAO executor API unavailable:',
-              error
-            );
-
-            var msg =
-              'Unable to load WEAO executor data right now.';
 
             showExecutorMessage(
-              document.getElementById('executorWindows'),
+              windows,
               'executor-error',
-              msg
+              'Unable to load WEAO executor data right now.'
             );
 
-            showExecutorMessage(
-              document.getElementById('executorMac'),
-              'executor-error',
-              msg
-            );
 
             showExecutorMessage(
-              document.getElementById('executorMobile'),
+              mac,
               'executor-error',
-              msg
+              'Unable to load WEAO executor data right now.'
             );
 
+
             showExecutorMessage(
-              document.getElementById('executorWindowsExternal'),
+              mobile,
               'executor-error',
-              msg
+              'Unable to load WEAO executor data right now.'
+            );
+
+
+            showExecutorMessage(
+              windowsExternal,
+              'executor-error',
+              'Unable to load WEAO executor data right now.'
             );
 
           }
@@ -8306,6 +9112,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
 
     loadExecutors();
+
 
     setInterval(
       loadExecutors,
@@ -8321,6 +9128,11 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
   <script>
 
+    
+
+
+ 
+
     const SUPABASE_URL = 'https://fzuocfhzzvscjhcxuzog.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_XWzMsq-kiPmkQ8rmL_u7Pg_bJT4TwZ5';
 
@@ -8329,6 +9141,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       SUPABASE_ANON_KEY
     );
 
+    
+
+ 
     function usernameToInternalEmail(username){
       return username.trim().toLowerCase() + '@sentinel-script.internal';
     }
@@ -8336,10 +9151,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     let currentProfile = null;
 
 
-    /* ── onglets connexion / inscription ── */
+     
 
     function switchAuthTab(tab){
-
       const isLogin = tab === 'login';
 
       document
@@ -8357,7 +9171,6 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       document
         .getElementById('signupForm')
         .classList.toggle('active', !isLogin);
-
     }
 
     function showAuthOverlay(){
@@ -8383,10 +9196,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
 
-    /* ── inscription ── */
+     
 
     async function handleSignup(e){
-
       e.preventDefault();
 
       setAuthError('signupError','');
@@ -8406,13 +9218,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       try{
 
+        
+        
         const { data: usernameExists, error: checkError } = await sb.rpc(
           'check_username_exists',
           { p_username: username }
         );
 
         if(checkError){
-          console.error('Erreur lors de la vérification du username:', checkError);
           setAuthError('signupError','Erreur technique, réessaie plus tard.');
           return false;
         }
@@ -8461,26 +9274,19 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         hideAuthOverlay();
 
       }catch(err){
-
-        console.error('Erreur lors de l\'inscription:', err);
         setAuthError('signupError','Erreur réseau, réessaie.');
-
       }finally{
-
         submitBtn.disabled = false;
         submitBtn.textContent = 'Créer mon compte';
-
       }
 
       return false;
-
     }
 
 
-    /* ── connexion ── */
+     
 
     async function handleLogin(e){
-
       e.preventDefault();
 
       setAuthError('loginError','');
@@ -8494,13 +9300,14 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       try{
 
+        
+        
         const { data: usernameExists, error: checkError } = await sb.rpc(
           'check_username_exists',
           { p_username: username }
         );
 
         if(checkError){
-          console.error('Erreur lors de la vérification du username:', checkError);
           setAuthError('loginError','Erreur technique, réessaie plus tard.');
           return false;
         }
@@ -8530,92 +9337,68 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         }
 
       }catch(err){
-
-        console.error('Erreur lors de la connexion:', err);
         setAuthError('loginError','Erreur réseau, réessaie.');
-
       }finally{
-
         submitBtn.disabled = false;
         submitBtn.textContent = 'Se connecter';
-
       }
 
       return false;
-
     }
 
 
     function translateAuthError(message){
-
       if(/already registered|already exists/i.test(message)){
         return 'Un compte existe déjà avec ce nom d\'utilisateur.';
       }
-
       if(/password/i.test(message)){
         return 'Mot de passe invalide (8 caractères minimum).';
       }
-
       return 'Une erreur est survenue, réessaie.';
-
     }
 
 
-    /* ── déconnexion ── */
+     
 
     async function handleLogout(){
-
       await sb.auth.signOut();
-
       currentProfile = null;
-
       toggleAccountMenu(false);
-
       document.getElementById('accountWidget').style.display = 'none';
       document.getElementById('accountDivider').style.display = 'none';
-
       if(typeof clearSavedKeySession === 'function'){
         clearSavedKeySession();
       }
-
       showAuthOverlay();
-
     }
 
 
-    /* ── menu du widget de compte ── */
+     
 
     function toggleAccountMenu(force){
-
       const menu = document.getElementById('accountMenu');
-
       const shouldShow = typeof force === 'boolean'
         ? force
         : !menu.classList.contains('visible');
 
       menu.classList.toggle('visible',shouldShow);
-
     }
 
     document.addEventListener('click',function(e){
-
       const widget = document.getElementById('accountWidget');
-
       if(widget && !widget.contains(e.target)){
         toggleAccountMenu(false);
       }
-
     });
 
 
-    /* ── chargement du profil courant ── */
+     
 
     function initials(name){
       return (name || '?').trim().slice(0,2).toUpperCase();
     }
 
     function renderAccountUI(profile){
-
       currentProfile = profile;
 
       document.getElementById('accountWidget').style.display = 'flex';
@@ -8627,7 +9410,6 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       ];
 
       avatarEls.forEach(function(el){
-
         if(profile.avatar_url){
           el.style.backgroundImage = `url(${profile.avatar_url})`;
           el.style.backgroundSize = 'cover';
@@ -8637,18 +9419,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
           el.style.backgroundImage = '';
           el.textContent = initials(profile.display_name);
         }
-
       });
 
       document.getElementById('accountName').textContent = profile.display_name;
       document.getElementById('accountMenuDisplay').textContent = profile.display_name;
       document.getElementById('accountMenuUsername').textContent = '@' + profile.username;
       document.getElementById('accountMenuId').textContent = 'ID · ' + profile.id;
-
     }
 
     async function loadCurrentUser(){
-
       const { data:{ user } } = await sb.auth.getUser();
 
       if(!user){
@@ -8667,17 +9446,15 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       renderAccountUI(profile);
       return true;
-
     }
 
 
-    /* ── édition du profil ── */
+     
 
     let pendingAvatarFile = null;
     let pendingBannerFile = null;
 
     function openProfileModal(){
-
       toggleAccountMenu(false);
 
       if(!currentProfile){
@@ -8688,7 +9465,6 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       document.getElementById('editBio').value = currentProfile.bio || '';
 
       const avatarPreview = document.getElementById('profileAvatarPreview');
-
       if(currentProfile.avatar_url){
         avatarPreview.style.backgroundImage = `url(${currentProfile.avatar_url})`;
         avatarPreview.style.backgroundSize = 'cover';
@@ -8700,7 +9476,6 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       }
 
       const bannerPreview = document.getElementById('profileBannerPreview');
-
       if(currentProfile.banner_url){
         bannerPreview.style.backgroundImage = `url(${currentProfile.banner_url})`;
       }else{
@@ -8715,7 +9490,6 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       document
         .getElementById('profileModalOverlay')
         .classList.add('visible');
-
     }
 
     function closeProfileModal(){
@@ -8725,9 +9499,7 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
     }
 
     function handleImageSelect(e,kind){
-
       const file = e.target.files[0];
-
       if(!file){
         return;
       }
@@ -8735,27 +9507,19 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
       const url = URL.createObjectURL(file);
 
       if(kind === 'avatar'){
-
         pendingAvatarFile = file;
-
         const el = document.getElementById('profileAvatarPreview');
         el.style.backgroundImage = `url(${url})`;
         el.style.backgroundSize = 'cover';
         el.style.backgroundPosition = 'center';
         el.textContent = '';
-
       }else{
-
         pendingBannerFile = file;
-
         document.getElementById('profileBannerPreview').style.backgroundImage = `url(${url})`;
-
       }
-
     }
 
     async function uploadImage(bucket,file,userId){
-
       const ext = file.name.split('.').pop();
       const path = `${userId}/${bucket === 'avatars' ? 'avatar' : 'banner'}.${ext}`;
 
@@ -8769,11 +9533,9 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
       const { data } = sb.storage.from(bucket).getPublicUrl(path);
       return data.publicUrl + '?t=' + Date.now();
-
     }
 
     async function handleProfileSave(){
-
       if(!currentProfile){
         return;
       }
@@ -8813,51 +9575,35 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         closeProfileModal();
 
       }catch(err){
-
-        console.error('Erreur lors de la sauvegarde du profil:', err);
         setAuthError('profileEditError','Erreur lors de l\'envoi de l\'image.');
-
       }finally{
-
         saveBtn.disabled = false;
         saveBtn.textContent = 'Enregistrer';
-
       }
-
     }
 
 
-    /* ── point d'entrée ── */
+    
+ 
 
+     
     let _sentinelReadyResolve;
     window._sentinelReady = new Promise(res => { _sentinelReadyResolve = res; });
 
     (async function initAuthGate(){
-
       const { data:{ session } } = await sb.auth.getSession();
 
-      console.log('[GetKey] initAuthGate → session Sentinel trouvée:', !!session);
-
       if(session){
-
         const ok = await loadCurrentUser();
-
         if(!ok){
-          console.log('[GetKey] loadCurrentUser a échoué → affichage overlay.');
           showAuthOverlay();
         }else if(typeof restoreDiscordKeySession === 'function'){
           restoreDiscordKeySession();
         }
-
       }else{
-
-        console.log('[GetKey] Pas de session Sentinel au chargement → affichage overlay.');
         showAuthOverlay();
-
       }
-
       _sentinelReadyResolve();
-
     })();
 
   </script>
@@ -8867,489 +9613,227 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
 
   <script>
 
-    /* ── CONFIG ── */
+     
     const DISCORD_CLIENT_ID   = '1451684958090428579';
     const DISCORD_REDIRECT_URI = 'https://x4tmqq.github.io/Sentinel-Script/';
     const EDGE_FUNCTION_URL   = 'https://fzuocfhzzvscjhcxuzog.supabase.co/functions/v1/get-key';
 
+     
     const KEY_SCRIPT_IDS = ['examination', 'mm2'];
 
     const KEY_SESSION_STORAGE_KEY = 'sentinelKeySession';
 
-
-    /* ── SESSION TOKEN ── */
-
+     
     function saveKeySession(sessionToken){
-
-      if(!sessionToken){
-        return;
-      }
-
+      if(!sessionToken) return;
       try{
-        localStorage.setItem(
-          KEY_SESSION_STORAGE_KEY,
-          JSON.stringify({
-            token: sessionToken,
-            savedAt: Date.now()
-          })
-        );
+        localStorage.setItem(KEY_SESSION_STORAGE_KEY, JSON.stringify({
+          token: sessionToken,
+          savedAt: Date.now()
+        }));
       }catch(e){}
-
     }
 
     function getSavedKeySessionToken(){
-
       try{
-
-        const raw = localStorage.getItem(
-          KEY_SESSION_STORAGE_KEY
-        );
-
-        if(!raw){
-          return null;
-        }
-
+        const raw = localStorage.getItem(KEY_SESSION_STORAGE_KEY);
+        if(!raw) return null;
         const parsed = JSON.parse(raw);
-
-        return parsed && parsed.token
-          ? parsed.token
-          : null;
-
+        return parsed && parsed.token ? parsed.token : null;
       }catch(e){
         return null;
       }
-
     }
 
     function clearSavedKeySession(){
-      try{
-        localStorage.removeItem(
-          KEY_SESSION_STORAGE_KEY
-        );
-      }catch(e){}
+      try{ localStorage.removeItem(KEY_SESSION_STORAGE_KEY); }catch(e){}
     }
 
-
-    /* ── FETCH KEY WITH SESSION TOKEN ── */
-
-    async function fetchKeyWithSession(
-      scriptId,
-      sessionToken
-    ){
-
+     
+    async function fetchKeyWithSession(scriptId, sessionToken){
       try{
-
         const { data: { session: sbSession } } = await sb.auth.getSession();
-
-        const res = await fetch(
-          EDGE_FUNCTION_URL,
-          {
-            method:  'POST',
-            headers: {
-              'Content-Type':  'application/json',
-              'Authorization': `Bearer ${sbSession?.access_token ?? ''}`,
-            },
-            body: JSON.stringify({
-              script_id: scriptId,
-              session_token: sessionToken
-            }),
-          }
-        );
-
+        const res  = await fetch(EDGE_FUNCTION_URL, {
+          method:  'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${sbSession?.access_token ?? ''}`,
+          },
+          body:    JSON.stringify({ script_id: scriptId, session_token: sessionToken }),
+        });
         const data = await res.json();
 
-        console.log(
-          '[GetKey] fetchKeyWithSession(',
-          scriptId,
-          ') → status:',
-          res.status,
-          '| body:',
-          data
-        );
-
         if(res.ok && data.key){
-
           showKey(scriptId, data.key);
-
-          if(data.session_token){
-            saveKeySession(data.session_token);
-          }
-
+          if(data.session_token) saveKeySession(data.session_token);
           return true;
-
         }
 
         if(data.expired){
-          console.log('[GetKey] session_token expiré, on le supprime du localStorage.');
           clearSavedKeySession();
         }
-
         return false;
 
       }catch(err){
-
-        console.error(
-          '[GetKey] Erreur restauration clé:',
-          err
-        );
-
         return false;
-
       }
-
     }
 
+    
 
-    /* ── RESTORE SESSION AU CHARGEMENT ── */
-
+ 
     async function restoreDiscordKeySession(){
-
-      const sessionToken =
-        getSavedKeySessionToken();
-
-      console.log(
-        '[GetKey] restoreDiscordKeySession → session_token en localStorage:',
-        sessionToken
-      );
-
-      if(!sessionToken){
-        return;
-      }
+      const sessionToken = getSavedKeySessionToken();
+      if(!sessionToken) return;
 
       for(const scriptId of KEY_SCRIPT_IDS){
+        const btn = document.getElementById('keyBtn_' + scriptId);
+         
+        if(!btn || btn.disabled) continue;
 
-        const btn =
-          document.getElementById(
-            'keyBtn_' + scriptId
-          );
-
-        if(!btn || btn.disabled){
-          continue;
-        }
-
-        await fetchKeyWithSession(
-          scriptId,
-          sessionToken
-        );
-
+        await fetchKeyWithSession(scriptId, sessionToken);
       }
-
     }
 
-
-    /* ── ANIMATION ICÔNE (check vert / croix rouge) ── */
-
-    function showKeyStatusAnim(
-      type,
-      callback
-    ){
-
-      var anim =
-        document.getElementById(
-          'keyStatusAnim'
-        );
-
-      var icon =
-        document.getElementById(
-          'keyStatusIcon'
-        );
-
-      var svg =
-        document.getElementById(
-          'keyStatusSvg'
-        );
-
-      icon.className =
-        'key-status-icon ' +
-        type;
-
-      svg.innerHTML =
-        type === 'success'
-          ? '<polyline points="20 6 9 17 4 12"></polyline>'
-          : '<line x1="18" y1="6" x2="6" y2="18"></line>' +
-            '<line x1="6" y1="6" x2="18" y2="18"></line>';
-
-      anim.classList.add(
-        'visible'
-      );
-
-      requestAnimationFrame(
-        function(){
-          requestAnimationFrame(
-            function(){
-              icon.classList.add(
-                'show'
-              );
-            }
-          );
-        }
-      );
-
-      setTimeout(
-        function(){
-
-          icon.classList.remove(
-            'show'
-          );
-
-          setTimeout(
-            function(){
-
-              anim.classList.remove(
-                'visible'
-              );
-
-              if(callback){
-                callback();
-              }
-
-            },
-            300
-          );
-
-        },
-        2000
-      );
-
-    }
-
-
-    /* ── AFFICHAGE DE LA CLÉ ── */
-
-    function showKey(
-      scriptId,
-      keyValue
-    ){
-
-      var reveal =
-        document.getElementById(
-          'keyReveal_' + scriptId
-        );
-
-      var text =
-        document.getElementById(
-          'keyText_' + scriptId
-        );
-
-      var btn =
-        document.getElementById(
-          'keyBtn_' + scriptId
-        );
+     
+    function showKey(scriptId, keyValue){
+      const reveal = document.getElementById('keyReveal_' + scriptId);
+      const text = document.getElementById('keyText_' + scriptId);
+      const btn = document.getElementById('keyBtn_' + scriptId);
 
       if(text){
         text.textContent = keyValue;
       }
 
-      showKeyStatusAnim(
-        'success',
-        function(){
+      if(reveal){
+        reveal.classList.add('visible');
+      }
 
-          if(reveal){
-            reveal.style.display = 'block';
-            requestAnimationFrame(
-              function(){
-                reveal.classList.add(
-                  'visible'
-                );
-              }
-            );
-          }
-
-          if(btn){
-
-            btn.disabled = false;
-
-            btn.innerHTML =
-              '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0">' +
-              '<rect x="9" y="9" width="13" height="13" rx="2"/>' +
-              '<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>' +
-              '</svg> Copy Key';
-
-            btn.style.opacity      = '1';
-            btn.style.borderColor  = 'rgba(92,255,138,.45)';
-            btn.style.background   = 'linear-gradient(135deg,rgba(92,255,138,.22) 0%,rgba(50,180,90,.14) 100%)';
-
-            btn.onclick = function(){
-              copyKey(scriptId);
-            };
-
-          }
-
-        }
-      );
-
+      if(btn){
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copy Key
+        `;
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.onclick = function(){
+          copyKey(scriptId);
+        };
+      }
     }
 
+     
+    function showKeyError(scriptId, message){
+      const errEl  = document.getElementById('keyError_'     + scriptId);
+      const errTxt = document.getElementById('keyErrorText_' + scriptId);
+      const btn    = document.getElementById('keyBtn_'       + scriptId);
 
-    /* ── AFFICHAGE D'UNE ERREUR ── */
-
-    function showKeyError(
-      scriptId,
-      message
-    ){
-
-      var errEl =
-        document.getElementById(
-          'keyError_' + scriptId
-        );
-
-      var errTxt =
-        document.getElementById(
-          'keyErrorText_' + scriptId
-        );
-
-      var btn =
-        document.getElementById(
-          'keyBtn_' + scriptId
-        );
-
-      showKeyStatusAnim(
-        'error',
-        function(){
-
-          if(errTxt){
-            errTxt.textContent = message;
-          }
-
-          if(errEl){
-            errEl.classList.add(
-              'visible'
-            );
-          }
-
-          if(btn){
-
-            btn.disabled = false;
-
-            btn.innerHTML =
-              '<svg viewBox="0 0 24 24">' +
-              '<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>' +
-              '</svg> Get Key';
-
-          }
-
-        }
-      );
-
+      if(errTxt) errTxt.textContent = message;
+      if(errEl)  errEl.classList.add('visible');
+      if(btn){
+        btn.disabled = false;
+        btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Get Key`;
+      }
     }
 
-
-    /* ── COPIER LA CLÉ ── */
-
+     
     function copyKey(scriptId){
-
-      var text =
-        document.getElementById(
-          'keyText_' + scriptId
-        );
-
-      if(
-        !text ||
-        !text.textContent
-      ){
-        return;
-      }
-
-      navigator.clipboard.writeText(
-        text.textContent
-      ).then(
-        function(){
-
-          showNotification(
-            'Key copied',
-            'The key has been copied to your clipboard.',
-            'success'
-          );
-
-          playNotificationSound();
-
-        }
-      ).catch(
-        function(){
-
-          var ok =
-            fallbackCopyText(
-              text.textContent
-            );
-
-          if(ok){
-
-            showNotification(
-              'Key copied',
-              'The key has been copied to your clipboard.',
-              'success'
-            );
-
-            playNotificationSound();
-
-          }else{
-
-            showNotification(
-              'Copy failed',
-              'Could not copy key.',
-              'error'
-            );
-
-          }
-
-        }
-      );
-
+      const text = document.getElementById('keyText_' + scriptId);
+      if(!text || !text.textContent) return;
+      navigator.clipboard.writeText(text.textContent).catch(() => {});
     }
 
-
-    /* ── LOADER OVERLAY DISCORD ── */
-
+     
     function showDiscordLoading(msg){
+      const overlay = document.getElementById('discordLoadingOverlay');
+      const txt = document.getElementById('discordLoadingText');
+      if(!overlay) return;
 
-      var overlay =
-        document.getElementById(
-          'discordLoadingOverlay'
-        );
+      overlay.classList.remove('result');
 
-      var txt =
-        document.getElementById(
-          'discordLoadingText'
-        );
-
-      if(overlay){
-        overlay.classList.add(
-          'visible'
-        );
+      const icon = document.getElementById('verificationIcon');
+      const svg = document.getElementById('verificationIconSvg');
+      if(icon){
+        icon.className = 'verification-icon';
+      }
+      if(svg){
+        svg.innerHTML = '';
       }
 
-      if(txt && msg){
-        txt.textContent = msg;
+      if(txt){
+        txt.classList.remove('changing');
+        txt.textContent = msg || 'Vérification Discord en cours…';
       }
 
+      requestAnimationFrame(() => {
+        overlay.classList.add('visible');
+      });
     }
 
     function hideDiscordLoading(){
-
-      var overlay =
-        document.getElementById(
-          'discordLoadingOverlay'
-        );
-
-      if(overlay){
-        overlay.classList.remove(
-          'visible'
-        );
-      }
-
+      const overlay = document.getElementById('discordLoadingOverlay');
+      if(!overlay) return;
+      overlay.classList.remove('visible');
     }
 
+    function showVerificationResult(success, callback){
+      const overlay = document.getElementById('discordLoadingOverlay');
+      const icon = document.getElementById('verificationIcon');
+      const svg = document.getElementById('verificationIconSvg');
+      const txt = document.getElementById('discordLoadingText');
 
-    /* ── BOUTON "GET KEY" CLIQUÉ ── */
+      if(!overlay || !icon || !svg){
+        if(callback) callback();
+        return;
+      }
 
+      const finishText = () => {
+        if(txt){
+          txt.textContent = success ? 'Vérification réussie' : 'Vérification refusée';
+          requestAnimationFrame(() => txt.classList.remove('changing'));
+        }
+      };
+
+      if(txt){
+        txt.classList.add('changing');
+      }
+
+      setTimeout(finishText, 180);
+
+      icon.className = 'verification-icon ' + (success ? 'success' : 'error');
+      svg.innerHTML = success
+        ? '<path d="M5 12.5l4.2 4.2L19 7"/>'
+        : '<path d="M7 7l10 10M17 7L7 17"/>';
+
+      overlay.classList.add('result');
+
+      setTimeout(() => {
+        overlay.classList.remove('visible');
+
+        setTimeout(() => {
+          overlay.classList.remove('result');
+          icon.className = 'verification-icon';
+          svg.innerHTML = '';
+          if(txt){
+            txt.classList.remove('changing');
+            txt.textContent = 'Vérification Discord en cours…';
+          }
+          if(callback) callback();
+        }, 460);
+      }, 2000);
+    }
+
+     
     function handleGetKey(scriptId){
 
-      console.log(
-        '[GetKey] handleGetKey(',
-        scriptId,
-        ') → redirection vers Discord…'
-      );
+      
 
+
+ 
       const params = new URLSearchParams({
         client_id:     DISCORD_CLIENT_ID,
         redirect_uri:  DISCORD_REDIRECT_URI,
@@ -9358,172 +9842,65 @@ cat > /home/claude/sentinel-script.html << 'HTMLEOF'
         state:         scriptId,
       });
 
-      window.location.href =
-        'https://discord.com/api/oauth2/authorize?' +
-        params.toString();
-
+       
+      window.location.href = 'https://discord.com/api/oauth2/authorize?' + params.toString();
     }
 
-
-    /* ── GESTION DU RETOUR OAUTH ── */
-
+     
     (async function handleOAuthCallback(){
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const scriptId = urlParams.get('state');
 
-      const urlParams =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      const code =
-        urlParams.get('code');
-
-      const scriptId =
-        urlParams.get('state');
-
-      console.log(
-        '[GetKey] handleOAuthCallback → code:',
-        code,
-        '| scriptId (state OAuth):',
-        scriptId
-      );
-
-      if(
-        !code ||
-        !scriptId
-      ){
-
-        console.log(
-          '[GetKey] Pas de code OU pas de scriptId → arrêt.'
-        );
-
+      if(!code || !scriptId){
         return;
-
       }
 
-      const cleanUrl =
-        window.location.origin +
-        window.location.pathname;
-
-      window.history.replaceState(
-        {},
-        document.title,
-        cleanUrl
-      );
+      const cleanUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
 
       await window._sentinelReady;
+      showDiscordLoading('Vérification Discord en cours…');
 
-      showDiscordLoading(
-        'Vérification Discord en cours…'
-      );
-
-      const btn =
-        document.getElementById(
-          'keyBtn_' + scriptId
-        );
-
+      const btn = document.getElementById('keyBtn_' + scriptId);
       if(btn){
         btn.disabled = true;
         btn.textContent = 'Vérification…';
       }
 
       try{
-
-        console.log(
-          '[GetKey] Appel de l\'edge function avec code + script_id =',
-          scriptId
-        );
-
-        const { data: { session: sbSession } } =
-          await sb.auth.getSession();
-
-        const res = await fetch(
-          EDGE_FUNCTION_URL,
-          {
-            method:  'POST',
-            headers: {
-              'Content-Type':  'application/json',
-              'Authorization': `Bearer ${sbSession?.access_token ?? ''}`,
-            },
-            body: JSON.stringify({
-              code,
-              script_id: scriptId
-            }),
-          }
-        );
+        const { data: { session: sbSession } } = await sb.auth.getSession();
+        const res = await fetch(EDGE_FUNCTION_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sbSession?.access_token ?? ''}`,
+          },
+          body: JSON.stringify({ code, script_id: scriptId }),
+        });
 
         const data = await res.json();
 
-        console.log(
-          '[GetKey] Réponse edge function → status:',
-          res.status,
-          '| body:',
-          data
-        );
-
-        hideDiscordLoading();
-
         if(res.ok && data.key){
-
-          console.log(
-            '[GetKey] Clé reçue, affichage en cours pour',
-            scriptId
-          );
-
-          showKey(scriptId, data.key);
-
-          if(data.session_token){
-
-            saveKeySession(
-              data.session_token
-            );
-
-            console.log(
-              '[GetKey] session_token sauvegardé dans localStorage.'
-            );
-
-          }else{
-
-            console.log(
-              '[GetKey] ⚠️ Aucun session_token dans la réponse.'
-            );
-
-          }
-
+          showVerificationResult(true, () => {
+            showKey(scriptId, data.key);
+            if(data.session_token){
+              saveKeySession(data.session_token);
+            }
+          });
         }else{
-
-          console.log(
-            '[GetKey] Pas de clé dans la réponse, affichage erreur:',
-            data.error
-          );
-
-          showKeyError(
-            scriptId,
-            data.error || 'Erreur inconnue.'
-          );
-
+          showVerificationResult(false, () => {
+            showKeyError(scriptId, data.error || 'Erreur inconnue.');
+          });
         }
-
       }catch(err){
-
-        hideDiscordLoading();
-
-        showKeyError(
-          scriptId,
-          'Erreur réseau. Réessaie.'
-        );
-
-        console.error(
-          '[GetKey] Erreur réseau lors de l\'appel edge function:',
-          err
-        );
-
+        showVerificationResult(false, () => {
+          showKeyError(scriptId, 'Erreur réseau. Réessaie.');
+        });
       }
-
     })();
 
   </script>
 
 </body>
 </html>
-HTMLEOF
-echo "Done"
