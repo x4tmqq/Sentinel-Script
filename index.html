@@ -1783,6 +1783,22 @@
 
     /* ── KEY REVEAL BOX ── */
 
+    .key-copy-success{
+      animation:keyCopySuccess .55s cubic-bezier(.22,1,.36,1);
+    }
+
+    @keyframes keyCopySuccess{
+      0%{
+        transform:translateY(0) scale(1);
+      }
+      45%{
+        transform:translateY(-2px) scale(1.06);
+      }
+      100%{
+        transform:translateY(0) scale(1);
+      }
+    }
+
     .key-reveal{
       display:none;
       position:relative;
@@ -1794,6 +1810,7 @@
       width:100%;
       max-width:100%;
       min-width:0;
+      align-self:stretch;
       overflow:hidden;
       background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 50%,rgba(255,255,255,.08));
       border:1px solid rgba(255,255,255,.18);
@@ -9597,8 +9614,6 @@
         const ok = await loadCurrentUser();
         if(!ok){
           showAuthOverlay();
-        }else if(typeof restoreDiscordKeySession === 'function'){
-          restoreDiscordKeySession();
         }
       }else{
         showAuthOverlay();
@@ -9741,10 +9756,97 @@
     }
 
      
-    function copyKey(scriptId){
+    async function copyKey(scriptId){
       const text = document.getElementById('keyText_' + scriptId);
+      const keyButton = document.getElementById('keyBtn_' + scriptId);
+      const revealButton = document.querySelector('#keyReveal_' + scriptId + ' .key-reveal-copy');
+
       if(!text || !text.textContent) return;
-      navigator.clipboard.writeText(text.textContent).catch(() => {});
+
+      const keyValue = text.textContent.trim();
+      if(!keyValue) return;
+
+      let copied = false;
+
+      if(navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+        try{
+          await navigator.clipboard.writeText(keyValue);
+          copied = true;
+        }catch(error){}
+      }
+
+      if(!copied){
+        copied = fallbackCopyText(keyValue);
+      }
+
+      const buttons = [keyButton, revealButton].filter(Boolean);
+
+      if(copied){
+        buttons.forEach((button) => {
+          button.classList.remove('key-copy-success');
+          void button.offsetWidth;
+          button.classList.add('key-copy-success');
+        });
+
+        if(keyButton){
+          keyButton.innerHTML = `
+            <svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Copied!
+          `;
+        }
+
+        if(revealButton){
+          revealButton.innerHTML = `
+            <svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          `;
+          revealButton.title = 'Clé copiée';
+        }
+
+        showNotification(
+          'Key copied',
+          'The key has been copied to your clipboard.',
+          'success'
+        );
+
+        playNotificationSound();
+
+        setTimeout(() => {
+          if(keyButton){
+            keyButton.innerHTML = `
+              <svg viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              Copy Key
+            `;
+          }
+
+          if(revealButton){
+            revealButton.innerHTML = `
+              <svg viewBox="0 0 24 24">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+            `;
+            revealButton.title = 'Copier la clé';
+          }
+
+          buttons.forEach((button) => {
+            button.classList.remove('key-copy-success');
+          });
+        }, 1800);
+      }else{
+        showNotification(
+          'Copy failed',
+          'Unable to copy the key to your clipboard.',
+          'error'
+        );
+        playNotificationSound();
+      }
     }
 
      
