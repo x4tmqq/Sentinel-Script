@@ -81,33 +81,59 @@
       inset:0;
 
       background:
-        /* lueur bleutée subtile en haut-centre — signature projectreal.gg */
+        /* grande lumière blanche éblouissante en haut-centre */
         radial-gradient(
-          ellipse 70% 42% at 50% -4%,
-          rgba(88,101,242,.28) 0%,
-          rgba(66,80,210,.10) 48%,
+          ellipse 55% 50% at 62% 0%,
+          rgba(255,255,255,1.0) 0%,
+          rgba(220,232,255,.92) 18%,
+          rgba(180,205,255,.70) 38%,
+          transparent 68%
+        ),
+
+        /* nappe bleu-ciel claire centre-haut */
+        radial-gradient(
+          ellipse 85% 60% at 45% 8%,
+          rgba(160,195,255,.88) 0%,
+          rgba(120,165,248,.65) 28%,
+          rgba(90,130,235,.35) 55%,
+          transparent 78%
+        ),
+
+        /* lumière blanche gauche — effet spot de scène */
+        radial-gradient(
+          ellipse 45% 60% at -5% 35%,
+          rgba(210,225,255,.82) 0%,
+          rgba(160,195,255,.50) 38%,
+          rgba(110,155,240,.20) 65%,
+          transparent 82%
+        ),
+
+        /* accent violet-bleu vif droite haute */
+        radial-gradient(
+          ellipse 50% 55% at 100% 0%,
+          rgba(100,120,255,.90) 0%,
+          rgba(110,130,250,.70) 22%,
+          rgba(90,110,230,.40) 48%,
           transparent 72%
         ),
 
-        /* accent froid gauche */
+        /* reflet violet-mauve centre droit */
         radial-gradient(
-          ellipse 38% 38% at 8% 35%,
-          rgba(70,90,200,.11) 0%,
-          transparent 65%
+          ellipse 40% 38% at 80% 30%,
+          rgba(130,110,240,.55) 0%,
+          rgba(110,100,220,.28) 45%,
+          transparent 72%
         ),
 
-        /* accent froid droit */
-        radial-gradient(
-          ellipse 36% 40% at 92% 28%,
-          rgba(80,100,215,.09) 0%,
-          transparent 65%
-        ),
-
-        /* fond noir profond */
+        /* dégradé de base — ciel bleu lumineux vers bas sombre */
         linear-gradient(
           180deg,
-          #06060f 0%,
-          #04040a 60%,
+          #b8ceff 0%,
+          #8aaaf0 18%,
+          #6585d8 38%,
+          #3a4fa0 58%,
+          #1e2a60 72%,
+          #0c1232 85%,
           #030304 100%
         );
     }
@@ -117,10 +143,10 @@
       content:'';
       position:absolute;
       inset:0;
-      background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);
+      background-image:radial-gradient(rgba(40,60,160,.18) 1px,transparent 1px);
       background-size:32px 32px;
-      -webkit-mask-image:radial-gradient(ellipse 90% 75% at 50% 35%,#000 0%,transparent 80%);
-      mask-image:radial-gradient(ellipse 90% 75% at 50% 35%,#000 0%,transparent 80%);
+      -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,#000 0%,transparent 85%);
+      mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,#000 0%,transparent 85%);
       pointer-events:none;
     }
 
@@ -131,23 +157,25 @@
     }
 
     .b1{
-      top:-22%;
+      top:-30%;
       left:50%;
 
       transform:translateX(-50%);
 
-      width:60%;
-      height:55%;
+      width:75%;
+      height:65%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(88,101,242,.18) 0%,
-          rgba(66,80,210,.07) 42%,
-          transparent 68%
+          rgba(255,255,255,.95) 0%,
+          rgba(200,220,255,.80) 22%,
+          rgba(150,185,255,.50) 45%,
+          rgba(100,145,240,.20) 65%,
+          transparent 78%
         );
 
-      filter:blur(40px);
+      filter:blur(28px);
 
       animation:
         b1a
@@ -158,21 +186,22 @@
     }
 
     .b2{
-      top:2%;
-      right:-18%;
+      top:-5%;
+      right:-20%;
 
-      width:44%;
-      height:60%;
+      width:55%;
+      height:65%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(100,120,220,.10) 0%,
-          rgba(70,90,190,.04) 50%,
-          transparent 72%
+          rgba(80,100,255,.88) 0%,
+          rgba(90,115,248,.62) 28%,
+          rgba(70,95,220,.30) 55%,
+          transparent 75%
         );
 
-      filter:blur(48px);
+      filter:blur(35px);
 
       animation:
         b2a
@@ -183,21 +212,22 @@
     }
 
     .b3{
-      top:20%;
-      left:-18%;
+      top:15%;
+      left:-22%;
 
-      width:42%;
-      height:58%;
+      width:52%;
+      height:62%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(80,110,210,.09) 0%,
-          rgba(60,90,180,.03) 52%,
-          transparent 72%
+          rgba(200,215,255,.85) 0%,
+          rgba(160,190,255,.58) 30%,
+          rgba(120,160,245,.28) 55%,
+          transparent 75%
         );
 
-      filter:blur(50px);
+      filter:blur(38px);
 
       animation:
         b3a
@@ -208,23 +238,24 @@
     }
 
     .b4{
-      bottom:-14%;
+      bottom:-10%;
       left:50%;
 
       transform:translateX(-50%);
 
-      width:70%;
-      height:44%;
+      width:80%;
+      height:40%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(60,80,180,.08) 0%,
-          rgba(40,60,150,.03) 55%,
-          transparent 78%
+          rgba(30,50,120,.85) 0%,
+          rgba(15,30,90,.60) 40%,
+          rgba(5,10,40,.30) 65%,
+          transparent 82%
         );
 
-      filter:blur(52px);
+      filter:blur(40px);
 
       animation:
         b4a
@@ -306,9 +337,7 @@
       }
     }
 
-    /* Voile statique qui absorbe le scintillement des blobs animés
-       en bas du hero, pour garantir une couleur de raccord fixe et
-       identique à celle du début du dégradé de transition. */
+    /* Voile de transition — assure le raccord lumineux → sombre */
     .hero-fade-mask{
       position:absolute;
       inset:0;
@@ -321,10 +350,11 @@
         linear-gradient(
           to bottom,
           transparent 0%,
-          transparent 50%,
-          rgba(3,3,4,.35) 68%,
-          rgba(3,3,4,.80) 84%,
-          #030304 96%,
+          transparent 42%,
+          rgba(10,18,60,.15) 55%,
+          rgba(5,10,35,.45) 68%,
+          rgba(3,5,20,.72) 80%,
+          rgba(3,3,4,.90) 90%,
           #030304 100%
         );
     }
@@ -664,7 +694,7 @@
 
       letter-spacing:.22em;
 
-      color:#f0f2ff;
+      color:#0a0f2e;
 
       text-transform:uppercase;
 
@@ -675,6 +705,10 @@
       display:flex;
 
       justify-content:center;
+
+      text-shadow:
+        0 1px 0 rgba(255,255,255,.5),
+        0 2px 12px rgba(50,80,200,.18);
     }
 
     .hero-title span{
@@ -754,11 +788,11 @@
     .hero-desc{
       font-size:15px;
 
-      font-weight:400;
+      font-weight:500;
 
-      color:#c8cef0;
+      color:#1a2560;
 
-      opacity:.65;
+      opacity:.85;
 
       text-align:center;
 
@@ -776,7 +810,7 @@
     }
 
     .btn-view{
-      background:#0d0d0d;
+      background:#0e1640;
 
       color:#fff;
 
@@ -798,18 +832,26 @@
 
       transition:
         background .2s,
-        transform .15s;
+        transform .15s,
+        box-shadow .2s;
 
       text-decoration:none;
 
       display:inline-block;
+
+      box-shadow:
+        0 4px 20px rgba(10,20,80,.25),
+        0 1px 0 rgba(255,255,255,.08) inset;
     }
 
     .btn-view:hover{
-      background:#222;
+      background:#1a2b6e;
 
       transform:
         translateY(-1px);
+
+      box-shadow:
+        0 8px 28px rgba(10,20,100,.35);
     }
 
     .btn-discord{
@@ -936,7 +978,9 @@
 
       text-transform:uppercase;
 
-      opacity:.55;
+      color:#1a2560;
+
+      opacity:.65;
     }
 
     .availability-links{
@@ -1062,52 +1106,60 @@
 
       background-image:
         radial-gradient(
-          rgba(255,255,255,.06) 1px,
+          rgba(255,255,255,.10) 1px,
           transparent 1px
         );
 
-      background-size:34px 34px;
+      background-size:32px 32px;
 
       -webkit-mask-image:
         radial-gradient(
-          ellipse 80% 60% at 50% 30%,
+          ellipse 92% 75% at 50% 20%,
           #000 0%,
-          transparent 78%
+          transparent 85%
         );
 
       mask-image:
         radial-gradient(
-          ellipse 80% 60% at 50% 30%,
+          ellipse 92% 75% at 50% 20%,
           #000 0%,
-          transparent 78%
+          transparent 85%
         );
     }
 
-    /* grand spotlight central, façon faisceau doux — en gris clair
-       plutôt qu'en bleu-noir, pour qu'il se voie vraiment sur fond
-       noir. Offset sous la couture pour ne jamais créer de bande. */
+    /* grand spotlight central — intense, visible, liquid */
     .spotlight{
       position:absolute;
 
-      top:260px;
+      top:80px;
       left:50%;
 
       transform:translateX(-50%);
 
-      width:1100px;
-      max-width:150%;
-      height:640px;
+      width:1200px;
+      max-width:160%;
+      height:700px;
 
       background:
         radial-gradient(
-          ellipse 50% 50% at 50% 0%,
-          rgba(220,222,232,.16) 0%,
-          rgba(170,174,190,.09) 32%,
-          rgba(120,124,140,.04) 58%,
-          transparent 78%
+          ellipse 55% 55% at 50% 0%,
+          rgba(100,120,255,.22) 0%,
+          rgba(80,105,230,.14) 25%,
+          rgba(60,85,200,.08) 50%,
+          transparent 75%
+        ),
+        radial-gradient(
+          ellipse 35% 40% at 25% 15%,
+          rgba(180,195,255,.12) 0%,
+          transparent 65%
+        ),
+        radial-gradient(
+          ellipse 35% 40% at 75% 15%,
+          rgba(140,100,255,.10) 0%,
+          transparent 65%
         );
 
-      filter:blur(6px);
+      filter:blur(4px);
 
       pointer-events:none;
     }
@@ -1117,26 +1169,27 @@
 
       border-radius:50%;
 
-      filter:blur(60px);
+      filter:blur(55px);
 
       will-change:transform,opacity;
     }
 
     .dblob-a{
-      top:32%;
+      top:18%;
       left:50%;
 
       transform:translateX(-50%);
 
-      width:64%;
-      height:44%;
+      width:72%;
+      height:50%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(200,204,216,.16) 0%,
-          rgba(150,154,168,.08) 46%,
-          transparent 74%
+          rgba(88,101,255,.20) 0%,
+          rgba(70,90,230,.12) 38%,
+          rgba(55,75,200,.06) 60%,
+          transparent 78%
         );
 
       animation:
@@ -1148,18 +1201,19 @@
     }
 
     .dblob-b{
-      top:56%;
-      left:4%;
+      top:40%;
+      left:-5%;
 
-      width:50%;
-      height:40%;
+      width:58%;
+      height:48%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(120,124,138,.16) 0%,
-          rgba(90,94,108,.07) 50%,
-          transparent 76%
+          rgba(100,80,240,.16) 0%,
+          rgba(80,65,200,.09) 42%,
+          rgba(60,50,160,.04) 65%,
+          transparent 80%
         );
 
       animation:
@@ -1171,18 +1225,19 @@
     }
 
     .dblob-c{
-      top:70%;
-      right:2%;
+      top:45%;
+      right:-5%;
 
-      width:46%;
-      height:38%;
+      width:55%;
+      height:45%;
 
       background:
         radial-gradient(
           ellipse,
-          rgba(70,73,84,.18) 0%,
-          rgba(50,53,62,.08) 50%,
-          transparent 76%
+          rgba(60,110,255,.14) 0%,
+          rgba(50,95,220,.08) 42%,
+          rgba(40,75,180,.04) 65%,
+          transparent 80%
         );
 
       animation:
