@@ -690,50 +690,6 @@
         infinite;
     }
 
-    .hero-title::after{
-      content:'';
-
-      position:absolute;
-
-      top:-35%;
-      bottom:-35%;
-      left:-42%;
-
-      width:18%;
-
-      background:
-        linear-gradient(
-          90deg,
-          transparent 0%,
-          rgba(255,255,255,0) 12%,
-          rgba(255,255,255,.18) 42%,
-          rgba(255,255,255,.95) 50%,
-          rgba(210,221,255,.26) 58%,
-          rgba(255,255,255,0) 88%,
-          transparent 100%
-        );
-
-      filter:blur(5px);
-
-      opacity:0;
-
-      transform:
-        skewX(-20deg)
-        translateX(0);
-
-      mix-blend-mode:screen;
-
-      z-index:3;
-
-      pointer-events:none;
-
-      animation:
-        heroTitleSweep 5.5s
-        cubic-bezier(.4,0,.2,1)
-        1.1s
-        infinite;
-    }
-
     @keyframes heroTitleLight{
       0%,100%{
         background-position:0% 50%;
@@ -767,26 +723,6 @@
         transform:
           translate(-50%,-50%)
           scale(1.04);
-      }
-    }
-
-    @keyframes heroTitleSweep{
-      0%{
-        left:-42%;
-        opacity:0;
-      }
-      10%{
-        opacity:.12;
-      }
-      18%{
-        opacity:1;
-      }
-      28%{
-        opacity:.35;
-      }
-      38%,100%{
-        left:128%;
-        opacity:0;
       }
     }
 
@@ -1824,6 +1760,119 @@
       stroke-linejoin:round;
 
       flex-shrink:0;
+    }
+
+    /* ── PATCHED SCRIPT CARD ── */
+
+    .script-card.patched-card{
+      position:relative;
+      overflow:hidden;
+      border-color:rgba(255,72,86,.18);
+      background:
+        linear-gradient(135deg,rgba(255,255,255,.028),rgba(255,60,75,.025) 52%,rgba(0,0,0,.16)),
+        rgba(255,255,255,.025);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.055),
+        0 18px 50px rgba(0,0,0,.22),
+        0 0 0 1px rgba(255,60,75,.025);
+    }
+
+    .script-card.patched-card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(ellipse 42% 80% at 12% 50%,rgba(255,59,75,.12),transparent 70%),
+        radial-gradient(ellipse 35% 70% at 90% 50%,rgba(255,59,75,.07),transparent 72%);
+      opacity:.9;
+    }
+
+    .patched-thumb{
+      filter:grayscale(.82) brightness(.5) contrast(1.08);
+    }
+
+    .patched-card .thumb-overlay{
+      background:
+        linear-gradient(90deg,rgba(8,8,10,.12) 0%,rgba(8,8,10,.74) 100%),
+        linear-gradient(135deg,rgba(255,50,70,.12),transparent 55%);
+    }
+
+    .patched-badge{
+      position:absolute;
+      top:18px;
+      left:18px;
+      z-index:4;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,77,91,.34);
+      background:rgba(52,8,12,.55);
+      color:#ff7480;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      box-shadow:0 8px 24px rgba(255,59,75,.12),inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .patched-badge-dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#ff5263;
+      box-shadow:0 0 10px rgba(255,82,99,.8);
+    }
+
+    .patched-status{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:9px;
+      color:rgba(255,116,128,.8);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .patched-status svg{
+      width:14px;
+      height:14px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2.2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    .patched-card .card-script-preview{
+      color:rgba(255,180,185,.26);
+      border-color:rgba(255,80,95,.10);
+      background:rgba(255,55,70,.025);
+      filter:blur(.15px);
+    }
+
+    .patched-copy-btn{
+      border-color:rgba(255,82,99,.32) !important;
+      background:rgba(70,10,16,.45) !important;
+      color:#ff7b86 !important;
+      cursor:not-allowed !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 5px 20px rgba(255,55,70,.08) !important;
+    }
+
+    .patched-copy-btn:hover{
+      background:rgba(88,12,19,.58) !important;
+      transform:none !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.07),
+        0 6px 22px rgba(255,55,70,.12) !important;
     }
 
     .divider{
@@ -4093,141 +4142,6 @@
       </div>
 
 
-      <!-- Ink Game -->
-
-      <div
-        class="script-card"
-        data-delay="150"
-      >
-
-        <div class="card-thumb">
-
-          <img
-            src="https://tr.rbxcdn.com/180DAY-d73149aeb59a17a4c1a97b8336e834f6/500/280/Image/Jpeg/noFilter"
-            alt="Ink Game"
-            loading="lazy"
-          >
-
-          <div class="thumb-overlay"></div>
-
-        </div>
-
-
-        <div class="card-body">
-
-          <div>
-
-            <div class="card-meta">
-
-              <div class="card-dot"></div>
-
-              Roblox Script
-
-            </div>
-
-
-            <div class="card-name">
-              Ink Game
-            </div>
-
-
-            <div class="card-script-preview">
-              loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Ink-Game/.../InkGame-Main [obf]"))()
-            </div>
-
-          </div>
-
-
-          <div class="card-actions">
-
-            <button
-              class="btn-dark copy-script-btn"
-              id="copy2"
-              type="button"
-              data-script='loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'
-              data-script-name="Ink Game"
-            >
-
-              <svg viewBox="0 0 24 24">
-
-                <rect
-                  x="9"
-                  y="9"
-                  width="13"
-                  height="13"
-                  rx="2"
-                />
-
-                <path
-                  d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"
-                />
-
-              </svg>
-
-              Copy script
-
-            </button>
-
-
-            <button
-              class="btn-key"
-              type="button"
-              disabled
-              title="Pas de clé pour ce script"
-              style="opacity:.35;cursor:not-allowed"
-            >
-
-              <svg viewBox="0 0 24 24">
-                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-              </svg>
-
-              No Key
-
-            </button>
-
-
-            <a
-              href="https://www.roblox.com/fr/games/99567941238278/Ink-Game"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-glass"
-            >
-
-              <svg viewBox="0 0 24 24">
-
-                <path
-                  d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"
-                />
-
-                <polyline
-                  points="15 3 21 3 21 9"
-                />
-
-                <line
-                  x1="10"
-                  y1="14"
-                  x2="21"
-                  y2="3"
-                />
-
-              </svg>
-
-              Join game
-
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="divider">
-        <hr>
-      </div>
-
-
       <!-- Murder Mystery 2 -->
 
       <div
@@ -4371,6 +4285,116 @@
         </div>
 
       </div>
+
+
+      <!-- Ink Game — patched -->
+
+      <div
+        class="script-card patched-card"
+        data-delay="450"
+      >
+
+        <div class="card-thumb">
+
+          <img
+            class="patched-thumb"
+            src="https://tr.rbxcdn.com/180DAY-d73149aeb59a17a4c1a97b8336e834f6/500/280/Image/Jpeg/noFilter"
+            alt="Ink Game"
+            loading="lazy"
+          >
+
+          <div class="thumb-overlay"></div>
+
+          <div class="patched-badge">
+            <span class="patched-badge-dot"></span>
+            Patched
+          </div>
+
+        </div>
+
+        <div class="card-body">
+
+          <div>
+
+            <div class="card-meta">
+              <div class="card-dot"></div>
+              Roblox Script
+            </div>
+
+            <div class="card-name">
+              Ink Game
+            </div>
+
+            <div class="patched-status">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M8.5 8.5l7 7m0-7l-7 7"></path>
+              </svg>
+              Script no longer supported
+            </div>
+
+            <div class="card-script-preview">
+              This script has been patched and is no longer usable.
+            </div>
+
+          </div>
+
+          <div class="card-actions">
+
+            <button
+              class="btn-dark copy-script-btn patched-copy-btn"
+              id="copy2"
+              type="button"
+              data-patched="true"
+              data-script-name="Ink Game"
+              aria-label="Ink Game is patched"
+            >
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M8.5 8.5l7 7m0-7l-7 7"></path>
+              </svg>
+              Patched
+            </button>
+
+            <button
+              class="btn-key"
+              type="button"
+              disabled
+              title="Pas de clé pour ce script"
+              style="opacity:.35;cursor:not-allowed"
+            >
+              <svg viewBox="0 0 24 24">
+                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+              </svg>
+              No Key
+            </button>
+
+            <a
+              href="https://www.roblox.com/fr/games/99567941238278/Ink-Game"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-glass"
+            >
+              <svg viewBox="0 0 24 24">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Join game
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="divider">
+        <hr>
+      </div>
+
+
 
     </div>
 
@@ -5033,6 +5057,23 @@
       }
 
 
+      if(
+        button.getAttribute('data-patched') === 'true'
+      ){
+
+        showNotification(
+          'Script patched',
+          'Ink Game is no longer usable. Copying has been disabled.',
+          'error'
+        );
+
+        playNotificationSound();
+
+        return;
+
+      }
+
+
       var script =
         button.getAttribute(
           'data-script'
@@ -5198,7 +5239,16 @@
 
           button.addEventListener(
             'click',
-            function(){
+            function(event){
+
+              if(
+                button.getAttribute('data-patched') === 'true'
+              ){
+
+                event.preventDefault();
+                event.stopPropagation();
+
+              }
 
               handleCopyScript(
                 button
