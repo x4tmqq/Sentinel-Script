@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,147 +7,74 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
   <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/x4tmqq/Sentinel-Script/refs/heads/main/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-  <!-- ══ SVG LIQUID GLASS FILTER ENGINE ══ -->
   <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute;overflow:hidden;pointer-events:none">
     <defs>
-      <!-- Pill / island filter (wide) -->
       <filter id="lg-pill" color-interpolation-filters="sRGB" x="-10%" y="-30%" width="120%" height="160%">
         <feTurbulence type="fractalNoise" baseFrequency="0 0" numOctaves="1" result="noise"/>
-        <feColorMatrix type="matrix" in="noise"
-          values="0 0 0 0 0.502
-                  0 0 0 0 0.502
-                  0 0 0 0 0
-                  0 0 0 0 1" result="dispMap"/>
-        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="-28"
-          xChannelSelector="R" yChannelSelector="G"/>
+        <feColorMatrix type="matrix" in="noise" values="0 0 0 0 0.502 0 0 0 0 0.502 0 0 0 0 0 0 0 0 0 1" result="dispMap"/>
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="-28" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
-      <!-- Card / modal filter (square-ish) -->
       <filter id="lg-card" color-interpolation-filters="sRGB" x="-5%" y="-5%" width="110%" height="110%">
         <feTurbulence type="fractalNoise" baseFrequency="0 0" numOctaves="1" result="noise"/>
-        <feColorMatrix type="matrix" in="noise"
-          values="0 0 0 0 0.502
-                  0 0 0 0 0.502
-                  0 0 0 0 0
-                  0 0 0 0 1" result="dispMap"/>
-        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="-22"
-          xChannelSelector="R" yChannelSelector="G"/>
+        <feColorMatrix type="matrix" in="noise" values="0 0 0 0 0.502 0 0 0 0 0.502 0 0 0 0 0 0 0 0 0 1" result="dispMap"/>
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="-22" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
-      <!-- Button filter -->
       <filter id="lg-btn" color-interpolation-filters="sRGB" x="-15%" y="-40%" width="130%" height="180%">
         <feTurbulence type="fractalNoise" baseFrequency="0 0" numOctaves="1" result="noise"/>
-        <feColorMatrix type="matrix" in="noise"
-          values="0 0 0 0 0.502
-                  0 0 0 0 0.502
-                  0 0 0 0 0
-                  0 0 0 0 1" result="dispMap"/>
-        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="-18"
-          xChannelSelector="R" yChannelSelector="G"/>
+        <feColorMatrix type="matrix" in="noise" values="0 0 0 0 0.502 0 0 0 0 0.502 0 0 0 0 0 0 0 0 0 1" result="dispMap"/>
+        <feDisplacementMap in="SourceGraphic" in2="dispMap" scale="-18" xChannelSelector="R" yChannelSelector="G"/>
       </filter>
     </defs>
   </svg>
 
   <style>
-    /* ── RESET ── */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-    /* ── TOKENS ── */
     :root {
       --lg-blur-pill:   blur(36px) url(#lg-pill) brightness(1.08) saturate(1.4);
       --lg-blur-card:   blur(28px) url(#lg-card) brightness(1.06) saturate(1.35);
       --lg-blur-btn:    blur(20px) url(#lg-btn)  brightness(1.07) saturate(1.3);
       --lg-blur-fallback: blur(32px) brightness(1.08) saturate(1.4);
-
       --lg-tint:        rgba(255,255,255,0.10);
       --lg-tint-hover:  rgba(255,255,255,0.16);
-      --lg-tint-modal:  rgba(255,255,255,0.08);
-
       --lg-border:      rgba(255,255,255,0.18);
       --lg-border-hover:rgba(255,255,255,0.32);
-
       --spec-top:       rgba(255,255,255,0.60);
       --spec-bot:       rgba(0,0,0,0.10);
       --shadow:         0 8px 32px rgba(0,0,0,0.32), 0 2px 8px rgba(0,0,0,0.18);
-      --shadow-lg:      0 20px 60px rgba(0,0,0,0.50), 0 6px 20px rgba(0,0,0,0.28);
-
       --accent:  #5865f2;
       --green:   #5cff8a;
       --red:     #ff5c68;
-      --orange:  #ff9500;
     }
 
     html { scroll-behavior:smooth; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.22) rgba(8,8,18,0.25); }
     body { font-family:'Inter',sans-serif; background:#030304; color:#f0f2ff; overflow-x:hidden; }
 
-    body::after {
-      content:''; position:fixed; inset:0; z-index:999; pointer-events:none;
-      opacity:.04; mix-blend-mode:overlay;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size:180px 180px;
-    }
-
     ::-webkit-scrollbar{width:12px}
     ::-webkit-scrollbar-track{background:rgba(8,8,18,.25);border-left:1px solid rgba(255,255,255,.04);backdrop-filter:blur(14px)}
     ::-webkit-scrollbar-thumb{border-radius:100px;border:3px solid transparent;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.1));background-clip:padding-box}
 
-    /* ══ LIQUID GLASS BASE MIXIN ══ */
-    .lg {
-      position:relative; overflow:hidden;
-      border:1px solid var(--lg-border);
-      box-shadow: var(--shadow), inset 0 1.5px 0 var(--spec-top), inset 0 -1px 0 var(--spec-bot);
-    }
-    .lg__refract {
-      position:absolute; inset:0; border-radius:inherit;
-      backdrop-filter: var(--lg-blur-fallback);
-      -webkit-backdrop-filter: var(--lg-blur-fallback);
-      isolation:isolate;
-    }
+    .lg { position:relative; overflow:hidden; border:1px solid var(--lg-border); box-shadow: var(--shadow), inset 0 1.5px 0 var(--spec-top), inset 0 -1px 0 var(--spec-bot); }
+    .lg__refract { position:absolute; inset:0; border-radius:inherit; backdrop-filter: var(--lg-blur-fallback); -webkit-backdrop-filter: var(--lg-blur-fallback); isolation:isolate; }
     .lg__tint { position:absolute; inset:0; border-radius:inherit; background:var(--lg-tint); }
-    .lg__specular {
-      position:absolute; inset:0; border-radius:inherit;
-      box-shadow: inset 0 1.5px 0 var(--spec-top), inset 0 -1px 0 var(--spec-bot);
-      pointer-events:none;
-    }
+    .lg__specular { position:absolute; inset:0; border-radius:inherit; box-shadow: inset 0 1.5px 0 var(--spec-top), inset 0 -1px 0 var(--spec-bot); pointer-events:none; }
     .lg__content { position:relative; z-index:10; }
-
-    /* pill variant */
     .lg-pill .lg__refract { backdrop-filter: var(--lg-blur-pill); -webkit-backdrop-filter: var(--lg-blur-pill); }
-    /* card variant */
     .lg-card .lg__refract { backdrop-filter: var(--lg-blur-card); -webkit-backdrop-filter: var(--lg-blur-card); }
-    /* btn variant */
     .lg-btn .lg__refract  { backdrop-filter: var(--lg-blur-btn);  -webkit-backdrop-filter: var(--lg-blur-btn);  }
 
     /* ══ ISLAND SAFE FRAME ══ */
-    .island-safe-frame {
-      position:fixed; top:0; left:0; width:100%; height:75px; z-index:940;
-      pointer-events:none; opacity:0;
-      background:linear-gradient(180deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.5) 42%,rgba(0,0,0,.12) 76%,transparent 100%);
-      backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
-      transition:opacity .32s cubic-bezier(.22,1,.36,1);
-    }
+    .island-safe-frame { position:fixed; top:0; left:0; width:100%; height:75px; z-index:940; pointer-events:none; opacity:0; background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 42%,transparent 100%); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); transition:opacity .32s cubic-bezier(.22,1,.36,1); }
     .island-safe-frame.visible { opacity:1; }
 
     /* ══ TOP ISLAND ══ */
-    .top-island {
-      position:fixed; top:20px; left:50%; transform:translateX(-50%);
-      z-index:1000; display:flex; align-items:center; gap:14px;
-      min-height:54px; padding:8px 14px; border-radius:100px;
-      opacity:0.6; white-space:nowrap;
-      transition:box-shadow .3s, background .3s, border-color .3s, opacity .3s;
-    }
+    .top-island { position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:1000; display:flex; align-items:center; gap:14px; min-height:54px; padding:8px 14px; border-radius:100px; opacity:0.7; white-space:nowrap; transition:box-shadow .3s, background .3s, border-color .3s, opacity .3s; }
     .top-island:hover { opacity:1; border-color:rgba(255,255,255,0.32); }
-    .top-island::before {
-      content:''; position:absolute; inset:0; border-radius:100px;
-      background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(255,255,255,0.22) 0%,transparent 70%);
-      pointer-events:none; z-index:11;
-    }
+    .top-island::before { content:''; position:absolute; inset:0; border-radius:100px; background:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(255,255,255,0.22) 0%,transparent 70%); pointer-events:none; z-index:11; }
 
-    .island-adaptive { display:flex; align-items:center; gap:14px; color:#fff; mix-blend-mode:difference; }
+    .island-adaptive { display:flex; align-items:center; gap:14px; color:#fff; }
     .island-socials  { display:flex; align-items:center; gap:5px; }
-    .island-social {
-      width:31px; height:31px; display:inline-flex; align-items:center; justify-content:center;
-      border-radius:50%; color:currentColor; text-decoration:none;
-      transition:transform .2s, background .2s;
-    }
+    .island-social { width:31px; height:31px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; color:currentColor; text-decoration:none; transition:transform .2s, background .2s; }
     .island-social:hover { transform:translateY(-2px) scale(1.1); background:rgba(255,255,255,.14); }
     .island-social svg  { width:17px; height:17px; fill:currentColor; }
     .island-divider     { width:1px; height:24px; background:currentColor; opacity:.35; flex-shrink:0; }
@@ -161,28 +87,12 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
 
     /* Account widget */
     .account-widget { position:relative; display:flex; align-items:center; }
-    .account-btn {
-      display:flex; align-items:center; gap:7px; padding:4px 11px 4px 4px;
-      border-radius:100px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16);
-      cursor:pointer; transition:background .2s, border-color .2s;
-    }
+    .account-btn { display:flex; align-items:center; gap:7px; padding:4px 11px 4px 4px; border-radius:100px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); cursor:pointer; transition:background .2s, border-color .2s; }
     .account-btn:hover { background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.28); }
-    .account-avatar {
-      width:26px; height:26px; border-radius:50%;
-      background:linear-gradient(135deg,#6a7cbf,#3b4573);
-      display:flex; align-items:center; justify-content:center;
-      font-size:11px; font-weight:700; color:#fff; object-fit:cover;
-    }
+    .account-avatar { width:26px; height:26px; border-radius:50%; background:linear-gradient(135deg,#6a7cbf,#3b4573); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; object-fit:cover; }
     .account-name { font-size:12px; font-weight:600; color:#fff; max-width:110px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    /* Account menu */
-    .account-menu {
-      position:absolute; top:calc(100% + 14px); right:0; width:264px;
-      padding:18px; border-radius:22px;
-      opacity:0; visibility:hidden; transform:translateY(-10px) scale(0.97);
-      transition:opacity .22s, transform .22s cubic-bezier(.22,1,.36,1), visibility 0s linear .22s;
-      z-index:1100;
-    }
+    .account-menu { position:absolute; top:calc(100% + 14px); right:0; width:264px; padding:18px; border-radius:22px; opacity:0; visibility:hidden; transform:translateY(-10px) scale(0.97); transition:opacity .22s, transform .22s cubic-bezier(.22,1,.36,1), visibility 0s linear .22s; z-index:1100; }
     .account-menu.visible { opacity:1; visibility:visible; transform:translateY(0) scale(1); transition:opacity .22s, transform .22s cubic-bezier(.22,1,.36,1), visibility 0s; }
     .account-menu-header { display:flex; align-items:center; gap:10px; padding-bottom:14px; margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.1); }
     .account-menu-avatar { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#6a7cbf,#3b4573); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
@@ -190,113 +100,155 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     .account-menu-display  { font-size:13.5px; font-weight:700; color:#f0f2ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .account-menu-username { font-size:11.5px; color:rgba(160,170,220,.55); }
     .account-menu-id       { font-size:10px; font-family:'Courier New',monospace; color:rgba(140,150,190,.4); margin-top:8px; word-break:break-all; }
-    .account-menu-item {
-      display:flex; align-items:center; gap:10px; padding:10px 8px; border-radius:12px;
-      font-size:12.5px; font-weight:600; color:rgba(220,222,238,.85); cursor:pointer;
-      transition:background .15s;
-    }
+    .account-menu-item { display:flex; align-items:center; gap:10px; padding:10px 8px; border-radius:12px; font-size:12.5px; font-weight:600; color:rgba(220,222,238,.85); cursor:pointer; transition:background .15s; }
     .account-menu-item:hover { background:rgba(255,255,255,.08); }
     .account-menu-item.danger { color:#ff8a8a; }
     .account-menu-item svg { width:15px; height:15px; }
-    .account-menu-item.admin-item { color:#ffd700; }
 
-    /* ══ HERO ══ */
+    /* ══ HERO — fluid colour background ══ */
     .hero {
       position:relative; width:100%; height:100vh; min-height:600px;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      overflow:hidden; background:#000;
+      overflow:hidden;
     }
-    .blob { position:absolute; border-radius:50%; will-change:transform,opacity; z-index:1; }
-    .b1 { top:-20%; left:50%; transform:translateX(-50%); width:55%; height:50%; background:radial-gradient(ellipse,rgba(255,255,255,.04) 0%,transparent 68%); filter:blur(40px); animation:b1a 12s ease-in-out infinite alternate; }
-    .b2 { top:5%;  right:-15%; width:38%; height:55%; background:radial-gradient(ellipse,rgba(220,225,240,.03) 0%,transparent 72%); filter:blur(50px); animation:b2a 15s ease-in-out infinite alternate; }
-    .b3 { top:22%; left:-15%;  width:36%; height:52%; background:radial-gradient(ellipse,rgba(210,218,240,.025) 0%,transparent 72%); filter:blur(52px); animation:b3a 13s ease-in-out infinite alternate; }
-    @keyframes b1a { 0%{opacity:.7;transform:translateX(-50%) scale(1) translateY(0)} 50%{opacity:1;transform:translateX(-50%) scale(1.06) translateY(-8px)} 100%{opacity:.8;transform:translateX(-50%) scale(.96) translateY(6px)} }
-    @keyframes b2a { 0%{opacity:.6;transform:scale(1)} 50%{opacity:.9;transform:scale(1.09) translate(-10px,8px)} 100%{opacity:.7;transform:scale(.94) translate(6px,-6px)} }
-    @keyframes b3a { 0%{opacity:.65;transform:scale(1)} 50%{opacity:.85;transform:scale(1.08) translate(8px,-7px)} 100%{opacity:.72;transform:scale(.96) translate(-5px,8px)} }
-    .hero-fade-mask { position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(to bottom,transparent 0%,transparent 50%,rgba(3,3,4,.35) 68%,rgba(3,3,4,.80) 84%,#030304 96%,#030304 100%); }
+
+    /* Fluid animated background — mimics the blue/purple/lavender silk look */
+    .hero-bg-canvas {
+      position:absolute; inset:0; z-index:0;
+      background: #a8b8d8;
+    }
+    /* Animated colour blobs that create the fluid silk effect */
+    .fluid-blob {
+      position:absolute; border-radius:50%;
+      filter:blur(80px);
+      mix-blend-mode:normal;
+      will-change:transform;
+    }
+    .fb1 {
+      width:90%; height:80%; top:-10%; left:-20%;
+      background:radial-gradient(ellipse, #b8c8e8 0%, #8fa8cc 40%, transparent 75%);
+      animation:fb1move 18s ease-in-out infinite alternate;
+    }
+    .fb2 {
+      width:80%; height:70%; top:10%; right:-25%;
+      background:radial-gradient(ellipse, #c4b8d4 0%, #9b8bbf 40%, transparent 75%);
+      animation:fb2move 22s ease-in-out infinite alternate;
+    }
+    .fb3 {
+      width:70%; height:65%; bottom:-15%; left:10%;
+      background:radial-gradient(ellipse, #c8c0d8 0%, #a090c0 40%, transparent 75%);
+      animation:fb3move 16s ease-in-out infinite alternate;
+    }
+    .fb4 {
+      width:60%; height:55%; top:30%; left:20%;
+      background:radial-gradient(ellipse, #d0c8e0 0%, #b0a0d0 40%, transparent 75%);
+      animation:fb4move 20s ease-in-out infinite alternate;
+    }
+    .fb5 {
+      width:50%; height:50%; bottom:5%; right:5%;
+      background:radial-gradient(ellipse, #bcc8e0 0%, #8898c0 40%, transparent 75%);
+      animation:fb5move 14s ease-in-out infinite alternate;
+    }
+    /* Subtle warm accent */
+    .fb6 {
+      width:40%; height:40%; top:50%; left:40%;
+      background:radial-gradient(ellipse, #d8c8d8 0%, #c0a8c8 50%, transparent 75%);
+      animation:fb6move 25s ease-in-out infinite alternate;
+    }
+    @keyframes fb1move { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(15%,12%) scale(1.12)} }
+    @keyframes fb2move { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-18%,10%) scale(1.08)} }
+    @keyframes fb3move { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(12%,-14%) scale(1.15)} }
+    @keyframes fb4move { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-10%,8%) scale(0.92)} }
+    @keyframes fb5move { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-8%,-12%) scale(1.1)} }
+    @keyframes fb6move { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(10%,-8%) scale(1.2)} }
+
+    /* Fade from hero colour to black at the bottom */
+    .hero-fade-mask {
+      position:absolute; inset:0; z-index:2; pointer-events:none;
+      background:linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 45%,
+        rgba(3,3,4,.15) 58%,
+        rgba(3,3,4,.55) 72%,
+        rgba(3,3,4,.88) 85%,
+        #030304 96%,
+        #030304 100%
+      );
+    }
+
     .hero-content { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; gap:16px; margin-top:-40px; }
+
     .hero-title {
       visibility:hidden; font-size:clamp(52px,7vw,88px); font-weight:900; letter-spacing:.22em;
       color:transparent; -webkit-text-fill-color:transparent;
-      background:linear-gradient(105deg,#dfe4ff 0%,#ffffff 18%,#aebcff 34%,#ffffff 48%,#ffffff 58%,#9aaeff 78%,#eef1ff 100%);
+      background:linear-gradient(105deg,#1a2040 0%,#2a3060 18%,#1e2850 34%,#0f1630 48%,#1a2040 58%,#2a3060 78%,#1e2850 100%);
       background-size:260% 100%; background-position:0% 50%;
       -webkit-background-clip:text; background-clip:text;
       text-transform:uppercase; text-align:center; line-height:1;
       display:flex; justify-content:center;
-      filter:drop-shadow(0 0 4px rgba(225,230,255,.45)) drop-shadow(0 0 18px rgba(140,157,255,.18));
-      animation:heroTitleLight 7s cubic-bezier(.65,0,.35,1) infinite;
+      filter:drop-shadow(0 2px 12px rgba(255,255,255,.25));
     }
     .hero-title.ready { visibility:visible; }
     .hero-title span { display:inline-block; opacity:0; transform:translateY(22px) scale(.92); animation:sentinelLetter .65s cubic-bezier(.22,1,.36,1) forwards; }
     .hero-title span:nth-child(1){animation-delay:.05s}.hero-title span:nth-child(2){animation-delay:.12s}.hero-title span:nth-child(3){animation-delay:.19s}.hero-title span:nth-child(4){animation-delay:.26s}.hero-title span:nth-child(5){animation-delay:.33s}.hero-title span:nth-child(6){animation-delay:.40s}.hero-title span:nth-child(7){animation-delay:.47s}.hero-title span:nth-child(8){animation-delay:.54s}
     @keyframes sentinelLetter{0%{opacity:0;transform:translateY(22px) scale(.92)}60%{opacity:1;transform:translateY(-3px) scale(1.015)}100%{opacity:1;transform:translateY(0) scale(1)}}
-    @keyframes heroTitleLight{0%,100%{background-position:0% 50%}45%{background-position:62% 50%}60%{background-position:100% 50%}}
-    .hero-desc { font-size:15px; font-weight:400; color:#c8cef0; opacity:.65; text-align:center; }
+
+    .hero-desc { font-size:15px; font-weight:500; color:rgba(20,28,60,.8); text-align:center; }
     .hero-cta   { margin-top:10px; display:flex; align-items:center; gap:10px; }
 
-    /* ── Liquid Glass Buttons ── */
     .btn-primary {
       position:relative; overflow:hidden;
-      background:rgba(255,255,255,0.92); color:#0b0b14;
+      background:rgba(15,20,50,0.85); color:#fff;
       font-family:'Inter',sans-serif; font-size:14px; font-weight:700;
       padding:13px 32px; border-radius:100px;
-      border:1px solid rgba(255,255,255,0.6); cursor:pointer; letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.25); cursor:pointer; letter-spacing:.02em;
       text-decoration:none; display:inline-block;
-      box-shadow:inset 0 1px 0 #fff,0 4px 20px rgba(0,0,0,.2),0 1px 4px rgba(0,0,0,.1);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 4px 20px rgba(0,0,0,.3),0 1px 4px rgba(0,0,0,.15);
       transition:transform .15s, box-shadow .2s, background .2s;
     }
-    .btn-primary:hover { background:#fff; transform:translateY(-1px); box-shadow:inset 0 1px 0 #fff,0 8px 32px rgba(0,0,0,.28); }
+    .btn-primary:hover { background:rgba(15,20,60,.95); transform:translateY(-1px); box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 32px rgba(0,0,0,.4); }
 
     .btn-glass-pill {
       position:relative; overflow:hidden;
       font-family:'Inter',sans-serif; font-size:14px; font-weight:600;
       padding:13px 24px; border-radius:100px;
-      border:1px solid rgba(255,255,255,0.28); cursor:pointer; letter-spacing:.02em;
+      border:1px solid rgba(255,255,255,0.5); cursor:pointer; letter-spacing:.02em;
       white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
-      color:rgba(255,255,255,.95);
-      background:linear-gradient(160deg,rgba(255,255,255,0.18) 0%,rgba(255,255,255,0.05) 60%,rgba(255,255,255,0.12) 100%);
-      backdrop-filter:var(--lg-blur-btn); -webkit-backdrop-filter:var(--lg-blur-btn);
-      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.1),0 6px 24px rgba(0,0,0,.22);
+      color:rgba(15,25,60,.9);
+      background:rgba(255,255,255,0.45);
+      backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%);
+      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(0,0,0,.05),0 6px 24px rgba(0,0,0,.12);
       transition:transform .15s, box-shadow .2s, background .2s;
     }
-    .btn-glass-pill::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-20deg);transition:left .5s}
-    .btn-glass-pill:hover::before{left:160%}
-    .btn-glass-pill:hover{transform:translateY(-1px);background:linear-gradient(160deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.08) 60%,rgba(255,255,255,.18) 100%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),0 10px 36px rgba(0,0,0,.32)}
-    .btn-glass-pill svg{width:15px;height:15px;fill:currentColor;flex-shrink:0}
+    .btn-glass-pill:hover { transform:translateY(-1px); background:rgba(255,255,255,.6); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.8),0 10px 36px rgba(0,0,0,.18); }
+    .btn-glass-pill svg { width:15px; height:15px; fill:currentColor; flex-shrink:0; }
 
-    /* availability */
-    .availability{margin-top:50px;display:flex;flex-direction:column;align-items:center;gap:13px;color:#d0d4f0}
-    .availability-title{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;opacity:.55}
-    .availability-links{display:flex;align-items:center;gap:12px}
-    .availability-link{
-      width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:14px;
-      background:linear-gradient(160deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.06) 100%);
-      border:1px solid rgba(255,255,255,.28);
-      backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),0 4px 14px rgba(0,0,0,.14);
-      transition:transform .2s, box-shadow .2s;
-    }
-    .availability-link:hover{transform:translateY(-3px) scale(1.05);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),0 8px 28px rgba(0,0,0,.22)}
-    .availability-link img{width:23px;height:23px;object-fit:contain;border-radius:6px}
+    .availability { margin-top:50px; display:flex; flex-direction:column; align-items:center; gap:13px; }
+    .availability-title { font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; opacity:.55; color:rgba(15,25,60,.7); }
+    .availability-links { display:flex; align-items:center; gap:12px; }
+    .availability-link { width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:14px; background:rgba(255,255,255,0.45); border:1px solid rgba(255,255,255,.6); backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7),0 4px 14px rgba(0,0,0,.10); transition:transform .2s, box-shadow .2s; }
+    .availability-link:hover { transform:translateY(-3px) scale(1.05); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.8),0 8px 28px rgba(0,0,0,.15); }
+    .availability-link img { width:23px; height:23px; object-fit:contain; border-radius:6px; }
 
     /* ══ SCRIPTS SECTION ══ */
-    .transition-gradient{height:80px;background:#030304}
-    .scripts-section{position:relative;background:#030304;padding:80px 0;overflow:hidden}
-    .dark-ambient{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
-    .dark-ambient::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,#000 0%,transparent 78%);mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,#000 0%,transparent 78%)}
-    .spotlight{position:absolute;top:260px;left:50%;transform:translateX(-50%);width:1100px;max-width:150%;height:640px;background:radial-gradient(ellipse 50% 50% at 50% 0%,rgba(220,222,232,.14) 0%,rgba(170,174,190,.07) 32%,rgba(120,124,140,.03) 58%,transparent 78%);filter:blur(6px);pointer-events:none}
-    .dblob{position:absolute;border-radius:50%;filter:blur(60px)}
-    .dblob-a{top:32%;left:50%;transform:translateX(-50%);width:64%;height:44%;background:radial-gradient(ellipse,rgba(200,204,216,.14) 0%,rgba(150,154,168,.06) 46%,transparent 74%);animation:db1 16s ease-in-out infinite alternate}
-    .dblob-b{top:56%;left:4%;width:50%;height:40%;background:radial-gradient(ellipse,rgba(120,124,138,.14) 0%,rgba(90,94,108,.06) 50%,transparent 76%);animation:db2 19s ease-in-out infinite alternate}
-    .dblob-c{top:70%;right:2%;width:46%;height:38%;background:radial-gradient(ellipse,rgba(70,73,84,.16) 0%,rgba(50,53,62,.07) 50%,transparent 76%);animation:db3 21s ease-in-out infinite alternate}
-    @keyframes db1{0%{opacity:.55;transform:translateX(-50%) scale(1)}100%{opacity:.85;transform:translateX(-50%) scale(1.1) translateY(-12px)}}
-    @keyframes db2{0%{opacity:.5;transform:scale(1)}100%{opacity:.78;transform:scale(1.1) translate(8px,-8px)}}
-    @keyframes db3{0%{opacity:.45;transform:scale(1)}100%{opacity:.72;transform:scale(1.09) translate(-8px,6px)}}
-    .section-label{text-align:center;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(160,170,220,.5);margin-bottom:14px}
-    .section-title{text-align:center;font-size:clamp(26px,4vw,40px);font-weight:700;color:#f0f2ff;letter-spacing:-.01em;margin-bottom:56px}
-    .scripts-grid{max-width:1100px;margin:0 auto;padding:0 32px;display:flex;flex-direction:column;gap:0}
+    .transition-gradient { height:0; background:#030304; }
+    .scripts-section { position:relative; background:#030304; padding:80px 0; overflow:hidden; }
+    .dark-ambient { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:-1; }
+    .dark-ambient::before { content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px); background-size:34px 34px; -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,#000 0%,transparent 78%); mask-image:radial-gradient(ellipse 80% 60% at 50% 30%,#000 0%,transparent 78%); }
+    .spotlight { position:absolute; top:260px; left:50%; transform:translateX(-50%); width:1100px; max-width:150%; height:640px; background:radial-gradient(ellipse 50% 50% at 50% 0%,rgba(220,222,232,.14) 0%,rgba(170,174,190,.07) 32%,rgba(120,124,140,.03) 58%,transparent 78%); filter:blur(6px); pointer-events:none; }
+    .dblob { position:absolute; border-radius:50%; filter:blur(60px); }
+    .dblob-a { top:32%; left:50%; transform:translateX(-50%); width:64%; height:44%; background:radial-gradient(ellipse,rgba(200,204,216,.14) 0%,rgba(150,154,168,.06) 46%,transparent 74%); animation:db1 16s ease-in-out infinite alternate; }
+    .dblob-b { top:56%; left:4%; width:50%; height:40%; background:radial-gradient(ellipse,rgba(120,124,138,.14) 0%,rgba(90,94,108,.06) 50%,transparent 76%); animation:db2 19s ease-in-out infinite alternate; }
+    .dblob-c { top:70%; right:2%; width:46%; height:38%; background:radial-gradient(ellipse,rgba(70,73,84,.16) 0%,rgba(50,53,62,.07) 50%,transparent 76%); animation:db3 21s ease-in-out infinite alternate; }
+    @keyframes db1 { 0%{opacity:.55;transform:translateX(-50%) scale(1)} 100%{opacity:.85;transform:translateX(-50%) scale(1.1) translateY(-12px)} }
+    @keyframes db2 { 0%{opacity:.5;transform:scale(1)} 100%{opacity:.78;transform:scale(1.1) translate(8px,-8px)} }
+    @keyframes db3 { 0%{opacity:.45;transform:scale(1)} 100%{opacity:.72;transform:scale(1.09) translate(-8px,6px)} }
+    .section-label { text-align:center; font-size:11px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:rgba(160,170,220,.5); margin-bottom:14px; }
+    .section-title { text-align:center; font-size:clamp(26px,4vw,40px); font-weight:700; color:#f0f2ff; letter-spacing:-.01em; margin-bottom:56px; }
+    .scripts-grid { max-width:1100px; margin:0 auto; padding:0 32px; display:flex; flex-direction:column; gap:0; }
 
-    /* Script Card — full LG */
+    /* Script Card */
     .script-card {
       position:relative; overflow:hidden;
       border:1px solid rgba(255,255,255,0.10); border-radius:22px;
@@ -306,12 +258,7 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       margin-bottom:20px;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.08),0 4px 24px rgba(0,0,0,.20);
     }
-    .script-card__refract {
-      position:absolute; inset:0; border-radius:inherit;
-      backdrop-filter:blur(24px) url(#lg-card) brightness(1.04) saturate(1.35);
-      -webkit-backdrop-filter:blur(24px) url(#lg-card) brightness(1.04) saturate(1.35);
-      isolation:isolate;
-    }
+    .script-card__refract { position:absolute; inset:0; border-radius:inherit; backdrop-filter:blur(24px) url(#lg-card) brightness(1.04) saturate(1.35); -webkit-backdrop-filter:blur(24px) url(#lg-card) brightness(1.04) saturate(1.35); isolation:isolate; }
     .script-card__tint    { position:absolute; inset:0; border-radius:inherit; background:rgba(255,255,255,.05); transition:background .25s; }
     .script-card__specular{ position:absolute; inset:0; border-radius:inherit; box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.08); pointer-events:none; }
     .script-card:hover .script-card__tint { background:rgba(255,255,255,.09); }
@@ -319,414 +266,135 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     .script-card.visible { opacity:1; transform:translateY(0); }
     .script-card__body { position:relative; z-index:10; }
 
-    .card-thumb{position:relative;overflow:hidden;background:#13131f;min-height:200px;z-index:10}
-    .card-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;opacity:.85}
-    .script-card:hover .card-thumb img{transform:scale(1.04)}
-    .thumb-overlay{position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,rgba(3,3,4,.92) 100%)}
-    .card-body{padding:32px 36px;display:flex;flex-direction:column;justify-content:space-between;gap:18px;min-width:0}
-    .card-meta{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(140,155,215,.55)}
-    .card-dot{width:6px;height:6px;border-radius:50%;background:rgba(140,155,215,.4);flex-shrink:0}
-    .card-name{font-size:clamp(20px,2.5vw,28px);font-weight:700;color:#eef0ff;letter-spacing:-.01em;margin:4px 0 2px}
-    .card-script-preview{font-family:'Courier New',monospace;font-size:11px;color:rgba(160,170,220,.45);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .card-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .card-thumb { position:relative; overflow:hidden; background:#13131f; min-height:200px; z-index:10; }
+    .card-thumb img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s; opacity:.85; }
+    .script-card:hover .card-thumb img { transform:scale(1.04); }
+    .thumb-overlay { position:absolute; inset:0; background:linear-gradient(90deg,transparent 55%,rgba(3,3,4,.92) 100%); }
+    .card-body { padding:32px 36px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; min-width:0; }
+    .card-meta { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:rgba(140,155,215,.55); }
+    .card-dot { width:6px; height:6px; border-radius:50%; background:rgba(140,155,215,.4); flex-shrink:0; }
+    .card-name { font-size:clamp(20px,2.5vw,28px); font-weight:700; color:#eef0ff; letter-spacing:-.01em; margin:4px 0 2px; }
+    .card-script-preview { font-family:'Courier New',monospace; font-size:11px; color:rgba(160,170,220,.45); background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:10px; padding:10px 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .card-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 
-    /* Card buttons */
-    .btn-dark {
-      background:rgba(255,255,255,0.06); color:#fff;
-      font-family:'Inter',sans-serif; font-size:12px; font-weight:600;
-      padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.12);
-      cursor:pointer; letter-spacing:.02em; text-decoration:none;
-      display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
-      backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 8px rgba(0,0,0,.16);
-      transition:background .2s, transform .15s, border-color .2s, box-shadow .2s;
-    }
-    .btn-dark:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);transform:translateY(-1px)}
-    .btn-dark:disabled{cursor:default;opacity:.7;transform:none}
-    .btn-dark svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .btn-dark { background:rgba(255,255,255,0.06); color:#fff; font-family:'Inter',sans-serif; font-size:12px; font-weight:600; padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.12); cursor:pointer; letter-spacing:.02em; text-decoration:none; display:inline-flex; align-items:center; gap:7px; white-space:nowrap; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 8px rgba(0,0,0,.16); transition:background .2s, transform .15s, border-color .2s, box-shadow .2s; }
+    .btn-dark:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.22); transform:translateY(-1px); }
+    .btn-dark:disabled { cursor:default; opacity:.7; transform:none; }
+    .btn-dark svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
-    .btn-card-glass {
-      position:relative; overflow:hidden;
-      font-family:'Inter',sans-serif; font-size:12px; font-weight:600;
-      padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.26);
-      cursor:pointer; letter-spacing:.02em; white-space:nowrap; text-decoration:none;
-      display:inline-flex; align-items:center; gap:7px; color:rgba(240,242,255,.92);
-      background:linear-gradient(160deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 60%,rgba(255,255,255,.12) 100%);
-      backdrop-filter:var(--lg-blur-btn);-webkit-backdrop-filter:var(--lg-blur-btn);
-      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),0 4px 16px rgba(0,0,0,.2);
-      transition:box-shadow .2s, transform .15s, background .2s;
-    }
-    .btn-card-glass::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:skewX(-20deg);transition:left .5s}
-    .btn-card-glass:hover::before{left:160%}
-    .btn-card-glass:hover{background:linear-gradient(160deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.08) 60%,rgba(255,255,255,.18) 100%);border-color:rgba(255,255,255,.36);transform:translateY(-1px)}
-    .btn-card-glass svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .btn-card-glass { position:relative; overflow:hidden; font-family:'Inter',sans-serif; font-size:12px; font-weight:600; padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.26); cursor:pointer; letter-spacing:.02em; white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center; gap:7px; color:rgba(240,242,255,.92); background:linear-gradient(160deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.05) 60%,rgba(255,255,255,.12) 100%); backdrop-filter:var(--lg-blur-btn); -webkit-backdrop-filter:var(--lg-blur-btn); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),0 4px 16px rgba(0,0,0,.2); transition:box-shadow .2s, transform .15s, background .2s; }
+    .btn-card-glass::before { content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent); transform:skewX(-20deg); transition:left .5s; }
+    .btn-card-glass:hover::before { left:160%; }
+    .btn-card-glass:hover { background:linear-gradient(160deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.08) 60%,rgba(255,255,255,.18) 100%); border-color:rgba(255,255,255,.36); transform:translateY(-1px); }
+    .btn-card-glass svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
-    .btn-key {
-      position:relative; overflow:hidden;
-      font-family:'Inter',sans-serif; font-size:12px; font-weight:700;
-      padding:10px 18px; border-radius:100px; border:1px solid rgba(88,101,242,.55);
-      cursor:pointer; letter-spacing:.03em; white-space:nowrap; text-decoration:none;
-      display:inline-flex; align-items:center; gap:7px; color:#fff;
-      background:linear-gradient(160deg,rgba(88,101,242,.55) 0%,rgba(66,80,210,.35) 100%);
-      backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 4px 18px rgba(88,101,242,.25);
-      transition:box-shadow .2s, transform .15s, background .2s, opacity .2s;
-    }
-    .btn-key:hover{background:linear-gradient(160deg,rgba(88,101,242,.75) 0%,rgba(66,80,210,.55) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 28px rgba(88,101,242,.42);transform:translateY(-1px)}
-    .btn-key:disabled{opacity:.6;cursor:default;transform:none}
-    .btn-key svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .btn-key { position:relative; overflow:hidden; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; padding:10px 18px; border-radius:100px; border:1px solid rgba(88,101,242,.55); cursor:pointer; letter-spacing:.03em; white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center; gap:7px; color:#fff; background:linear-gradient(160deg,rgba(88,101,242,.55) 0%,rgba(66,80,210,.35) 100%); backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 4px 18px rgba(88,101,242,.25); transition:box-shadow .2s, transform .15s, background .2s, opacity .2s; }
+    .btn-key:hover { background:linear-gradient(160deg,rgba(88,101,242,.75) 0%,rgba(66,80,210,.55) 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 28px rgba(88,101,242,.42); transform:translateY(-1px); }
+    .btn-key:disabled { opacity:.6; cursor:default; transform:none; }
+    .btn-key svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
-    .btn-keyless {
-      font-family:'Inter',sans-serif; font-size:12px; font-weight:600;
-      padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.08);
-      display:inline-flex; align-items:center; gap:7px;
-      color:rgba(160,170,220,.4); background:rgba(255,255,255,.03);
-      cursor:not-allowed; letter-spacing:.02em; white-space:nowrap;
-    }
-    .btn-keyless svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .btn-keyless { font-family:'Inter',sans-serif; font-size:12px; font-weight:600; padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.08); display:inline-flex; align-items:center; gap:7px; color:rgba(160,170,220,.4); background:rgba(255,255,255,.03); cursor:not-allowed; letter-spacing:.02em; white-space:nowrap; }
+    .btn-keyless svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
-    /* Key reveal */
-    .key-reveal{
-      display:none; position:relative; align-items:center; gap:10px;
-      margin-top:8px; padding:10px 46px 10px 14px;
-      box-sizing:border-box; width:100%; min-width:0; align-self:stretch; overflow:hidden;
-      background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 50%,rgba(255,255,255,.08));
-      border:1px solid rgba(255,255,255,.18); border-radius:13px;
-      backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 16px rgba(0,0,0,.14);
-    }
-    .key-reveal.visible{display:flex}
-    .key-reveal-icon{flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#7289da}
-    .key-reveal-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-    .key-reveal-text{flex:1 1 auto;min-width:0;font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:#a0b4ff;letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .key-reveal-copy{position:absolute;top:50%;right:8px;transform:translateY(-50%);width:28px;height:28px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);cursor:pointer;color:rgba(220,225,255,.68);padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:color .2s,background .2s,transform .15s}
-    .key-reveal-copy:hover{color:#fff;background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28);transform:translateY(-50%) scale(1.06)}
-    .key-reveal-copy svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-    .key-error{display:none;margin-top:8px;font-size:11px;color:#ff8080;gap:6px;align-items:center}
-    .key-error.visible{display:flex}
-    .key-error svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+    .key-reveal { display:none; position:relative; align-items:center; gap:10px; margin-top:8px; padding:10px 46px 10px 14px; box-sizing:border-box; width:100%; min-width:0; align-self:stretch; overflow:hidden; background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 50%,rgba(255,255,255,.08)); border:1px solid rgba(255,255,255,.18); border-radius:13px; backdrop-filter:blur(24px) saturate(180%); -webkit-backdrop-filter:blur(24px) saturate(180%); box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 16px rgba(0,0,0,.14); }
+    .key-reveal.visible { display:flex; }
+    .key-reveal-icon { flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#7289da; }
+    .key-reveal-icon svg { width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .key-reveal-text { flex:1 1 auto; min-width:0; font-family:'Courier New',monospace; font-size:12px; font-weight:700; color:#a0b4ff; letter-spacing:.04em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .key-reveal-copy { position:absolute; top:50%; right:8px; transform:translateY(-50%); width:28px; height:28px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); cursor:pointer; color:rgba(220,225,255,.68); padding:0; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:color .2s,background .2s,transform .15s; }
+    .key-reveal-copy:hover { color:#fff; background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.28); transform:translateY(-50%) scale(1.06); }
+    .key-reveal-copy svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .key-error { display:none; margin-top:8px; font-size:11px; color:#ff8080; gap:6px; align-items:center; }
+    .key-error.visible { display:flex; }
+    .key-error svg { width:12px; height:12px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
     /* ══ DISCORD LOADING ══ */
-    .discord-loading-overlay{
-      display:flex;position:fixed;inset:0;z-index:9990;
-      background:rgba(3,3,4,.78);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
-      align-items:center;justify-content:center;flex-direction:column;gap:16px;
-      opacity:0;visibility:hidden;pointer-events:none;
-      transition:opacity .42s cubic-bezier(.22,1,.36,1),visibility 0s linear .42s;
-    }
-    .discord-loading-overlay.visible{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .42s cubic-bezier(.22,1,.36,1),visibility 0s}
-    .discord-loading-stage{position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center}
-    .discord-loading-spinner,.verification-icon{position:absolute;inset:0;margin:auto;width:42px;height:42px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:50%}
-    .discord-loading-spinner{border:3px solid rgba(114,137,218,.18);border-top-color:#7289da;animation:spin .8s linear infinite;opacity:1;transform:scale(1) rotate(0);transition:opacity .38s,transform .48s}
-    .verification-icon{opacity:0;transform:scale(.55) rotate(-12deg);border:2px solid transparent;background:rgba(255,255,255,.055);transition:opacity .42s,transform .55s cubic-bezier(.16,1.25,.3,1),background .3s,border-color .3s}
-    .verification-icon.success{color:var(--green);border-color:rgba(92,255,138,.5);background:rgba(92,255,138,.08);box-shadow:0 0 0 6px rgba(92,255,138,.045),0 0 32px rgba(92,255,138,.2)}
-    .verification-icon.error{color:var(--red);border-color:rgba(255,92,104,.5);background:rgba(255,92,104,.08);box-shadow:0 0 0 6px rgba(255,92,104,.045),0 0 32px rgba(255,92,104,.2)}
-    .discord-loading-overlay.result .discord-loading-spinner{opacity:0;transform:scale(.72) rotate(90deg);animation:none}
-    .discord-loading-overlay.result .verification-icon{opacity:1;transform:scale(1) rotate(0)}
-    .verification-icon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-    .verification-icon.success svg path{stroke-dasharray:30;stroke-dashoffset:30;animation:drawCheck .5s .14s cubic-bezier(.22,1,.36,1) forwards}
-    .verification-icon.error   svg path{stroke-dasharray:40;stroke-dashoffset:40;animation:drawError .5s .14s cubic-bezier(.22,1,.36,1) forwards}
-    .discord-loading-text{font-size:13px;font-weight:600;color:rgba(235,238,255,.85);letter-spacing:.01em;transition:opacity .24s,transform .24s}
-    .discord-loading-text.changing{opacity:0;transform:translateY(4px)}
+    .discord-loading-overlay { display:flex; position:fixed; inset:0; z-index:9990; background:rgba(3,3,4,.78); backdrop-filter:blur(24px) saturate(160%); -webkit-backdrop-filter:blur(24px) saturate(160%); align-items:center; justify-content:center; flex-direction:column; gap:16px; opacity:0; visibility:hidden; pointer-events:none; transition:opacity .42s cubic-bezier(.22,1,.36,1),visibility 0s linear .42s; }
+    .discord-loading-overlay.visible { opacity:1; visibility:visible; pointer-events:auto; transition:opacity .42s cubic-bezier(.22,1,.36,1),visibility 0s; }
+    .discord-loading-stage { position:relative; width:52px; height:52px; display:flex; align-items:center; justify-content:center; }
+    .discord-loading-spinner,.verification-icon { position:absolute; inset:0; margin:auto; width:42px; height:42px; box-sizing:border-box; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+    .discord-loading-spinner { border:3px solid rgba(114,137,218,.18); border-top-color:#7289da; animation:spin .8s linear infinite; opacity:1; transform:scale(1) rotate(0); transition:opacity .38s,transform .48s; }
+    .verification-icon { opacity:0; transform:scale(.55) rotate(-12deg); border:2px solid transparent; background:rgba(255,255,255,.055); transition:opacity .42s,transform .55s cubic-bezier(.16,1.25,.3,1),background .3s,border-color .3s; }
+    .verification-icon.success { color:var(--green); border-color:rgba(92,255,138,.5); background:rgba(92,255,138,.08); box-shadow:0 0 0 6px rgba(92,255,138,.045),0 0 32px rgba(92,255,138,.2); }
+    .verification-icon.error { color:var(--red); border-color:rgba(255,92,104,.5); background:rgba(255,92,104,.08); box-shadow:0 0 0 6px rgba(255,92,104,.045),0 0 32px rgba(255,92,104,.2); }
+    .discord-loading-overlay.result .discord-loading-spinner { opacity:0; transform:scale(.72) rotate(90deg); animation:none; }
+    .discord-loading-overlay.result .verification-icon { opacity:1; transform:scale(1) rotate(0); }
+    .verification-icon svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+    .verification-icon.success svg path { stroke-dasharray:30; stroke-dashoffset:30; animation:drawCheck .5s .14s cubic-bezier(.22,1,.36,1) forwards; }
+    .verification-icon.error svg path { stroke-dasharray:40; stroke-dashoffset:40; animation:drawError .5s .14s cubic-bezier(.22,1,.36,1) forwards; }
+    .discord-loading-text { font-size:13px; font-weight:600; color:rgba(235,238,255,.85); letter-spacing:.01em; transition:opacity .24s,transform .24s; }
+    .discord-loading-text.changing { opacity:0; transform:translateY(4px); }
     @keyframes spin{to{transform:rotate(360deg)}}
     @keyframes drawCheck{to{stroke-dashoffset:0}}
     @keyframes drawError{to{stroke-dashoffset:0}}
 
     /* ══ AUTH OVERLAY ══ */
-    .auth-overlay{
-      position:fixed;inset:0;z-index:5000;
-      display:flex;align-items:center;justify-content:center;padding:24px;
-      background:rgba(3,3,4,.72);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
-      opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s linear .35s;
-    }
-    .auth-overlay.visible{opacity:1;visibility:visible;transition:opacity .35s,visibility 0s}
-    .auth-card{
-      width:100%;max-width:400px;padding:36px 32px 30px;border-radius:28px;
-      transform:translateY(14px) scale(.98);transition:transform .35s cubic-bezier(.22,1,.36,1);
-    }
-    .auth-overlay.visible .auth-card{transform:translateY(0) scale(1)}
-    .auth-card__refract{position:absolute;inset:0;border-radius:inherit;backdrop-filter:blur(48px) url(#lg-card) saturate(220%) brightness(1.1);-webkit-backdrop-filter:blur(48px) url(#lg-card) saturate(220%) brightness(1.1);isolation:isolate}
-    .auth-card__tint{position:absolute;inset:0;border-radius:inherit;background:rgba(255,255,255,.08)}
-    .auth-card__specular{position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.1);pointer-events:none}
-    .auth-card__content{position:relative;z-index:10}
-    .auth-logo-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px}
-    .auth-logo-row img{width:26px;height:26px;border-radius:7px}
-    .auth-logo-row span{font-size:15px;font-weight:800;color:#f0f2ff;letter-spacing:-.01em}
-    .auth-tabs{display:flex;padding:4px;border-radius:100px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);margin-bottom:24px}
-    .auth-tab{flex:1;text-align:center;padding:9px 0;border-radius:100px;font-size:12.5px;font-weight:600;color:rgba(210,214,235,.55);cursor:pointer;user-select:none;transition:background .2s,color .2s}
-    .auth-tab.active{background:rgba(255,255,255,.92);color:#0b0b14}
-    .auth-form{display:none;flex-direction:column;gap:14px}
-    .auth-form.active{display:flex}
-    .auth-field{display:flex;flex-direction:column;gap:7px}
-    .auth-field label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(160,170,220,.5)}
-    .auth-field input{
-      font-family:'Inter',sans-serif;font-size:13.5px;color:#f0f2ff;
-      padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);outline:none;
-      transition:border-color .2s,background .2s,box-shadow .2s;
-    }
-    .auth-field input:focus{border-color:rgba(255,255,255,.36);background:rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 3px rgba(255,255,255,.04)}
-    .auth-field input::placeholder{color:rgba(160,170,220,.32)}
-    .auth-error{font-size:12px;color:#ff8080;display:none;line-height:1.5}
-    .auth-error.visible{display:block}
-    .auth-submit{
-      margin-top:6px;width:100%;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;
-      color:#0b0b14;background:rgba(255,255,255,.92);padding:13px 0;
-      border:1px solid rgba(255,255,255,.5);border-radius:100px;cursor:pointer;
-      box-shadow:inset 0 1px 0 #fff,0 4px 16px rgba(0,0,0,.16);
-      transition:transform .15s,opacity .15s,box-shadow .2s;
-    }
-    .auth-submit:hover{transform:translateY(-1px);opacity:.92}
-    .auth-submit:disabled{opacity:.5;cursor:default;transform:none}
-    .auth-switch-note{margin-top:18px;text-align:center;font-size:12px;color:rgba(160,170,220,.45)}
+    .auth-overlay { position:fixed; inset:0; z-index:5000; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(3,3,4,.72); backdrop-filter:blur(28px) saturate(160%); -webkit-backdrop-filter:blur(28px) saturate(160%); opacity:0; visibility:hidden; transition:opacity .35s,visibility 0s linear .35s; }
+    .auth-overlay.visible { opacity:1; visibility:visible; transition:opacity .35s,visibility 0s; }
+    .auth-card { width:100%; max-width:400px; padding:36px 32px 30px; border-radius:28px; transform:translateY(14px) scale(.98); transition:transform .35s cubic-bezier(.22,1,.36,1); }
+    .auth-overlay.visible .auth-card { transform:translateY(0) scale(1); }
+    .auth-card__refract { position:absolute; inset:0; border-radius:inherit; backdrop-filter:blur(48px) url(#lg-card) saturate(220%) brightness(1.1); -webkit-backdrop-filter:blur(48px) url(#lg-card) saturate(220%) brightness(1.1); isolation:isolate; }
+    .auth-card__tint { position:absolute; inset:0; border-radius:inherit; background:rgba(255,255,255,.08); }
+    .auth-card__specular { position:absolute; inset:0; border-radius:inherit; box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.1); pointer-events:none; }
+    .auth-card__content { position:relative; z-index:10; }
+    .auth-logo-row { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:22px; }
+    .auth-logo-row img { width:26px; height:26px; border-radius:7px; }
+    .auth-logo-row span { font-size:15px; font-weight:800; color:#f0f2ff; letter-spacing:-.01em; }
+    .auth-tabs { display:flex; padding:4px; border-radius:100px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); margin-bottom:24px; }
+    .auth-tab { flex:1; text-align:center; padding:9px 0; border-radius:100px; font-size:12.5px; font-weight:600; color:rgba(210,214,235,.55); cursor:pointer; user-select:none; transition:background .2s,color .2s; }
+    .auth-tab.active { background:rgba(255,255,255,.92); color:#0b0b14; }
+    .auth-form { display:none; flex-direction:column; gap:14px; }
+    .auth-form.active { display:flex; }
+    .auth-field { display:flex; flex-direction:column; gap:7px; }
+    .auth-field label { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:rgba(160,170,220,.5); }
+    .auth-field input { font-family:'Inter',sans-serif; font-size:13.5px; color:#f0f2ff; padding:12px 14px; border-radius:14px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10); outline:none; transition:border-color .2s,background .2s,box-shadow .2s; }
+    .auth-field input:focus { border-color:rgba(255,255,255,.36); background:rgba(255,255,255,.08); box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 0 3px rgba(255,255,255,.04); }
+    .auth-field input::placeholder { color:rgba(160,170,220,.32); }
+    .auth-error { font-size:12px; color:#ff8080; display:none; line-height:1.5; }
+    .auth-error.visible { display:block; }
+    .auth-submit { margin-top:6px; width:100%; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; color:#0b0b14; background:rgba(255,255,255,.92); padding:13px 0; border:1px solid rgba(255,255,255,.5); border-radius:100px; cursor:pointer; box-shadow:inset 0 1px 0 #fff,0 4px 16px rgba(0,0,0,.16); transition:transform .15s,opacity .15s,box-shadow .2s; }
+    .auth-submit:hover { transform:translateY(-1px); opacity:.92; }
+    .auth-submit:disabled { opacity:.5; cursor:default; transform:none; }
+    .auth-switch-note { margin-top:18px; text-align:center; font-size:12px; color:rgba(160,170,220,.45); }
 
     /* ══ PROFILE MODAL ══ */
-    .profile-modal-overlay{position:fixed;inset:0;z-index:5100;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(3,3,4,.72);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s linear .3s}
-    .profile-modal-overlay.visible{opacity:1;visibility:visible;transition:opacity .3s,visibility 0s}
-    .profile-modal{width:100%;max-width:440px;max-height:86vh;overflow-y:auto;border-radius:28px;border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 30px 80px rgba(0,0,0,.5);position:relative;overflow:hidden}
-    .profile-modal__refract{position:absolute;inset:0;border-radius:inherit;backdrop-filter:blur(48px) url(#lg-card) saturate(200%) brightness(1.08);-webkit-backdrop-filter:blur(48px) url(#lg-card) saturate(200%) brightness(1.08);isolation:isolate}
-    .profile-modal__tint{position:absolute;inset:0;border-radius:inherit;background:rgba(255,255,255,.07)}
-    .profile-modal__content{position:relative;z-index:10;max-height:86vh;overflow-y:auto}
-    .profile-banner{position:relative;height:110px;background:linear-gradient(135deg,#6a7cbf,#3b4573);background-size:cover;background-position:center;border-radius:28px 28px 0 0;cursor:pointer}
-    .profile-banner-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;background:rgba(0,0,0,.35);opacity:0;transition:opacity .2s;border-radius:28px 28px 0 0}
-    .profile-banner:hover .profile-banner-hint{opacity:1}
-    .profile-avatar-wrap{position:relative;width:76px;height:76px;margin:-38px 0 0 24px;border-radius:50%;border:4px solid rgba(14,14,24,.9);cursor:pointer}
-    .profile-avatar-wrap img,.profile-avatar-wrap .account-avatar{width:100%;height:100%;border-radius:50%;object-fit:cover;font-size:22px}
-    .profile-avatar-hint{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;text-align:center;color:#fff;background:rgba(0,0,0,.45);opacity:0;transition:opacity .2s}
-    .profile-avatar-wrap:hover .profile-avatar-hint{opacity:1}
-    .profile-modal-body{padding:16px 24px 24px;display:flex;flex-direction:column;gap:14px}
-    .profile-field textarea{width:100%;font-family:'Inter',sans-serif;font-size:13px;color:#f0f2ff;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);outline:none;resize:vertical;min-height:70px;transition:border-color .2s}
-    .profile-field textarea:focus{border-color:rgba(255,255,255,.32)}
-    .profile-modal-actions{display:flex;gap:10px;margin-top:4px}
-    .profile-modal-actions .auth-submit{margin-top:0}
-    .profile-cancel-btn{flex-shrink:0;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:rgba(220,222,238,.8);background:rgba(255,255,255,.06);padding:13px 20px;border:1px solid rgba(255,255,255,.1);border-radius:100px;cursor:pointer;transition:background .2s}
-    .profile-cancel-btn:hover{background:rgba(255,255,255,.1)}
-
-    /* ══════════════════════════════════
-       ADMIN PANEL
-    ══════════════════════════════════ */
-
-    /* Floating trigger button */
-    .admin-fab {
-      position:fixed; bottom:32px; left:32px; z-index:2100;
-      width:52px; height:52px; border-radius:50%;
-      display:none; align-items:center; justify-content:center;
-      cursor:pointer;
-      border:1px solid rgba(255,215,0,0.35);
-      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.1),0 8px 32px rgba(0,0,0,.32),0 0 24px rgba(255,200,0,.15);
-      transition:transform .2s cubic-bezier(.22,1,.36,1), box-shadow .2s, opacity .2s;
-      opacity:0; pointer-events:none;
-    }
-    .admin-fab.show { display:flex; opacity:1; pointer-events:auto; }
-    .admin-fab:hover { transform:scale(1.08) translateY(-2px); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.65),0 12px 40px rgba(0,0,0,.42),0 0 36px rgba(255,200,0,.25); }
-    .admin-fab__refract { position:absolute;inset:0;border-radius:50%;backdrop-filter:blur(32px) url(#lg-pill) brightness(1.12) saturate(1.5);-webkit-backdrop-filter:blur(32px) url(#lg-pill) brightness(1.12) saturate(1.5);isolation:isolate; }
-    .admin-fab__tint    { position:absolute;inset:0;border-radius:50%;background:rgba(255,200,0,.18); }
-    .admin-fab__icon    { position:relative;z-index:10;display:flex;align-items:center;justify-content:center; }
-    .admin-fab__icon svg{ width:22px;height:22px;stroke:rgba(255,220,80,.95);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
-
-    /* Admin panel overlay */
-    .admin-overlay {
-      position:fixed;inset:0;z-index:6000;
-      display:flex;align-items:center;justify-content:center;padding:24px;
-      background:rgba(3,3,4,.80);backdrop-filter:blur(32px) saturate(140%);-webkit-backdrop-filter:blur(32px) saturate(140%);
-      opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s linear .35s;
-    }
-    .admin-overlay.visible{opacity:1;visibility:visible;transition:opacity .35s,visibility 0s}
-
-    .admin-panel {
-      position:relative; width:100%;max-width:780px;max-height:90vh;
-      border-radius:28px; overflow:hidden;
-      border:1px solid rgba(255,215,0,.20);
-      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.1),0 40px 100px rgba(0,0,0,.60),0 0 60px rgba(255,200,0,.06);
-      transform:translateY(20px) scale(.97);
-      transition:transform .38s cubic-bezier(.22,1,.36,1);
-    }
-    .admin-overlay.visible .admin-panel{transform:translateY(0) scale(1)}
-    .admin-panel__refract{position:absolute;inset:0;border-radius:inherit;backdrop-filter:blur(52px) url(#lg-card) saturate(220%) brightness(1.08);-webkit-backdrop-filter:blur(52px) url(#lg-card) saturate(220%) brightness(1.08);isolation:isolate}
-    .admin-panel__tint{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(160deg,rgba(255,215,0,.06) 0%,rgba(255,255,255,.03) 60%,rgba(255,215,0,.04) 100%)}
-    .admin-panel__specular{position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(0,0,0,.1);pointer-events:none}
-    .admin-panel__body{position:relative;z-index:10;display:flex;flex-direction:column;max-height:90vh;overflow:hidden}
-
-    /* Admin header */
-    .admin-header{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:24px 28px 20px; border-bottom:1px solid rgba(255,255,255,.08);
-      flex-shrink:0;
-    }
-    .admin-header-left{display:flex;align-items:center;gap:12px}
-    .admin-badge{
-      display:inline-flex;align-items:center;gap:7px;
-      padding:5px 12px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-      background:rgba(255,200,0,.10);border:1px solid rgba(255,200,0,.28);color:rgba(255,220,80,.9);
-    }
-    .admin-badge-dot{width:6px;height:6px;border-radius:50%;background:#ffd700;box-shadow:0 0 8px rgba(255,215,0,.8)}
-    .admin-title{font-size:20px;font-weight:800;color:#f0f2ff;letter-spacing:-.01em}
-    .admin-close{
-      width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;
-      color:rgba(220,222,238,.7);transition:background .2s,color .2s;
-    }
-    .admin-close:hover{background:rgba(255,255,255,.12);color:#fff}
-    .admin-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-    /* Admin tabs */
-    .admin-tabs-bar{
-      display:flex;gap:2px;padding:12px 28px 0;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;
-    }
-    .admin-tab-btn{
-      padding:10px 18px;border-radius:12px 12px 0 0;font-size:12px;font-weight:600;
-      color:rgba(160,170,220,.55);cursor:pointer;border:none;background:transparent;
-      display:flex;align-items:center;gap:7px;transition:color .2s,background .2s;
-      border-bottom:2px solid transparent;
-    }
-    .admin-tab-btn:hover{color:rgba(220,224,255,.8);background:rgba(255,255,255,.04)}
-    .admin-tab-btn.active{color:#f0f2ff;border-bottom-color:rgba(255,215,0,.7);background:rgba(255,215,0,.05)}
-    .admin-tab-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-    /* Admin content area */
-    .admin-content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px}
-    .admin-tab-pane{display:none;flex-direction:column;gap:16px}
-    .admin-tab-pane.active{display:flex}
-
-    /* Admin section */
-    .admin-section-title{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(160,170,220,.45);margin-bottom:4px}
-
-    /* Admin card row */
-    .admin-row{
-      display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
-      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-      transition:background .2s;
-    }
-    .admin-row:hover{background:rgba(255,255,255,.07)}
-    .admin-row-info{flex:1;min-width:0}
-    .admin-row-label{font-size:13px;font-weight:600;color:#eef0ff}
-    .admin-row-sub{font-size:11px;color:rgba(160,170,220,.45);margin-top:2px;font-family:'Courier New',monospace}
-    .admin-row-badge{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-    .admin-row-badge.active{background:rgba(92,255,138,.10);border:1px solid rgba(92,255,138,.25);color:rgba(92,255,138,.9)}
-    .admin-row-badge.keyless{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);color:rgba(160,170,220,.5)}
-
-    /* Input */
-    .admin-input{
-      font-family:'Inter',sans-serif;font-size:13px;color:#f0f2ff;
-      padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);outline:none;width:100%;
-      transition:border-color .2s,background .2s;
-    }
-    .admin-input:focus{border-color:rgba(255,215,0,.4);background:rgba(255,255,255,.08);box-shadow:0 0 0 3px rgba(255,215,0,.06)}
-    .admin-input::placeholder{color:rgba(160,170,220,.32)}
-    .admin-select{
-      font-family:'Inter',sans-serif;font-size:13px;color:#f0f2ff;
-      padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);outline:none;width:100%;cursor:pointer;
-      transition:border-color .2s;
-    }
-    .admin-select:focus{border-color:rgba(255,215,0,.4)}
-    .admin-select option{background:#1a1a2e;color:#f0f2ff}
-
-    /* Admin button variants */
-    .admin-btn{
-      font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
-      padding:9px 18px;border-radius:100px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
-      transition:transform .15s,opacity .2s,box-shadow .2s;white-space:nowrap;
-    }
-    .admin-btn:hover{transform:translateY(-1px)}
-    .admin-btn:disabled{opacity:.5;cursor:default;transform:none}
-    .admin-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-    .admin-btn-gold{
-      background:linear-gradient(135deg,rgba(255,215,0,.3) 0%,rgba(255,180,0,.15) 100%);
-      border:1px solid rgba(255,215,0,.4);color:rgba(255,220,80,.95);
-      box-shadow:0 4px 16px rgba(255,200,0,.12);
-    }
-    .admin-btn-gold:hover{background:linear-gradient(135deg,rgba(255,215,0,.45) 0%,rgba(255,180,0,.25) 100%);box-shadow:0 6px 24px rgba(255,200,0,.22)}
-    .admin-btn-danger{background:rgba(255,92,104,.12);border:1px solid rgba(255,92,104,.28);color:#ff8a8a;box-shadow:0 4px 16px rgba(255,92,104,.08)}
-    .admin-btn-danger:hover{background:rgba(255,92,104,.22);box-shadow:0 6px 24px rgba(255,92,104,.18)}
-    .admin-btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(220,222,238,.8)}
-    .admin-btn-ghost:hover{background:rgba(255,255,255,.12)}
-    .admin-btn-success{background:rgba(92,255,138,.10);border:1px solid rgba(92,255,138,.28);color:rgba(92,255,138,.9)}
-    .admin-btn-success:hover{background:rgba(92,255,138,.20)}
-
-    /* Form group */
-    .admin-form-group{display:flex;flex-direction:column;gap:8px}
-    .admin-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .admin-form-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(160,170,220,.5)}
-    .admin-form-hint{font-size:11px;color:rgba(160,170,220,.35);margin-top:4px}
-    .admin-msg{font-size:12px;padding:10px 14px;border-radius:10px;display:none}
-    .admin-msg.visible{display:block}
-    .admin-msg.success{background:rgba(92,255,138,.08);border:1px solid rgba(92,255,138,.2);color:rgba(92,255,138,.9)}
-    .admin-msg.error{background:rgba(255,92,104,.08);border:1px solid rgba(255,92,104,.2);color:#ff8a8a}
-
-    /* User list */
-    .admin-user-row{
-      display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
-      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
-      transition:background .2s;
-    }
-    .admin-user-row:hover{background:rgba(255,255,255,.07)}
-    .admin-user-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#6a7cbf,#3b4573);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
-    .admin-user-info{flex:1;min-width:0}
-    .admin-user-display{font-size:13px;font-weight:600;color:#eef0ff}
-    .admin-user-meta{font-size:11px;color:rgba(160,170,220,.45);margin-top:1px}
-    .admin-user-actions{display:flex;gap:6px;flex-shrink:0}
-    .admin-user-badge{padding:3px 8px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-    .admin-user-badge.banned{background:rgba(255,92,104,.12);border:1px solid rgba(255,92,104,.25);color:#ff8a8a}
-    .admin-user-badge.active{background:rgba(92,255,138,.08);border:1px solid rgba(92,255,138,.2);color:rgba(92,255,138,.85)}
-    .admin-user-badge.admin{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:rgba(255,220,80,.9)}
-
-    .admin-empty{text-align:center;padding:40px 20px;color:rgba(160,170,220,.35);font-size:13px}
-    .admin-empty svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto}
-    .admin-search{position:relative;margin-bottom:4px}
-    .admin-search .admin-input{padding-left:38px}
-    .admin-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:rgba(160,170,220,.4)}
-    .admin-search-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-    /* Toggle switch */
-    .toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
-    .toggle-info{min-width:0}
-    .toggle-label{font-size:13px;font-weight:600;color:#eef0ff}
-    .toggle-sub{font-size:11px;color:rgba(160,170,220,.45);margin-top:2px}
-    .toggle-switch{position:relative;flex-shrink:0;width:44px;height:26px;cursor:pointer}
-    .toggle-switch input{opacity:0;width:0;height:0;position:absolute}
-    .toggle-track{
-      position:absolute;inset:0;border-radius:100px;
-      background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);
-      transition:background .25s,border-color .25s;
-    }
-    .toggle-switch input:checked + .toggle-track{background:rgba(88,101,242,.55);border-color:rgba(88,101,242,.6)}
-    .toggle-thumb{
-      position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
-      background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.28);
-      transition:transform .25s cubic-bezier(.22,1,.36,1);
-    }
-    .toggle-switch input:checked ~ .toggle-thumb{transform:translateX(18px)}
-
-    /* Divider */
-    .admin-divider{height:1px;background:rgba(255,255,255,.06);margin:4px 0}
+    .profile-modal-overlay { position:fixed; inset:0; z-index:5100; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(3,3,4,.72); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); opacity:0; visibility:hidden; transition:opacity .3s,visibility 0s linear .3s; }
+    .profile-modal-overlay.visible { opacity:1; visibility:visible; transition:opacity .3s,visibility 0s; }
+    .profile-modal { width:100%; max-width:440px; max-height:86vh; overflow-y:auto; border-radius:28px; border:1px solid rgba(255,255,255,.16); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.45),0 30px 80px rgba(0,0,0,.5); position:relative; overflow:hidden; }
+    .profile-modal__refract { position:absolute; inset:0; border-radius:inherit; backdrop-filter:blur(48px) url(#lg-card) saturate(200%) brightness(1.08); -webkit-backdrop-filter:blur(48px) url(#lg-card) saturate(200%) brightness(1.08); isolation:isolate; }
+    .profile-modal__tint { position:absolute; inset:0; border-radius:inherit; background:rgba(255,255,255,.07); }
+    .profile-modal__content { position:relative; z-index:10; max-height:86vh; overflow-y:auto; }
+    .profile-banner { position:relative; height:110px; background:linear-gradient(135deg,#6a7cbf,#3b4573); background-size:cover; background-position:center; border-radius:28px 28px 0 0; cursor:pointer; }
+    .profile-banner-hint { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#fff; background:rgba(0,0,0,.35); opacity:0; transition:opacity .2s; border-radius:28px 28px 0 0; }
+    .profile-banner:hover .profile-banner-hint { opacity:1; }
+    .profile-avatar-wrap { position:relative; width:76px; height:76px; margin:-38px 0 0 24px; border-radius:50%; border:4px solid rgba(14,14,24,.9); cursor:pointer; }
+    .profile-avatar-wrap img,.profile-avatar-wrap .account-avatar { width:100%; height:100%; border-radius:50%; object-fit:cover; font-size:22px; }
+    .profile-avatar-hint { position:absolute; inset:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; text-align:center; color:#fff; background:rgba(0,0,0,.45); opacity:0; transition:opacity .2s; }
+    .profile-avatar-wrap:hover .profile-avatar-hint { opacity:1; }
+    .profile-modal-body { padding:16px 24px 24px; display:flex; flex-direction:column; gap:14px; }
+    .profile-field textarea { width:100%; font-family:'Inter',sans-serif; font-size:13px; color:#f0f2ff; padding:12px 14px; border-radius:12px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); outline:none; resize:vertical; min-height:70px; transition:border-color .2s; }
+    .profile-field textarea:focus { border-color:rgba(255,255,255,.32); }
+    .profile-modal-actions { display:flex; gap:10px; margin-top:4px; }
+    .profile-modal-actions .auth-submit { margin-top:0; }
+    .profile-cancel-btn { flex-shrink:0; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; color:rgba(220,222,238,.8); background:rgba(255,255,255,.06); padding:13px 20px; border:1px solid rgba(255,255,255,.1); border-radius:100px; cursor:pointer; transition:background .2s; }
+    .profile-cancel-btn:hover { background:rgba(255,255,255,.1); }
 
     /* ══ NOTIFICATIONS ══ */
-    .notification-container{position:fixed;right:24px;bottom:24px;z-index:2000;display:flex;flex-direction:column;align-items:flex-end;gap:10px;pointer-events:none}
-    .notification{
-      position:relative;min-width:280px;max-width:360px;
-      display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:20px;
-      background:linear-gradient(160deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.05) 60%,rgba(255,255,255,.11) 100%);
-      border:1px solid rgba(255,255,255,.20);
-      backdrop-filter:blur(40px) saturate(220%) brightness(1.1);-webkit-backdrop-filter:blur(40px) saturate(220%) brightness(1.1);
-      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),0 12px 40px rgba(0,0,0,.34);
-      color:#fff;opacity:0;transform:translateX(30px) translateY(10px) scale(.96);
-      transition:opacity .35s,transform .35s cubic-bezier(.22,1,.36,1);overflow:hidden;
-    }
-    .notification.show{opacity:1;transform:translateX(0) translateY(0) scale(1)}
-    .notification.hide{opacity:0;transform:translateX(30px) translateY(10px) scale(.96)}
-    .notification-progress{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.10);overflow:hidden;border-radius:0 0 20px 20px}
-    .notification-progress-bar{width:100%;height:100%;transform-origin:left center;transform:scaleX(1);background:rgba(255,255,255,.65)}
-    .notification.error .notification-progress-bar{background:#ff626f}
-    .notification.success .notification-progress-bar{background:#6dff9a}
-    .notification-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);flex-shrink:0}
-    .notification-icon.success{color:#6dff9a;box-shadow:0 0 12px rgba(109,255,154,.22)}
-    .notification-icon.error{color:#ff7373;box-shadow:0 0 12px rgba(255,115,115,.22)}
-    .notification-icon svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-    .notification-content{display:flex;flex-direction:column;gap:2px;min-width:0}
-    .notification-title{font-size:12px;font-weight:700}
-    .notification-message{font-size:11px;color:rgba(255,255,255,.62);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .notification-container { position:fixed; right:24px; bottom:24px; z-index:2000; display:flex; flex-direction:column; align-items:flex-end; gap:10px; pointer-events:none; }
+    .notification { position:relative; min-width:280px; max-width:360px; display:flex; align-items:center; gap:12px; padding:13px 16px; border-radius:20px; background:linear-gradient(160deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.05) 60%,rgba(255,255,255,.11) 100%); border:1px solid rgba(255,255,255,.20); backdrop-filter:blur(40px) saturate(220%) brightness(1.1); -webkit-backdrop-filter:blur(40px) saturate(220%) brightness(1.1); box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),0 12px 40px rgba(0,0,0,.34); color:#fff; opacity:0; transform:translateX(30px) translateY(10px) scale(.96); transition:opacity .35s,transform .35s cubic-bezier(.22,1,.36,1); overflow:hidden; }
+    .notification.show { opacity:1; transform:translateX(0) translateY(0) scale(1); }
+    .notification.hide { opacity:0; transform:translateX(30px) translateY(10px) scale(.96); }
+    .notification-progress { position:absolute; left:0; right:0; bottom:0; height:2px; background:rgba(255,255,255,.10); overflow:hidden; border-radius:0 0 20px 20px; }
+    .notification-progress-bar { width:100%; height:100%; transform-origin:left center; transform:scaleX(1); background:rgba(255,255,255,.65); }
+    .notification.error .notification-progress-bar { background:#ff626f; }
+    .notification.success .notification-progress-bar { background:#6dff9a; }
+    .notification-icon { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.18); flex-shrink:0; }
+    .notification-icon.success { color:#6dff9a; box-shadow:0 0 12px rgba(109,255,154,.22); }
+    .notification-icon.error { color:#ff7373; box-shadow:0 0 12px rgba(255,115,115,.22); }
+    .notification-icon svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .notification-content { display:flex; flex-direction:column; gap:2px; min-width:0; }
+    .notification-title { font-size:12px; font-weight:700; }
+    .notification-message { font-size:11px; color:rgba(255,255,255,.62); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
     /* ══ RESPONSIVE ══ */
     @media(max-width:680px){
@@ -740,9 +408,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       .notification-container{right:14px;bottom:14px;left:14px;align-items:stretch}
       .notification{min-width:0;width:100%;max-width:none}
       .account-name{display:none}
-      .admin-form-row{grid-template-columns:1fr}
-      .admin-fab{bottom:20px;left:20px}
-      .admin-panel{max-height:95vh}
     }
   </style>
 </head>
@@ -798,7 +463,7 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
         </div>
         <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="handleImageSelect(event,'avatar')">
         <div class="profile-modal-body">
-          <div class="auth-field"><label>Nom affiché</label><input type="text" id="editDisplayName" maxlength="32" class="auth-field" style="font-family:'Inter',sans-serif;font-size:13.5px;color:#f0f2ff;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);outline:none;width:100%"></div>
+          <div class="auth-field"><label>Nom affiché</label><input type="text" id="editDisplayName" maxlength="32" style="font-family:'Inter',sans-serif;font-size:13.5px;color:#f0f2ff;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);outline:none;width:100%"></div>
           <div class="auth-field profile-field"><label>Bio</label><textarea id="editBio" maxlength="200" placeholder="Parle un peu de toi..."></textarea></div>
           <div class="auth-error" id="profileEditError"></div>
           <div class="profile-modal-actions">
@@ -807,251 +472,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
           </div>
         </div>
       </div>
-    </div>
-  </div>
-
-  <!-- ══ ADMIN PANEL ══ -->
-  <div class="admin-overlay" id="adminOverlay" onclick="handleAdminOverlayClick(event)">
-    <div class="admin-panel" id="adminPanel">
-      <div class="admin-panel__refract"></div>
-      <div class="admin-panel__tint"></div>
-      <div class="admin-panel__specular"></div>
-      <div class="admin-panel__body">
-
-        <!-- Header -->
-        <div class="admin-header">
-          <div class="admin-header-left">
-            <div class="admin-badge"><span class="admin-badge-dot"></span>Admin Panel</div>
-            <div class="admin-title">Sentinel Control</div>
-          </div>
-          <button class="admin-close" onclick="closeAdminPanel()">
-            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
-
-        <!-- Tabs -->
-        <div class="admin-tabs-bar">
-          <button class="admin-tab-btn active" onclick="switchAdminTab('keys')" id="adminTab-keys">
-            <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-            Keys
-          </button>
-          <button class="admin-tab-btn" onclick="switchAdminTab('cards')" id="adminTab-cards">
-            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            Cartes
-          </button>
-          <button class="admin-tab-btn" onclick="switchAdminTab('users')" id="adminTab-users">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Utilisateurs
-          </button>
-        </div>
-
-        <!-- Content -->
-        <div class="admin-content">
-
-          <!-- ── KEYS TAB ── -->
-          <div class="admin-tab-pane active" id="adminPane-keys">
-            <div class="admin-section-title">Scripts & Clés</div>
-
-            <!-- Examination -->
-            <div class="admin-row" id="adminKeyRow-examination">
-              <div class="admin-row-info">
-                <div class="admin-row-label">Examination</div>
-                <div class="admin-row-sub" id="adminKeySub-examination">Chargement…</div>
-              </div>
-              <span class="admin-row-badge active" id="adminKeyBadge-examination">Active</span>
-              <button class="admin-btn admin-btn-gold" onclick="openKeyEditor('examination', 'Examination')">
-                <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                Modifier
-              </button>
-            </div>
-
-            <!-- BloxStrike -->
-            <div class="admin-row" id="adminKeyRow-bloxstrike">
-              <div class="admin-row-info">
-                <div class="admin-row-label">BloxStrike</div>
-                <div class="admin-row-sub" id="adminKeySub-bloxstrike">Chargement…</div>
-              </div>
-              <span class="admin-row-badge active" id="adminKeyBadge-bloxstrike">Active</span>
-              <button class="admin-btn admin-btn-gold" onclick="openKeyEditor('bloxstrike', 'BloxStrike')">
-                <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                Modifier
-              </button>
-            </div>
-
-            <!-- Ajouter une nouvelle key -->
-            <div class="admin-divider"></div>
-            <div class="admin-section-title">Ajouter un script</div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div class="admin-form-row">
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Script ID</span>
-                  <input class="admin-input" id="newKeyScriptId" placeholder="ex. mm2" type="text">
-                </div>
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Valeur de la clé</span>
-                  <input class="admin-input" id="newKeyValue" placeholder="ex. SentinelMM2Key" type="text">
-                </div>
-              </div>
-              <div style="display:flex;gap:8px">
-                <button class="admin-btn admin-btn-success" onclick="adminAddKey()">
-                  <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  Ajouter
-                </button>
-              </div>
-              <div class="admin-msg" id="adminKeyMsg"></div>
-            </div>
-
-            <!-- Key editor inline -->
-            <div id="keyEditorBox" style="display:none;flex-direction:column;gap:10px;padding:16px;border-radius:14px;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.15)">
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <span style="font-size:13px;font-weight:700;color:rgba(255,220,80,.9)" id="keyEditorTitle">Modifier la clé</span>
-                <button class="admin-btn admin-btn-ghost" style="padding:6px 12px;font-size:11px" onclick="closeKeyEditor()">Fermer</button>
-              </div>
-              <div class="admin-form-group">
-                <span class="admin-form-label">Nouvelle valeur</span>
-                <input class="admin-input" id="keyEditorValue" placeholder="Nouvelle clé…">
-              </div>
-              <div class="admin-form-group">
-                <span class="admin-form-label">Mode du bouton</span>
-                <select class="admin-select" id="keyEditorMode">
-                  <option value="active">Get Key (actif)</option>
-                  <option value="keyless">Keyless (bloqué)</option>
-                </select>
-                <div class="admin-form-hint">Keyless = affiche un bouton grisé "Keyless" à la place de Get Key</div>
-              </div>
-              <div style="display:flex;gap:8px">
-                <button class="admin-btn admin-btn-gold" onclick="adminSaveKey()">
-                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                  Enregistrer
-                </button>
-                <button class="admin-btn admin-btn-danger" onclick="adminDeleteKey()">
-                  <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                  Supprimer cette clé
-                </button>
-              </div>
-              <div class="admin-msg" id="keyEditorMsg"></div>
-            </div>
-          </div>
-
-          <!-- ── CARDS TAB ── -->
-          <div class="admin-tab-pane" id="adminPane-cards">
-            <div class="admin-section-title">Ajouter une carte script</div>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div class="admin-form-row">
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Nom du script</span>
-                  <input class="admin-input" id="cardName" placeholder="ex. Arsenal">
-                </div>
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Script ID (key)</span>
-                  <input class="admin-input" id="cardScriptId" placeholder="ex. arsenal">
-                  <div class="admin-form-hint">Doit correspondre à la ligne dans script_keys</div>
-                </div>
-              </div>
-              <div class="admin-form-group">
-                <span class="admin-form-label">Script (loadstring)</span>
-                <input class="admin-input" id="cardScript" placeholder='loadstring(game:HttpGet("https://…"))()'>
-              </div>
-              <div class="admin-form-row">
-                <div class="admin-form-group">
-                  <span class="admin-form-label">URL de la miniature</span>
-                  <input class="admin-input" id="cardThumb" placeholder="https://tr.rbxcdn.com/…">
-                </div>
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Lien du jeu Roblox</span>
-                  <input class="admin-input" id="cardGameLink" placeholder="https://www.roblox.com/games/…">
-                </div>
-              </div>
-              <div class="admin-form-row">
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Mode du bouton Get Key</span>
-                  <select class="admin-select" id="cardKeyMode">
-                    <option value="active">Get Key (actif)</option>
-                    <option value="keyless">Keyless (bloqué)</option>
-                  </select>
-                </div>
-                <div class="admin-form-group">
-                  <span class="admin-form-label">Délai d'animation (ms)</span>
-                  <input class="admin-input" id="cardDelay" placeholder="ex. 200" type="number" value="200">
-                </div>
-              </div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <button class="admin-btn admin-btn-gold" onclick="adminAddCard()">
-                  <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  Créer la carte
-                </button>
-                <button class="admin-btn admin-btn-ghost" onclick="adminPreviewCard()">
-                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Aperçu
-                </button>
-              </div>
-              <div class="admin-msg" id="adminCardMsg"></div>
-            </div>
-
-            <div class="admin-divider"></div>
-            <div class="admin-section-title">Cartes existantes</div>
-            <div id="adminCardList" style="display:flex;flex-direction:column;gap:8px">
-              <div class="admin-empty">
-                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                Les cartes dynamiques apparaissent ici
-              </div>
-            </div>
-          </div>
-
-          <!-- ── USERS TAB ── -->
-          <div class="admin-tab-pane" id="adminPane-users">
-            <div class="admin-section-title">Rechercher un utilisateur</div>
-            <div class="admin-search">
-              <div class="admin-search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-              <input class="admin-input" id="adminUserSearch" placeholder="Nom d'utilisateur…" oninput="adminSearchUsers()" autocomplete="off">
-            </div>
-
-            <div id="adminUserList" style="display:flex;flex-direction:column;gap:8px;min-height:60px">
-              <div class="admin-empty" id="adminUserEmpty">
-                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                Recherche un utilisateur pour commencer
-              </div>
-            </div>
-
-            <!-- Ban modal inline -->
-            <div id="banBox" style="display:none;flex-direction:column;gap:10px;padding:16px;border-radius:14px;background:rgba(255,92,104,.04);border:1px solid rgba(255,92,104,.15);margin-top:8px">
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <span style="font-size:13px;font-weight:700;color:#ff8a8a">Bannir <span id="banTargetName"></span></span>
-                <button class="admin-btn admin-btn-ghost" style="padding:6px 12px;font-size:11px" onclick="closeBanBox()">Annuler</button>
-              </div>
-              <div class="admin-form-group">
-                <span class="admin-form-label">Durée</span>
-                <select class="admin-select" id="banDuration">
-                  <option value="1h">1 heure</option>
-                  <option value="24h">24 heures</option>
-                  <option value="7d">7 jours</option>
-                  <option value="30d">30 jours</option>
-                  <option value="perm">Permanent</option>
-                </select>
-              </div>
-              <div class="admin-form-group">
-                <span class="admin-form-label">Raison</span>
-                <input class="admin-input" id="banReason" placeholder="Raison du ban…">
-              </div>
-              <button class="admin-btn admin-btn-danger" onclick="confirmBan()">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-                Confirmer le ban
-              </button>
-              <div class="admin-msg" id="banMsg"></div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ ADMIN FAB ══ -->
-  <div class="admin-fab" id="adminFab" onclick="openAdminPanel()" title="Admin Panel">
-    <div class="admin-fab__refract"></div>
-    <div class="admin-fab__tint"></div>
-    <div class="admin-fab__icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
     </div>
   </div>
 
@@ -1078,11 +498,11 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
         </div>
         <div class="island-divider"></div>
         <div class="island-stats">
-          <div class="island-stat" title="Membres en ligne">
+          <div class="island-stat">
             <span class="status-dot" id="activeStatusDot"></span>
             <span class="island-number" id="activeMembers">—</span>
           </div>
-          <div class="island-stat" title="Membres total">
+          <div class="island-stat">
             <span class="status-dot inactive"></span>
             <span class="island-number" id="totalMembers">—</span>
           </div>
@@ -1110,10 +530,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
               Modifier le profil
             </div>
-            <div class="account-menu-item admin-item" id="adminMenuBtn" style="display:none" onclick="openAdminPanel();toggleAccountMenu(false)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-              Admin Panel
-            </div>
             <div class="account-menu-item danger" onclick="handleLogout()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
               Se déconnecter
@@ -1138,10 +554,15 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
 
   <!-- ══ HERO ══ -->
   <section class="hero" id="top">
-    <div class="hero-bg">
-      <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-      <div class="hero-fade-mask"></div>
+    <div class="hero-bg-canvas">
+      <div class="fluid-blob fb1"></div>
+      <div class="fluid-blob fb2"></div>
+      <div class="fluid-blob fb3"></div>
+      <div class="fluid-blob fb4"></div>
+      <div class="fluid-blob fb5"></div>
+      <div class="fluid-blob fb6"></div>
     </div>
+    <div class="hero-fade-mask"></div>
     <div class="hero-content">
       <div class="hero-title" aria-label="Sentinel">
         <span>S</span><span>e</span><span>n</span><span>t</span><span>i</span><span>n</span><span>e</span><span>l</span>
@@ -1167,8 +588,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       </div>
     </div>
   </section>
-
-  <div class="transition-gradient"></div>
 
   <!-- ══ SCRIPTS ══ -->
   <section class="scripts-section" id="scripts">
@@ -1271,7 +690,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       </div>
 
     </div>
-    <!-- Dynamic cards appended here -->
     <div id="dynamicCardsContainer" style="max-width:1100px;margin:0 auto;padding:0 32px;display:flex;flex-direction:column;gap:0"></div>
   </section>
 
@@ -1281,13 +699,10 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     <source src="https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/SentinelNotifSound.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
   <script>
-    /* ── HERO ── */
     document.querySelector('.hero-title').classList.add('ready');
     document.querySelector('.btn-primary').addEventListener('click',function(e){ e.preventDefault(); document.getElementById('scripts').scrollIntoView({behavior:'smooth'}); });
 
-    /* ── ISLAND SAFE FRAME ── */
     var island=document.getElementById('topIsland'),islandFrame=document.getElementById('islandSafeFrame'),islandFrameTimeout=null;
     function getDistToRect(x,y,r){var dx=Math.max(r.left-x,0,x-r.right),dy=Math.max(r.top-y,0,y-r.bottom);return Math.sqrt(dx*dx+dy*dy)}
     document.addEventListener('mousemove',function(e){
@@ -1297,7 +712,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       else{islandFrameTimeout=setTimeout(function(){islandFrame.classList.remove('visible');islandFrameTimeout=null},90)}
     },{passive:true});
 
-    /* ── NOTIFICATIONS ── */
     function showNotification(title,message,type){
       var c=document.getElementById('notificationContainer');if(!c)return;
       var n=document.createElement('div');n.className='notification '+(type==='success'?'success':'error');
@@ -1342,7 +756,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     }
     document.querySelectorAll('.copy-script-btn').forEach(function(btn){btn.addEventListener('click',function(){handleCopyScript(btn)})});
 
-    /* Card observer */
     var observer=new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         if(entry.isIntersecting){var delay=parseInt(entry.target.dataset.delay)||0;setTimeout(function(){entry.target.classList.add('visible')},delay);observer.unobserve(entry.target)}
@@ -1350,7 +763,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     },{threshold:.12});
     document.querySelectorAll('.script-card').forEach(function(c){observer.observe(c)});
 
-    /* Discord stats */
     function formatNumber(n){return typeof n!=='number'?'—':n.toLocaleString('fr-FR')}
     function updateDiscordStats(){
       fetch('https://discord.com/api/v10/invites/vTE8NQPsUb?with_counts=true',{method:'GET',cache:'no-store'})
@@ -1367,16 +779,13 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     updateDiscordStats();setInterval(updateDiscordStats,60000);
   </script>
 
-  <!-- ═══════════════════ SUPABASE AUTH ═══════════════════ -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL='https://fzuocfhzzvscjhcxuzog.supabase.co';
     const SUPABASE_ANON_KEY='sb_publishable_XWzMsq-kiPmkQ8rmL_u7Pg_bJT4TwZ5';
     const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-    const ADMIN_USERNAME='x4tmq';
 
     function usernameToInternalEmail(u){return u.trim().toLowerCase()+'@sentinel-script.internal'}
-
     let currentProfile=null;
 
     function switchAuthTab(tab){
@@ -1440,7 +849,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       await sb.auth.signOut();currentProfile=null;toggleAccountMenu(false);
       document.getElementById('accountWidget').style.display='none';
       document.getElementById('accountDivider').style.display='none';
-      hideAdminFab();
       if(typeof clearSavedKeySession==='function')clearSavedKeySession();
       showAuthOverlay();
     }
@@ -1469,17 +877,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       document.getElementById('accountMenuDisplay').textContent=profile.display_name;
       document.getElementById('accountMenuUsername').textContent='@'+profile.username;
       document.getElementById('accountMenuId').textContent='ID · '+profile.id;
-      // Admin check
-      var adminBtn=document.getElementById('adminMenuBtn');
-      var adminFab=document.getElementById('adminFab');
-      if(profile.username===ADMIN_USERNAME){
-        if(adminBtn)adminBtn.style.display='flex';
-        if(adminFab)adminFab.classList.add('show');
-        adminLoadKeys();
-      }else{
-        if(adminBtn)adminBtn.style.display='none';
-        if(adminFab)adminFab.classList.remove('show');
-      }
     }
 
     async function loadCurrentUser(){
@@ -1539,8 +936,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       finally{btn.disabled=false;btn.textContent='Enregistrer'}
     }
 
-    function hideAdminFab(){var f=document.getElementById('adminFab');if(f)f.classList.remove('show')}
-
     let _sentinelReadyResolve;
     window._sentinelReady=new Promise(res=>{_sentinelReadyResolve=res;});
     (async function initAuthGate(){
@@ -1551,364 +946,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
     })();
   </script>
 
-  <!-- ═══════════════════ ADMIN PANEL ═══════════════════ -->
-  <script>
-    /* ── State ── */
-    var _adminKeyEditTarget = null;
-    var _adminBanTarget = null;
-    var _dynamicCards = JSON.parse(localStorage.getItem('sentinel_dynamic_cards') || '[]');
-    var _keyModes = JSON.parse(localStorage.getItem('sentinel_key_modes') || '{}');
-
-    /* ── Open / close ── */
-    function openAdminPanel(){
-      if(!currentProfile||currentProfile.username!==ADMIN_USERNAME)return;
-      document.getElementById('adminOverlay').classList.add('visible');
-      document.body.style.overflow='hidden';
-      adminLoadKeys();
-      renderAdminCardList();
-    }
-    function closeAdminPanel(){
-      document.getElementById('adminOverlay').classList.remove('visible');
-      document.body.style.overflow='';
-    }
-    function handleAdminOverlayClick(e){
-      if(e.target===document.getElementById('adminOverlay'))closeAdminPanel();
-    }
-
-    /* ── Tabs ── */
-    function switchAdminTab(tab){
-      ['keys','cards','users'].forEach(function(t){
-        document.getElementById('adminTab-'+t).classList.toggle('active',t===tab);
-        document.getElementById('adminPane-'+t).classList.toggle('active',t===tab);
-      });
-    }
-
-    /* ──────────────────────────────
-       KEYS TAB
-    ────────────────────────────── */
-    async function adminLoadKeys(){
-      var scripts=['examination','bloxstrike'];
-      for(var sid of scripts){
-        var sub=document.getElementById('adminKeySub-'+sid);
-        var badge=document.getElementById('adminKeyBadge-'+sid);
-        if(!sub)continue;
-        try{
-          var{data,error}=await sb.from('script_keys').select('key_value').eq('script_id',sid).maybeSingle();
-          if(data&&data.key_value){
-            // mask: show first 4 + stars
-            var k=data.key_value;
-            var masked=k.slice(0,4)+'*'.repeat(Math.max(0,k.length-4));
-            sub.textContent=masked;
-            if(badge){
-              var mode=_keyModes[sid]||'active';
-              badge.textContent=mode==='keyless'?'Keyless':'Active';
-              badge.className='admin-row-badge '+(mode==='keyless'?'keyless':'active');
-            }
-          }else{
-            sub.textContent='Aucune clé';
-            if(badge){badge.textContent='Absente';badge.className='admin-row-badge keyless'}
-          }
-        }catch(e){sub.textContent='Erreur'}
-      }
-    }
-
-    function openKeyEditor(scriptId, scriptName){
-      _adminKeyEditTarget=scriptId;
-      document.getElementById('keyEditorTitle').textContent='Modifier · '+scriptName;
-      document.getElementById('keyEditorValue').value='';
-      document.getElementById('keyEditorMode').value=_keyModes[scriptId]||'active';
-      document.getElementById('keyEditorBox').style.display='flex';
-      setAdminMsg('keyEditorMsg','','');
-      document.getElementById('keyEditorValue').focus();
-    }
-    function closeKeyEditor(){
-      document.getElementById('keyEditorBox').style.display='none';
-      _adminKeyEditTarget=null;
-    }
-
-    async function adminSaveKey(){
-      if(!_adminKeyEditTarget)return;
-      var val=document.getElementById('keyEditorValue').value.trim();
-      var mode=document.getElementById('keyEditorMode').value;
-      // Update mode locally
-      _keyModes[_adminKeyEditTarget]=mode;
-      localStorage.setItem('sentinel_key_modes',JSON.stringify(_keyModes));
-      // Update button on page
-      applyKeyMode(_adminKeyEditTarget,mode);
-      // Update key value in Supabase if provided
-      if(val){
-        var{error}=await sb.from('script_keys').upsert({script_id:_adminKeyEditTarget,key_value:val,updated_at:new Date().toISOString()});
-        if(error){setAdminMsg('keyEditorMsg','Erreur Supabase : '+error.message,'error');return}
-      }
-      setAdminMsg('keyEditorMsg','Enregistré avec succès.','success');
-      adminLoadKeys();
-      showNotification('Admin','Clé mise à jour.','success');
-      playNotificationSound();
-      setTimeout(closeKeyEditor,1200);
-    }
-
-    async function adminDeleteKey(){
-      if(!_adminKeyEditTarget)return;
-      if(!confirm('Supprimer la clé "'+_adminKeyEditTarget+'" ? Cette action est irréversible.'))return;
-      var{error}=await sb.from('script_keys').delete().eq('script_id',_adminKeyEditTarget);
-      if(error){setAdminMsg('keyEditorMsg','Erreur suppression : '+error.message,'error');return}
-      setAdminMsg('keyEditorMsg','Clé supprimée.','success');
-      adminLoadKeys();
-      showNotification('Admin','Clé supprimée.','success');
-      playNotificationSound();
-      setTimeout(closeKeyEditor,1200);
-    }
-
-    async function adminAddKey(){
-      var sid=document.getElementById('newKeyScriptId').value.trim().toLowerCase();
-      var val=document.getElementById('newKeyValue').value.trim();
-      if(!sid||!val){setAdminMsg('adminKeyMsg','Remplis les deux champs.','error');return}
-      var{error}=await sb.from('script_keys').upsert({script_id:sid,key_value:val,updated_at:new Date().toISOString()});
-      if(error){setAdminMsg('adminKeyMsg','Erreur : '+error.message,'error');return}
-      setAdminMsg('adminKeyMsg','Clé ajoutée pour "'+sid+'".','success');
-      document.getElementById('newKeyScriptId').value='';
-      document.getElementById('newKeyValue').value='';
-      adminLoadKeys();
-      showNotification('Admin','Nouvelle clé ajoutée.','success');playNotificationSound();
-    }
-
-    function applyKeyMode(scriptId, mode){
-      var wrap=document.getElementById('keyWrap_'+scriptId);
-      if(!wrap)return;
-      if(mode==='keyless'){
-        wrap.innerHTML='<button class="btn-keyless" type="button" disabled><svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Keyless</button>';
-      }else{
-        wrap.innerHTML='<button class="btn-key" type="button" onclick="handleGetKey(\''+scriptId+'\')" id="keyBtn_'+scriptId+'"><svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Get Key</button>';
-      }
-      // Update badge in admin panel
-      var badge=document.getElementById('adminKeyBadge-'+scriptId);
-      if(badge){badge.textContent=mode==='keyless'?'Keyless':'Active';badge.className='admin-row-badge '+(mode==='keyless'?'keyless':'active')}
-    }
-
-    // Apply saved modes on load
-    (function(){
-      Object.keys(_keyModes).forEach(function(sid){applyKeyMode(sid,_keyModes[sid])});
-    })();
-
-    /* ──────────────────────────────
-       CARDS TAB
-    ────────────────────────────── */
-    function adminAddCard(){
-      var name=document.getElementById('cardName').value.trim();
-      var scriptId=document.getElementById('cardScriptId').value.trim().toLowerCase();
-      var script=document.getElementById('cardScript').value.trim();
-      var thumb=document.getElementById('cardThumb').value.trim();
-      var gameLink=document.getElementById('cardGameLink').value.trim();
-      var keyMode=document.getElementById('cardKeyMode').value;
-      var delay=parseInt(document.getElementById('cardDelay').value)||200;
-
-      if(!name||!scriptId||!script){setAdminMsg('adminCardMsg','Nom, Script ID et Script sont requis.','error');return}
-
-      var card={id:'dynamic-'+Date.now(),name,scriptId,script,thumb,gameLink,keyMode,delay};
-      _dynamicCards.push(card);
-      localStorage.setItem('sentinel_dynamic_cards',JSON.stringify(_dynamicCards));
-      renderDynamicCard(card);
-      renderAdminCardList();
-      setAdminMsg('adminCardMsg','Carte "'+name+'" créée.','success');
-      // Clear
-      ['cardName','cardScriptId','cardScript','cardThumb','cardGameLink','cardDelay'].forEach(function(id){document.getElementById(id).value=''});
-      document.getElementById('cardKeyMode').value='active';
-      showNotification('Admin','Carte ajoutée.','success');playNotificationSound();
-    }
-
-    function adminPreviewCard(){
-      var name=document.getElementById('cardName').value.trim()||'Preview Card';
-      var scriptId=document.getElementById('cardScriptId').value.trim()||'preview';
-      var script=document.getElementById('cardScript').value.trim()||'-- script --';
-      var thumb=document.getElementById('cardThumb').value.trim();
-      var gameLink=document.getElementById('cardGameLink').value.trim();
-      var keyMode=document.getElementById('cardKeyMode').value;
-      renderDynamicCard({id:'preview-'+Date.now(),name,scriptId,script,thumb,gameLink,keyMode,delay:0},true);
-      setAdminMsg('adminCardMsg','Aperçu ajouté en bas de la page.','success');
-    }
-
-    function renderDynamicCard(card, isPreview){
-      var container=document.getElementById('dynamicCardsContainer');
-      var el=document.createElement('div');
-      el.className='script-card'; el.dataset.delay=card.delay; el.dataset.cardId=card.id;
-      if(isPreview)el.dataset.preview='1';
-      var keyBtnHtml=card.keyMode==='keyless'
-        ?'<button class="btn-keyless" type="button" disabled><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>Keyless</button>'
-        :'<button class="btn-key" type="button" onclick="handleGetKey(\''+card.scriptId+'\')" id="keyBtn_'+card.scriptId+'"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>Get Key</button>';
-      var thumbHtml=card.thumb?'<img src="'+card.thumb+'" alt="'+card.name+'" loading="lazy"><div class="thumb-overlay"></div>':'<div style="display:flex;align-items:center;justify-content:center;height:200px;color:rgba(160,170,220,.3);font-size:12px">No thumbnail</div>';
-      var gameLinkHtml=card.gameLink?'<a href="'+card.gameLink+'" target="_blank" rel="noopener noreferrer" class="btn-card-glass"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Join game</a>':'';
-      el.innerHTML=
-        '<div class="script-card__refract"></div>'+
-        '<div class="script-card__tint"></div>'+
-        '<div class="script-card__specular"></div>'+
-        '<div class="card-thumb script-card__body">'+thumbHtml+'</div>'+
-        '<div class="card-body script-card__body">'+
-          '<div>'+
-            '<div class="card-meta"><div class="card-dot"></div>Sentinel Script</div>'+
-            '<div class="card-name">'+card.name+'</div>'+
-            '<div class="card-script-preview">'+card.script+'</div>'+
-          '</div>'+
-          '<div class="card-actions">'+
-            '<button class="btn-dark copy-script-btn" type="button" data-script="'+card.script.replace(/"/g,'&quot;')+'" data-script-name="'+card.name+'">'+
-              '<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy script'+
-            '</button>'+
-            keyBtnHtml+
-            gameLinkHtml+
-          '</div>'+
-          '<div class="key-reveal" id="keyReveal_'+card.scriptId+'">'+
-            '<div class="key-reveal-icon"><svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>'+
-            '<span class="key-reveal-text" id="keyText_'+card.scriptId+'"></span>'+
-            '<button class="key-reveal-copy" onclick="copyKey(\''+card.scriptId+'\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>'+
-          '</div>'+
-          '<div class="key-error" id="keyError_'+card.scriptId+'">'+
-            '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'+
-            '<span id="keyErrorText_'+card.scriptId+'"></span>'+
-          '</div>'+
-        '</div>';
-      container.appendChild(el);
-      // Attach copy listeners
-      el.querySelectorAll('.copy-script-btn').forEach(function(btn){btn.addEventListener('click',function(){handleCopyScript(btn)})});
-      // Observe for animation
-      setTimeout(function(){el.classList.add('visible')},card.delay||100);
-    }
-
-    function renderAdminCardList(){
-      var list=document.getElementById('adminCardList');
-      if(!list)return;
-      if(_dynamicCards.length===0){
-        list.innerHTML='<div class="admin-empty"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Aucune carte dynamique</div>';
-        return;
-      }
-      list.innerHTML='';
-      _dynamicCards.forEach(function(card){
-        var row=document.createElement('div');row.className='admin-row';
-        row.innerHTML=
-          '<div class="admin-row-info">'+
-            '<div class="admin-row-label">'+card.name+'</div>'+
-            '<div class="admin-row-sub">ID: '+card.scriptId+' &nbsp;·&nbsp; '+card.keyMode+'</div>'+
-          '</div>'+
-          '<button class="admin-btn admin-btn-danger" onclick="adminDeleteCard(\''+card.id+'\')">'+
-            '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>Supprimer'+
-          '</button>';
-        list.appendChild(row);
-      });
-    }
-
-    function adminDeleteCard(cardId){
-      if(!confirm('Supprimer cette carte ?'))return;
-      _dynamicCards=_dynamicCards.filter(function(c){return c.id!==cardId});
-      localStorage.setItem('sentinel_dynamic_cards',JSON.stringify(_dynamicCards));
-      // Remove from DOM
-      var el=document.querySelector('[data-card-id="'+cardId+'"]');
-      if(el)el.remove();
-      renderAdminCardList();
-      showNotification('Admin','Carte supprimée.','success');playNotificationSound();
-    }
-
-    // Load persisted dynamic cards on startup
-    (function(){_dynamicCards.forEach(function(card){renderDynamicCard(card)})})();
-
-    /* ──────────────────────────────
-       USERS TAB
-    ────────────────────────────── */
-    var _searchTimeout=null;
-    function adminSearchUsers(){
-      clearTimeout(_searchTimeout);
-      _searchTimeout=setTimeout(async function(){
-        var q=document.getElementById('adminUserSearch').value.trim();
-        var list=document.getElementById('adminUserList');
-        if(!q){list.innerHTML='<div class="admin-empty" id="adminUserEmpty"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Recherche un utilisateur pour commencer</div>';return}
-        list.innerHTML='<div class="admin-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 2"></path></svg>Recherche en cours…</div>';
-        try{
-          var{data:rows,error}=await sb.from('profiles').select('id,username,display_name,avatar_url').ilike('username','%'+q+'%').limit(10);
-          if(error)throw error;
-          if(!rows||rows.length===0){list.innerHTML='<div class="admin-empty">Aucun utilisateur trouvé.</div>';return}
-          list.innerHTML='';
-          rows.forEach(function(profile){
-            // Check banned status from auth_users — we can't access that with anon key, so we'll just show the user
-            var row=document.createElement('div');row.className='admin-user-row';
-            var avatarHTML=profile.avatar_url
-              ?'<img src="'+profile.avatar_url+'" style="width:38px;height:38px;border-radius:50%;object-fit:cover" alt="">'
-              :'<div class="admin-user-avatar">'+initials(profile.display_name)+'</div>';
-            row.innerHTML=
-              avatarHTML+
-              '<div class="admin-user-info">'+
-                '<div class="admin-user-display">'+profile.display_name+'</div>'+
-                '<div class="admin-user-meta">@'+profile.username+' &nbsp;·&nbsp; '+profile.id.slice(0,8)+'…</div>'+
-              '</div>'+
-              '<div class="admin-user-actions">'+
-                (profile.username!==ADMIN_USERNAME?
-                  '<button class="admin-btn admin-btn-danger" style="padding:7px 14px;font-size:11px" onclick="openBanBox(\''+profile.id+'\',\''+profile.username+'\')">'+
-                    '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Ban'+
-                  '</button>'+
-                  '<button class="admin-btn admin-btn-ghost" style="padding:7px 14px;font-size:11px" onclick="adminDeleteUser(\''+profile.id+'\',\''+profile.username+'\')">'+
-                    '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Suppr.'+
-                  '</button>'
-                :'<span class="admin-user-badge admin" style="padding:5px 10px">Owner</span>')+
-              '</div>';
-            list.appendChild(row);
-          });
-        }catch(e){list.innerHTML='<div class="admin-empty">Erreur de recherche.</div>'}
-      },320);
-    }
-
-    function openBanBox(userId,username){
-      _adminBanTarget={userId,username};
-      document.getElementById('banTargetName').textContent=username;
-      document.getElementById('banReason').value='';
-      document.getElementById('banDuration').value='24h';
-      setAdminMsg('banMsg','','');
-      document.getElementById('banBox').style.display='flex';
-    }
-    function closeBanBox(){document.getElementById('banBox').style.display='none';_adminBanTarget=null}
-
-    async function confirmBan(){
-      if(!_adminBanTarget)return;
-      var reason=document.getElementById('banReason').value.trim()||'Comportement inapproprié';
-      var duration=document.getElementById('banDuration').value;
-      var banUntil=null;
-      if(duration!=='perm'){
-        var ms={h:3600000,d:86400000};
-        var match=duration.match(/(\d+)([hd])/);
-        if(match)banUntil=new Date(Date.now()+parseInt(match[1])*ms[match[2]]).toISOString();
-      }
-      try{
-        // We update the profiles table as a ban flag (using a custom banned field or we use the users table)
-        // Try the users table first (from the SQL schema)
-        var{error}=await sb.from('users').update({banned:true,ban_reason:reason,ban_until:banUntil}).eq('id',_adminBanTarget.userId);
-        if(error){
-          // Fallback: try profiles (might not have banned column)
-          setAdminMsg('banMsg','Erreur : '+error.message,'error');return;
-        }
-        setAdminMsg('banMsg','@'+_adminBanTarget.username+' banni.','success');
-        showNotification('Admin','@'+_adminBanTarget.username+' a été banni.','success');
-        playNotificationSound();
-        setTimeout(function(){closeBanBox();adminSearchUsers()},1500);
-      }catch(e){setAdminMsg('banMsg','Erreur réseau.','error')}
-    }
-
-    async function adminDeleteUser(userId,username){
-      if(username===ADMIN_USERNAME){showNotification('Admin','Impossible de supprimer le propriétaire.','error');playNotificationSound();return}
-      if(!confirm('Supprimer définitivement @'+username+' ? Cette action est irréversible.'))return;
-      try{
-        // Delete profile first
-        var{error:pErr}=await sb.from('profiles').delete().eq('id',userId);
-        if(pErr){showNotification('Admin','Erreur profil : '+pErr.message,'error');playNotificationSound();return}
-        // Then auth user (requires service role — will fail with anon, notify admin)
-        showNotification('Admin','Profil @'+username+' supprimé. Supprime le compte auth manuellement dans Supabase → Auth → Users.','success');
-        playNotificationSound();
-        adminSearchUsers();
-      }catch(e){showNotification('Admin','Erreur réseau.','error');playNotificationSound()}
-    }
-
-    /* ── Util ── */
-    function setAdminMsg(id,msg,type){
-      var el=document.getElementById(id);if(!el)return;
-      el.textContent=msg;el.className='admin-msg'+(type?' '+type:'')+(msg?' visible':'');
-    }
-  </script>
-
-  <!-- ═══════════════════ GET KEY SYSTEM ═══════════════════ -->
   <script>
     const DISCORD_CLIENT_ID='1451684958090428579';
     const DISCORD_REDIRECT_URI='https://x4tmqq.github.io/Sentinel-Script/';
@@ -1981,7 +1018,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       }else{showNotification('Copy failed','Impossible de copier la clé.','error');playNotificationSound()}
     }
 
-    /* Discord loading UI */
     function showDiscordLoading(msg){
       var overlay=document.getElementById('discordLoadingOverlay');var txt=document.getElementById('discordLoadingText');if(!overlay)return;
       overlay.classList.remove('result');
@@ -2007,7 +1043,6 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
       window.location.href='https://discord.com/api/oauth2/authorize?'+params.toString();
     }
 
-    /* OAuth callback */
     (async function handleOAuthCallback(){
       var urlParams=new URLSearchParams(window.location.search);
       var code=urlParams.get('code');var scriptId=urlParams.get('state');
@@ -2029,5 +1064,3 @@ cat > /mnt/user-data/outputs/sentinel-v23.html << 'HTMLEOF'
 
 </body>
 </html>
-HTMLEOF
-echo "Done"
