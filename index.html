@@ -34,11 +34,8 @@
     ::-webkit-scrollbar-track{background:rgba(8,8,18,.25);border-left:1px solid rgba(255,255,255,.04);backdrop-filter:blur(14px)}
     ::-webkit-scrollbar-thumb{border-radius:100px;border:3px solid transparent;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.1));background-clip:padding-box}
 
-    /* ══ GLOBAL CURSOR LIGHT — appliqué partout via pseudo-element ══ */
-    /* Le radial gradient suit --gx/--gy définis par JS sur chaque élément */
     .lg { position:relative; overflow:hidden; isolation:isolate; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.025); box-shadow:0 24px 80px rgba(0,0,0,.38),0 8px 28px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.38); }
 
-    /* Lumière curseur — sur tous les éléments .lg et .script-card */
     .lg::before,
     .script-card::before {
       content:'';
@@ -62,7 +59,6 @@
       transition: opacity 0.3s;
     }
 
-    /* Hover : lumière curseur plus intense */
     .lg:hover::before,
     .script-card:hover::before {
       background: radial-gradient(
@@ -102,7 +98,6 @@
     .top-island.lg { overflow:visible; }
     .top-island.lg::after { display:none; }
     .top-island:hover { opacity:1; border-color:rgba(255,255,255,.34); box-shadow:0 22px 64px rgba(0,0,0,.42),0 7px 22px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.60),inset 0 -1px 0 rgba(0,0,0,.30); }
-    /* On retire le ::before générique pour l'island car on gère la lumière via JS */
     .top-island::before { content:''; position:absolute; inset:0; border-radius:100px; background:radial-gradient(ellipse 85% 70% at 50% 0%,rgba(255,255,255,.18) 0%,transparent 65%),radial-gradient(300px circle at var(--gx,-999px) var(--gy,-999px),rgba(255,255,255,.13),transparent 70%); pointer-events:none; z-index:5; }
 
     .island-adaptive { display:flex; align-items:center; gap:14px; color:#fff; }
@@ -151,7 +146,6 @@
       background-size:56px 56px; mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 0%,transparent 82%); -webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#000 0%,transparent 82%); opacity:.55; }
     @keyframes heroAmbientFloat { 0%{transform:translate3d(-2%,0,0) scale(1)} 100%{transform:translate3d(2%,3%,0) scale(1.08)} }
 
-    /* Lumière curseur sur le hero */
     .hero-cursor-light {
       position:absolute; inset:0; z-index:1; pointer-events:none;
       background: radial-gradient(600px circle at var(--gx,-999px) var(--gy,-999px), rgba(255,255,255,0.06), transparent 60%);
@@ -240,7 +234,7 @@
     .section-title { text-align:center; font-size:clamp(26px,4vw,40px); font-weight:700; color:#f0f2ff; letter-spacing:-.01em; margin-bottom:56px; }
     .scripts-grid { max-width:1180px; margin:0 auto; padding:0 32px; display:flex; flex-direction:column; gap:0; }
 
-    /* ══ SCRIPT CARD — 3D TILT ══ */
+    /* ══ SCRIPT CARD ══ */
     .script-card {
       position:relative; overflow:hidden;
       border:1px solid rgba(255,255,255,0.10); border-radius:22px;
@@ -253,19 +247,16 @@
         box-shadow .25s;
       margin-bottom:20px;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.08),0 4px 24px rgba(0,0,0,.20);
-      /* Perspective pour le tilt 3D */
       transform-style: preserve-3d;
       will-change: transform;
     }
 
-    /* Container pour le tilt — sépare transform:translateY(40px) du tilt */
     .script-card-tilt-wrap {
       transform-style: preserve-3d;
       perspective: 1000px;
       margin-bottom: 20px;
     }
 
-    /* On enlève le margin-bottom de la carte elle-même puisque le wrap s'en charge */
     .script-card-tilt-wrap .script-card {
       margin-bottom: 0;
       transition:
@@ -275,7 +266,6 @@
         transform .12s cubic-bezier(.22,1,.36,1);
     }
 
-    /* Ombre qui bouge avec le tilt — effet de "profondeur" */
     .script-card-tilt-wrap:hover .script-card {
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.38),
@@ -283,7 +273,6 @@
         0 8px 24px rgba(0,0,0,.30);
     }
 
-    /* Reset du transform quand la carte sort (retour fluide) */
     .script-card-tilt-wrap:not(:hover) .script-card {
       transition:
         opacity .6s,
@@ -292,14 +281,6 @@
         transform 0.55s cubic-bezier(.22,1,.36,1);
     }
 
-    /* Léger effet "liquide" sur les coins (hors hover) */
-    @keyframes liquidMorph {
-      0%,100% { border-radius:22px 22px 22px 22px; }
-      33%     { border-radius:27px 20px 25px 22px; }
-      66%     { border-radius:21px 26px 21px 27px; }
-    }
-
-    /* Le reflet cursor suit --mx/--my (défini par JS) */
     .script-card__cursor-light {
       position:absolute; inset:0; z-index:12; border-radius:inherit; pointer-events:none;
       background: radial-gradient(380px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.16),rgba(255,255,255,.05) 45%,transparent 70%);
@@ -316,7 +297,7 @@
     .script-card__specular{ position:absolute; inset:0; border-radius:inherit; box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -1px 0 rgba(0,0,0,.18); pointer-events:none; }
     .script-card:hover .script-card__tint { background:linear-gradient(150deg,rgba(255,255,255,.055),rgba(255,255,255,.015) 50%,rgba(255,255,255,.065)); }
     .script-card:hover { border-color:rgba(255,255,255,.24); }
-    .script-card.visible { opacity:1; }
+    .script-card.visible { opacity:1; transform:translateY(0); }
     .script-card__body { position:relative; z-index:10; }
 
     .card-thumb { position:relative; overflow:hidden; background:#13131f; min-height:260px; z-index:10; }
@@ -346,9 +327,6 @@
     .btn-key:hover { background:linear-gradient(160deg,rgba(88,101,242,.75) 0%,rgba(66,80,210,.55) 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 28px rgba(88,101,242,.42); transform:translateY(-1px); }
     .btn-key:disabled { opacity:.6; cursor:default; transform:none; }
     .btn-key svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-
-    .btn-keyless { font-family:'Inter',sans-serif; font-size:12px; font-weight:600; padding:10px 18px; border-radius:100px; border:1px solid rgba(255,255,255,.08); display:inline-flex; align-items:center; gap:7px; color:rgba(160,170,220,.4); background:rgba(255,255,255,.03); cursor:not-allowed; letter-spacing:.02em; white-space:nowrap; }
-    .btn-keyless svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
 
     .key-reveal { display:none; position:relative; align-items:center; gap:10px; margin-top:8px; padding:10px 46px 10px 14px; box-sizing:border-box; width:100%; min-width:0; align-self:stretch; overflow:hidden; background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 50%,rgba(255,255,255,.08)); border:1px solid rgba(255,255,255,.18); border-radius:13px; backdrop-filter:blur(24px) saturate(180%); -webkit-backdrop-filter:blur(24px) saturate(180%); box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 16px rgba(0,0,0,.14); }
     .key-reveal.visible { display:flex; }
@@ -496,7 +474,6 @@
       .island-social{width:27px;height:27px}.island-social svg{width:14px;height:14px}
       .island-adaptive{gap:7px}.island-socials{gap:2px}.island-divider{height:20px}
       .hero-title{font-size:clamp(42px,12vw,68px);letter-spacing:.12em}
-      .hero-title span{color:#fff}
       .hero-content{padding:0 16px}
       .hero-cta{flex-direction:column}
       .scripts-grid,#dynamicCardsContainer{padding:0 16px !important}
@@ -512,7 +489,6 @@
       .notification-container{right:14px;bottom:14px;left:14px;align-items:stretch}
       .notification{min-width:0;width:100%;max-width:none}
       .account-name{display:none}
-      /* Pas de tilt 3D sur mobile (risque de bug tactile) */
       .script-card-tilt-wrap .script-card { transform: none !important; }
     }
 
@@ -712,7 +688,6 @@
       <div class="fluid-blob fb5"></div>
       <div class="fluid-blob fb6"></div>
     </div>
-    <!-- Lumière curseur hero -->
     <div class="hero-cursor-light" id="heroCursorLight"></div>
     <div class="hero-fade-mask"></div>
     <div class="hero-content">
@@ -721,7 +696,7 @@
       </div>
       <div class="hero-desc">Copy, paste, dominate.</div>
       <div class="hero-cta">
-        <a href="#scripts" class="btn-primary">View Script</a>
+        <a href="#scripts" class="btn-primary" id="heroScrollBtn">View Script</a>
         <a href="https://discord.gg/dyQsQVV8ck" target="_blank" rel="noopener noreferrer" class="btn-glass-pill">
           <svg viewBox="0 0 24 24"><path d="M19.54 5.17A16.9 16.9 0 0015.2 3.8l-.53 1.08a15.7 15.7 0 00-3.34-.36c-1.14 0-2.25.12-3.34.36L7.46 3.8a16.9 16.9 0 00-4.34 1.37C.37 9.22-.37 13.2.01 17.13a16.8 16.8 0 005.17 2.6l1.25-1.7c-.69-.26-1.35-.58-1.98-.96l.48-.37c3.82 1.77 7.96 1.77 11.74 0l.48.37c-.63.38-1.29.7-1.98.96l1.25 1.7a16.8 16.8 0 005.17-2.6c.44-4.55-.75-8.5-2.05-11.96zM8.02 14.7c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.09 1.05 2.08 2.34c0 1.29-.92 2.34-2.08 2.34zm7.96 0c-1.14 0-2.08-1.05-2.08-2.34s.92-2.34 2.08-2.34 2.08 1.05 2.08 2.34-.92 2.08-2.08 2.08z"/></svg>
           Join Discord
@@ -751,7 +726,7 @@
     <div class="section-title">Pick your script.</div>
     <div class="scripts-grid" id="scriptsGrid">
 
-      <!-- Examination — wrapped in tilt wrapper -->
+      <!-- ══ Examination ══ -->
       <div class="script-card-tilt-wrap">
         <div class="script-card" data-delay="0" data-script-id="examination">
           <div class="script-card__cursor-light"></div>
@@ -759,7 +734,7 @@
           <div class="script-card__tint"></div>
           <div class="script-card__specular"></div>
           <div class="card-thumb script-card__body">
-            <img src="https://tr.rbxcdn.com/180DAY-b0582dc7b3cf299043e010ea079893ba/768/432/Image/Webp/noFilter" alt="Examination" loading="lazy">
+            <img src="https://raw.githubusercontent.com/x4tmqq/Sentinel-Script/refs/heads/main/ExaminationBanner1.webp" alt="Examination" loading="lazy">
             <div class="thumb-overlay"></div>
           </div>
           <div class="card-body script-card__body">
@@ -775,12 +750,10 @@
                 <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 Copy script
               </button>
-              <div class="key-btn-wrap" id="keyWrap_examination">
-                <button class="btn-key" type="button" onclick="handleGetKey('examination')" id="keyBtn_examination">
-                  <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-                  Get Key
-                </button>
-              </div>
+              <button class="btn-key" type="button" id="keyBtn_examination">
+                <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                Get Key
+              </button>
               <a href="https://www.roblox.com/fr/games/10165583746/Examination" target="_blank" rel="noopener noreferrer" class="btn-card-glass">
                 <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 Join game
@@ -789,13 +762,13 @@
             <div class="key-reveal" id="keyReveal_examination">
               <div class="key-reveal-icon"><svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
               <span class="key-reveal-text" id="keyText_examination"></span>
-              <button class="key-reveal-copy" onclick="copyKey('examination')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+              <button class="key-reveal-copy" id="keyCopyBtn_examination"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
             </div>
             <div class="key-error" id="keyError_examination">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <span id="keyErrorText_examination"></span>
             </div>
-            <div class="script-analytics" data-rscripts-key="examination">
+            <div class="script-analytics" data-rscripts-slug="examination-oBz7" data-rscripts-url="https://rscripts.net/script/examination-oBz7">
               <div class="analytics-head">
                 <div class="analytics-head-left">
                   <span class="analytics-brand"><span class="analytics-brand-dot"></span>RScripts</span>
@@ -812,14 +785,14 @@
               </div>
               <div class="analytics-footer">
                 <span data-analytics="updated">Waiting for RScripts…</span>
-                <button type="button" class="analytics-refresh" onclick="refreshOneRScriptsCard(this)" aria-label="Refresh">↻</button>
+                <button type="button" class="analytics-refresh" aria-label="Refresh">↻</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- BloxStrike — wrapped in tilt wrapper -->
+      <!-- ══ BloxStrike ══ -->
       <div class="script-card-tilt-wrap">
         <div class="script-card" data-delay="100" data-script-id="bloxstrike">
           <div class="script-card__cursor-light"></div>
@@ -827,7 +800,7 @@
           <div class="script-card__tint"></div>
           <div class="script-card__specular"></div>
           <div class="card-thumb script-card__body">
-            <img src="https://tr.rbxcdn.com/180DAY-05b8a5dda66adc52c456c3592aa01d35/768/432/Image/Webp/noFilter" alt="BloxStrike" loading="lazy">
+            <img src="https://raw.githubusercontent.com/x4tmqq/Sentinel-Script/refs/heads/main/BloxstrikeBanner1.webp" alt="BloxStrike" loading="lazy">
             <div class="thumb-overlay"></div>
           </div>
           <div class="card-body script-card__body">
@@ -843,12 +816,10 @@
                 <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 Copy script
               </button>
-              <div class="key-btn-wrap" id="keyWrap_bloxstrike">
-                <button class="btn-key" type="button" onclick="handleGetKey('bloxstrike')" id="keyBtn_bloxstrike">
-                  <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-                  Get Key
-                </button>
-              </div>
+              <button class="btn-key" type="button" id="keyBtn_bloxstrike">
+                <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                Get Key
+              </button>
               <a href="https://www.roblox.com/fr/games/114234929420007/BloxStrike" target="_blank" rel="noopener noreferrer" class="btn-card-glass">
                 <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 Join game
@@ -857,13 +828,13 @@
             <div class="key-reveal" id="keyReveal_bloxstrike">
               <div class="key-reveal-icon"><svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
               <span class="key-reveal-text" id="keyText_bloxstrike"></span>
-              <button class="key-reveal-copy" onclick="copyKey('bloxstrike')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+              <button class="key-reveal-copy" id="keyCopyBtn_bloxstrike"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
             </div>
             <div class="key-error" id="keyError_bloxstrike">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <span id="keyErrorText_bloxstrike"></span>
             </div>
-            <div class="script-analytics" data-rscripts-key="bloxstrike">
+            <div class="script-analytics" data-rscripts-slug="sentinel-script-bloxstrike-HMJb" data-rscripts-url="https://rscripts.net/script/sentinel-script-bloxstrike-HMJb">
               <div class="analytics-head">
                 <div class="analytics-head-left">
                   <span class="analytics-brand"><span class="analytics-brand-dot"></span>RScripts</span>
@@ -880,7 +851,7 @@
               </div>
               <div class="analytics-footer">
                 <span data-analytics="updated">Waiting for RScripts…</span>
-                <button type="button" class="analytics-refresh" onclick="refreshOneRScriptsCard(this)" aria-label="Refresh">↻</button>
+                <button type="button" class="analytics-refresh" aria-label="Refresh">↻</button>
               </div>
             </div>
           </div>
@@ -897,463 +868,627 @@
     <source src="https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/SentinelNotifSound.mp3" type="audio/mpeg">
   </audio>
 
-  <script>
-    /* ══════════════════════════════════════════
-       EFFET LUMIÈRE CURSEUR GLOBAL
-       Suit --gx / --gy sur chaque élément .lg
-       ══════════════════════════════════════════ */
-    (function initGlobalCursorLight() {
-      // Tous les éléments qui reçoivent la lumière curseur
-      const targets = document.querySelectorAll('.lg, .script-card');
-
-      // Hero : lumière curseur spéciale (plus grande)
-      const hero = document.getElementById('top');
-      const heroCursorLight = document.getElementById('heroCursorLight');
-
-      // Top island : lumière via ::before (--gx/--gy)
-      const island = document.getElementById('topIsland');
-
-      // Mise à jour throttlée avec requestAnimationFrame
-      let rafId = null;
-      let mouseX = -9999, mouseY = -9999;
-
-      function update() {
-        rafId = null;
-
-        // Hero cursor light
-        if (hero && heroCursorLight) {
-          const r = hero.getBoundingClientRect();
-          const x = mouseX - r.left;
-          const y = mouseY - r.top;
-          hero.style.setProperty('--gx', x + 'px');
-          hero.style.setProperty('--gy', y + 'px');
-          heroCursorLight.style.background =
-            `radial-gradient(600px circle at ${x}px ${y}px, rgba(255,255,255,0.07), transparent 60%)`;
-        }
-
-        // Tous les .lg et .script-card
-        targets.forEach(function(el) {
-          const r = el.getBoundingClientRect();
-          // Ne mettre à jour que si la souris est proche (optimisation)
-          const margin = 120;
-          if (
-            mouseX < r.left - margin || mouseX > r.right + margin ||
-            mouseY < r.top - margin  || mouseY > r.bottom + margin
-          ) {
-            // Souris loin → lumière hors de la carte
-            el.style.setProperty('--gx', '-9999px');
-            el.style.setProperty('--gy', '-9999px');
-            return;
-          }
-          el.style.setProperty('--gx', (mouseX - r.left) + 'px');
-          el.style.setProperty('--gy', (mouseY - r.top)  + 'px');
-        });
-      }
-
-      document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (!rafId) rafId = requestAnimationFrame(update);
-      });
-
-      // Quand la souris quitte la page
-      document.addEventListener('mouseleave', function() {
-        mouseX = -9999;
-        mouseY = -9999;
-        if (!rafId) rafId = requestAnimationFrame(update);
-      });
-    })();
-
-    /* ══════════════════════════════════════════
-       EFFET 3D TILT SUR LES CARTES
-       ══════════════════════════════════════════ */
-    (function initCardTilt() {
-      // Désactivé sur mobile / reduced motion
-      if (window.matchMedia('(max-width:680px)').matches) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      const MAX_TILT   = 7;    // degrés max d'inclinaison
-      const SCALE_HOVER = 1.018; // léger zoom au hover
-
-      document.querySelectorAll('.script-card-tilt-wrap').forEach(function(wrap) {
-        const card = wrap.querySelector('.script-card');
-        if (!card) return;
-
-        // Perspective sur le wrapper
-        wrap.style.perspective = '1000px';
-
-        let animFrame = null;
-        let targetRX = 0, targetRY = 0;
-        let currentRX = 0, currentRY = 0;
-        let isHovered = false;
-
-        function lerp(a, b, t) { return a + (b - a) * t; }
-
-        function animateTilt() {
-          // Interpolation douce (lerp) pour un rendu plus fluide
-          currentRX = lerp(currentRX, targetRX, 0.12);
-          currentRY = lerp(currentRY, targetRY, 0.12);
-
-          const scale = isHovered ? SCALE_HOVER : 1;
-          card.style.transform =
-            `perspective(1000px) rotateX(${currentRX}deg) rotateY(${currentRY}deg) scale3d(${scale},${scale},${scale})`;
-
-          // Continue à animer jusqu'à ce que la carte soit au repos
-          if (
-            Math.abs(currentRX - targetRX) > 0.01 ||
-            Math.abs(currentRY - targetRY) > 0.01
-          ) {
-            animFrame = requestAnimationFrame(animateTilt);
-          } else {
-            animFrame = null;
-          }
-        }
-
-        function startAnim() {
-          if (!animFrame) animFrame = requestAnimationFrame(animateTilt);
-        }
-
-        wrap.addEventListener('pointermove', function(e) {
-          const r = card.getBoundingClientRect();
-          // Position relative au centre de la carte (-0.5 à +0.5)
-          const px = (e.clientX - r.left) / r.width  - 0.5;
-          const py = (e.clientY - r.top)  / r.height - 0.5;
-
-          // rotateX : souris en haut → penche en avant (+), en bas → penche en arrière (-)
-          // rotateY : souris à droite → tourne droite (+), à gauche → tourne gauche (-)
-          targetRX = -py * MAX_TILT * 2;
-          targetRY =  px * MAX_TILT * 2;
-          startAnim();
-        });
-
-        wrap.addEventListener('pointerenter', function() {
-          isHovered = true;
-          startAnim();
-          // Cursor style : montre que c'est interactif
-        });
-
-        wrap.addEventListener('pointerleave', function() {
-          isHovered = false;
-          targetRX = 0;
-          targetRY = 0;
-          startAnim();
-        });
-      });
-    })();
-
-    /* Smooth scroll du bouton hero */
-    document.querySelector('.btn-primary').addEventListener('click',function(e){
-      e.preventDefault();
-      document.getElementById('scripts').scrollIntoView({behavior:'smooth'});
-    });
-
-    /* Coupe les animations des filtres SVG si reduced motion */
-    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-      document.querySelectorAll('filter animate').forEach(function(a){a.remove()});
-    }
-
-    /* ══ Reflet curseur classique sur les cartes (pour le .script-card__cursor-light) ══ */
-    document.querySelectorAll('.script-card').forEach(function(card){
-      card.addEventListener('pointermove',function(e){
-        var r=card.getBoundingClientRect();
-        card.style.setProperty('--mx',(e.clientX-r.left)+'px');
-        card.style.setProperty('--my',(e.clientY-r.top)+'px');
-      });
-    });
-
-    /* ══ NOTIFICATIONS ══ */
-    function showNotification(title,message,type){
-      var c=document.getElementById('notificationContainer');if(!c)return;
-      var n=document.createElement('div');n.className='notification '+(type==='success'?'success':'error');
-      var icon=document.createElement('div');icon.className='notification-icon '+(type==='success'?'success':'error');
-      icon.innerHTML=type==='success'?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>':'<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-      var content=document.createElement('div');content.className='notification-content';
-      content.innerHTML='<div class="notification-title">'+title+'</div><div class="notification-message">'+message+'</div>';
-      var progress=document.createElement('div');progress.className='notification-progress';
-      var bar=document.createElement('div');bar.className='notification-progress-bar';
-      progress.appendChild(bar);n.appendChild(icon);n.appendChild(content);n.appendChild(progress);c.appendChild(n);
-      requestAnimationFrame(function(){requestAnimationFrame(function(){
-        n.classList.add('show');bar.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:3000,easing:'linear',fill:'forwards'});
-      })});
-      setTimeout(function(){n.classList.remove('show');n.classList.add('hide');setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n)},350)},3000);
-    }
-    function playNotificationSound(){var s=document.getElementById('notificationSound');if(!s)return;try{s.currentTime=0;var p=s.play();if(p&&p.catch)p.catch(function(){})}catch(e){}}
-
-    function fallbackCopyText(text){
-      var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');
-      Object.assign(ta.style,{position:'fixed',left:'-999999px',top:'-999999px',width:'1px',height:'1px',opacity:'0',pointerEvents:'none'});
-      document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);
-      var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);return ok;
-    }
-    async function copyWithClipboardAPI(text){if(!navigator.clipboard||typeof navigator.clipboard.writeText!=='function')return false;try{await navigator.clipboard.writeText(text);return true}catch(e){return false}}
-
-    async function handleCopyScript(button){
-      if(!button||button.disabled)return;
-      var script=button.getAttribute('data-script'),scriptName=button.getAttribute('data-script-name')||'Script';
-      if(!script){showNotification('Copy failed','Le contenu du script est vide.','error');playNotificationSound();return}
-      var originalHTML=button.innerHTML;button.disabled=true;
-      button.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> Copying...';
-      var copied=await copyWithClipboardAPI(script)||fallbackCopyText(script);
-      if(copied){
-        button.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
-        button.style.background='rgba(80,200,100,0.12)';button.style.borderColor='rgba(80,200,100,.25)';
-        showNotification('Script copied',scriptName+' copié dans le presse-papier.','success');playNotificationSound();
-        setTimeout(function(){button.innerHTML=originalHTML;button.style.background='';button.style.borderColor='';button.disabled=false},2000);
-      }else{
-        button.innerHTML=originalHTML;button.style.background='';button.style.borderColor='';button.disabled=false;
-        showNotification('Copy failed','Le navigateur a bloqué l\'accès au presse-papier.','error');playNotificationSound();
-      }
-    }
-    document.querySelectorAll('.copy-script-btn').forEach(function(btn){btn.addEventListener('click',function(){handleCopyScript(btn)})});
-
-    /* Intersection observer pour l'apparition des cartes */
-    var observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          var card=entry.target.querySelector('.script-card')||entry.target;
-          var delay=parseInt(card.dataset.delay)||0;
-          setTimeout(function(){card.classList.add('visible')},delay);
-          observer.unobserve(entry.target);
-        }
-      });
-    },{threshold:.12});
-    document.querySelectorAll('.script-card-tilt-wrap').forEach(function(c){observer.observe(c)});
-
-    /* ══ RSCRIPTS API ══ */
-    const RSCRIPTS_API_URL='https://rscripts.net/api/v2/script';
-    const RSCRIPTS_STATS_ENDPOINT='https://fzuocfhzzvscjhcxuzog.supabase.co/functions/v1/rscripts-stats';
-    const RSCRIPTS_SCRIPT_MAP={
-      examination:'examination-oBz7',
-      bloxstrike:'sentinel-script-bloxstrike-HMJb'
-    };
-    let rscriptsRefreshTimer=null;
-
-    function toNumber(){for(var i=0;i<arguments.length;i++){var v=arguments[i];if(typeof v==='number'&&Number.isFinite(v))return v;if(typeof v==='string'&&v.trim()!==''&&Number.isFinite(Number(v)))return Number(v)}return null}
-    function normalizeRScript(s){return{views:toNumber(s.views),executions:toNumber(s.executions,s.executes,s.executionCount,s.executionsCount,s.runs),likes:toNumber(s.likes),dislikes:toNumber(s.dislikes),isMobileReady:s.mobileReady===true||s.isMobileReady===true,isKeySystem:s.keySystem===true||s.isKeySystem===true,updatedAt:s.lastUpdated||s.updatedAt||s.createdAt||null}}
-    async function fetchRScriptDirect(slug){var res=await fetch(RSCRIPTS_API_URL+'?id='+encodeURIComponent(slug),{method:'GET',cache:'no-store',headers:{'Accept':'application/json'}});if(!res.ok)throw new Error('RScripts API '+res.status);var json=await res.json();var s=json&&json.script;if(Array.isArray(s))s=s[0];if(!s||typeof s!=='object')throw new Error('RScripts API: script introuvable');return normalizeRScript(s)}
-    function mergeStats(base,override){var out=Object.assign({},base||{});Object.keys(override||{}).forEach(function(k){if(override[k]!==null&&override[k]!==undefined)out[k]=override[k]});return out}
-    async function loadRScriptsData(keys){var result={};var direct=await Promise.allSettled(keys.map(function(k){return fetchRScriptDirect(RSCRIPTS_SCRIPT_MAP[k])}));keys.forEach(function(k,i){result[k]=direct[i].status==='fulfilled'?direct[i].value:null});var needFallback=keys.some(function(k){return !result[k]||result[k].executions===null});if(needFallback){try{var res=await fetch(RSCRIPTS_STATS_ENDPOINT,{method:'GET',cache:'no-store',headers:{'Accept':'application/json'}});if(res.ok){var payload=await res.json();var items=payload&&payload.scripts?payload.scripts:{};keys.forEach(function(k){if(items[k])result[k]=mergeStats(items[k],result[k])})}}catch(e){}}return result}
-    function formatCompactNumber(value){if(typeof value!=='number'||!Number.isFinite(value))return'—';return new Intl.NumberFormat('fr-FR',{notation:'compact',maximumFractionDigits:value<1000?0:1}).format(value)}
-    function formatAnalyticsDate(value){if(!value)return'No update timestamp';var d=new Date(value);if(Number.isNaN(d.getTime()))return'Updated recently';return'Updated '+d.toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}
-    function setAnalyticsText(root,key,value){var el=root.querySelector('[data-analytics="'+key+'"]');if(el)el.textContent=value}
-    function setAnalyticsState(root,state){root.classList.toggle('loading',state==='loading')}
-    function paintRScriptsCard(root,data){setAnalyticsText(root,'views',formatCompactNumber(data.views));setAnalyticsText(root,'executions',formatCompactNumber(data.executions));setAnalyticsText(root,'likes',formatCompactNumber(data.likes));setAnalyticsText(root,'dislikes',formatCompactNumber(data.dislikes));setAnalyticsText(root,'mobile',data.isMobileReady?'Mobile ready':'Desktop');setAnalyticsText(root,'keyless',data.isKeySystem?'Key system':'Keyless');setAnalyticsText(root,'updated',formatAnalyticsDate(data.updatedAt));setAnalyticsState(root,'done')}
-    function paintRScriptsError(root){setAnalyticsText(root,'views','—');setAnalyticsText(root,'executions','—');setAnalyticsText(root,'likes','—');setAnalyticsText(root,'dislikes','—');setAnalyticsText(root,'mobile','Unavailable');setAnalyticsText(root,'keyless','Unavailable');setAnalyticsText(root,'updated','RScripts data unavailable');setAnalyticsState(root,'error')}
-    async function refreshRScriptsAnalytics(){var roots=[].slice.call(document.querySelectorAll('.script-analytics'));if(!roots.length)return;roots.forEach(function(root){setAnalyticsState(root,'loading');setAnalyticsText(root,'updated','Refreshing RScripts…')});try{var keys=roots.map(function(r){return r.getAttribute('data-rscripts-key')}).filter(function(k){return RSCRIPTS_SCRIPT_MAP[k]});var items=await loadRScriptsData(keys);roots.forEach(function(root){var key=root.getAttribute('data-rscripts-key');if(items[key])paintRScriptsCard(root,items[key]);else paintRScriptsError(root)})}catch(err){roots.forEach(paintRScriptsError)}}
-    async function refreshOneRScriptsCard(button){var root=button.closest('.script-analytics');if(!root)return;var key=root.getAttribute('data-rscripts-key');setAnalyticsState(root,'loading');setAnalyticsText(root,'updated','Refreshing RScripts…');try{var items=await loadRScriptsData([key]);if(!items[key])throw new Error('no data');paintRScriptsCard(root,items[key])}catch(err){paintRScriptsError(root)}}
-    window.refreshRScriptsAnalytics=refreshRScriptsAnalytics;
-    window.refreshOneRScriptsCard=refreshOneRScriptsCard;
-    refreshRScriptsAnalytics();
-    clearInterval(rscriptsRefreshTimer);rscriptsRefreshTimer=setInterval(refreshRScriptsAnalytics,60000);
-  </script>
-
+  <!-- ══ ALL SCRIPTS ══ -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL='https://fzuocfhzzvscjhcxuzog.supabase.co';
-    const SUPABASE_ANON_KEY='sb_publishable_XWzMsq-kiPmkQ8rmL_u7Pg_bJT4TwZ5';
-    const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  // ─────────────────────────────────────────────
+  // UTILS
+  // ─────────────────────────────────────────────
+  function playNotificationSound(){
+    var s=document.getElementById('notificationSound');
+    if(!s)return;
+    try{s.currentTime=0;var p=s.play();if(p&&p.catch)p.catch(function(){})}catch(e){}
+  }
 
-    function usernameToInternalEmail(u){return u.trim().toLowerCase()+'@sentinel-script.internal'}
-    let currentProfile=null;
+  function showNotification(title,message,type){
+    var c=document.getElementById('notificationContainer');if(!c)return;
+    var n=document.createElement('div');
+    n.className='notification '+(type==='success'?'success':'error');
+    var icon=document.createElement('div');
+    icon.className='notification-icon '+(type==='success'?'success':'error');
+    icon.innerHTML=type==='success'
+      ?'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+      :'<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+    var content=document.createElement('div');
+    content.className='notification-content';
+    content.innerHTML='<div class="notification-title">'+title+'</div><div class="notification-message">'+message+'</div>';
+    var progress=document.createElement('div');progress.className='notification-progress';
+    var bar=document.createElement('div');bar.className='notification-progress-bar';
+    progress.appendChild(bar);n.appendChild(icon);n.appendChild(content);n.appendChild(progress);c.appendChild(n);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){
+      n.classList.add('show');
+      bar.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}],{duration:3000,easing:'linear',fill:'forwards'});
+    })});
+    setTimeout(function(){
+      n.classList.remove('show');n.classList.add('hide');
+      setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n)},350);
+    },3000);
+  }
 
-    function switchAuthTab(tab){var isLogin=tab==='login';document.getElementById('authTabLogin').classList.toggle('active',isLogin);document.getElementById('authTabSignup').classList.toggle('active',!isLogin);document.getElementById('loginForm').classList.toggle('active',isLogin);document.getElementById('signupForm').classList.toggle('active',!isLogin)}
-    function showAuthOverlay(){document.getElementById('authOverlay').classList.add('visible');document.body.style.overflow='hidden'}
-    function hideAuthOverlay(){document.getElementById('authOverlay').classList.remove('visible');document.body.style.overflow=''}
-    function setAuthError(id,msg){var el=document.getElementById(id);el.textContent=msg;el.classList.toggle('visible',!!msg)}
+  function fallbackCopyText(text){
+    var ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');
+    Object.assign(ta.style,{position:'fixed',left:'-999999px',top:'-999999px',width:'1px',height:'1px',opacity:'0',pointerEvents:'none'});
+    document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,ta.value.length);
+    var ok=false;try{ok=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);return ok;
+  }
 
-    async function handleSignup(e){
-      e.preventDefault();setAuthError('signupError','');
-      var displayName=document.getElementById('signupDisplayName').value.trim();
-      var username=document.getElementById('signupUsername').value.trim();
-      var password=document.getElementById('signupPassword').value;
-      if(!/^[a-zA-Z0-9_]{3,24}$/.test(username)){setAuthError('signupError','Le nom d\'utilisateur doit faire 3 à 24 caractères.');return false}
-      var btn=document.getElementById('signupSubmitBtn');btn.disabled=true;btn.textContent='Création...';
-      try{
-        var{data:exists,error:checkErr}=await sb.rpc('check_username_exists',{p_username:username});
-        if(checkErr){setAuthError('signupError','Erreur technique.');return false}
-        if(exists===true){setAuthError('signupError','Ce nom d\'utilisateur est déjà pris.');return false}
-        var{data:signUpData,error:signUpErr}=await sb.auth.signUp({email:usernameToInternalEmail(username),password});
-        if(signUpErr){setAuthError('signupError',translateAuthError(signUpErr.message));return false}
-        var user=signUpData.user;if(!user){setAuthError('signupError','Inscription impossible.');return false}
-        var{error:profileErr}=await sb.from('profiles').insert({id:user.id,display_name:displayName,username,bio:'',avatar_url:null,banner_url:null});
-        if(profileErr){setAuthError('signupError','Compte créé, profil non enregistré.');return false}
-        await loadCurrentUser();hideAuthOverlay();
-      }catch(err){setAuthError('signupError','Erreur réseau.')}
-      finally{btn.disabled=false;btn.textContent='Créer mon compte'}
-      return false;
+  async function copyToClipboard(text){
+    if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
+      try{await navigator.clipboard.writeText(text);return true}catch(e){}
     }
+    return fallbackCopyText(text);
+  }
 
-    async function handleLogin(e){
-      e.preventDefault();setAuthError('loginError','');
-      var username=document.getElementById('loginUsername').value.trim();
-      var password=document.getElementById('loginPassword').value;
-      var btn=document.getElementById('loginSubmitBtn');btn.disabled=true;btn.textContent='Connexion...';
-      try{
-        var{data:exists,error:checkErr}=await sb.rpc('check_username_exists',{p_username:username});
-        if(checkErr){setAuthError('loginError','Erreur technique.');return false}
-        if(exists===false){setAuthError('loginError','Nom d\'utilisateur ou mot de passe incorrect.');return false}
-        var{error}=await sb.auth.signInWithPassword({email:usernameToInternalEmail(username),password});
-        if(error){setAuthError('loginError','Nom d\'utilisateur ou mot de passe incorrect.');return false}
-        await loadCurrentUser();hideAuthOverlay();
-        if(typeof restoreDiscordKeySession==='function')restoreDiscordKeySession();
-      }catch(err){setAuthError('loginError','Erreur réseau.')}
-      finally{btn.disabled=false;btn.textContent='Se connecter'}
-      return false;
-    }
-
-    function translateAuthError(m){if(/already registered|already exists/i.test(m))return'Un compte existe déjà avec ce nom d\'utilisateur.';if(/password/i.test(m))return'Mot de passe invalide (8 caractères minimum).';return'Une erreur est survenue.'}
-
-    async function handleLogout(){await sb.auth.signOut();currentProfile=null;toggleAccountMenu(false);document.getElementById('accountWidget').style.display='none';document.getElementById('accountDivider').style.display='none';if(typeof clearSavedKeySession==='function')clearSavedKeySession();showAuthOverlay()}
-
-    function toggleAccountMenu(force){var menu=document.getElementById('accountMenu');var show=typeof force==='boolean'?force:!menu.classList.contains('visible');menu.classList.toggle('visible',show)}
-    document.addEventListener('click',function(e){var w=document.getElementById('accountWidget');if(w&&!w.contains(e.target))toggleAccountMenu(false)});
-
-    function initials(name){return(name||'?').trim().slice(0,2).toUpperCase()}
-
-    function renderAccountUI(profile){
-      currentProfile=profile;
-      document.getElementById('accountWidget').style.display='flex';
-      document.getElementById('accountDivider').style.display='block';
-      [document.getElementById('accountAvatar'),document.getElementById('accountMenuAvatar')].forEach(function(el){if(profile.avatar_url){el.style.backgroundImage='url('+profile.avatar_url+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent=''}else{el.style.backgroundImage='';el.textContent=initials(profile.display_name)}});
-      document.getElementById('accountName').textContent=profile.display_name;
-      document.getElementById('accountMenuDisplay').textContent=profile.display_name;
-      document.getElementById('accountMenuUsername').textContent='@'+profile.username;
-      document.getElementById('accountMenuId').textContent='ID · '+profile.id;
-    }
-
-    async function loadCurrentUser(){var{data:{user}}=await sb.auth.getUser();if(!user)return false;var{data:profile,error}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();if(error||!profile)return false;renderAccountUI(profile);return true}
-
-    let pendingAvatarFile=null,pendingBannerFile=null;
-
-    function openProfileModal(){toggleAccountMenu(false);if(!currentProfile)return;document.getElementById('editDisplayName').value=currentProfile.display_name||'';document.getElementById('editUsername').value=currentProfile.username||'';document.getElementById('editBio').value=currentProfile.bio||'';var ap=document.getElementById('profileAvatarPreview');if(currentProfile.avatar_url){ap.style.backgroundImage='url('+currentProfile.avatar_url+')';ap.style.backgroundSize='cover';ap.style.backgroundPosition='center';ap.textContent=''}else{ap.style.backgroundImage='';ap.textContent=initials(currentProfile.display_name)}var bp=document.getElementById('profileBannerPreview');bp.style.backgroundImage=currentProfile.banner_url?'url('+currentProfile.banner_url+')':'';pendingAvatarFile=null;pendingBannerFile=null;setAuthError('profileEditError','');document.getElementById('profileModalOverlay').classList.add('visible')}
-    function closeProfileModal(){document.getElementById('profileModalOverlay').classList.remove('visible')}
-
-    function handleImageSelect(e,kind){var file=e.target.files[0];if(!file)return;var url=URL.createObjectURL(file);if(kind==='avatar'){pendingAvatarFile=file;var el=document.getElementById('profileAvatarPreview');el.style.backgroundImage='url('+url+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent=''}else{pendingBannerFile=file;document.getElementById('profileBannerPreview').style.backgroundImage='url('+url+')'}}
-
-    async function uploadImage(bucket,file,userId){var ext=file.name.split('.').pop();var path=userId+'/'+(bucket==='avatars'?'avatar':'banner')+'.'+ext;var{error}=await sb.storage.from(bucket).upload(path,file,{upsert:true});if(error)throw error;var{data}=sb.storage.from(bucket).getPublicUrl(path);return data.publicUrl+'?t='+Date.now()}
-
-    async function handleProfileSave(){
-      if(!currentProfile)return;setAuthError('profileEditError','');
-      var btn=document.getElementById('profileSaveBtn');btn.disabled=true;btn.textContent='Enregistrement...';
-      var newDisplayName=document.getElementById('editDisplayName').value.trim();
-      var newUsername=document.getElementById('editUsername').value.trim();
-      var newBio=document.getElementById('editBio').value.trim();
-      if(!newDisplayName){setAuthError('profileEditError','Le nom affiché est requis.');btn.disabled=false;btn.textContent='Enregistrer';return}
-      if(!/^[a-zA-Z0-9_]{3,24}$/.test(newUsername)){setAuthError('profileEditError','Le pseudo doit faire 3 à 24 caractères, avec lettres, chiffres ou _.');btn.disabled=false;btn.textContent='Enregistrer';return}
-      try{
-        if(newUsername.toLowerCase()!==String(currentProfile.username||'').toLowerCase()){
-          var{data:exists,error:checkErr}=await sb.rpc('check_username_exists',{p_username:newUsername});
-          if(checkErr){setAuthError('profileEditError','Impossible de vérifier ce pseudo.');return}
-          if(exists===true){setAuthError('profileEditError','Ce pseudo est déjà utilisé.');return}
-        }
-        var updates={display_name:newDisplayName,username:newUsername,bio:newBio};
-        if(pendingAvatarFile)updates.avatar_url=await uploadImage('avatars',pendingAvatarFile,currentProfile.id);
-        if(pendingBannerFile)updates.banner_url=await uploadImage('banners',pendingBannerFile,currentProfile.id);
-        var{error}=await sb.from('profiles').update(updates).eq('id',currentProfile.id);
-        if(error){setAuthError('profileEditError',error.message||'Impossible d\'enregistrer le profil.');return}
-        if(newUsername.toLowerCase()!==String(currentProfile.username||'').toLowerCase()){
-          var{error:emailErr}=await sb.auth.updateUser({email:usernameToInternalEmail(newUsername)});
-          if(emailErr){setAuthError('profileEditError','Le pseudo a été refusé par Supabase.');return}
-        }
-        var ok=await loadCurrentUser();
-        if(!ok){setAuthError('profileEditError','Profil enregistré, mais impossible de le recharger.');return}
-        closeProfileModal();
-        showNotification('Profil mis à jour','Tes informations ont été enregistrées.','success');
-      }catch(err){setAuthError('profileEditError',err&&err.message?err.message:'Erreur lors de l\'envoi.')}
-      finally{btn.disabled=false;btn.textContent='Enregistrer'}
-    }
-
-    let _sentinelReadyResolve;
-    window._sentinelReady=new Promise(res=>{_sentinelReadyResolve=res;});
-    (async function initAuthGate(){
-      var{data:{session}}=await sb.auth.getSession();
-      if(session){var ok=await loadCurrentUser();if(!ok)showAuthOverlay()}
-      else showAuthOverlay();
-      _sentinelReadyResolve();
-    })();
-  </script>
-
-  <script>
-    const DISCORD_CLIENT_ID='1451684958090428579';
-    const DISCORD_REDIRECT_URI='https://x4tmqq.github.io/Sentinel-Script/';
-    const EDGE_FUNCTION_URL='https://fzuocfhzzvscjhcxuzog.supabase.co/functions/v1/get-key';
-    const KEY_SCRIPT_IDS=['examination','bloxstrike'];
-    const KEY_SESSION_STORAGE_KEY='sentinelKeySession';
-
-    function saveKeySession(token){try{localStorage.setItem(KEY_SESSION_STORAGE_KEY,JSON.stringify({token,savedAt:Date.now()}))}catch(e){}}
-    function getSavedKeySessionToken(){try{var r=localStorage.getItem(KEY_SESSION_STORAGE_KEY);if(!r)return null;var p=JSON.parse(r);return p&&p.token?p.token:null}catch(e){return null}}
-    function clearSavedKeySession(){try{localStorage.removeItem(KEY_SESSION_STORAGE_KEY)}catch(e){}}
-
-    async function fetchKeyWithSession(scriptId,sessionToken){
-      try{
-        var{data:{session:sbSession}}=await sb.auth.getSession();
-        var res=await fetch(EDGE_FUNCTION_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(sbSession?.access_token??'')},body:JSON.stringify({script_id:scriptId,session_token:sessionToken})});
-        var data=await res.json();
-        if(res.ok&&data.key){showKey(scriptId,data.key);if(data.session_token)saveKeySession(data.session_token);return true}
-        if(data.expired)clearSavedKeySession();
-        return false;
-      }catch(e){return false}
-    }
-
-    async function restoreDiscordKeySession(){
-      var sessionToken=getSavedKeySessionToken();if(!sessionToken)return;
-      for(var scriptId of KEY_SCRIPT_IDS){
-        var btn=document.getElementById('keyBtn_'+scriptId);
-        if(!btn||btn.disabled)continue;
-        await fetchKeyWithSession(scriptId,sessionToken);
+  // ─────────────────────────────────────────────
+  // CURSOR LIGHT
+  // ─────────────────────────────────────────────
+  (function initGlobalCursorLight(){
+    var targets=document.querySelectorAll('.lg, .script-card');
+    var hero=document.getElementById('top');
+    var heroCursorLight=document.getElementById('heroCursorLight');
+    var rafId=null,mouseX=-9999,mouseY=-9999;
+    function update(){
+      rafId=null;
+      if(hero&&heroCursorLight){
+        var r=hero.getBoundingClientRect();
+        var x=mouseX-r.left,y=mouseY-r.top;
+        heroCursorLight.style.background='radial-gradient(600px circle at '+x+'px '+y+'px, rgba(255,255,255,0.07), transparent 60%)';
       }
+      targets.forEach(function(el){
+        var r=el.getBoundingClientRect();
+        var margin=120;
+        if(mouseX<r.left-margin||mouseX>r.right+margin||mouseY<r.top-margin||mouseY>r.bottom+margin){
+          el.style.setProperty('--gx','-9999px');el.style.setProperty('--gy','-9999px');return;
+        }
+        el.style.setProperty('--gx',(mouseX-r.left)+'px');
+        el.style.setProperty('--gy',(mouseY-r.top)+'px');
+      });
     }
+    document.addEventListener('mousemove',function(e){mouseX=e.clientX;mouseY=e.clientY;if(!rafId)rafId=requestAnimationFrame(update)});
+    document.addEventListener('mouseleave',function(){mouseX=-9999;mouseY=-9999;if(!rafId)rafId=requestAnimationFrame(update)});
+  })();
 
-    function showKey(scriptId,keyValue){var reveal=document.getElementById('keyReveal_'+scriptId);var text=document.getElementById('keyText_'+scriptId);var btn=document.getElementById('keyBtn_'+scriptId);if(text)text.textContent=keyValue;if(reveal)reveal.classList.add('visible');if(btn){btn.innerHTML='<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Key';btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';btn.onclick=function(){copyKey(scriptId)}}}
-    function showKeyError(scriptId,message){var errEl=document.getElementById('keyError_'+scriptId);var errTxt=document.getElementById('keyErrorText_'+scriptId);var btn=document.getElementById('keyBtn_'+scriptId);if(errTxt)errTxt.textContent=message;if(errEl)errEl.classList.add('visible');if(btn){btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Get Key'}}
+  // ─────────────────────────────────────────────
+  // 3D TILT
+  // ─────────────────────────────────────────────
+  (function initCardTilt(){
+    if(window.matchMedia('(max-width:680px)').matches)return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    var MAX_TILT=7,SCALE_HOVER=1.018;
+    document.querySelectorAll('.script-card-tilt-wrap').forEach(function(wrap){
+      var card=wrap.querySelector('.script-card');if(!card)return;
+      wrap.style.perspective='1000px';
+      var animFrame=null,targetRX=0,targetRY=0,currentRX=0,currentRY=0,isHovered=false;
+      function lerp(a,b,t){return a+(b-a)*t}
+      function animateTilt(){
+        currentRX=lerp(currentRX,targetRX,0.12);currentRY=lerp(currentRY,targetRY,0.12);
+        var scale=isHovered?SCALE_HOVER:1;
+        card.style.transform='perspective(1000px) rotateX('+currentRX+'deg) rotateY('+currentRY+'deg) scale3d('+scale+','+scale+','+scale+')';
+        if(Math.abs(currentRX-targetRX)>0.01||Math.abs(currentRY-targetRY)>0.01)animFrame=requestAnimationFrame(animateTilt);
+        else animFrame=null;
+      }
+      function startAnim(){if(!animFrame)animFrame=requestAnimationFrame(animateTilt)}
+      wrap.addEventListener('pointermove',function(e){
+        var r=card.getBoundingClientRect();
+        var px=(e.clientX-r.left)/r.width-0.5,py=(e.clientY-r.top)/r.height-0.5;
+        targetRX=-py*MAX_TILT*2;targetRY=px*MAX_TILT*2;startAnim();
+      });
+      wrap.addEventListener('pointerenter',function(){isHovered=true;startAnim()});
+      wrap.addEventListener('pointerleave',function(){isHovered=false;targetRX=0;targetRY=0;startAnim()});
+    });
+  })();
 
-    var _copyCooldowns={};
-    async function copyKey(scriptId){
-      var now=Date.now();if(_copyCooldowns[scriptId]&&now-_copyCooldowns[scriptId]<500)return;
-      _copyCooldowns[scriptId]=now;
-      var text=document.getElementById('keyText_'+scriptId);
-      var keyButton=document.getElementById('keyBtn_'+scriptId);
-      var revealButton=document.querySelector('#keyReveal_'+scriptId+' .key-reveal-copy');
-      if(!text||!text.textContent)return;
-      var keyValue=text.textContent.trim();if(!keyValue)return;
-      var copied=false;
-      if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){try{await navigator.clipboard.writeText(keyValue);copied=true}catch(e){}}
-      if(!copied)copied=fallbackCopyText(keyValue);
-      if(copied){
-        if(keyButton)keyButton.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
-        if(revealButton)revealButton.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-        showNotification('Key copied','La clé a été copiée dans le presse-papier.','success');playNotificationSound();
-        setTimeout(function(){
-          if(keyButton)keyButton.innerHTML='<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Key';
-          if(revealButton)revealButton.innerHTML='<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
-        },1800);
-      }else{showNotification('Copy failed','Impossible de copier la clé.','error');playNotificationSound()}
+  // Cursor light on cards (--mx/--my)
+  document.querySelectorAll('.script-card').forEach(function(card){
+    card.addEventListener('pointermove',function(e){
+      var r=card.getBoundingClientRect();
+      card.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      card.style.setProperty('--my',(e.clientY-r.top)+'px');
+    });
+  });
+
+  // Hero scroll button
+  document.getElementById('heroScrollBtn').addEventListener('click',function(e){
+    e.preventDefault();
+    document.getElementById('scripts').scrollIntoView({behavior:'smooth'});
+  });
+
+  // Reduced motion: strip SVG filter animations
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('filter animate').forEach(function(a){a.remove()});
+  }
+
+  // ─────────────────────────────────────────────
+  // COPY SCRIPT BUTTONS
+  // ─────────────────────────────────────────────
+  async function handleCopyScript(button){
+    if(!button||button.disabled)return;
+    var script=button.getAttribute('data-script');
+    var scriptName=button.getAttribute('data-script-name')||'Script';
+    if(!script){showNotification('Copy failed','Le contenu du script est vide.','error');playNotificationSound();return}
+    var originalHTML=button.innerHTML;
+    button.disabled=true;
+    button.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg> Copying...';
+    var copied=await copyToClipboard(script);
+    if(copied){
+      button.innerHTML='<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+      button.style.background='rgba(80,200,100,0.12)';button.style.borderColor='rgba(80,200,100,.25)';
+      showNotification('Script copied',scriptName+' copié dans le presse-papier.','success');playNotificationSound();
+      setTimeout(function(){button.innerHTML=originalHTML;button.style.background='';button.style.borderColor='';button.disabled=false},2000);
+    }else{
+      button.innerHTML=originalHTML;button.style.background='';button.style.borderColor='';button.disabled=false;
+      showNotification('Copy failed','Le navigateur a bloqué l\'accès au presse-papier.','error');playNotificationSound();
     }
+  }
 
-    function showDiscordLoading(msg){var overlay=document.getElementById('discordLoadingOverlay');var txt=document.getElementById('discordLoadingText');if(!overlay)return;overlay.classList.remove('result');var icon=document.getElementById('verificationIcon');var svg=document.getElementById('verificationIconSvg');if(icon)icon.className='verification-icon';if(svg)svg.innerHTML='';if(txt){txt.classList.remove('changing');txt.textContent=msg||'Vérification Discord en cours…'}requestAnimationFrame(function(){overlay.classList.add('visible')})}
-    function hideDiscordLoading(){var o=document.getElementById('discordLoadingOverlay');if(o)o.classList.remove('visible')}
-    function showVerificationResult(success,callback){var overlay=document.getElementById('discordLoadingOverlay');var icon=document.getElementById('verificationIcon');var svg=document.getElementById('verificationIconSvg');var txt=document.getElementById('discordLoadingText');if(!overlay||!icon||!svg){if(callback)callback();return}if(txt)txt.classList.add('changing');setTimeout(function(){if(txt){txt.textContent=success?'Vérification réussie':'Vérification refusée';txt.classList.remove('changing')}},180);icon.className='verification-icon '+(success?'success':'error');svg.innerHTML=success?'<path d="M5 12.5l4.2 4.2L19 7"/>':'<path d="M7 7l10 10M17 7L7 17"/>';overlay.classList.add('result');setTimeout(function(){overlay.classList.remove('visible');setTimeout(function(){overlay.classList.remove('result');icon.className='verification-icon';svg.innerHTML='';if(txt){txt.classList.remove('changing');txt.textContent='Vérification Discord en cours…'}if(callback)callback()},460)},2000)}
+  // Bind copy script buttons
+  document.querySelectorAll('.copy-script-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){handleCopyScript(btn)});
+  });
 
-    function handleGetKey(scriptId){var params=new URLSearchParams({client_id:DISCORD_CLIENT_ID,redirect_uri:DISCORD_REDIRECT_URI,response_type:'code',scope:'identify guilds.members.read',state:scriptId});window.location.href='https://discord.com/api/oauth2/authorize?'+params.toString()}
+  // ─────────────────────────────────────────────
+  // INTERSECTION OBSERVER — card reveal
+  // ─────────────────────────────────────────────
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var wrap=entry.target;
+        var card=wrap.querySelector('.script-card')||wrap;
+        var delay=parseInt(card.dataset.delay)||0;
+        setTimeout(function(){card.classList.add('visible')},delay);
+        observer.unobserve(wrap);
+      }
+    });
+  },{threshold:.12});
+  document.querySelectorAll('.script-card-tilt-wrap').forEach(function(c){observer.observe(c)});
 
-    (async function handleOAuthCallback(){
-      var urlParams=new URLSearchParams(window.location.search);
-      var code=urlParams.get('code');var scriptId=urlParams.get('state');
-      if(!code||!scriptId)return;
+  // ─────────────────────────────────────────────
+  // RSCRIPTS API — direct fetch (public API)
+  // Uses the undocumented but public endpoint: https://rscripts.net/api/v2/script?id=SLUG
+  // ─────────────────────────────────────────────
+  var RSCRIPTS_PROXY='https://api.allorigins.win/get?url=';
+  var rscriptsTimer=null;
+
+  function fmt(v){
+    if(typeof v!=='number'||!isFinite(v))return'—';
+    return new Intl.NumberFormat('fr-FR',{notation:'compact',maximumFractionDigits:v<1000?0:1}).format(v);
+  }
+  function fmtDate(v){
+    if(!v)return'No update timestamp';
+    var d=new Date(v);
+    if(isNaN(d.getTime()))return'Updated recently';
+    return'Updated '+d.toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+  }
+  function setAt(root,key,val){
+    var el=root.querySelector('[data-analytics="'+key+'"]');
+    if(el)el.textContent=val;
+  }
+
+  async function fetchRScriptsSlug(slug){
+    // Try direct first
+    var directUrl='https://rscripts.net/api/v2/script?id='+encodeURIComponent(slug);
+    try{
+      var r=await fetch(directUrl,{method:'GET',headers:{'Accept':'application/json'},cache:'no-store'});
+      if(r.ok){
+        var j=await r.json();
+        var s=j&&j.script;
+        if(Array.isArray(s))s=s[0];
+        if(s&&typeof s==='object')return s;
+      }
+    }catch(e){}
+    // Fallback via allorigins proxy (no-cors workaround)
+    try{
+      var proxyUrl=RSCRIPTS_PROXY+encodeURIComponent(directUrl);
+      var r2=await fetch(proxyUrl,{cache:'no-store'});
+      if(r2.ok){
+        var j2=await r2.json();
+        var inner=j2&&j2.contents?JSON.parse(j2.contents):null;
+        var s2=inner&&inner.script;
+        if(Array.isArray(s2))s2=s2[0];
+        if(s2&&typeof s2==='object')return s2;
+      }
+    }catch(e){}
+    return null;
+  }
+
+  function paintCard(root,s){
+    // Normalize field names — rscripts uses different names across versions
+    var views   =s.views       ??s.pageViews??null;
+    var execs   =s.executes    ??s.executions??s.executionCount??s.runs??null;
+    var likes   =s.likes       ??null;
+    var dislikes=s.dislikes    ??null;
+    var mobile  =s.mobileReady ===true||s.isMobileReady===true;
+    var keyless =!(s.keySystem ===true||s.isKeySystem===true);
+    var upd     =s.lastUpdated ??s.updatedAt??s.createdAt??null;
+
+    setAt(root,'views',    typeof views==='number'?fmt(views):'—');
+    setAt(root,'executions',typeof execs==='number'?fmt(execs):'—');
+    setAt(root,'likes',    typeof likes==='number'?fmt(likes):'—');
+    setAt(root,'dislikes', typeof dislikes==='number'?fmt(dislikes):'—');
+    setAt(root,'mobile',   mobile?'Mobile ready':'Desktop');
+    setAt(root,'keyless',  keyless?'Keyless':'Key system');
+    setAt(root,'updated',  fmtDate(upd));
+    root.classList.remove('loading');
+  }
+
+  function errorCard(root){
+    ['views','executions','likes','dislikes'].forEach(function(k){setAt(root,k,'—')});
+    setAt(root,'mobile','Unavailable');setAt(root,'keyless','Unavailable');
+    setAt(root,'updated','RScripts data unavailable');
+    root.classList.remove('loading');
+  }
+
+  async function refreshAllAnalytics(){
+    var roots=[].slice.call(document.querySelectorAll('.script-analytics'));
+    roots.forEach(function(r){r.classList.add('loading');setAt(r,'updated','Refreshing…')});
+    await Promise.all(roots.map(async function(root){
+      var slug=root.getAttribute('data-rscripts-slug');
+      if(!slug){errorCard(root);return}
+      var s=await fetchRScriptsSlug(slug);
+      if(s)paintCard(root,s);else errorCard(root);
+    }));
+  }
+
+  async function refreshOneCard(btn){
+    var root=btn.closest('.script-analytics');if(!root)return;
+    var slug=root.getAttribute('data-rscripts-slug');
+    root.classList.add('loading');setAt(root,'updated','Refreshing…');
+    var s=slug?await fetchRScriptsSlug(slug):null;
+    if(s)paintCard(root,s);else errorCard(root);
+  }
+
+  // Bind refresh buttons
+  document.querySelectorAll('.analytics-refresh').forEach(function(btn){
+    btn.addEventListener('click',function(){refreshOneCard(btn)});
+  });
+
+  // Initial load + auto-refresh every 60s
+  refreshAllAnalytics();
+  rscriptsTimer=setInterval(refreshAllAnalytics,60000);
+
+  // ─────────────────────────────────────────────
+  // KEY SYSTEM
+  // ─────────────────────────────────────────────
+  var DISCORD_CLIENT_ID='1451684958090428579';
+  var DISCORD_REDIRECT_URI='https://x4tmqq.github.io/Sentinel-Script/';
+  var EDGE_FUNCTION_URL='https://fzuocfhzzvscjhcxuzog.supabase.co/functions/v1/get-key';
+  var KEY_SESSION_KEY='sentinelKeySession';
+
+  function saveKeySession(token){try{localStorage.setItem(KEY_SESSION_KEY,JSON.stringify({token,savedAt:Date.now()}))}catch(e){}}
+  function getSavedKeyToken(){try{var r=localStorage.getItem(KEY_SESSION_KEY);if(!r)return null;var p=JSON.parse(r);return p&&p.token?p.token:null}catch(e){return null}}
+  function clearSavedKeySession(){try{localStorage.removeItem(KEY_SESSION_KEY)}catch(e){}}
+
+  function showKey(scriptId,keyValue){
+    var reveal=document.getElementById('keyReveal_'+scriptId);
+    var text=document.getElementById('keyText_'+scriptId);
+    var btn=document.getElementById('keyBtn_'+scriptId);
+    if(text)text.textContent=keyValue;
+    if(reveal)reveal.classList.add('visible');
+    if(btn){
+      btn.innerHTML='<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Key';
+      btn.disabled=false;
+      btn.onclick=function(){copyKey(scriptId)};
+    }
+  }
+
+  function showKeyError(scriptId,message){
+    var errEl=document.getElementById('keyError_'+scriptId);
+    var errTxt=document.getElementById('keyErrorText_'+scriptId);
+    var btn=document.getElementById('keyBtn_'+scriptId);
+    if(errTxt)errTxt.textContent=message;
+    if(errEl)errEl.classList.add('visible');
+    if(btn){
+      btn.disabled=false;
+      btn.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Get Key';
+      btn.onclick=function(){handleGetKey(scriptId)};
+    }
+  }
+
+  var _keyCooldowns={};
+  async function copyKey(scriptId){
+    var now=Date.now();
+    if(_keyCooldowns[scriptId]&&now-_keyCooldowns[scriptId]<500)return;
+    _keyCooldowns[scriptId]=now;
+    var textEl=document.getElementById('keyText_'+scriptId);
+    if(!textEl||!textEl.textContent.trim())return;
+    var keyValue=textEl.textContent.trim();
+    var copied=await copyToClipboard(keyValue);
+    var mainBtn=document.getElementById('keyBtn_'+scriptId);
+    var copyBtn=document.getElementById('keyCopyBtn_'+scriptId);
+    if(copied){
+      if(mainBtn)mainBtn.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+      if(copyBtn)copyBtn.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+      showNotification('Key copied','La clé a été copiée dans le presse-papier.','success');playNotificationSound();
+      setTimeout(function(){
+        if(mainBtn)mainBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Key';
+        if(copyBtn)copyBtn.innerHTML='<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      },1800);
+    }else{
+      showNotification('Copy failed','Impossible de copier la clé.','error');playNotificationSound();
+    }
+  }
+
+  // Bind key copy buttons
+  document.getElementById('keyCopyBtn_examination').addEventListener('click',function(){copyKey('examination')});
+  document.getElementById('keyCopyBtn_bloxstrike').addEventListener('click',function(){copyKey('bloxstrike')});
+
+  // Bind get-key buttons
+  function handleGetKey(scriptId){
+    var params=new URLSearchParams({
+      client_id:DISCORD_CLIENT_ID,
+      redirect_uri:DISCORD_REDIRECT_URI,
+      response_type:'code',
+      scope:'identify guilds.members.read',
+      state:scriptId
+    });
+    window.location.href='https://discord.com/api/oauth2/authorize?'+params.toString();
+  }
+
+  document.getElementById('keyBtn_examination').addEventListener('click',function(){handleGetKey('examination')});
+  document.getElementById('keyBtn_bloxstrike').addEventListener('click',function(){handleGetKey('bloxstrike')});
+
+  // Discord loading UI
+  function showDiscordLoading(msg){
+    var overlay=document.getElementById('discordLoadingOverlay');
+    var txt=document.getElementById('discordLoadingText');
+    if(!overlay)return;
+    overlay.classList.remove('result');
+    var icon=document.getElementById('verificationIcon');
+    var svg=document.getElementById('verificationIconSvg');
+    if(icon)icon.className='verification-icon';
+    if(svg)svg.innerHTML='';
+    if(txt){txt.classList.remove('changing');txt.textContent=msg||'Vérification Discord en cours…'}
+    requestAnimationFrame(function(){overlay.classList.add('visible')});
+  }
+  function showVerificationResult(success,callback){
+    var overlay=document.getElementById('discordLoadingOverlay');
+    var icon=document.getElementById('verificationIcon');
+    var svg=document.getElementById('verificationIconSvg');
+    var txt=document.getElementById('discordLoadingText');
+    if(!overlay||!icon||!svg){if(callback)callback();return}
+    if(txt)txt.classList.add('changing');
+    setTimeout(function(){
+      if(txt){txt.textContent=success?'Vérification réussie':'Vérification refusée';txt.classList.remove('changing')}
+    },180);
+    icon.className='verification-icon '+(success?'success':'error');
+    svg.innerHTML=success?'<path d="M5 12.5l4.2 4.2L19 7"/>':'<path d="M7 7l10 10M17 7L7 17"/>';
+    overlay.classList.add('result');
+    setTimeout(function(){
+      overlay.classList.remove('visible');
+      setTimeout(function(){
+        overlay.classList.remove('result');
+        icon.className='verification-icon';svg.innerHTML='';
+        if(txt){txt.classList.remove('changing');txt.textContent='Vérification Discord en cours…'}
+        if(callback)callback();
+      },460);
+    },2000);
+  }
+
+  // ─────────────────────────────────────────────
+  // SUPABASE AUTH
+  // ─────────────────────────────────────────────
+  var SUPABASE_URL='https://fzuocfhzzvscjhcxuzog.supabase.co';
+  var SUPABASE_ANON_KEY='sb_publishable_XWzMsq-kiPmkQ8rmL_u7Pg_bJT4TwZ5';
+  var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  var currentProfile=null;
+
+  function usernameToEmail(u){return u.trim().toLowerCase()+'@sentinel-script.internal'}
+
+  function switchAuthTab(tab){
+    var isLogin=tab==='login';
+    document.getElementById('authTabLogin').classList.toggle('active',isLogin);
+    document.getElementById('authTabSignup').classList.toggle('active',!isLogin);
+    document.getElementById('loginForm').classList.toggle('active',isLogin);
+    document.getElementById('signupForm').classList.toggle('active',!isLogin);
+  }
+  function showAuthOverlay(){document.getElementById('authOverlay').classList.add('visible');document.body.style.overflow='hidden'}
+  function hideAuthOverlay(){document.getElementById('authOverlay').classList.remove('visible');document.body.style.overflow=''}
+  function setAuthError(id,msg){var el=document.getElementById(id);el.textContent=msg;el.classList.toggle('visible',!!msg)}
+
+  function translateAuthError(m){
+    if(/already registered|already exists/i.test(m))return'Un compte existe déjà avec ce nom d\'utilisateur.';
+    if(/password/i.test(m))return'Mot de passe invalide (8 caractères minimum).';
+    return'Une erreur est survenue.';
+  }
+
+  function initials(name){return(name||'?').trim().slice(0,2).toUpperCase()}
+
+  function renderAccountUI(profile){
+    currentProfile=profile;
+    document.getElementById('accountWidget').style.display='flex';
+    document.getElementById('accountDivider').style.display='block';
+    [document.getElementById('accountAvatar'),document.getElementById('accountMenuAvatar')].forEach(function(el){
+      if(profile.avatar_url){el.style.backgroundImage='url('+profile.avatar_url+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent=''}
+      else{el.style.backgroundImage='';el.textContent=initials(profile.display_name)}
+    });
+    document.getElementById('accountName').textContent=profile.display_name;
+    document.getElementById('accountMenuDisplay').textContent=profile.display_name;
+    document.getElementById('accountMenuUsername').textContent='@'+profile.username;
+    document.getElementById('accountMenuId').textContent='ID · '+profile.id;
+  }
+
+  async function loadCurrentUser(){
+    var res=await sb.auth.getUser();
+    var user=res.data&&res.data.user;if(!user)return false;
+    var profileRes=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+    if(profileRes.error||!profileRes.data)return false;
+    renderAccountUI(profileRes.data);return true;
+  }
+
+  async function handleSignup(e){
+    e.preventDefault();setAuthError('signupError','');
+    var displayName=document.getElementById('signupDisplayName').value.trim();
+    var username=document.getElementById('signupUsername').value.trim();
+    var password=document.getElementById('signupPassword').value;
+    if(!/^[a-zA-Z0-9_]{3,24}$/.test(username)){setAuthError('signupError','Le nom d\'utilisateur doit faire 3 à 24 caractères.');return false}
+    var btn=document.getElementById('signupSubmitBtn');btn.disabled=true;btn.textContent='Création...';
+    try{
+      var chk=await sb.rpc('check_username_exists',{p_username:username});
+      if(chk.error){setAuthError('signupError','Erreur technique.');return false}
+      if(chk.data===true){setAuthError('signupError','Ce nom d\'utilisateur est déjà pris.');return false}
+      var sup=await sb.auth.signUp({email:usernameToEmail(username),password});
+      if(sup.error){setAuthError('signupError',translateAuthError(sup.error.message));return false}
+      var user=sup.data.user;if(!user){setAuthError('signupError','Inscription impossible.');return false}
+      var ins=await sb.from('profiles').insert({id:user.id,display_name:displayName,username,bio:'',avatar_url:null,banner_url:null});
+      if(ins.error){setAuthError('signupError','Compte créé, profil non enregistré.');return false}
+      await loadCurrentUser();hideAuthOverlay();
+    }catch(err){setAuthError('signupError','Erreur réseau.')}
+    finally{btn.disabled=false;btn.textContent='Créer mon compte'}
+    return false;
+  }
+
+  async function handleLogin(e){
+    e.preventDefault();setAuthError('loginError','');
+    var username=document.getElementById('loginUsername').value.trim();
+    var password=document.getElementById('loginPassword').value;
+    var btn=document.getElementById('loginSubmitBtn');btn.disabled=true;btn.textContent='Connexion...';
+    try{
+      var chk=await sb.rpc('check_username_exists',{p_username:username});
+      if(chk.error){setAuthError('loginError','Erreur technique.');return false}
+      if(chk.data===false){setAuthError('loginError','Nom d\'utilisateur ou mot de passe incorrect.');return false}
+      var res=await sb.auth.signInWithPassword({email:usernameToEmail(username),password});
+      if(res.error){setAuthError('loginError','Nom d\'utilisateur ou mot de passe incorrect.');return false}
+      await loadCurrentUser();hideAuthOverlay();
+    }catch(err){setAuthError('loginError','Erreur réseau.')}
+    finally{btn.disabled=false;btn.textContent='Se connecter'}
+    return false;
+  }
+
+  async function handleLogout(){
+    await sb.auth.signOut();currentProfile=null;toggleAccountMenu(false);
+    document.getElementById('accountWidget').style.display='none';
+    document.getElementById('accountDivider').style.display='none';
+    clearSavedKeySession();showAuthOverlay();
+  }
+
+  function toggleAccountMenu(force){
+    var menu=document.getElementById('accountMenu');
+    var show=typeof force==='boolean'?force:!menu.classList.contains('visible');
+    menu.classList.toggle('visible',show);
+  }
+  document.addEventListener('click',function(e){
+    var w=document.getElementById('accountWidget');
+    if(w&&!w.contains(e.target))toggleAccountMenu(false);
+  });
+
+  // Profile modal
+  var pendingAvatarFile=null,pendingBannerFile=null;
+
+  function openProfileModal(){
+    toggleAccountMenu(false);if(!currentProfile)return;
+    document.getElementById('editDisplayName').value=currentProfile.display_name||'';
+    document.getElementById('editUsername').value=currentProfile.username||'';
+    document.getElementById('editBio').value=currentProfile.bio||'';
+    var ap=document.getElementById('profileAvatarPreview');
+    if(currentProfile.avatar_url){ap.style.backgroundImage='url('+currentProfile.avatar_url+')';ap.style.backgroundSize='cover';ap.style.backgroundPosition='center';ap.textContent=''}
+    else{ap.style.backgroundImage='';ap.textContent=initials(currentProfile.display_name)}
+    var bp=document.getElementById('profileBannerPreview');
+    bp.style.backgroundImage=currentProfile.banner_url?'url('+currentProfile.banner_url+')':'';
+    pendingAvatarFile=null;pendingBannerFile=null;
+    setAuthError('profileEditError','');
+    document.getElementById('profileModalOverlay').classList.add('visible');
+  }
+  function closeProfileModal(){document.getElementById('profileModalOverlay').classList.remove('visible')}
+
+  function handleImageSelect(e,kind){
+    var file=e.target.files[0];if(!file)return;
+    var url=URL.createObjectURL(file);
+    if(kind==='avatar'){pendingAvatarFile=file;var el=document.getElementById('profileAvatarPreview');el.style.backgroundImage='url('+url+')';el.style.backgroundSize='cover';el.style.backgroundPosition='center';el.textContent=''}
+    else{pendingBannerFile=file;document.getElementById('profileBannerPreview').style.backgroundImage='url('+url+')'}
+  }
+
+  async function uploadImage(bucket,file,userId){
+    var ext=file.name.split('.').pop();
+    var path=userId+'/'+(bucket==='avatars'?'avatar':'banner')+'.'+ext;
+    var upRes=await sb.storage.from(bucket).upload(path,file,{upsert:true});
+    if(upRes.error)throw upRes.error;
+    var{data}=sb.storage.from(bucket).getPublicUrl(path);
+    return data.publicUrl+'?t='+Date.now();
+  }
+
+  async function handleProfileSave(){
+    if(!currentProfile)return;setAuthError('profileEditError','');
+    var btn=document.getElementById('profileSaveBtn');btn.disabled=true;btn.textContent='Enregistrement...';
+    var newDisplayName=document.getElementById('editDisplayName').value.trim();
+    var newUsername=document.getElementById('editUsername').value.trim();
+    var newBio=document.getElementById('editBio').value.trim();
+    if(!newDisplayName){setAuthError('profileEditError','Le nom affiché est requis.');btn.disabled=false;btn.textContent='Enregistrer';return}
+    if(!/^[a-zA-Z0-9_]{3,24}$/.test(newUsername)){setAuthError('profileEditError','Pseudo invalide.');btn.disabled=false;btn.textContent='Enregistrer';return}
+    try{
+      if(newUsername.toLowerCase()!==String(currentProfile.username||'').toLowerCase()){
+        var chk=await sb.rpc('check_username_exists',{p_username:newUsername});
+        if(chk.error){setAuthError('profileEditError','Impossible de vérifier ce pseudo.');return}
+        if(chk.data===true){setAuthError('profileEditError','Ce pseudo est déjà utilisé.');return}
+      }
+      var updates={display_name:newDisplayName,username:newUsername,bio:newBio};
+      if(pendingAvatarFile)updates.avatar_url=await uploadImage('avatars',pendingAvatarFile,currentProfile.id);
+      if(pendingBannerFile)updates.banner_url=await uploadImage('banners',pendingBannerFile,currentProfile.id);
+      var upd=await sb.from('profiles').update(updates).eq('id',currentProfile.id);
+      if(upd.error){setAuthError('profileEditError',upd.error.message||'Impossible d\'enregistrer.');return}
+      if(newUsername.toLowerCase()!==String(currentProfile.username||'').toLowerCase()){
+        await sb.auth.updateUser({email:usernameToEmail(newUsername)});
+      }
+      await loadCurrentUser();closeProfileModal();
+      showNotification('Profil mis à jour','Tes informations ont été enregistrées.','success');
+    }catch(err){setAuthError('profileEditError',err&&err.message?err.message:'Erreur lors de l\'envoi.')}
+    finally{btn.disabled=false;btn.textContent='Enregistrer'}
+  }
+
+  // Auth gate + OAuth callback
+  var _sentinelReadyResolve;
+  window._sentinelReady=new Promise(function(res){_sentinelReadyResolve=res});
+
+  async function fetchKeyWithSession(scriptId,sessionToken){
+    try{
+      var ses=await sb.auth.getSession();
+      var token=ses.data&&ses.data.session?ses.data.session.access_token:'';
+      var r=await fetch(EDGE_FUNCTION_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({script_id:scriptId,session_token:sessionToken})});
+      var data=await r.json();
+      if(r.ok&&data.key){showKey(scriptId,data.key);if(data.session_token)saveKeySession(data.session_token);return true}
+      if(data.expired)clearSavedKeySession();
+      return false;
+    }catch(e){return false}
+  }
+
+  async function restoreDiscordKeySession(){
+    var token=getSavedKeyToken();if(!token)return;
+    var scriptIds=['examination','bloxstrike'];
+    for(var i=0;i<scriptIds.length;i++){
+      var btn=document.getElementById('keyBtn_'+scriptIds[i]);
+      if(!btn||btn.disabled)continue;
+      await fetchKeyWithSession(scriptIds[i],token);
+    }
+  }
+
+  (async function initAuthGate(){
+    var ses=await sb.auth.getSession();
+    if(ses.data&&ses.data.session){
+      var ok=await loadCurrentUser();if(!ok)showAuthOverlay();
+    }else{showAuthOverlay()}
+    _sentinelReadyResolve();
+
+    // Handle Discord OAuth callback
+    var urlParams=new URLSearchParams(window.location.search);
+    var code=urlParams.get('code');var scriptId=urlParams.get('state');
+    if(code&&scriptId){
       var cleanUrl=window.location.origin+window.location.pathname;
       window.history.replaceState({},document.title,cleanUrl);
-      await window._sentinelReady;
       showDiscordLoading('Vérification Discord en cours…');
-      var btn=document.getElementById('keyBtn_'+scriptId);if(btn){btn.disabled=true;btn.textContent='Vérification…'}
+      var keyBtn=document.getElementById('keyBtn_'+scriptId);
+      if(keyBtn){keyBtn.disabled=true;keyBtn.textContent='Vérification…'}
       try{
-        var{data:{session:sbSession}}=await sb.auth.getSession();
-        var res=await fetch(EDGE_FUNCTION_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(sbSession?.access_token??'')},body:JSON.stringify({code,script_id:scriptId})});
+        var ses2=await sb.auth.getSession();
+        var tok=ses2.data&&ses2.data.session?ses2.data.session.access_token:'';
+        var res=await fetch(EDGE_FUNCTION_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},body:JSON.stringify({code,script_id:scriptId})});
         var data=await res.json();
         if(res.ok&&data.key){showVerificationResult(true,function(){showKey(scriptId,data.key);if(data.session_token)saveKeySession(data.session_token)})}
         else{showVerificationResult(false,function(){showKeyError(scriptId,data.error||'Erreur inconnue.')})}
       }catch(err){showVerificationResult(false,function(){showKeyError(scriptId,'Erreur réseau. Réessaie.')})}
-    })();
+    }else{
+      // Try restoring session from localStorage
+      if(ses.data&&ses.data.session)restoreDiscordKeySession();
+    }
+  })();
   </script>
-
 </body>
 </html>
