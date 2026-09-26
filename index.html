@@ -379,6 +379,43 @@
     .availability-link:hover { transform: translateY(-3px) scale(1.05); }
     .availability-link img { width: 23px; height: 23px; object-fit: contain; border-radius: 6px; }
 
+
+    /* ===== PREMIUM BACKGROUND FIELD ===== */
+    body {
+      background:
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.055), transparent 30%),
+        radial-gradient(circle at 8% 38%, rgba(107,121,190,.055), transparent 27%),
+        radial-gradient(circle at 92% 72%, rgba(255,255,255,.035), transparent 30%),
+        #06070a;
+    }
+    body::after {
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      opacity:.72;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.10) 0 1px, transparent 1.35px),
+        radial-gradient(circle, rgba(255,255,255,.045) 0 .8px, transparent 1.15px);
+      background-size:42px 42px, 87px 87px;
+      background-position:0 0, 15px 21px;
+      mask-image:radial-gradient(ellipse 92% 82% at 50% 42%, #000 35%, rgba(0,0,0,.7) 68%, transparent 100%);
+      -webkit-mask-image:radial-gradient(ellipse 92% 82% at 50% 42%, #000 35%, rgba(0,0,0,.7) 68%, transparent 100%);
+    }
+    .content-section, .category-nav-wrap, #content { background:#06070a !important; }
+    .content-section::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.34;
+      background-image:radial-gradient(circle, rgba(255,255,255,.075) 0 1px, transparent 1.35px);
+      background-size:36px 36px;
+      mask-image:radial-gradient(ellipse 82% 68% at 50% 18%, #000 0%, transparent 84%);
+      -webkit-mask-image:radial-gradient(ellipse 82% 68% at 50% 18%, #000 0%, transparent 84%);
+    }
+
     /* ===== CATEGORY NAV — LEFT NOTCH ===== */
     .category-nav-wrap {
       position: relative;
@@ -394,77 +431,172 @@
     }
 
     .category-nav-notch {
+      --active-top: 6px;
+      --active-height: 44px;
+      --mouse-x: 50%;
+      --mouse-y: 50%;
       position: fixed;
       left: 24px;
       top: 50%;
       transform: translateY(-50%);
       z-index: 900;
+      width: 182px;
       display: flex;
       flex-direction: column;
       gap: 4px;
       padding: 6px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.03) 60%, rgba(255,255,255,.06));
-      backdrop-filter: blur(24px) saturate(200%);
-      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.11);
+      background:
+        linear-gradient(145deg, rgba(21,23,30,.70), rgba(8,9,13,.56) 52%, rgba(18,19,27,.63)),
+        radial-gradient(160px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,.09), transparent 68%);
+      backdrop-filter: blur(30px) saturate(190%) contrast(112%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%) contrast(112%);
       box-shadow:
-        inset 0 1.5px 0 rgba(255,255,255,.32),
-        inset 0 -1px 0 rgba(0,0,0,.18),
-        0 20px 60px rgba(0,0,0,.4),
-        0 6px 18px rgba(0,0,0,.22);
+        inset 0 1.5px 0 rgba(255,255,255,.20),
+        inset 0 -1px 0 rgba(0,0,0,.34),
+        inset 1px 0 0 rgba(255,255,255,.07),
+        inset -1px 0 0 rgba(255,255,255,.04),
+        0 24px 70px rgba(0,0,0,.44),
+        0 8px 24px rgba(0,0,0,.24);
+      overflow:hidden;
+      transition: box-shadow .35s cubic-bezier(.22,1,.36,1), border-color .35s ease, background .35s ease;
     }
+    .category-nav-notch::before {
+      content:"";
+      position:absolute;
+      left:7px;
+      right:7px;
+      top:var(--active-top);
+      height:var(--active-height);
+      border-radius:18px;
+      background:
+        linear-gradient(145deg, rgba(126,140,255,.18), rgba(255,255,255,.045) 58%, rgba(119,133,255,.13)),
+        radial-gradient(130px 60px at 20% 0%, rgba(255,255,255,.15), transparent 65%);
+      border:1px solid rgba(173,183,255,.16);
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.18),
+        inset 0 -1px 0 rgba(0,0,0,.22),
+        0 5px 18px rgba(79,91,180,.11),
+        0 0 22px rgba(104,118,255,.055);
+      transform: translateY(0);
+      pointer-events:none;
+      transition: top .42s cubic-bezier(.22,1,.36,1), height .42s cubic-bezier(.22,1,.36,1), box-shadow .35s ease, background .35s ease;
+      z-index:0;
+    }
+    .category-nav-notch::after {
+      content:"";
+      position:absolute;
+      inset:-30%;
+      pointer-events:none;
+      background:radial-gradient(180px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,.095), transparent 62%);
+      filter:blur(8px);
+      opacity:.9;
+      z-index:0;
+    }
+    .category-nav-notch:hover {
+      border-color:rgba(255,255,255,.17);
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.26),
+        inset 0 -1px 0 rgba(0,0,0,.36),
+        0 28px 78px rgba(0,0,0,.50),
+        0 10px 28px rgba(0,0,0,.28);
+    }
+    .category-nav-notch .glass-sheen { z-index:1; opacity:.5; }
+    .category-nav-notch .glass-edge-highlight { z-index:2; opacity:.58; }
 
     .cat-tab {
-      display: flex; align-items: center; gap: 9px;
-      padding: 11px 14px;
-      border-radius: 16px;
-      font-size: 12px; font-weight: 600;
-      color: rgba(210,214,235,.45);
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: color .22s, background .22s, border-color .22s, box-shadow .22s, padding .22s;
-      user-select: none;
-      white-space: nowrap;
+      position:relative;
+      z-index:3;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      width:100%;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid transparent;
+      border-radius:18px;
+      font-size:12px;
+      font-weight:650;
+      color:rgba(210,214,235,.42);
+      background:transparent;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+      overflow:hidden;
+      transition:
+        color .24s cubic-bezier(.22,1,.36,1),
+        transform .24s cubic-bezier(.22,1,.36,1),
+        border-color .24s ease,
+        background .24s ease;
     }
-
-    .cat-tab svg {
-      width: 14px; height: 14px;
-      fill: none; stroke: currentColor;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-      flex-shrink: 0;
-      transition: transform .22s;
+    .cat-tab::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:radial-gradient(110px 60px at var(--mouse-x) var(--mouse-y), rgba(255,255,255,.11), transparent 70%);
+      opacity:0;
+      transition:opacity .24s ease;
+      pointer-events:none;
     }
-
-    .cat-tab-label {
-      overflow: hidden;
-      max-width: 0;
-      opacity: 0;
-      transition: max-width .3s cubic-bezier(.22,1,.36,1), opacity .25s;
-      display: inline-block;
+    .cat-tab::after {
+      content:"";
+      position:absolute;
+      left:10px;
+      top:8px;
+      bottom:8px;
+      width:2px;
+      border-radius:999px;
+      background:linear-gradient(180deg, rgba(195,202,255,.75), rgba(110,124,255,.08));
+      opacity:0;
+      filter:blur(.2px);
+      transition:opacity .25s ease, transform .25s cubic-bezier(.22,1,.36,1);
+      transform:scaleY(.55);
+      pointer-events:none;
     }
-
-    .cat-tab:hover .cat-tab-label,
-    .cat-tab.active .cat-tab-label {
-      max-width: 120px;
-      opacity: 1;
-    }
-
     .cat-tab:hover {
-      color: rgba(240,242,255,.75);
-      background: rgba(255,255,255,.08);
-      padding-right: 18px;
+      color:rgba(235,238,255,.83);
+      transform:translateX(1px);
     }
-
+    .cat-tab:hover::before { opacity:1; }
     .cat-tab.active {
-      color: #fff;
-      background: linear-gradient(145deg, rgba(255,255,255,.17), rgba(255,255,255,.06) 60%, rgba(255,255,255,.12));
-      border-color: rgba(255,255,255,.24);
-      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.34), 0 4px 18px rgba(0,0,0,.22);
-      padding-right: 18px;
+      color:rgba(228,232,255,.97);
+      text-shadow:0 0 18px rgba(175,185,255,.12);
     }
-
-    .cat-tab.active svg { transform: scale(1.1); }
+    .cat-tab.active::after { opacity:1; transform:scaleY(1); }
+    .cat-tab svg {
+      width:15px;
+      height:15px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.8;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      flex-shrink:0;
+      opacity:.72;
+      transition:transform .3s cubic-bezier(.22,1,.36,1), opacity .24s ease, filter .24s ease;
+      filter:drop-shadow(0 0 0 rgba(151,164,255,0));
+    }
+    .cat-tab:hover svg { transform:scale(1.08); opacity:.92; }
+    .cat-tab.active svg {
+      transform:scale(1.12);
+      opacity:1;
+      filter:drop-shadow(0 0 7px rgba(151,164,255,.28));
+    }
+    .cat-tab-label {
+      position:relative;
+      z-index:2;
+      overflow:hidden;
+      max-width:110px;
+      opacity:1;
+      transform:translateX(0);
+      transition:max-width .34s cubic-bezier(.22,1,.36,1), opacity .24s ease, transform .34s cubic-bezier(.22,1,.36,1), color .24s ease;
+      display:inline-block;
+    }
+    .cat-tab:not(.active) .cat-tab-label { color:rgba(210,214,235,.40); }
+    .cat-tab:hover:not(.active) .cat-tab-label { color:rgba(235,238,255,.80); }
+    .cat-tab.active .cat-tab-label { color:rgba(231,235,255,.96); }
 
     /* ===== SECTIONS COMMUNES ===== */
     .content-section {
@@ -732,7 +864,27 @@
     .analytics-refresh:hover { transform: rotate(90deg); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.22); }
 
     /* ===== EXECUTORS SECTION ===== */
-    .executor-category{position:relative;z-index:3;max-width:1180px;margin:0 auto 42px;padding:0 32px}.executor-category:last-child{margin-bottom:0}.executor-category-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}.executor-category-rule{height:1px;flex:1;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,0))}.executor-category-badge{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 6px 18px rgba(0,0,0,.16);color:rgba(240,242,255,.85);font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.executor-category-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.executors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}.executor-card{position:relative;overflow:hidden;min-width:0;border-radius:22px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.022) 46%,rgba(255,255,255,.045));backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);-webkit-backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.12),0 4px 24px rgba(0,0,0,.2);padding:18px;display:flex;flex-direction:column;gap:13px;opacity:0;transform:translateY(22px);transition:opacity .48s,transform .48s,border-color .25s,box-shadow .25s}.executor-card.visible{opacity:1;transform:translateY(0)}.executor-card:before{content:"";position:absolute;inset:-18px;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 115% at -2% 50%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse 55% 115% at 102% 50%,rgba(255,255,255,.15),transparent 30%),radial-gradient(ellipse 115% 55% at 50% -2%,rgba(255,255,255,.14),transparent 28%);filter:blur(10px);opacity:.8}.executor-card:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,rgba(255,255,255,.16),transparent 8%,transparent 92%,rgba(255,255,255,.14)),linear-gradient(180deg,rgba(255,255,255,.14),transparent 12%,transparent 86%,rgba(0,0,0,.18)),radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.11),transparent 70%);mix-blend-mode:screen}.executor-card:hover{border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 24px 60px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.28)}.executor-card>*{position:relative;z-index:2}.executor-header{display:flex;align-items:center;gap:12px;min-width:0}.executor-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.14);overflow:hidden;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}.executor-icon img{width:30px;height:30px;object-fit:contain}.executor-icon svg{width:23px;height:23px;fill:none;stroke:rgba(255,255,255,.72);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.executor-title-wrap{min-width:0;flex:1}.executor-name{font-size:15px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-version{font-size:10px;color:rgba(160,170,220,.5);margin-top:3px;font-family:"Courier New",monospace}.executor-status{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);font-size:8.5px;font-weight:800}.executor-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.executor-status-dot.online{background:var(--green);box-shadow:0 0 8px rgba(109,255,154,.6)}.executor-status-dot.offline{background:var(--red);box-shadow:0 0 8px rgba(255,98,111,.6)}.executor-status-dot.unknown{background:rgba(255,210,50,.8);box-shadow:0 0 8px rgba(255,210,50,.4)}.executor-desc{font-size:11.5px;color:rgba(210,214,235,.55);line-height:1.55;min-height:35px}.executor-tags{display:flex;flex-wrap:wrap;gap:6px}.executor-tag{font-size:9px;font-weight:700;letter-spacing:.06em;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:rgba(210,214,235,.65)}.executor-tag.green{border-color:rgba(109,255,154,.22);background:rgba(109,255,154,.05);color:rgba(109,255,154,.86)}.executor-tag.blue{border-color:rgba(88,101,242,.28);background:rgba(88,101,242,.07);color:rgba(150,162,255,.88)}.executor-tag.yellow{border-color:rgba(255,210,50,.22);background:rgba(255,210,50,.05);color:rgba(255,220,80,.82)}.executor-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.executor-spec{min-width:0;padding:9px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015));box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}.executor-spec-label{font-size:7.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.38)}.executor-spec-value{margin-top:4px;font-size:12.5px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}.executor-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.025));color:rgba(240,242,255,.82);font-size:9.5px;font-weight:700;text-decoration:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .16s,border-color .2s,background .2s,color .2s}.executor-link:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.26);background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.05));color:#fff}.executor-link svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.exec-loading,.exec-error{position:relative;z-index:3}.exec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 0}.spinner{width:36px;height:36px;border-radius:50%;border:2.5px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.6);animation:spin .7s linear infinite}.exec-loading-text{font-size:12px;color:rgba(210,214,235,.4);font-weight:500}.exec-error{text-align:center;padding:48px 32px;font-size:13px;color:rgba(255,98,111,.7);font-weight:500}
+    .executor-category{position:relative;z-index:3;max-width:1180px;margin:0 auto 42px;padding:0 32px}.executor-category:last-child{margin-bottom:0}.executor-category-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}.executor-category-rule{height:1px;flex:1;background:linear-gradient(90deg,rgba(130,143,255,.26),rgba(255,255,255,.10) 46%,transparent)}.executor-category-badge{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(107,120,205,.13),rgba(255,255,255,.035) 62%,rgba(86,98,177,.08));backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 6px 18px rgba(0,0,0,.16),0 0 20px rgba(96,110,220,.05);color:rgba(221,226,255,.82);font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.executor-category-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.executors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}.executor-card{position:relative;overflow:hidden;min-width:0;border-radius:22px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.022) 46%,rgba(255,255,255,.045));backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);-webkit-backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.12),0 4px 24px rgba(0,0,0,.2);padding:18px;display:flex;flex-direction:column;gap:13px;opacity:0;transform:translateY(22px);transition:opacity .48s,transform .48s,border-color .25s,box-shadow .25s}.executor-card.visible{opacity:1;transform:translateY(0)}.executor-card:before{content:"";position:absolute;inset:-18px;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 115% at -2% 50%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse 55% 115% at 102% 50%,rgba(255,255,255,.15),transparent 30%),radial-gradient(ellipse 115% 55% at 50% -2%,rgba(255,255,255,.14),transparent 28%);filter:blur(10px);opacity:.8}.executor-card:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,rgba(255,255,255,.16),transparent 8%,transparent 92%,rgba(255,255,255,.14)),linear-gradient(180deg,rgba(255,255,255,.14),transparent 12%,transparent 86%,rgba(0,0,0,.18)),radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.11),transparent 70%);mix-blend-mode:screen}.executor-card:hover{border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 24px 60px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.28)}.executor-card>*{position:relative;z-index:2}.executor-header{display:flex;align-items:center;gap:12px;min-width:0}.executor-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.14);overflow:hidden;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}.executor-icon img{width:30px;height:30px;object-fit:contain}.executor-icon svg{width:23px;height:23px;fill:none;stroke:rgba(255,255,255,.72);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.executor-title-wrap{min-width:0;flex:1}.executor-name{font-size:15px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-version{font-size:10px;color:rgba(160,170,220,.5);margin-top:3px;font-family:"Courier New",monospace}.executor-status{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);font-size:8.5px;font-weight:800}.executor-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.executor-status-dot.online{background:var(--green);box-shadow:0 0 8px rgba(109,255,154,.6)}.executor-status-dot.offline{background:var(--red);box-shadow:0 0 8px rgba(255,98,111,.6)}.executor-status-dot.unknown{background:rgba(255,210,50,.8);box-shadow:0 0 8px rgba(255,210,50,.4)}.executor-desc{font-size:11.5px;color:rgba(210,214,235,.55);line-height:1.55;min-height:35px}.executor-tags{display:flex;flex-wrap:wrap;gap:6px}.executor-tag{font-size:9px;font-weight:700;letter-spacing:.06em;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:rgba(210,214,235,.65)}.executor-tag.green{border-color:rgba(109,255,154,.22);background:rgba(109,255,154,.05);color:rgba(109,255,154,.86)}.executor-tag.blue{border-color:rgba(88,101,242,.28);background:rgba(88,101,242,.07);color:rgba(150,162,255,.88)}.executor-tag.yellow{border-color:rgba(255,210,50,.22);background:rgba(255,210,50,.05);color:rgba(255,220,80,.82)}.executor-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.executor-spec{min-width:0;padding:9px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015));box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}.executor-spec-label{font-size:7.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.38)}.executor-spec-value{margin-top:4px;font-size:12.5px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}.executor-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.025));color:rgba(240,242,255,.82);font-size:9.5px;font-weight:700;text-decoration:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .16s,border-color .2s,background .2s,color .2s}.executor-link:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.26);background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.05));color:#fff}.executor-link svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.exec-loading,.exec-error{position:relative;z-index:3}.exec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 0}.spinner{width:36px;height:36px;border-radius:50%;border:2.5px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.6);animation:spin .7s linear infinite}.exec-loading-text{font-size:12px;color:rgba(210,214,235,.4);font-weight:500}.exec-error{text-align:center;padding:48px 32px;font-size:13px;color:rgba(255,98,111,.7);font-weight:500}
+
+    .executor-category-badge small {
+      margin-left:1px;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:0;
+      color:rgba(185,193,235,.42);
+    }
+    .executor-updated {
+      margin-top:-4px;
+      font-size:8.5px;
+      color:rgba(160,170,220,.28);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .executor-card:hover::after { opacity:1; }
+
     /* ===== OVERLAYS & MODALS ===== */
     .auth-overlay, .profile-modal-overlay, .discord-loading-overlay {
       position: fixed; inset: 0;
@@ -823,9 +975,13 @@
       .account-name { display: none; }
       .category-nav-notch {
         position: relative; left: auto; top: auto; transform: none;
-        flex-direction: row; flex-wrap: wrap; justify-content: center;
-        border-radius: 22px; width: calc(100% - 32px); margin: 0 auto;
+        flex-direction: row; flex-wrap: nowrap; justify-content: stretch;
+        border-radius: 24px; width: calc(100% - 32px); margin: 0 auto;
+        padding: 5px;
       }
+      .category-nav-notch::before { top:5px !important; height:42px !important; left:5px; right:5px; }
+      .cat-tab { flex:1; min-width:0; justify-content:center; }
+      .cat-tab-label { max-width:100px; }
       .scripts-grid { padding: 0 16px; }
       .executor-category { padding: 0 16px; }
       .executors-grid { grid-template-columns: 1fr; }
@@ -1315,14 +1471,41 @@
     };
     let executorsLoaded = false;
 
+    function updateCategoryIndicator() {
+      const notch = document.getElementById("catNotch");
+      const active = document.querySelector(".cat-tab.active");
+      if (!notch || !active) return;
+      notch.style.setProperty("--active-top", (active.offsetTop) + "px");
+      notch.style.setProperty("--active-height", active.offsetHeight + "px");
+    }
+
+    function updateCategoryCursor(e) {
+      const notch = document.getElementById("catNotch");
+      if (!notch) return;
+      const r = notch.getBoundingClientRect();
+      notch.style.setProperty("--mouse-x", ((e.clientX-r.left)/r.width*100).toFixed(1) + "%");
+      notch.style.setProperty("--mouse-y", ((e.clientY-r.top)/r.height*100).toFixed(1) + "%");
+    }
+
     function switchCategory(cat) {
       catTabs.forEach(t => { t.classList.toggle("active", t.dataset.cat === cat); t.setAttribute("aria-selected", t.dataset.cat === cat); });
       Object.entries(sections).forEach(([key, el]) => { if (el) el.classList.toggle("active", key === cat); });
+      requestAnimationFrame(updateCategoryIndicator);
       if (cat === "executors" && !executorsLoaded) { executorsLoaded = true; loadExecutors(); }
       document.getElementById("content").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    catTabs.forEach(t => t.addEventListener("click", () => switchCategory(t.dataset.cat)));
+    catTabs.forEach(t => {
+      t.addEventListener("click", () => switchCategory(t.dataset.cat));
+      t.addEventListener("pointermove", (e) => {
+        const r=t.getBoundingClientRect();
+        t.style.setProperty("--mouse-x", ((e.clientX-r.left)/r.width*100).toFixed(1)+"%");
+        t.style.setProperty("--mouse-y", ((e.clientY-r.top)/r.height*100).toFixed(1)+"%");
+      });
+    });
+    document.getElementById("catNotch")?.addEventListener("pointermove", updateCategoryCursor, { passive:true });
+    window.addEventListener("resize", updateCategoryIndicator);
+    requestAnimationFrame(updateCategoryIndicator);
 
     /* ============================================================
        HERO SCROLL
@@ -1396,40 +1579,174 @@
     });
 
     /* ============================================================
-       EXECUTORS — WEAO API + ENRICHED CATALOG
+       EXECUTORS — OFFICIAL WEAO API
+       Official read endpoint: /status/exploits
     ============================================================ */
-    function statusDotClass(status){const s=String(status||"").toLowerCase();if(["working","online","up","updated"].includes(s))return"online";if(["broken","offline","down","outdated"].includes(s))return"offline";return"unknown";}
-    function statusLabel(status){if(!status)return"Unknown";const s=String(status).toLowerCase();if(["working","online","up","updated"].includes(s))return"Working";if(["broken","offline","down","outdated"].includes(s))return"Broken";return String(status).charAt(0).toUpperCase()+String(status).slice(1);}
-    function tagClass(tag){const t=String(tag||"").toLowerCase();if(["free","gratuit","keyless"].includes(t))return"green";if(["pc","windows","android","mobile","ios","macos","mac"].includes(t))return"blue";if(["partial","beta","experimental","paid"].includes(t))return"yellow";return"";}
-    function firstDefined(obj,keys){for(const key of keys){const value=obj?.[key];if(value!==undefined&&value!==null&&String(value).trim()!=="")return value;}return"";}
-    function statusValue(value){return value===true?"Passed":value===false?"Failed":"—";}
-    function scoreValue(obj,scoreKeys,statusKeys){const raw=firstDefined(obj,scoreKeys);if(raw!=="")return String(raw);for(const key of statusKeys)if(typeof obj?.[key]==="boolean")return statusValue(obj[key]);return"—";}
-    function getExecutorPlatforms(exec){const values=[];[exec.platform,exec.platforms,exec.os,exec.device,exec.devices,exec.supportedPlatforms,exec.supported,exec.tags].forEach(v=>{if(Array.isArray(v))values.push(...v);else if(typeof v==="string")values.push(...v.split(/[|,;/]+/));});return values.map(v=>String(v).trim().toLowerCase()).filter(Boolean);}
-    function classifyExecutor(exec){const values=getExecutorPlatforms(exec);const type=String(firstDefined(exec,["type","category","executorType","kind","mode","extype"])||"").toLowerCase();if(values.some(v=>/ios|iphone|ipad/.test(v)))return"iOS Executor";if(values.some(v=>/android/.test(v)))return"Android Executor";if(values.some(v=>/macos|mac/.test(v)))return"macOS Executor";if(/external|wexternal|mexternal/.test(type))return"Windows External";return"Windows Internal";}
-    function escHtml(str){return String(str??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
-    function safeLink(value){const raw=String(value||"").trim();return/^https?:\/\//i.test(raw)?raw:"";}
-    const executorCategoryIcons={"Windows Internal":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>',"Windows External":'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="9" cy="10" r="1"></circle><path d="M12 10h4M8 14h8"></path></svg>',"Android Executor":'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="3"></rect><path d="M9 6h6M10 18h4"></path></svg>',"iOS Executor":'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"></rect><path d="M10 5h4M11 18.5h2"></path></svg>',"macOS Executor":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>'};
-    function buildExecutorCard(exec,index){
-      const name=firstDefined(exec,["name","title","exploitName"])||"Executor";const status=firstDefined(exec,["status","exploitStatus"])||(exec.updateStatus===true?"Updated":"Unknown");const version=firstDefined(exec,["version","currentVersion"]);const desc=firstDefined(exec,["description","about"])||"No description available.";const icon=safeLink(firstDefined(exec,["icon","image","logo"]));const platform=classifyExecutor(exec);
-      const sUNC=scoreValue(exec,["sUNC","sunc","sUNCScore","suncScore","s_unc","sunc_percentage"],["suncStatus"]);const UNC=scoreValue(exec,["UNC","unc","uncScore","uncCompatibility","unc_percentage"],["uncStatus"]);
-      const website=safeLink(firstDefined(exec,["websitelink","officialWebsite","official","website","site","homepage","url","link"]));const discord=safeLink(firstDefined(exec,["discordlink","discord","discordLink","discord_url","discordUrl","discordInvite"]));const install=safeLink(firstDefined(exec,["downloadLink","download_link","downloadUrl","download","v3rmlink","install","installation"]));const price=firstDefined(exec,["price","cost","pricing","payment"]);const detected=typeof exec.detected==="boolean"?(exec.detected?"Detected":"Not detected"):"—";
-      let tags=exec.tags||exec.supported||[];if(typeof tags==="string")tags=tags.split(",").map(v=>v.trim()).filter(Boolean);if(!Array.isArray(tags))tags=[];if(exec.free===true&&!tags.some(t=>String(t).toLowerCase()==="free"))tags.unshift("Free");if(!tags.some(t=>String(t).toLowerCase()===platform.toLowerCase()))tags.push(platform);
-      const tagsHtml=tags.slice(0,5).map(t=>`<span class="executor-tag ${tagClass(t)}">${escHtml(t)}</span>`).join("");
-      const links=[website&&`<a class="executor-link" href="${escHtml(website)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l2-2a5 5 0 0 0-7.07-7.07l-1.15 1.15"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-2 2a5 5 0 0 0 7.07 7.07l1.15-1.15"></path></svg>Official</a>`,discord&&`<a class="executor-link" href="${escHtml(discord)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M19.5 5.4a16 16 0 0 0-4-1.3l-.5 1a14 14 0 0 0-5.9 0l-.5-1a16 16 0 0 0-4 1.3"></path><path d="M4.5 15.4A13.8 13.8 0 0 0 7.9 17c2.7 1 5.5 1 8.2 0a13.8 13.8 0 0 0 3.4-1.6"></path></svg>Discord</a>`,install&&`<a class="executor-link" href="${escHtml(install)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><path d="M4 20h16"></path></svg>Install</a>`].filter(Boolean).join("");
-      const specs=[["sUNC",sUNC],["UNC",UNC],["Detected",detected],["Price",price||"—"]];const specsHtml=specs.map(([label,value])=>`<div class="executor-spec"><div class="executor-spec-label">${label}</div><div class="executor-spec-value">${escHtml(value)}</div></div>`).join("");
-      return `<article class="executor-card" data-delay="${index*45}"><div class="executor-header"><div class="executor-icon">${icon?`<img src="${escHtml(icon)}" alt="" loading="lazy" onerror="this.style.display='none'">`:'<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'}</div><div class="executor-title-wrap"><div class="executor-name">${escHtml(name)}</div>${version?`<div class="executor-version">v${escHtml(version)}</div>`:""}</div><div class="executor-status"><span class="executor-status-dot ${statusDotClass(status)}"></span>${escHtml(statusLabel(status))}</div></div><div class="executor-desc">${escHtml(desc)}</div>${tagsHtml?`<div class="executor-tags">${tagsHtml}</div>`:""}<div class="executor-specs">${specsHtml}</div>${links?`<div class="executor-links">${links}</div>`:""}</article>`;
+    const WEAO_API_ENDPOINTS = [
+      "https://api.weao.xyz/status/exploits",
+      "https://weao.xyz/api/status/exploits",
+      "https://weao.gg/api/status/exploits"
+    ];
+
+    function statusDotClass(status){
+      const s=String(status||"").toLowerCase();
+      if(["working","online","up","updated","true"].includes(s))return"online";
+      if(["broken","offline","down","outdated","false"].includes(s))return"offline";
+      return"unknown";
     }
+    function statusLabel(status){
+      if(typeof status === "boolean") return status ? "Updated" : "Outdated";
+      const s=String(status||"").toLowerCase();
+      if(["working","online","up","updated"].includes(s))return"Working";
+      if(["broken","offline","down","outdated"].includes(s))return"Outdated";
+      if(!s)return"Unknown";
+      return s.charAt(0).toUpperCase()+s.slice(1);
+    }
+    function tagClass(tag){
+      const t=String(tag||"").toLowerCase();
+      if(["free","gratuit","keyless","updated","working"].includes(t))return"green";
+      if(["pc","windows","android","mobile","ios","macos","mac"].includes(t))return"blue";
+      if(["partial","beta","experimental","paid","detected"].includes(t))return"yellow";
+      return"";
+    }
+    function firstDefined(obj,keys){
+      for(const key of keys){
+        const value=obj?.[key];
+        if(value!==undefined&&value!==null&&String(value).trim()!=="")return value;
+      }
+      return"";
+    }
+    function scoreValue(obj,keys,statusKey){
+      for(const key of keys){
+        if(obj?.[key]!==undefined&&obj?.[key]!==null&&String(obj[key]).trim()!=="") return String(obj[key]);
+      }
+      if(typeof obj?.[statusKey] === "boolean") return obj[statusKey] ? "Passed" : "Failed";
+      return "—";
+    }
+    function platformLabel(exec){
+      const raw=String(firstDefined(exec,["platform","os","device"])||"").toLowerCase();
+      if(/ios|iphone|ipad/.test(raw)) return "iOS";
+      if(/android/.test(raw)) return "Android";
+      if(/mac/.test(raw)) return "macOS";
+      return "Windows";
+    }
+    function classifyExecutor(exec){
+      const platform=platformLabel(exec);
+      const type=String(firstDefined(exec,["type","extype","executorType","kind","mode"])||"").toLowerCase();
+      if(platform==="iOS")return"iOS Executor";
+      if(platform==="Android")return"Android Executor";
+      if(platform==="macOS")return"macOS Executor";
+      if(/external/.test(type))return"Windows External";
+      return"Windows Internal";
+    }
+    function escHtml(str){return String(str??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#39;");}
+    function safeLink(value){const raw=String(value||"").trim();return/^https?:\/\//i.test(raw)?raw:"";}
+    function formatUpdated(value){
+      if(!value) return "Unknown update date";
+      const d=new Date(value);
+      return Number.isNaN(d.getTime()) ? String(value) : "Updated " + d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+    }
+    const executorCategoryIcons={
+      "Windows Internal":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>',
+      "Windows External":'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="9" cy="10" r="1"></circle><path d="M12 10h4M8 14h8"></path></svg>',
+      "Android Executor":'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="3"></rect><path d="M9 6h6M10 18h4"></path></svg>',
+      "iOS Executor":'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"></rect><path d="M10 5h4M11 18.5h2"></path></svg>',
+      "macOS Executor":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>'
+    };
+
+    function buildExecutorCard(exec,index){
+      const name=firstDefined(exec,["name","title","exploitName"])||"Executor";
+      const version=firstDefined(exec,["version","currentVersion"]);
+      const updateStatus=exec.updateStatus;
+      const status=firstDefined(exec,["status","exploitStatus"]) || updateStatus;
+      const platform=platformLabel(exec);
+      const type=firstDefined(exec,["type","extype"])||"Executor";
+      const sUNC=scoreValue(exec,["sUNC","sunc","suncScore","sUNCScore","sunc_percentage"],"suncStatus");
+      const UNC=scoreValue(exec,["UNC","unc","uncScore","uncCompatibility","unc_percentage"],"uncStatus");
+      const detected=typeof exec.detected==="boolean"?(exec.detected?"Detected":"Not detected"):"—";
+      const payment=String(firstDefined(exec,["payment","price","cost","pricing"])||"");
+      const price=exec.free===true?"Free":(payment||"—");
+      const website=safeLink(firstDefined(exec,["websitelink","website","officialWebsite","site","homepage"]));
+      const discord=safeLink(firstDefined(exec,["discordlink","discord","discordLink"]));
+      const install=safeLink(firstDefined(exec,["v3rmlink","downloadLink","download_url","downloadUrl","installation","install","purchaselink"]));
+      const purchase=safeLink(firstDefined(exec,["purchaselink"]));
+      const updated=formatUpdated(firstDefined(exec,["updatedDate","lastUpdated","updatedAt"]));
+      const tags=[];
+      if(exec.free===true)tags.push("Free");
+      tags.push(platform);
+      if(exec.elementVerified===true || exec.elementCertified===true)tags.push("Verified");
+      if(exec.beta===true)tags.push("Beta");
+      if(exec.indev===true)tags.push("In development");
+      if(exec.detected===false)tags.push("Undetected");
+      const tagsHtml=tags.slice(0,5).map(t=>`<span class="executor-tag ${tagClass(t)}">${escHtml(t)}</span>`).join("");
+      const links=[
+        website&&`<a class="executor-link" href="${escHtml(website)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l2-2a5 5 0 0 0-7.07-7.07l-1.15 1.15"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-2 2a5 5 0 0 0 7.07 7.07l1.15-1.15"></path></svg>Website</a>`,
+        discord&&`<a class="executor-link" href="${escHtml(discord)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M19.5 5.4a16 16 0 0 0-4-1.3l-.5 1a14 14 0 0 0-5.9 0l-.5-1a16 16 0 0 0-4 1.3"></path><path d="M4.5 15.4A13.8 13.8 0 0 0 7.9 17c2.7 1 5.5 1 8.2 0a13.8 13.8 0 0 0 3.4-1.6"></path></svg>Discord</a>`,
+        install&&`<a class="executor-link" href="${escHtml(install)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><path d="M4 20h16"></path></svg>${purchase&&install===purchase?"Purchase":"Install"}</a>`
+      ].filter(Boolean).join("");
+      const specs=[
+        ["sUNC",sUNC],
+        ["UNC",UNC],
+        ["Status",statusLabel(status)],
+        ["Price",price]
+      ];
+      const specsHtml=specs.map(([label,value])=>`<div class="executor-spec"><div class="executor-spec-label">${label}</div><div class="executor-spec-value">${escHtml(value)}</div></div>`).join("");
+      const desc=`${platform} · ${String(type)}` + (detected!=="—" ? ` · ${detected}` : "");
+      return `<article class="executor-card" data-delay="${index*45}"><div class="executor-header"><div class="executor-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"></rect><path d="M8 12h8M12 8v8"></path></svg></div><div class="executor-title-wrap"><div class="executor-name">${escHtml(name)}</div>${version?`<div class="executor-version">v${escHtml(String(version).replace(/^v/i,""))}</div>`:""}</div><div class="executor-status"><span class="executor-status-dot ${statusDotClass(status)}"></span>${escHtml(statusLabel(status))}</div></div><div class="executor-desc">${escHtml(desc)}</div>${tagsHtml?`<div class="executor-tags">${tagsHtml}</div>`:""}<div class="executor-specs">${specsHtml}</div>${links?`<div class="executor-links">${links}</div>`:""}<div class="executor-updated">${escHtml(updated)}</div></article>`;
+    }
+
+    function unwrapWeaoResponse(json){
+      if(Array.isArray(json)) return json;
+      if(Array.isArray(json?.exploits)) return json.exploits;
+      if(Array.isArray(json?.results)) return json.results;
+      if(Array.isArray(json?.data)) return json.data;
+      if(Array.isArray(json?.data?.exploits)) return json.data.exploits;
+      return [];
+    }
+
+    async function fetchWeaoExecutors(){
+      let lastError="WEAO API unavailable.";
+      for(const url of WEAO_API_ENDPOINTS){
+        try{
+          const response=await fetch(url,{method:"GET",mode:"cors",cache:"no-store",headers:{"Accept":"application/json"},signal:AbortSignal.timeout(12000)});
+          if(!response.ok){ lastError=`WEAO returned HTTP ${response.status}.`; continue; }
+          const json=await response.json();
+          const list=unwrapWeaoResponse(json);
+          if(list.length) return list;
+          lastError="WEAO returned an empty executor list.";
+        }catch(error){
+          lastError=error?.message||lastError;
+        }
+      }
+      throw new Error(lastError);
+    }
+
     async function loadExecutors(){
-      const loading=document.getElementById("execLoading"),error=document.getElementById("execError");
+      const loading=document.getElementById("execLoading"),error=document.getElementById("execError"),host=document.getElementById("executorsGrid");
       try{
-        const PROXY_ENDPOINTS=["https://corsproxy.io/?https://weao.xyz/api/status/exploits","https://api.allorigins.win/raw?url="+encodeURIComponent("https://weao.xyz/api/status/exploits")];let data=null,lastErr="All executor data endpoints failed.";
-        for(const url of PROXY_ENDPOINTS){try{const res=await fetch(url,{signal:AbortSignal.timeout(10000),headers:{"Accept":"application/json"}});if(!res.ok)continue;const json=await res.json();const list=Array.isArray(json)?json:(json.exploits||json.data||json.results||Object.values(json));if(Array.isArray(list)&&list.length){data=list;break;}}catch(e){lastErr=e?.message||lastErr;}}
-        if(!data)throw new Error(lastErr);
-        const groups=new Map([["Windows Internal",[]],["iOS Executor",[]],["Android Executor",[]],["Windows External",[]],["macOS Executor",[]]]);data.forEach(ex=>{const cat=classifyExecutor(ex);if(!groups.has(cat))groups.set(cat,[]);groups.get(cat).push(ex);});
-        const ordered=["Windows Internal","iOS Executor","Android Executor","Windows External","macOS Executor"];const html=ordered.filter(k=>groups.get(k)?.length).map(category=>{const items=groups.get(category);return `<section class="executor-category"><div class="executor-category-head"><div class="executor-category-badge">${executorCategoryIcons[category]||""}${escHtml(category)}<span style="opacity:.45">${items.length}</span></div><div class="executor-category-rule"></div></div><div class="executors-grid">${items.map((ex,i)=>buildExecutorCard(ex,i)).join("")}</div></section>`;}).join("");
-        document.getElementById("executorsGrid").outerHTML=`<div id="executorsGrid">${html}</div>`;loading.style.display="none";document.querySelectorAll(".executor-card").forEach(card=>{const d=parseInt(card.dataset.delay||"0",10);setTimeout(()=>card.classList.add("visible"),d);});
-      }catch(err){loading.style.display="none";error.style.display="block";error.innerHTML=`<svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:rgba(255,98,111,.5);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 12px;display:block"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>Unable to load executors.<br><span style="font-size:11px;color:rgba(160,170,220,.4)">${escHtml(err?.message||"Unknown error")}</span><br><br><button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Retry</button>`;}}
-    window.retryExecutors=function(){const loading=document.getElementById("execLoading"),error=document.getElementById("execError");if(loading)loading.style.display="flex";if(error)error.style.display="none";loadExecutors();};
+        const data=await fetchWeaoExecutors();
+        const groups=new Map([["Windows Internal",[]],["Windows External",[]],["iOS Executor",[]],["Android Executor",[]],["macOS Executor",[]]]);
+        data.forEach(ex=>{const cat=classifyExecutor(ex);if(!groups.has(cat))groups.set(cat,[]);groups.get(cat).push(ex);});
+        const ordered=["Windows Internal","Windows External","iOS Executor","Android Executor","macOS Executor"];
+        const html=ordered.filter(k=>groups.get(k)?.length).map(category=>{
+          const items=groups.get(category).sort((a,b)=>String(a.title||a.name||"").localeCompare(String(b.title||b.name||"")));
+          return `<section class="executor-category"><div class="executor-category-head"><div class="executor-category-badge">${executorCategoryIcons[category]||""}<span>${escHtml(category)}</span><small>${items.length}</small></div><div class="executor-category-rule"></div></div><div class="executors-grid">${items.map((ex,i)=>buildExecutorCard(ex,i)).join("")}</div></section>`;
+        }).join("");
+        if(host){host.outerHTML=`<div id="executorsGrid">${html}</div>`;}
+        loading.style.display="none";
+        document.querySelectorAll(".executor-card").forEach(card=>{setTimeout(()=>card.classList.add("visible"),parseInt(card.dataset.delay||"0",10));});
+      }catch(err){
+        loading.style.display="none";
+        error.style.display="block";
+        error.innerHTML=`<div style="font-size:13px;color:rgba(255,255,255,.72);margin-bottom:8px">Unable to load WEAO data.</div><div style="font-size:11px;color:rgba(160,170,220,.42)">${escHtml(err?.message||"Unknown error")}</div><br><button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Retry</button>`;
+      }
+    }
+    window.retryExecutors=function(){
+      const loading=document.getElementById("execLoading"),error=document.getElementById("execError");
+      if(loading)loading.style.display="flex";
+      if(error)error.style.display="none";
+      loadExecutors();
+    };
     /* ============================================================
        AUTH INIT
     ============================================================ */
