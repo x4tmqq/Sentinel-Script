@@ -379,50 +379,92 @@
     .availability-link:hover { transform: translateY(-3px) scale(1.05); }
     .availability-link img { width: 23px; height: 23px; object-fit: contain; border-radius: 6px; }
 
-    /* ===== CATEGORY NAV ===== */
+    /* ===== CATEGORY NAV — LEFT NOTCH ===== */
     .category-nav-wrap {
       position: relative;
       background: #030304;
-      padding: 36px 0 0;
-      display: flex;
-      justify-content: center;
+      padding: 48px 0 0;
       z-index: 10;
     }
 
-    .category-nav {
+    /* Left floating notch */
+    .category-nav-outer {
+      position: relative;
       display: flex;
-      gap: 6px;
-      padding: 5px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 8px 32px rgba(0,0,0,.28);
+    }
+
+    .category-nav-notch {
+      position: fixed;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 6px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.03) 60%, rgba(255,255,255,.06));
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.32),
+        inset 0 -1px 0 rgba(0,0,0,.18),
+        0 20px 60px rgba(0,0,0,.4),
+        0 6px 18px rgba(0,0,0,.22);
     }
 
     .cat-tab {
-      display: flex; align-items: center; gap: 7px;
-      padding: 9px 20px;
-      border-radius: 999px;
-      font-size: 12.5px; font-weight: 600;
-      color: rgba(210,214,235,.5);
+      display: flex; align-items: center; gap: 9px;
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(210,214,235,.45);
       cursor: pointer;
       border: 1px solid transparent;
-      transition: color .22s, background .22s, border-color .22s, box-shadow .22s;
+      transition: color .22s, background .22s, border-color .22s, box-shadow .22s, padding .22s;
       user-select: none;
+      white-space: nowrap;
     }
 
-    .cat-tab svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .cat-tab svg {
+      width: 14px; height: 14px;
+      fill: none; stroke: currentColor;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+      flex-shrink: 0;
+      transition: transform .22s;
+    }
 
-    .cat-tab:hover { color: rgba(240,242,255,.8); background: rgba(255,255,255,.07); }
+    .cat-tab-label {
+      overflow: hidden;
+      max-width: 0;
+      opacity: 0;
+      transition: max-width .3s cubic-bezier(.22,1,.36,1), opacity .25s;
+      display: inline-block;
+    }
+
+    .cat-tab:hover .cat-tab-label,
+    .cat-tab.active .cat-tab-label {
+      max-width: 120px;
+      opacity: 1;
+    }
+
+    .cat-tab:hover {
+      color: rgba(240,242,255,.75);
+      background: rgba(255,255,255,.08);
+      padding-right: 18px;
+    }
 
     .cat-tab.active {
       color: #fff;
-      background: linear-gradient(145deg, rgba(255,255,255,.15), rgba(255,255,255,.05) 60%, rgba(255,255,255,.1));
-      border-color: rgba(255,255,255,.22);
-      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.32), 0 4px 16px rgba(0,0,0,.2);
+      background: linear-gradient(145deg, rgba(255,255,255,.17), rgba(255,255,255,.06) 60%, rgba(255,255,255,.12));
+      border-color: rgba(255,255,255,.24);
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.34), 0 4px 18px rgba(0,0,0,.22);
+      padding-right: 18px;
     }
+
+    .cat-tab.active svg { transform: scale(1.1); }
 
     /* ===== SECTIONS COMMUNES ===== */
     .content-section {
@@ -791,7 +833,6 @@
     .executor-download:hover { transform: translateY(-1px); background: linear-gradient(160deg, rgba(255,255,255,.22), rgba(255,255,255,.07) 60%, rgba(255,255,255,.14)); border-color: rgba(255,255,255,.32); }
     .executor-download svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Loading state executors */
     .exec-loading, .deob-loading {
       position: relative; z-index: 3;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -815,7 +856,7 @@
       font-size: 13px; color: rgba(255,98,111,.7); font-weight: 500;
     }
 
-    /* ===== DEOBFUSCATOR SECTION ===== */
+    /* ===== OBFUSCATOR SECTION ===== */
     .deob-container {
       position: relative; z-index: 3;
       max-width: 860px; margin: 0 auto;
@@ -852,6 +893,17 @@
     .deob-title { font-size: 16px; font-weight: 700; }
     .deob-subtitle { font-size: 11px; color: rgba(160,170,220,.45); margin-top: 2px; }
 
+    /* Credits bar */
+    .obf-credits-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; border-radius: 12px; margin-bottom: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      font-size: 11px; color: rgba(160,170,220,.55);
+    }
+    .obf-credits-val { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); font-variant-numeric: tabular-nums; }
+    .obf-cooldown { font-size: 10px; color: rgba(255,210,50,.65); }
+
     .deob-textarea-wrap { position: relative; }
     .deob-textarea {
       width: 100%; min-height: 180px;
@@ -879,6 +931,40 @@
     }
 
     .deob-output.visible { display: block; }
+
+    /* Options grid */
+    .obf-options-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .obf-option {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      cursor: pointer; transition: background .2s, border-color .2s;
+    }
+
+    .obf-option:hover { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.14); }
+    .obf-option.active { background: rgba(88,101,242,.12); border-color: rgba(88,101,242,.35); }
+
+    .obf-option-check {
+      width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
+      border: 1.5px solid rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s;
+    }
+
+    .obf-option.active .obf-option-check {
+      background: rgba(88,101,242,.8); border-color: rgba(88,101,242,1);
+    }
+
+    .obf-option-check svg { width: 10px; height: 10px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .15s; }
+    .obf-option.active .obf-option-check svg { opacity: 1; }
+
+    .obf-option-label { font-size: 11.5px; font-weight: 600; color: rgba(210,214,235,.7); }
+    .obf-option-desc { font-size: 9.5px; color: rgba(160,170,220,.4); margin-top: 1px; }
 
     .deob-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 
@@ -1009,14 +1095,18 @@
       .script-card { grid-template-columns: 40% minmax(0,1fr); }
       .card-body { padding: 26px 24px; }
       .executors-grid { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); }
+      .category-nav-notch { left: 12px; }
     }
 
     @media (max-width: 680px) {
       .top-island { top: 10px; padding: 6px 8px; max-width: calc(100vw - 12px); min-height: 50px; }
       .island-social { width: 27px; height: 27px; }
       .account-name { display: none; }
-      .category-nav { flex-wrap: wrap; justify-content: center; border-radius: 22px; }
-      .cat-tab { padding: 8px 14px; font-size: 11.5px; }
+      .category-nav-notch {
+        position: relative; left: auto; top: auto; transform: none;
+        flex-direction: row; flex-wrap: wrap; justify-content: center;
+        border-radius: 22px; width: calc(100% - 32px); margin: 0 auto;
+      }
       .scripts-grid, .deob-container { padding: 0 16px; }
       .executors-grid { padding: 0 16px; grid-template-columns: 1fr; }
       .script-card { grid-template-columns: 1fr; }
@@ -1029,6 +1119,7 @@
       .analytics-live { display: none; }
       .notification-container { right: 14px; bottom: 14px; left: 14px; align-items: stretch; }
       .notification { min-width: 0; width: 100%; max-width: none; }
+      .obf-options-grid { grid-template-columns: 1fr; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1203,23 +1294,25 @@
     </div>
   </section>
 
-  <!-- ===== CATEGORY NAV ===== -->
-  <div class="category-nav-wrap" id="content">
-    <nav class="category-nav" role="tablist" aria-label="Categories">
-      <button class="cat-tab active" role="tab" data-cat="scripts" aria-selected="true">
-        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        Scripts
-      </button>
-      <button class="cat-tab" role="tab" data-cat="executors" aria-selected="false">
-        <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        Executors
-      </button>
-      <button class="cat-tab" role="tab" data-cat="deobfuscators" aria-selected="false">
-        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
-        Deobfuscators
-      </button>
-    </nav>
-  </div>
+  <!-- ===== CATEGORY NAV — LEFT NOTCH ===== -->
+  <div id="content" style="position:relative;background:#030304;padding-top:1px"></div>
+
+  <nav class="category-nav-notch glass" role="tablist" aria-label="Categories" id="catNotch">
+    <div class="glass-sheen"></div>
+    <div class="glass-edge-highlight"></div>
+    <button class="cat-tab active" role="tab" data-cat="scripts" aria-selected="true">
+      <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+      <span class="cat-tab-label">Scripts</span>
+    </button>
+    <button class="cat-tab" role="tab" data-cat="executors" aria-selected="false">
+      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      <span class="cat-tab-label">Executors</span>
+    </button>
+    <button class="cat-tab" role="tab" data-cat="obfuscator" aria-selected="false">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+      <span class="cat-tab-label">Obfuscator</span>
+    </button>
+  </nav>
 
   <!-- ===== SECTION : SCRIPTS ===== -->
   <section class="content-section active" id="section-scripts">
@@ -1323,7 +1416,7 @@
             </div>
             <div class="key-reveal glass" id="keyReveal_bloxstrike" style="display:none;padding:10px 46px 10px 14px;border-radius:13px;">
               <span class="key-reveal-text" id="keyText_bloxstrike" style="font-family:'Courier New',monospace;font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0"></span>
-              <button type="button" class="key-reveal-copy" id="keyCopyBtn_bloxstrike" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:#fff">
+              <button type="button" class="key-reveal-copy" id="keyCopyBtn_bloxstrike" style="position:absolute;right:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:#fff; right:8px; top:50%; position:absolute">
                 <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
               </button>
             </div>
@@ -1369,47 +1462,82 @@
     <div class="section-title">Run your scripts.</div>
     <div class="exec-loading" id="execLoading">
       <div class="spinner"></div>
-      <div class="exec-loading-text">Chargement des executors…</div>
+      <div class="exec-loading-text">Loading executors…</div>
     </div>
     <div class="exec-error" id="execError" style="display:none"></div>
     <div class="executors-grid" id="executorsGrid" style="display:none"></div>
   </section>
 
-  <!-- ===== SECTION : DEOBFUSCATORS ===== -->
-  <section class="content-section" id="section-deobfuscators">
+  <!-- ===== SECTION : OBFUSCATOR ===== -->
+  <section class="content-section" id="section-obfuscator">
     <div class="dark-ambient"><div class="spotlight"></div></div>
-    <div class="section-label">Lua deobfuscation</div>
-    <div class="section-title">Decode your scripts.</div>
+    <div class="section-label">Lua protection</div>
+    <div class="section-title">Protect your scripts.</div>
 
     <div class="deob-container">
-      <!-- Info card -->
+      <!-- Main card -->
       <div class="deob-card">
         <div class="deob-header">
           <div class="deob-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
           </div>
           <div>
-            <div class="deob-title">Antilua Deobfuscator</div>
-            <div class="deob-subtitle">api.antilua.xyz — powered by obf.antilua.xyz</div>
+            <div class="deob-title">AntiLua Obfuscator</div>
+            <div class="deob-subtitle">api.antilua.xyz — Powered by obf.antilua.xyz</div>
           </div>
         </div>
 
+        <!-- Credits bar -->
+        <div class="obf-credits-bar" id="obfCreditsBar">
+          <span>Credits remaining</span>
+          <span class="obf-credits-val" id="obfCreditsVal">—</span>
+          <span class="obf-cooldown" id="obfCooldown"></span>
+        </div>
+
+        <!-- Options -->
+        <div class="obf-options-grid" id="obfOptions">
+          <label class="obf-option" data-param="map">
+            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div><div class="obf-option-label">AntiTamper</div><div class="obf-option-desc">Detects hooks & memory edits</div></div>
+          </label>
+          <label class="obf-option" data-param="2step">
+            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div><div class="obf-option-label">Double Pass</div><div class="obf-option-desc">2x obfuscation — larger output</div></div>
+          </label>
+          <label class="obf-option active" data-param="encryptStrings">
+            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div><div class="obf-option-label">Intense VM</div><div class="obf-option-desc">Strong VM & string protection</div></div>
+          </label>
+          <label class="obf-option" data-param="proxifyFunctions">
+            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div><div class="obf-option-label">Proxify Functions</div><div class="obf-option-desc">Function proxification layer</div></div>
+          </label>
+          <label class="obf-option" data-param="fastOpcode">
+            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+            <div><div class="obf-option-label">Fast Runtime</div><div class="obf-option-desc">Speed over opcode hardening</div></div>
+          </label>
+        </div>
+
         <div class="deob-textarea-wrap">
-          <textarea class="deob-textarea" id="deobInput" placeholder="Colle ici ton script Lua obfusqué..."></textarea>
+          <textarea class="deob-textarea" id="deobInput" placeholder="Paste your Lua script here to obfuscate it..."></textarea>
         </div>
 
         <div class="deob-actions">
           <button class="btn-deob btn-deob-primary" id="deobRunBtn" type="button">
-            <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            Déobfusquer
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Obfuscate
           </button>
           <button class="btn-deob" id="deobCopyBtn" type="button" style="display:none">
             <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copier le résultat
+            Copy result
+          </button>
+          <button class="btn-deob" id="deobDownloadBtn" type="button" style="display:none">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download
           </button>
           <button class="btn-deob" id="deobClearBtn" type="button">
             <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
-            Effacer
+            Clear
           </button>
         </div>
 
@@ -1432,15 +1560,18 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
           </div>
           <div>
-            <div class="deob-title">À propos de l'API</div>
-            <div class="deob-subtitle">Documentation — obf.antilua.xyz/docs</div>
+            <div class="deob-title">About AntiLua API</div>
+            <div class="deob-subtitle">obf.antilua.xyz — API reference</div>
           </div>
         </div>
         <div class="deob-endpoints-info">
-          Les requêtes sont envoyées à <code>https://obf.antilua.xyz/api/deobfuscate</code> via un proxy CORS.<br>
-          Méthode : <code>POST</code> · Content-Type : <code>application/json</code><br>
-          Body : <code>{ "code": "..." }</code><br><br>
-          ⚠️ Si l'API retourne une erreur CORS, activez un proxy ou utilisez l'extension de navigateur CORS Unblock.
+          Requests are sent to <code>https://api.antilua.xyz/v1/obfuscate</code><br>
+          Method: <code>POST</code> · Content-Type: <code>text/plain</code><br>
+          Auth: <code>Authorization: Bearer YOUR_API_KEY</code><br>
+          Body: <code>Raw Luau source (max 5 MB)</code><br>
+          Query params: <code>?map=true&amp;2step=true&amp;encryptStrings=true&amp;proxifyFunctions=true&amp;fastOpcode=true</code><br><br>
+          Response: <code>{ "status": true, "code": "...", "credits": 49, "taken": 1842 }</code><br><br>
+          ⚠ Rate limit: 30s cooldown per request. Credits reset monthly.
         </div>
       </div>
     </div>
@@ -1571,7 +1702,11 @@
        CATEGORY NAV
     ============================================================ */
     const catTabs = document.querySelectorAll(".cat-tab");
-    const sections = { scripts: document.getElementById("section-scripts"), executors: document.getElementById("section-executors"), deobfuscators: document.getElementById("section-deobfuscators") };
+    const sections = {
+      scripts: document.getElementById("section-scripts"),
+      executors: document.getElementById("section-executors"),
+      obfuscator: document.getElementById("section-obfuscator")
+    };
     let executorsLoaded = false;
 
     function switchCategory(cat) {
@@ -1607,7 +1742,7 @@
       if (!button || button.disabled) return;
       const script = button.getAttribute("data-script");
       const name = button.getAttribute("data-script-name") || "Script";
-      if (!script) { showNotification("Copy failed", "Le contenu du script est vide.", "error"); return; }
+      if (!script) { showNotification("Copy failed", "Script content is empty.", "error"); return; }
       const original = button.innerHTML;
       button.disabled = true;
       setButtonVisual(button, "Copying…", '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>');
@@ -1615,11 +1750,11 @@
       if (copied) {
         button.classList.add("is-success");
         setButtonVisual(button, "Copied!", '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>');
-        showNotification("Script copied", name + " copié dans le presse-papier.", "success");
+        showNotification("Script copied", name + " copied to clipboard.", "success");
         setTimeout(() => { button.classList.remove("is-success"); button.innerHTML = original; button.disabled = false; }, 1800);
       } else {
         button.innerHTML = original; button.disabled = false;
-        showNotification("Copy failed", "Le navigateur a bloqué l'accès au presse-papier.", "error");
+        showNotification("Copy failed", "Browser blocked clipboard access.", "error");
       }
     }
 
@@ -1650,49 +1785,55 @@
         btn.classList.add("is-changing");
         window.setTimeout(() => btn.classList.remove("is-changing"), 180);
         paintStaticStats(root);
-        showNotification("Stats refreshed", "Les statistiques enregistrées ont été réappliquées.", "success");
+        showNotification("Stats refreshed", "Stored stats have been re-applied.", "success");
       });
     });
 
     /* ============================================================
        EXECUTORS — WEAO API
-       https://weao.xyz/api/executors  (public endpoint, no key)
+       Endpoint: https://weao.xyz/api/status/exploits
+       Required header: User-Agent: WEAO-3PService
+       CORS proxy used to bypass browser restrictions
     ============================================================ */
     function statusDotClass(status) {
       if (!status) return "unknown";
       const s = status.toLowerCase();
-      if (s === "online" || s === "working" || s === "up") return "online";
-      if (s === "offline" || s === "down" || s === "broken") return "offline";
+      if (["working","online","up","updated"].includes(s)) return "online";
+      if (["broken","offline","down","outdated"].includes(s)) return "offline";
       return "unknown";
     }
 
     function statusLabel(status) {
       if (!status) return "Unknown";
       const s = status.toLowerCase();
-      if (s === "online" || s === "working" || s === "up") return "Working";
-      if (s === "offline" || s === "down" || s === "broken") return "Broken";
+      if (["working","online","up","updated"].includes(s)) return "Working";
+      if (["broken","offline","down","outdated"].includes(s)) return "Broken";
       return status.charAt(0).toUpperCase() + status.slice(1);
     }
 
     function tagClass(tag) {
       tag = (tag || "").toLowerCase();
       if (["free","gratuit"].includes(tag)) return "green";
-      if (["pc","windows","android","mobile"].includes(tag)) return "blue";
-      if (["partial","beta","experimental"].includes(tag)) return "yellow";
+      if (["pc","windows","android","mobile","ios"].includes(tag)) return "blue";
+      if (["partial","beta","experimental","paid"].includes(tag)) return "yellow";
       return "";
     }
 
     function buildExecutorCard(exec, index) {
-      const delay = (index * 60) + "ms";
-      const dl = exec.download_link || exec.downloadLink || exec.link || exec.url || "";
-      const tags = exec.tags || exec.features || exec.compatibility || [];
-      const status = exec.status || exec.exploitStatus || exec.exploit_status || "";
-      const version = exec.version || exec.currentVersion || exec.current_version || "";
-      const desc = exec.description || exec.desc || exec.about || "";
-      const name = exec.name || exec.exploitName || exec.exploit_name || "Executor";
-      const icon = exec.icon || exec.image || exec.logo || exec.thumbnail || "";
+      const delay = (index * 55) + "ms";
+      // WEAO API fields
+      const name = exec.name || exec.exploitName || exec.title || "Executor";
+      const status = exec.status || exec.exploitStatus || "";
+      const version = exec.version || exec.currentVersion || "";
+      const desc = exec.description || exec.about || "";
+      const dl = exec.downloadLink || exec.download_link || exec.website || exec.link || exec.url || "";
+      const icon = exec.icon || exec.image || exec.logo || "";
+      // WEAO may return tags as array or as comma-string
+      let tags = exec.tags || exec.supported || [];
+      if (typeof tags === "string") tags = tags.split(",").map(t => t.trim()).filter(Boolean);
+      if (!Array.isArray(tags)) tags = [];
 
-      const tagsHtml = (Array.isArray(tags) ? tags.slice(0,4) : []).map(t => {
+      const tagsHtml = tags.slice(0,4).map(t => {
         const cls = tagClass(t);
         return `<span class="executor-tag ${cls}">${escHtml(t)}</span>`;
       }).join("");
@@ -1735,34 +1876,45 @@
       const grid = document.getElementById("executorsGrid");
 
       try {
-        // Tentative directe puis via proxy CORS public si échec CORS
-        let data = null;
-        const endpoints = [
-          "https://weao.xyz/api/executors",
-          "https://corsproxy.io/?https://weao.xyz/api/executors"
+        // WEAO requires User-Agent: WEAO-3PService — browsers can't set it directly
+        // We use the community proxy which handles the correct headers
+        const PROXY_ENDPOINTS = [
+          "http://farts.fadedis.xyz:25505/api/status/exploits",
+          "https://corsproxy.io/?https://weao.xyz/api/status/exploits",
+          "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://weao.xyz/api/status/exploits")
         ];
 
-        for (const url of endpoints) {
+        let data = null;
+        let lastErr = "All proxy endpoints failed.";
+
+        for (const url of PROXY_ENDPOINTS) {
           try {
-            const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-            if (res.ok) { data = await res.json(); break; }
-          } catch (_) {}
+            const res = await fetch(url, {
+              signal: AbortSignal.timeout(10000),
+              headers: { "Accept": "application/json" }
+            });
+            if (res.ok) {
+              const json = await res.json();
+              // WEAO returns { exploits: [...] } or array directly
+              const list = Array.isArray(json) ? json : (json.exploits || json.data || json.results || Object.values(json));
+              if (Array.isArray(list) && list.length > 0) {
+                data = list;
+                break;
+              }
+            }
+          } catch (e) { lastErr = e.message; }
         }
 
-        if (!data) throw new Error("Impossible de joindre l'API WEAO.");
+        if (!data || data.length === 0) throw new Error(lastErr);
 
-        // Normalisation — l'API peut retourner un tableau ou { executors: [...] }
-        const list = Array.isArray(data) ? data : (data.executors || data.data || data.results || Object.values(data));
-        if (!list.length) throw new Error("Aucun executor trouvé.");
-
-        grid.innerHTML = list.map((ex, i) => buildExecutorCard(ex, i)).join("");
+        grid.innerHTML = data.map((ex, i) => buildExecutorCard(ex, i)).join("");
         loading.style.display = "none";
         grid.style.display = "grid";
 
-        // Animate in
         requestAnimationFrame(() => {
           grid.querySelectorAll(".executor-card").forEach(card => {
-            setTimeout(() => card.classList.add("visible"), parseInt(card.style.transitionDelay) || 0);
+            const d = parseInt(card.style.transitionDelay) || 0;
+            setTimeout(() => card.classList.add("visible"), d);
           });
         });
 
@@ -1773,9 +1925,9 @@
           <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:rgba(255,98,111,.5);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 12px;display:block">
             <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
-          Impossible de charger les executors.<br>
+          Unable to load executors.<br>
           <span style="font-size:11px;color:rgba(160,170,220,.4)">${escHtml(err.message)}</span><br><br>
-          <button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Réessayer</button>
+          <button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Retry</button>
         `;
       }
     }
@@ -1789,17 +1941,41 @@
     };
 
     /* ============================================================
-       DEOBFUSCATOR — ANTILUA API
-       https://obf.antilua.xyz/docs
+       OBFUSCATOR — ANTILUA API
+       POST https://api.antilua.xyz/v1/obfuscate
+       Body: raw text/plain Luau source
+       Auth: Authorization: Bearer YOUR_KEY
+       Query params: map, 2step, encryptStrings, proxifyFunctions, fastOpcode
     ============================================================ */
+    const ANTILUA_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNjdhOTUzOS01OWZiLTQ1ZmUtOTlkYy01NTBhZjY4MWRhNDMiLCJ0eXBlIjoiYXBpIiwibWF4Q3JlZGl0cyI6NTAsImlhdCI6MTc5MDQ0NTAwMH0.BlQtKbEPAiXeEZwnCpO4jPsUvEeaTs3ePMXmOFokDck";
+    const ANTILUA_ENDPOINT = "https://api.antilua.xyz/v1/obfuscate";
+
     const deobInput = document.getElementById("deobInput");
     const deobOutput = document.getElementById("deobOutput");
     const deobRunBtn = document.getElementById("deobRunBtn");
     const deobCopyBtn = document.getElementById("deobCopyBtn");
+    const deobDownloadBtn = document.getElementById("deobDownloadBtn");
     const deobClearBtn = document.getElementById("deobClearBtn");
     const deobStatus = document.getElementById("deobStatus");
     const deobStatusIcon = document.getElementById("deobStatusIcon");
     const deobStatusText = document.getElementById("deobStatusText");
+    const obfCreditsVal = document.getElementById("obfCreditsVal");
+    const obfCooldown = document.getElementById("obfCooldown");
+
+    // Options toggle
+    let cooldownTimer = null;
+
+    document.querySelectorAll(".obf-option").forEach(opt => {
+      opt.addEventListener("click", () => opt.classList.toggle("active"));
+    });
+
+    function getObfOptions() {
+      const params = {};
+      document.querySelectorAll(".obf-option").forEach(opt => {
+        params[opt.dataset.param] = opt.classList.contains("active") ? "true" : "false";
+      });
+      return params;
+    }
 
     function setDeobStatus(state, text) {
       deobStatus.style.display = "flex";
@@ -1814,68 +1990,103 @@
       }
     }
 
-    async function runDeobfuscate() {
+    function startCooldown(ms) {
+      if (cooldownTimer) clearInterval(cooldownTimer);
+      let remaining = Math.ceil(ms / 1000);
+      obfCooldown.textContent = "⏳ " + remaining + "s cooldown";
+      cooldownTimer = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(cooldownTimer);
+          obfCooldown.textContent = "";
+          deobRunBtn.disabled = false;
+        } else {
+          obfCooldown.textContent = "⏳ " + remaining + "s cooldown";
+        }
+      }, 1000);
+    }
+
+    async function runObfuscate() {
       const code = deobInput.value.trim();
-      if (!code) { showNotification("Input vide", "Colle un script avant de déobfusquer.", "error"); return; }
+      if (!code) { showNotification("Empty input", "Paste a script before obfuscating.", "error"); return; }
 
       deobRunBtn.disabled = true;
       deobCopyBtn.style.display = "none";
+      deobDownloadBtn.style.display = "none";
       deobOutput.classList.remove("visible");
-      setDeobStatus("running", "Déobfuscation en cours…");
+      setDeobStatus("running", "Obfuscating…");
 
-      // ANTILUA API — essai direct puis CORS proxy
-      const body = JSON.stringify({ code });
-      const endpoints = [
-        "https://obf.antilua.xyz/api/deobfuscate",
-        "https://corsproxy.io/?https://obf.antilua.xyz/api/deobfuscate"
-      ];
+      // Build query string from options
+      const opts = getObfOptions();
+      const qs = Object.entries(opts).map(([k,v]) => k + "=" + encodeURIComponent(v)).join("&");
+      const url = ANTILUA_ENDPOINT + "?" + qs;
 
-      let result = null;
-      let lastErr = "";
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain",
+            "Authorization": "Bearer " + ANTILUA_API_KEY
+          },
+          body: code,
+          signal: AbortSignal.timeout(30000)
+        });
 
-      for (const url of endpoints) {
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body,
-            signal: AbortSignal.timeout(20000)
-          });
-          const data = await res.json().catch(() => ({}));
-          if (res.ok) {
-            // Normalisation de la réponse
-            result = data.result || data.output || data.deobfuscated || data.code || data.lua || null;
-            if (!result && typeof data === "string") result = data;
-            break;
-          } else {
-            lastErr = data.error || data.message || ("HTTP " + res.status);
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.status === true && data.code) {
+          // Update credits display
+          if (typeof data.credits !== "undefined") {
+            obfCreditsVal.textContent = data.credits + " / " + (data.limit || 50);
           }
-        } catch (e) {
-          lastErr = e.message;
+          // Handle cooldown
+          if (data.cooldownRemaining > 0) {
+            startCooldown(data.cooldownRemaining);
+          } else {
+            deobRunBtn.disabled = false;
+          }
+
+          deobOutput.textContent = data.code;
+          deobOutput.classList.add("visible");
+          deobCopyBtn.style.display = "inline-flex";
+          deobDownloadBtn.style.display = "inline-flex";
+          setDeobStatus("success", "Obfuscation complete · " + (data.taken || 0) + "ms" + (data.cached ? " (cached)" : ""));
+          showNotification("Success", "Script obfuscated successfully.", "success");
+        } else {
+          // Error from API
+          const msg = data.message || data.error || ("HTTP " + res.status);
+          deobRunBtn.disabled = false;
+          // Handle cooldown on 429
+          if (res.status === 429 && data.cooldownRemaining) startCooldown(data.cooldownRemaining);
+          setDeobStatus("error", "Error: " + msg);
+          showNotification("Failed", msg, "error");
         }
-      }
-
-      deobRunBtn.disabled = false;
-
-      if (result) {
-        deobOutput.textContent = result;
-        deobOutput.classList.add("visible");
-        deobCopyBtn.style.display = "inline-flex";
-        setDeobStatus("success", "Déobfuscation réussie.");
-        showNotification("Succès", "Le script a été déobfusqué.", "success");
-      } else {
-        setDeobStatus("error", "Échec : " + (lastErr || "Réponse inattendue de l'API."));
-        showNotification("Échec", "L'API n'a pas pu déobfusquer ce script.", "error");
+      } catch (err) {
+        deobRunBtn.disabled = false;
+        const msg = err.name === "TimeoutError" ? "Request timed out (30s)." : (err.message || "Network error.");
+        setDeobStatus("error", msg);
+        showNotification("Failed", msg, "error");
       }
     }
 
-    deobRunBtn.addEventListener("click", runDeobfuscate);
+    deobRunBtn.addEventListener("click", runObfuscate);
 
     deobCopyBtn.addEventListener("click", async () => {
       const text = deobOutput.textContent.trim();
       if (!text) return;
       const ok = await copyToClipboard(text);
-      showNotification(ok ? "Copié" : "Erreur", ok ? "Résultat copié dans le presse-papier." : "Impossible de copier.", ok ? "success" : "error");
+      showNotification(ok ? "Copied" : "Error", ok ? "Result copied to clipboard." : "Unable to copy.", ok ? "success" : "error");
+    });
+
+    deobDownloadBtn.addEventListener("click", () => {
+      const text = deobOutput.textContent.trim();
+      if (!text) return;
+      const blob = new Blob([text], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "obfuscated.lua";
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
     });
 
     deobClearBtn.addEventListener("click", () => {
@@ -1883,6 +2094,7 @@
       deobOutput.textContent = "";
       deobOutput.classList.remove("visible");
       deobCopyBtn.style.display = "none";
+      deobDownloadBtn.style.display = "none";
       deobStatus.style.display = "none";
     });
 
@@ -1953,37 +2165,37 @@
       const displayName = document.getElementById("signupDisplayName").value.trim();
       const username = document.getElementById("signupUsername").value.trim();
       const password = document.getElementById("signupPassword").value;
-      if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) { setAuthError("signupError","Le nom d'utilisateur doit faire 3 à 24 caractères."); return; }
-      const btn = document.getElementById("signupSubmitBtn"); btn.disabled = true; btn.textContent = "Création…";
+      if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) { setAuthError("signupError","Username must be 3–24 characters."); return; }
+      const btn = document.getElementById("signupSubmitBtn"); btn.disabled = true; btn.textContent = "Creating…";
       try {
         const chk = await sb.rpc("check_username_exists", { p_username: username });
-        if (chk.error) throw new Error("Erreur technique.");
-        if (chk.data === true) throw new Error("Ce nom d'utilisateur est déjà pris.");
+        if (chk.error) throw new Error("Technical error.");
+        if (chk.data === true) throw new Error("Username already taken.");
         const sup = await sb.auth.signUp({ email: usernameToEmail(username), password });
         if (sup.error) throw new Error(sup.error.message);
-        if (!sup.data.user) throw new Error("Inscription impossible.");
+        if (!sup.data.user) throw new Error("Sign up failed.");
         const ins = await sb.from("profiles").insert({ id: sup.data.user.id, display_name: displayName, username, bio:"", avatar_url:null, banner_url:null });
-        if (ins.error) throw new Error("Compte créé, profil non enregistré.");
+        if (ins.error) throw new Error("Account created but profile not saved.");
         await loadCurrentUser(); hideAuthOverlay();
-        showNotification("Compte créé","Ton compte Sentinel a été créé.","success");
-      } catch (err) { setAuthError("signupError", err?.message||"Une erreur est survenue."); }
-      finally { btn.disabled = false; btn.textContent = "Créer mon compte"; }
+        showNotification("Account created","Your Sentinel account is ready.","success");
+      } catch (err) { setAuthError("signupError", err?.message||"An error occurred."); }
+      finally { btn.disabled = false; btn.textContent = "Create account"; }
     }
 
     async function handleLogin(e) {
       e.preventDefault(); setAuthError("loginError","");
       const username = document.getElementById("loginUsername").value.trim();
       const password = document.getElementById("loginPassword").value;
-      const btn = document.getElementById("loginSubmitBtn"); btn.disabled = true; btn.textContent = "Connexion…";
+      const btn = document.getElementById("loginSubmitBtn"); btn.disabled = true; btn.textContent = "Logging in…";
       try {
         const chk = await sb.rpc("check_username_exists", { p_username: username });
-        if (chk.error) throw new Error("Erreur technique.");
-        if (chk.data === false) throw new Error("Nom d'utilisateur ou mot de passe incorrect.");
+        if (chk.error) throw new Error("Technical error.");
+        if (chk.data === false) throw new Error("Username or password incorrect.");
         const res = await sb.auth.signInWithPassword({ email: usernameToEmail(username), password });
-        if (res.error) throw new Error("Nom d'utilisateur ou mot de passe incorrect.");
+        if (res.error) throw new Error("Username or password incorrect.");
         await loadCurrentUser(); hideAuthOverlay();
-      } catch (err) { setAuthError("loginError", err?.message||"Une erreur est survenue."); }
-      finally { btn.disabled = false; btn.textContent = "Se connecter"; }
+      } catch (err) { setAuthError("loginError", err?.message||"An error occurred."); }
+      finally { btn.disabled = false; btn.textContent = "Log in"; }
     }
 
     async function handleLogout() {
@@ -2036,28 +2248,28 @@
 
     async function handleProfileSave() {
       if (!currentProfile) return; setAuthError("profileEditError","");
-      const btn = document.getElementById("profileSaveBtn"); btn.disabled = true; btn.textContent = "Enregistrement…";
+      const btn = document.getElementById("profileSaveBtn"); btn.disabled = true; btn.textContent = "Saving…";
       const newDisplayName = document.getElementById("editDisplayName").value.trim();
       const newUsername = document.getElementById("editUsername").value.trim();
       const newBio = document.getElementById("editBio").value.trim();
-      if (!newDisplayName) { setAuthError("profileEditError","Le nom affiché est requis."); btn.disabled=false; btn.textContent="Enregistrer"; return; }
-      if (!/^[a-zA-Z0-9_]{3,24}$/.test(newUsername)) { setAuthError("profileEditError","Pseudo invalide."); btn.disabled=false; btn.textContent="Enregistrer"; return; }
+      if (!newDisplayName) { setAuthError("profileEditError","Display name is required."); btn.disabled=false; btn.textContent="Save"; return; }
+      if (!/^[a-zA-Z0-9_]{3,24}$/.test(newUsername)) { setAuthError("profileEditError","Invalid username."); btn.disabled=false; btn.textContent="Save"; return; }
       try {
         if (newUsername.toLowerCase() !== String(currentProfile.username||"").toLowerCase()) {
           const chk = await sb.rpc("check_username_exists", { p_username: newUsername });
-          if (chk.error) throw new Error("Impossible de vérifier ce pseudo.");
-          if (chk.data === true) throw new Error("Ce pseudo est déjà utilisé.");
+          if (chk.error) throw new Error("Cannot verify username.");
+          if (chk.data === true) throw new Error("Username already taken.");
         }
         const updates = { display_name: newDisplayName, username: newUsername, bio: newBio };
         if (pendingAvatarFile) updates.avatar_url = await uploadImage("avatars", pendingAvatarFile, currentProfile.id);
         if (pendingBannerFile) updates.banner_url = await uploadImage("banners", pendingBannerFile, currentProfile.id);
         const upd = await sb.from("profiles").update(updates).eq("id", currentProfile.id);
-        if (upd.error) throw new Error(upd.error.message||"Impossible d'enregistrer.");
+        if (upd.error) throw new Error(upd.error.message||"Unable to save.");
         if (newUsername.toLowerCase() !== String(currentProfile.username||"").toLowerCase()) await sb.auth.updateUser({ email: usernameToEmail(newUsername) });
         await loadCurrentUser(); closeProfileModal();
-        showNotification("Profil mis à jour","Tes informations ont été enregistrées.","success");
-      } catch (err) { setAuthError("profileEditError", err?.message||"Erreur lors de l'envoi."); }
-      finally { btn.disabled=false; btn.textContent="Enregistrer"; }
+        showNotification("Profile updated","Your info has been saved.","success");
+      } catch (err) { setAuthError("profileEditError", err?.message||"Error while saving."); }
+      finally { btn.disabled=false; btn.textContent="Save"; }
     }
 
     function saveKeySession(token) { try { localStorage.setItem(KEY_SESSION_KEY, JSON.stringify({ token, savedAt: Date.now() })); } catch (_) {} }
@@ -2094,7 +2306,7 @@
       const now = Date.now(); if (keyCooldowns[scriptId] && now - keyCooldowns[scriptId] < 500) return; keyCooldowns[scriptId] = now;
       const textEl = document.getElementById("keyText_" + scriptId); if (!textEl || !textEl.textContent.trim()) return;
       const copied = await copyToClipboard(textEl.textContent.trim());
-      showNotification(copied ? "Key copied" : "Copy failed", copied ? "La clé a été copiée dans le presse-papier." : "Impossible de copier la clé.", copied ? "success" : "error");
+      showNotification(copied ? "Key copied" : "Copy failed", copied ? "Key copied to clipboard." : "Unable to copy key.", copied ? "success" : "error");
     }
 
     async function fetchKeyWithSession(scriptId, sessionToken) {
@@ -2115,7 +2327,7 @@
 
     function showDiscordLoading(message) {
       const overlay = document.getElementById("discordLoadingOverlay"); const txt = document.getElementById("discordLoadingText"); if (!overlay) return;
-      txt.textContent = message||"Vérification Discord en cours…";
+      txt.textContent = message||"Discord verification…";
       document.getElementById("verificationIcon").className = "verification-icon";
       document.getElementById("verificationIconSvg").innerHTML = "";
       overlay.classList.add("visible");
@@ -2124,12 +2336,12 @@
     function showVerificationResult(success, callback) {
       const overlay = document.getElementById("discordLoadingOverlay"); const icon = document.getElementById("verificationIcon"); const svg = document.getElementById("verificationIconSvg"); const txt = document.getElementById("discordLoadingText");
       if (!overlay||!icon||!svg) { callback?.(); return; }
-      txt.textContent = success ? "Vérification réussie" : "Vérification refusée";
+      txt.textContent = success ? "Verification successful" : "Verification failed";
       icon.className = "verification-icon " + (success ? "success" : "error");
       svg.innerHTML = success ? '<path d="M5 12.5 9.2 16.7 19 7"></path>' : '<path d="M7 7 17 17"></path><path d="M17 7 7 17"></path>';
       setTimeout(() => {
         overlay.classList.remove("visible");
-        setTimeout(() => { icon.className="verification-icon"; svg.innerHTML=""; txt.textContent="Vérification Discord en cours…"; callback?.(); }, 460);
+        setTimeout(() => { icon.className="verification-icon"; svg.innerHTML=""; txt.textContent="Discord verification…"; callback?.(); }, 460);
       }, 1800);
     }
 
@@ -2186,17 +2398,17 @@
         if (code && ["examination","bloxstrike"].includes(scriptId)) {
           const cleanUrl = window.location.origin + window.location.pathname;
           window.history.replaceState({}, document.title, cleanUrl);
-          showDiscordLoading("Vérification Discord en cours…");
+          showDiscordLoading("Discord verification…");
           const keyBtn = document.getElementById("keyBtn_"+scriptId);
-          if (keyBtn) { keyBtn.disabled=true; keyBtn.textContent="Vérification…"; }
+          if (keyBtn) { keyBtn.disabled=true; keyBtn.textContent="Verifying…"; }
 
           try {
             const ses2 = await sb.auth.getSession(); const token = ses2.data?.session?.access_token||"";
             const res = await fetch(EDGE_FUNCTION_URL, { method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+token}, body: JSON.stringify({ code, script_id: scriptId }) });
             const data = await res.json();
             if (res.ok && data.key) { showVerificationResult(true, () => { showKey(scriptId, data.key); if (data.session_token) saveKeySession(data.session_token); }); }
-            else { showVerificationResult(false, () => { showKeyError(scriptId, data.error||"Erreur inconnue."); }); }
-          } catch (_) { showVerificationResult(false, () => { showKeyError(scriptId, "Erreur réseau. Réessaie."); }); }
+            else { showVerificationResult(false, () => { showKeyError(scriptId, data.error||"Unknown error."); }); }
+          } catch (_) { showVerificationResult(false, () => { showKeyError(scriptId, "Network error. Please retry."); }); }
         } else if (ses.data?.session) {
           await restoreDiscordKeySession();
         }
