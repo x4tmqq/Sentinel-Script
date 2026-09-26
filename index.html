@@ -379,49 +379,103 @@
     .availability-link:hover { transform: translateY(-3px) scale(1.05); }
     .availability-link img { width: 23px; height: 23px; object-fit: contain; border-radius: 6px; }
 
-    /* ===== CATEGORY NAV ===== */
+    /* ===== CATEGORY NAV — notch latéral gauche ===== */
     .category-nav-wrap {
       position: relative;
       background: #030304;
-      padding: 36px 0 0;
-      display: flex;
-      justify-content: center;
+      padding: 48px 0 0;
       z-index: 10;
+    }
+
+    /* Ligne décorative verticale à gauche */
+    .category-nav-wrap::before {
+      content: "";
+      position: absolute;
+      left: calc(32px + 22px); /* aligné avec le centre du notch */
+      top: 48px;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.12), transparent 80%);
+      pointer-events: none;
     }
 
     .category-nav {
       display: flex;
-      gap: 6px;
-      padding: 5px;
-      border-radius: 999px;
+      flex-direction: column;
+      gap: 4px;
+      padding: 6px;
+      /* Le notch est accolé au bord gauche, avec un léger inset */
+      margin-left: 32px;
+      width: fit-content;
+      border-radius: 20px;
       border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 8px 32px rgba(0,0,0,.28);
+      background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.022) 50%, rgba(255,255,255,.05));
+      backdrop-filter: blur(22px) saturate(185%) contrast(112%) brightness(1.08);
+      -webkit-backdrop-filter: blur(22px) saturate(185%) contrast(112%) brightness(1.08);
+      box-shadow:
+        inset 0 1.5px 0 rgba(255,255,255,.38),
+        inset 0 -1px 0 rgba(0,0,0,.28),
+        inset 1px 0 0 rgba(255,255,255,.1),
+        0 12px 44px rgba(0,0,0,.32),
+        0 4px 16px rgba(0,0,0,.2);
+      /* Petit "oreille" droite — simule l'attache au contenu */
+      position: relative;
+    }
+
+    /* Connecteur droit du notch vers le contenu */
+    .category-nav::after {
+      content: "";
+      position: absolute;
+      right: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(to right, rgba(255,255,255,.18), transparent);
+      pointer-events: none;
     }
 
     .cat-tab {
-      display: flex; align-items: center; gap: 7px;
-      padding: 9px 20px;
-      border-radius: 999px;
-      font-size: 12.5px; font-weight: 600;
-      color: rgba(210,214,235,.5);
+      display: flex; align-items: center; gap: 9px;
+      padding: 10px 16px;
+      border-radius: 14px;
+      font-size: 12px; font-weight: 600;
+      color: rgba(210,214,235,.45);
       cursor: pointer;
       border: 1px solid transparent;
-      transition: color .22s, background .22s, border-color .22s, box-shadow .22s;
+      transition: color .22s, background .22s, border-color .22s, box-shadow .22s, transform .15s;
       user-select: none;
+      white-space: nowrap;
     }
 
-    .cat-tab svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .cat-tab svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; transition: stroke .22s; }
 
-    .cat-tab:hover { color: rgba(240,242,255,.8); background: rgba(255,255,255,.07); }
+    .cat-tab:hover { color: rgba(240,242,255,.82); background: rgba(255,255,255,.07); transform: translateX(2px); }
 
     .cat-tab.active {
       color: #fff;
-      background: linear-gradient(145deg, rgba(255,255,255,.15), rgba(255,255,255,.05) 60%, rgba(255,255,255,.1));
-      border-color: rgba(255,255,255,.22);
-      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.32), 0 4px 16px rgba(0,0,0,.2);
+      background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.04) 55%, rgba(255,255,255,.09));
+      border-color: rgba(255,255,255,.2);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.36),
+        inset 0 -1px 0 rgba(0,0,0,.18),
+        0 4px 14px rgba(0,0,0,.22);
+      transform: translateX(2px);
+    }
+
+    .cat-tab-label { flex: 1; }
+
+    /* Petit indicateur actif (pastille droite) */
+    .cat-tab-pip {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      flex-shrink: 0;
+      transition: background .22s, box-shadow .22s;
+    }
+
+    .cat-tab.active .cat-tab-pip {
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 0 6px rgba(255,255,255,.5);
     }
 
     /* ===== SECTIONS COMMUNES ===== */
