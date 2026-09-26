@@ -732,288 +732,7 @@
     .analytics-refresh:hover { transform: rotate(90deg); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.22); }
 
     /* ===== EXECUTORS SECTION ===== */
-    .executors-grid {
-      position: relative; z-index: 3;
-      max-width: 1180px; margin: 0 auto;
-      padding: 0 32px;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    .executor-card {
-      position: relative; overflow: hidden;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.022) 46%, rgba(255,255,255,.045));
-      backdrop-filter: blur(16px) saturate(180%) contrast(112%) brightness(1.07);
-      -webkit-backdrop-filter: blur(16px) saturate(180%) contrast(112%) brightness(1.07);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.12), 0 4px 24px rgba(0,0,0,.2);
-      padding: 22px;
-      display: flex; flex-direction: column; gap: 14px;
-      opacity: 0; transform: translateY(30px);
-      transition: opacity .5s, transform .5s, border-color .25s, box-shadow .25s;
-    }
-
-    .executor-card.visible { opacity: 1; transform: translateY(0); }
-
-    .executor-card::before {
-      content: "";
-      position: absolute; inset: -18px; z-index: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 55% 115% at -2% 50%, rgba(255,255,255,.18), transparent 30%),
-        radial-gradient(ellipse 55% 115% at 102% 50%, rgba(255,255,255,.15), transparent 30%),
-        radial-gradient(ellipse 115% 55% at 50% -2%, rgba(255,255,255,.14), transparent 28%);
-      filter: blur(10px); opacity: .8;
-    }
-
-    .executor-card::after {
-      content: "";
-      position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,.16), transparent 8%, transparent 92%, rgba(255,255,255,.14)),
-        linear-gradient(180deg, rgba(255,255,255,.14), transparent 12%, transparent 86%, rgba(0,0,0,.18));
-      mix-blend-mode: screen;
-    }
-
-    .executor-card:hover {
-      border-color: rgba(255,255,255,.26);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.38), 0 24px 60px rgba(0,0,0,.45), 0 8px 24px rgba(0,0,0,.28);
-    }
-
-    .executor-card > * { position: relative; z-index: 2; }
-
-    .executor-header { display: flex; align-items: center; gap: 12px; }
-
-    .executor-icon {
-      width: 44px; height: 44px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-      overflow: hidden; flex-shrink: 0;
-    }
-
-    .executor-icon img { width: 28px; height: 28px; object-fit: contain; }
-    .executor-icon svg { width: 22px; height: 22px; fill: none; stroke: rgba(255,255,255,.7); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-    .executor-name { font-size: 15px; font-weight: 700; }
-    .executor-version { font-size: 10px; color: rgba(160,170,220,.45); margin-top: 2px; font-family: "Courier New", monospace; }
-
-    .executor-desc { font-size: 11.5px; color: rgba(210,214,235,.55); line-height: 1.55; }
-
-    .executor-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .executor-tag {
-      font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
-      padding: 4px 9px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04);
-      color: rgba(210,214,235,.6);
-    }
-
-    .executor-tag.green { border-color: rgba(109,255,154,.25); background: rgba(109,255,154,.06); color: rgba(109,255,154,.85); }
-    .executor-tag.blue { border-color: rgba(88,101,242,.35); background: rgba(88,101,242,.08); color: rgba(140,155,255,.85); }
-    .executor-tag.yellow { border-color: rgba(255,210,50,.25); background: rgba(255,210,50,.06); color: rgba(255,220,80,.8); }
-
-    .executor-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
-    .executor-status { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; }
-    .executor-status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .executor-status-dot.online { background: var(--green); box-shadow: 0 0 8px rgba(109,255,154,.6); }
-    .executor-status-dot.offline { background: var(--red); box-shadow: 0 0 8px rgba(255,98,111,.6); }
-    .executor-status-dot.unknown { background: rgba(255,210,50,.8); box-shadow: 0 0 8px rgba(255,210,50,.4); }
-
-    .executor-download {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 14px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.2);
-      background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.04) 60%, rgba(255,255,255,.09));
-      font-size: 11px; font-weight: 700; color: #fff;
-      backdrop-filter: blur(10px);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 3px 12px rgba(0,0,0,.2);
-      transition: transform .15s, background .2s, border-color .2s;
-      text-decoration: none;
-    }
-
-    .executor-download:hover { transform: translateY(-1px); background: linear-gradient(160deg, rgba(255,255,255,.22), rgba(255,255,255,.07) 60%, rgba(255,255,255,.14)); border-color: rgba(255,255,255,.32); }
-    .executor-download svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-    .exec-loading, .deob-loading {
-      position: relative; z-index: 3;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 14px; padding: 60px 0;
-    }
-
-    .spinner {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 2.5px solid rgba(255,255,255,.1);
-      border-top-color: rgba(255,255,255,.6);
-      animation: spin .7s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .exec-loading-text, .deob-loading-text { font-size: 12px; color: rgba(210,214,235,.4); font-weight: 500; }
-
-    .exec-error {
-      position: relative; z-index: 3;
-      text-align: center; padding: 48px 32px;
-      font-size: 13px; color: rgba(255,98,111,.7); font-weight: 500;
-    }
-
-    /* ===== OBFUSCATOR SECTION ===== */
-    .deob-container {
-      position: relative; z-index: 3;
-      max-width: 860px; margin: 0 auto;
-      padding: 0 32px;
-      display: flex; flex-direction: column; gap: 20px;
-    }
-
-    .deob-card {
-      position: relative; overflow: hidden;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.022) 46%, rgba(255,255,255,.045));
-      backdrop-filter: blur(16px) saturate(180%) contrast(112%) brightness(1.07);
-      -webkit-backdrop-filter: blur(16px) saturate(180%) contrast(112%) brightness(1.07);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.12), 0 4px 24px rgba(0,0,0,.2);
-      padding: 28px;
-    }
-
-    .deob-card::before {
-      content: "";
-      position: absolute; inset: -18px; z-index: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 55% 115% at -2% 50%, rgba(255,255,255,.18), transparent 30%),
-        radial-gradient(ellipse 55% 115% at 102% 50%, rgba(255,255,255,.15), transparent 30%),
-        radial-gradient(ellipse 115% 55% at 50% -2%, rgba(255,255,255,.14), transparent 28%);
-      filter: blur(10px); opacity: .8;
-    }
-
-    .deob-card > * { position: relative; z-index: 2; }
-
-    .deob-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-    .deob-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); flex-shrink: 0; }
-    .deob-icon svg { width: 18px; height: 18px; fill: none; stroke: rgba(255,255,255,.75); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .deob-title { font-size: 16px; font-weight: 700; }
-    .deob-subtitle { font-size: 11px; color: rgba(160,170,220,.45); margin-top: 2px; }
-
-    /* Credits bar */
-    .obf-credits-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px; border-radius: 12px; margin-bottom: 16px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      font-size: 11px; color: rgba(160,170,220,.55);
-    }
-    .obf-credits-val { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); font-variant-numeric: tabular-nums; }
-    .obf-cooldown { font-size: 10px; color: rgba(255,210,50,.65); }
-
-    .deob-textarea-wrap { position: relative; }
-    .deob-textarea {
-      width: 100%; min-height: 180px;
-      font-family: "Courier New", monospace; font-size: 12px;
-      color: rgba(220,225,255,.9); line-height: 1.6;
-      padding: 16px; border-radius: 14px;
-      background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.1);
-      outline: none; resize: vertical;
-      transition: border-color .2s;
-    }
-
-    .deob-textarea:focus { border-color: rgba(255,255,255,.3); }
-    .deob-textarea::placeholder { color: rgba(160,170,220,.3); }
-
-    .deob-output-wrap { position: relative; }
-
-    .deob-output {
-      width: 100%; min-height: 180px;
-      font-family: "Courier New", monospace; font-size: 12px;
-      color: rgba(109,255,154,.85); line-height: 1.6;
-      padding: 16px; border-radius: 14px;
-      background: rgba(0,0,0,.35); border: 1px solid rgba(109,255,154,.12);
-      overflow: auto; white-space: pre-wrap; word-break: break-all;
-      display: none;
-    }
-
-    .deob-output.visible { display: block; }
-
-    /* Options grid */
-    .obf-options-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .obf-option {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.03);
-      cursor: pointer; transition: background .2s, border-color .2s;
-    }
-
-    .obf-option:hover { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.14); }
-    .obf-option.active { background: rgba(88,101,242,.12); border-color: rgba(88,101,242,.35); }
-
-    .obf-option-check {
-      width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
-      border: 1.5px solid rgba(255,255,255,.2);
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s, border-color .2s;
-    }
-
-    .obf-option.active .obf-option-check {
-      background: rgba(88,101,242,.8); border-color: rgba(88,101,242,1);
-    }
-
-    .obf-option-check svg { width: 10px; height: 10px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0; transition: opacity .15s; }
-    .obf-option.active .obf-option-check svg { opacity: 1; }
-
-    .obf-option-label { font-size: 11.5px; font-weight: 600; color: rgba(210,214,235,.7); }
-    .obf-option-desc { font-size: 9.5px; color: rgba(160,170,220,.4); margin-top: 1px; }
-
-    .deob-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
-
-    .btn-deob {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 11px 22px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.22);
-      background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,.04) 60%, rgba(255,255,255,.08));
-      font-family: "Inter", sans-serif; font-size: 12.5px; font-weight: 700; color: #fff;
-      backdrop-filter: blur(12px); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.3), 0 4px 14px rgba(0,0,0,.2);
-      cursor: pointer;
-      transition: transform .15s, background .2s, border-color .2s;
-      white-space: nowrap;
-    }
-
-    .btn-deob:hover { transform: translateY(-1px); background: linear-gradient(160deg, rgba(255,255,255,.2), rgba(255,255,255,.07) 60%, rgba(255,255,255,.13)); border-color: rgba(255,255,255,.34); }
-    .btn-deob:disabled { opacity: .55; cursor: default; transform: none; }
-    .btn-deob svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-    .btn-deob-primary {
-      background: linear-gradient(160deg, rgba(88,101,242,.55), rgba(66,80,210,.35));
-      border-color: rgba(88,101,242,.55);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 4px 18px rgba(88,101,242,.25);
-    }
-
-    .btn-deob-primary:hover { background: linear-gradient(160deg, rgba(88,101,242,.75), rgba(66,80,210,.55)); border-color: rgba(88,101,242,.75); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 6px 24px rgba(88,101,242,.4); }
-
-    .deob-status {
-      display: flex; align-items: center; gap: 8px;
-      margin-top: 12px;
-      font-size: 11px; color: rgba(160,170,220,.5); font-weight: 500;
-      min-height: 20px;
-    }
-
-    .deob-status-icon { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .deob-status-icon svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-    .deob-status.running .deob-status-icon { color: rgba(255,210,50,.8); }
-    .deob-status.success .deob-status-icon { color: var(--green); }
-    .deob-status.error .deob-status-icon { color: var(--red); }
-
-    .deob-endpoints-info {
-      padding: 14px 16px; border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.07);
-      background: rgba(0,0,0,.2);
-      font-size: 10.5px; color: rgba(160,170,220,.45); line-height: 1.6;
-    }
-
-    .deob-endpoints-info code { font-family: "Courier New", monospace; color: rgba(200,210,255,.55); font-size: 10px; }
-
+    .executor-category{position:relative;z-index:3;max-width:1180px;margin:0 auto 42px;padding:0 32px}.executor-category:last-child{margin-bottom:0}.executor-category-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}.executor-category-rule{height:1px;flex:1;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,0))}.executor-category-badge{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 6px 18px rgba(0,0,0,.16);color:rgba(240,242,255,.85);font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.executor-category-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.executors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}.executor-card{position:relative;overflow:hidden;min-width:0;border-radius:22px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.022) 46%,rgba(255,255,255,.045));backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);-webkit-backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.12),0 4px 24px rgba(0,0,0,.2);padding:18px;display:flex;flex-direction:column;gap:13px;opacity:0;transform:translateY(22px);transition:opacity .48s,transform .48s,border-color .25s,box-shadow .25s}.executor-card.visible{opacity:1;transform:translateY(0)}.executor-card:before{content:"";position:absolute;inset:-18px;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 115% at -2% 50%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse 55% 115% at 102% 50%,rgba(255,255,255,.15),transparent 30%),radial-gradient(ellipse 115% 55% at 50% -2%,rgba(255,255,255,.14),transparent 28%);filter:blur(10px);opacity:.8}.executor-card:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,rgba(255,255,255,.16),transparent 8%,transparent 92%,rgba(255,255,255,.14)),linear-gradient(180deg,rgba(255,255,255,.14),transparent 12%,transparent 86%,rgba(0,0,0,.18)),radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.11),transparent 70%);mix-blend-mode:screen}.executor-card:hover{border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 24px 60px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.28)}.executor-card>*{position:relative;z-index:2}.executor-header{display:flex;align-items:center;gap:12px;min-width:0}.executor-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.14);overflow:hidden;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}.executor-icon img{width:30px;height:30px;object-fit:contain}.executor-icon svg{width:23px;height:23px;fill:none;stroke:rgba(255,255,255,.72);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.executor-title-wrap{min-width:0;flex:1}.executor-name{font-size:15px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-version{font-size:10px;color:rgba(160,170,220,.5);margin-top:3px;font-family:"Courier New",monospace}.executor-status{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);font-size:8.5px;font-weight:800}.executor-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.executor-status-dot.online{background:var(--green);box-shadow:0 0 8px rgba(109,255,154,.6)}.executor-status-dot.offline{background:var(--red);box-shadow:0 0 8px rgba(255,98,111,.6)}.executor-status-dot.unknown{background:rgba(255,210,50,.8);box-shadow:0 0 8px rgba(255,210,50,.4)}.executor-desc{font-size:11.5px;color:rgba(210,214,235,.55);line-height:1.55;min-height:35px}.executor-tags{display:flex;flex-wrap:wrap;gap:6px}.executor-tag{font-size:9px;font-weight:700;letter-spacing:.06em;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:rgba(210,214,235,.65)}.executor-tag.green{border-color:rgba(109,255,154,.22);background:rgba(109,255,154,.05);color:rgba(109,255,154,.86)}.executor-tag.blue{border-color:rgba(88,101,242,.28);background:rgba(88,101,242,.07);color:rgba(150,162,255,.88)}.executor-tag.yellow{border-color:rgba(255,210,50,.22);background:rgba(255,210,50,.05);color:rgba(255,220,80,.82)}.executor-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.executor-spec{min-width:0;padding:9px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015));box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}.executor-spec-label{font-size:7.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.38)}.executor-spec-value{margin-top:4px;font-size:12.5px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}.executor-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.025));color:rgba(240,242,255,.82);font-size:9.5px;font-weight:700;text-decoration:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .16s,border-color .2s,background .2s,color .2s}.executor-link:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.26);background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.05));color:#fff}.executor-link svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.exec-loading,.exec-error{position:relative;z-index:3}.exec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 0}.spinner{width:36px;height:36px;border-radius:50%;border:2.5px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.6);animation:spin .7s linear infinite}.exec-loading-text{font-size:12px;color:rgba(210,214,235,.4);font-weight:500}.exec-error{text-align:center;padding:48px 32px;font-size:13px;color:rgba(255,98,111,.7);font-weight:500}
     /* ===== OVERLAYS & MODALS ===== */
     .auth-overlay, .profile-modal-overlay, .discord-loading-overlay {
       position: fixed; inset: 0;
@@ -1107,8 +826,9 @@
         flex-direction: row; flex-wrap: wrap; justify-content: center;
         border-radius: 22px; width: calc(100% - 32px); margin: 0 auto;
       }
-      .scripts-grid, .deob-container { padding: 0 16px; }
-      .executors-grid { padding: 0 16px; grid-template-columns: 1fr; }
+      .scripts-grid { padding: 0 16px; }
+      .executor-category { padding: 0 16px; }
+      .executors-grid { grid-template-columns: 1fr; }
       .script-card { grid-template-columns: 1fr; }
       .card-thumb { min-height: 0; aspect-ratio: 16/9; }
       .thumb-overlay { background: linear-gradient(180deg, transparent 60%, rgba(3,3,4,.85) 100%); }
@@ -1119,8 +839,7 @@
       .analytics-live { display: none; }
       .notification-container { right: 14px; bottom: 14px; left: 14px; align-items: stretch; }
       .notification { min-width: 0; width: 100%; max-width: none; }
-      .obf-options-grid { grid-template-columns: 1fr; }
-    }
+}
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
@@ -1308,10 +1027,7 @@
       <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
       <span class="cat-tab-label">Executors</span>
     </button>
-    <button class="cat-tab" role="tab" data-cat="obfuscator" aria-selected="false">
-      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-      <span class="cat-tab-label">Obfuscator</span>
-    </button>
+
   </nav>
 
   <!-- ===== SECTION : SCRIPTS ===== -->
@@ -1468,115 +1184,6 @@
     <div class="executors-grid" id="executorsGrid" style="display:none"></div>
   </section>
 
-  <!-- ===== SECTION : OBFUSCATOR ===== -->
-  <section class="content-section" id="section-obfuscator">
-    <div class="dark-ambient"><div class="spotlight"></div></div>
-    <div class="section-label">Lua protection</div>
-    <div class="section-title">Protect your scripts.</div>
-
-    <div class="deob-container">
-      <!-- Main card -->
-      <div class="deob-card">
-        <div class="deob-header">
-          <div class="deob-icon">
-            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          </div>
-          <div>
-            <div class="deob-title">AntiLua Obfuscator</div>
-            <div class="deob-subtitle">api.antilua.xyz — Powered by obf.antilua.xyz</div>
-          </div>
-        </div>
-
-        <!-- Credits bar -->
-        <div class="obf-credits-bar" id="obfCreditsBar">
-          <span>Credits remaining</span>
-          <span class="obf-credits-val" id="obfCreditsVal">—</span>
-          <span class="obf-cooldown" id="obfCooldown"></span>
-        </div>
-
-        <!-- Options -->
-        <div class="obf-options-grid" id="obfOptions">
-          <label class="obf-option" data-param="map">
-            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-            <div><div class="obf-option-label">AntiTamper</div><div class="obf-option-desc">Detects hooks & memory edits</div></div>
-          </label>
-          <label class="obf-option" data-param="2step">
-            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-            <div><div class="obf-option-label">Double Pass</div><div class="obf-option-desc">2x obfuscation — larger output</div></div>
-          </label>
-          <label class="obf-option active" data-param="encryptStrings">
-            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-            <div><div class="obf-option-label">Intense VM</div><div class="obf-option-desc">Strong VM & string protection</div></div>
-          </label>
-          <label class="obf-option" data-param="proxifyFunctions">
-            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-            <div><div class="obf-option-label">Proxify Functions</div><div class="obf-option-desc">Function proxification layer</div></div>
-          </label>
-          <label class="obf-option" data-param="fastOpcode">
-            <div class="obf-option-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-            <div><div class="obf-option-label">Fast Runtime</div><div class="obf-option-desc">Speed over opcode hardening</div></div>
-          </label>
-        </div>
-
-        <div class="deob-textarea-wrap">
-          <textarea class="deob-textarea" id="deobInput" placeholder="Paste your Lua script here to obfuscate it..."></textarea>
-        </div>
-
-        <div class="deob-actions">
-          <button class="btn-deob btn-deob-primary" id="deobRunBtn" type="button">
-            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            Obfuscate
-          </button>
-          <button class="btn-deob" id="deobCopyBtn" type="button" style="display:none">
-            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy result
-          </button>
-          <button class="btn-deob" id="deobDownloadBtn" type="button" style="display:none">
-            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Download
-          </button>
-          <button class="btn-deob" id="deobClearBtn" type="button">
-            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
-            Clear
-          </button>
-        </div>
-
-        <div class="deob-status" id="deobStatus" style="display:none">
-          <div class="deob-status-icon">
-            <svg id="deobStatusIcon" viewBox="0 0 24 24"></svg>
-          </div>
-          <span id="deobStatusText"></span>
-        </div>
-
-        <div class="deob-output-wrap" style="margin-top:14px">
-          <pre class="deob-output" id="deobOutput"></pre>
-        </div>
-      </div>
-
-      <!-- API info card -->
-      <div class="deob-card">
-        <div class="deob-header">
-          <div class="deob-icon">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-          </div>
-          <div>
-            <div class="deob-title">About AntiLua API</div>
-            <div class="deob-subtitle">obf.antilua.xyz — API reference</div>
-          </div>
-        </div>
-        <div class="deob-endpoints-info">
-          Requests are sent to <code>https://api.antilua.xyz/v1/obfuscate</code><br>
-          Method: <code>POST</code> · Content-Type: <code>text/plain</code><br>
-          Auth: <code>Authorization: Bearer YOUR_API_KEY</code><br>
-          Body: <code>Raw Luau source (max 5 MB)</code><br>
-          Query params: <code>?map=true&amp;2step=true&amp;encryptStrings=true&amp;proxifyFunctions=true&amp;fastOpcode=true</code><br><br>
-          Response: <code>{ "status": true, "code": "...", "credits": 49, "taken": 1842 }</code><br><br>
-          ⚠ Rate limit: 30s cooldown per request. Credits reset monthly.
-        </div>
-      </div>
-    </div>
-  </section>
-
   <div class="notification-container" id="notificationContainer"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1630,7 +1237,6 @@
        GLASS CURSOR / REFRACTION
     ============================================================ */
     (function initGlassMotion() {
-      const targets = document.querySelectorAll(".glass, .script-card, .script-analytics");
       const hero = document.getElementById("top");
       const heroLight = document.getElementById("heroCursorLight");
       let mx = -9999, my = -9999, raf = 0;
@@ -1642,16 +1248,17 @@
           heroLight.style.setProperty("--gx", (mx - r.left) + "px");
           heroLight.style.setProperty("--gy", (my - r.top) + "px");
         }
+        const targets = document.querySelectorAll(".glass, .script-card, .script-analytics, .executor-card");
         targets.forEach((el) => {
           const r = el.getBoundingClientRect();
           if (mx < r.left - 120 || mx > r.right + 120 || my < r.top - 120 || my > r.bottom + 120) {
             el.style.setProperty("--gx", "-9999px"); el.style.setProperty("--gy", "-9999px");
-            if (el.classList.contains("script-card")) { el.style.setProperty("--mx","50%"); el.style.setProperty("--my","50%"); }
+            if (el.classList.contains("script-card") || el.classList.contains("executor-card")) { el.style.setProperty("--mx","50%"); el.style.setProperty("--my","50%"); }
             return;
           }
           el.style.setProperty("--gx", (mx - r.left) + "px");
           el.style.setProperty("--gy", (my - r.top) + "px");
-          if (el.classList.contains("script-card")) {
+          if (el.classList.contains("script-card") || el.classList.contains("executor-card")) {
             el.style.setProperty("--mx", (mx - r.left) + "px");
             el.style.setProperty("--my", (my - r.top) + "px");
           }
@@ -1704,8 +1311,7 @@
     const catTabs = document.querySelectorAll(".cat-tab");
     const sections = {
       scripts: document.getElementById("section-scripts"),
-      executors: document.getElementById("section-executors"),
-      obfuscator: document.getElementById("section-obfuscator")
+      executors: document.getElementById("section-executors")
     };
     let executorsLoaded = false;
 
@@ -1790,598 +1396,40 @@
     });
 
     /* ============================================================
-       EXECUTORS — WEAO API
-       Endpoint: https://weao.xyz/api/status/exploits
-       Required header: User-Agent: WEAO-3PService
-       CORS proxy used to bypass browser restrictions
+       EXECUTORS — WEAO API + ENRICHED CATALOG
     ============================================================ */
-    function statusDotClass(status) {
-      if (!status) return "unknown";
-      const s = status.toLowerCase();
-      if (["working","online","up","updated"].includes(s)) return "online";
-      if (["broken","offline","down","outdated"].includes(s)) return "offline";
-      return "unknown";
+    function statusDotClass(status){const s=String(status||"").toLowerCase();if(["working","online","up","updated"].includes(s))return"online";if(["broken","offline","down","outdated"].includes(s))return"offline";return"unknown";}
+    function statusLabel(status){if(!status)return"Unknown";const s=String(status).toLowerCase();if(["working","online","up","updated"].includes(s))return"Working";if(["broken","offline","down","outdated"].includes(s))return"Broken";return String(status).charAt(0).toUpperCase()+String(status).slice(1);}
+    function tagClass(tag){const t=String(tag||"").toLowerCase();if(["free","gratuit","keyless"].includes(t))return"green";if(["pc","windows","android","mobile","ios","macos","mac"].includes(t))return"blue";if(["partial","beta","experimental","paid"].includes(t))return"yellow";return"";}
+    function firstDefined(obj,keys){for(const key of keys){const value=obj?.[key];if(value!==undefined&&value!==null&&String(value).trim()!=="")return value;}return"";}
+    function statusValue(value){return value===true?"Passed":value===false?"Failed":"—";}
+    function scoreValue(obj,scoreKeys,statusKeys){const raw=firstDefined(obj,scoreKeys);if(raw!=="")return String(raw);for(const key of statusKeys)if(typeof obj?.[key]==="boolean")return statusValue(obj[key]);return"—";}
+    function getExecutorPlatforms(exec){const values=[];[exec.platform,exec.platforms,exec.os,exec.device,exec.devices,exec.supportedPlatforms,exec.supported,exec.tags].forEach(v=>{if(Array.isArray(v))values.push(...v);else if(typeof v==="string")values.push(...v.split(/[|,;/]+/));});return values.map(v=>String(v).trim().toLowerCase()).filter(Boolean);}
+    function classifyExecutor(exec){const values=getExecutorPlatforms(exec);const type=String(firstDefined(exec,["type","category","executorType","kind","mode","extype"])||"").toLowerCase();if(values.some(v=>/ios|iphone|ipad/.test(v)))return"iOS Executor";if(values.some(v=>/android/.test(v)))return"Android Executor";if(values.some(v=>/macos|mac/.test(v)))return"macOS Executor";if(/external|wexternal|mexternal/.test(type))return"Windows External";return"Windows Internal";}
+    function escHtml(str){return String(str??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
+    function safeLink(value){const raw=String(value||"").trim();return/^https?:\/\//i.test(raw)?raw:"";}
+    const executorCategoryIcons={"Windows Internal":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>',"Windows External":'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="9" cy="10" r="1"></circle><path d="M12 10h4M8 14h8"></path></svg>',"Android Executor":'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="3"></rect><path d="M9 6h6M10 18h4"></path></svg>',"iOS Executor":'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"></rect><path d="M10 5h4M11 18.5h2"></path></svg>',"macOS Executor":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>'};
+    function buildExecutorCard(exec,index){
+      const name=firstDefined(exec,["name","title","exploitName"])||"Executor";const status=firstDefined(exec,["status","exploitStatus"])||(exec.updateStatus===true?"Updated":"Unknown");const version=firstDefined(exec,["version","currentVersion"]);const desc=firstDefined(exec,["description","about"])||"No description available.";const icon=safeLink(firstDefined(exec,["icon","image","logo"]));const platform=classifyExecutor(exec);
+      const sUNC=scoreValue(exec,["sUNC","sunc","sUNCScore","suncScore","s_unc","sunc_percentage"],["suncStatus"]);const UNC=scoreValue(exec,["UNC","unc","uncScore","uncCompatibility","unc_percentage"],["uncStatus"]);
+      const website=safeLink(firstDefined(exec,["websitelink","officialWebsite","official","website","site","homepage","url","link"]));const discord=safeLink(firstDefined(exec,["discordlink","discord","discordLink","discord_url","discordUrl","discordInvite"]));const install=safeLink(firstDefined(exec,["downloadLink","download_link","downloadUrl","download","v3rmlink","install","installation"]));const price=firstDefined(exec,["price","cost","pricing","payment"]);const detected=typeof exec.detected==="boolean"?(exec.detected?"Detected":"Not detected"):"—";
+      let tags=exec.tags||exec.supported||[];if(typeof tags==="string")tags=tags.split(",").map(v=>v.trim()).filter(Boolean);if(!Array.isArray(tags))tags=[];if(exec.free===true&&!tags.some(t=>String(t).toLowerCase()==="free"))tags.unshift("Free");if(!tags.some(t=>String(t).toLowerCase()===platform.toLowerCase()))tags.push(platform);
+      const tagsHtml=tags.slice(0,5).map(t=>`<span class="executor-tag ${tagClass(t)}">${escHtml(t)}</span>`).join("");
+      const links=[website&&`<a class="executor-link" href="${escHtml(website)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l2-2a5 5 0 0 0-7.07-7.07l-1.15 1.15"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-2 2a5 5 0 0 0 7.07 7.07l1.15-1.15"></path></svg>Official</a>`,discord&&`<a class="executor-link" href="${escHtml(discord)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M19.5 5.4a16 16 0 0 0-4-1.3l-.5 1a14 14 0 0 0-5.9 0l-.5-1a16 16 0 0 0-4 1.3"></path><path d="M4.5 15.4A13.8 13.8 0 0 0 7.9 17c2.7 1 5.5 1 8.2 0a13.8 13.8 0 0 0 3.4-1.6"></path></svg>Discord</a>`,install&&`<a class="executor-link" href="${escHtml(install)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><path d="M4 20h16"></path></svg>Install</a>`].filter(Boolean).join("");
+      const specs=[["sUNC",sUNC],["UNC",UNC],["Detected",detected],["Price",price||"—"]];const specsHtml=specs.map(([label,value])=>`<div class="executor-spec"><div class="executor-spec-label">${label}</div><div class="executor-spec-value">${escHtml(value)}</div></div>`).join("");
+      return `<article class="executor-card" data-delay="${index*45}"><div class="executor-header"><div class="executor-icon">${icon?`<img src="${escHtml(icon)}" alt="" loading="lazy" onerror="this.style.display='none'">`:'<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'}</div><div class="executor-title-wrap"><div class="executor-name">${escHtml(name)}</div>${version?`<div class="executor-version">v${escHtml(version)}</div>`:""}</div><div class="executor-status"><span class="executor-status-dot ${statusDotClass(status)}"></span>${escHtml(statusLabel(status))}</div></div><div class="executor-desc">${escHtml(desc)}</div>${tagsHtml?`<div class="executor-tags">${tagsHtml}</div>`:""}<div class="executor-specs">${specsHtml}</div>${links?`<div class="executor-links">${links}</div>`:""}</article>`;
     }
-
-    function statusLabel(status) {
-      if (!status) return "Unknown";
-      const s = status.toLowerCase();
-      if (["working","online","up","updated"].includes(s)) return "Working";
-      if (["broken","offline","down","outdated"].includes(s)) return "Broken";
-      return status.charAt(0).toUpperCase() + status.slice(1);
-    }
-
-    function tagClass(tag) {
-      tag = (tag || "").toLowerCase();
-      if (["free","gratuit"].includes(tag)) return "green";
-      if (["pc","windows","android","mobile","ios"].includes(tag)) return "blue";
-      if (["partial","beta","experimental","paid"].includes(tag)) return "yellow";
-      return "";
-    }
-
-    function buildExecutorCard(exec, index) {
-      const delay = (index * 55) + "ms";
-      // WEAO API fields
-      const name = exec.name || exec.exploitName || exec.title || "Executor";
-      const status = exec.status || exec.exploitStatus || "";
-      const version = exec.version || exec.currentVersion || "";
-      const desc = exec.description || exec.about || "";
-      const dl = exec.downloadLink || exec.download_link || exec.website || exec.link || exec.url || "";
-      const icon = exec.icon || exec.image || exec.logo || "";
-      // WEAO may return tags as array or as comma-string
-      let tags = exec.tags || exec.supported || [];
-      if (typeof tags === "string") tags = tags.split(",").map(t => t.trim()).filter(Boolean);
-      if (!Array.isArray(tags)) tags = [];
-
-      const tagsHtml = tags.slice(0,4).map(t => {
-        const cls = tagClass(t);
-        return `<span class="executor-tag ${cls}">${escHtml(t)}</span>`;
-      }).join("");
-
-      return `
-        <div class="executor-card" style="transition-delay:${delay}">
-          <div class="executor-header">
-            <div class="executor-icon">
-              ${icon
-                ? `<img src="${escHtml(icon)}" alt="${escHtml(name)}" onerror="this.style.display='none'">`
-                : `<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`}
-            </div>
-            <div>
-              <div class="executor-name">${escHtml(name)}</div>
-              ${version ? `<div class="executor-version">v${escHtml(version)}</div>` : ""}
-            </div>
-          </div>
-          ${desc ? `<div class="executor-desc">${escHtml(desc)}</div>` : ""}
-          ${tagsHtml ? `<div class="executor-tags">${tagsHtml}</div>` : ""}
-          <div class="executor-footer">
-            <div class="executor-status">
-              <span class="executor-status-dot ${statusDotClass(status)}"></span>
-              ${escHtml(statusLabel(status))}
-            </div>
-            ${dl ? `<a href="${escHtml(dl)}" target="_blank" rel="noopener noreferrer" class="executor-download">
-              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Download
-            </a>` : ""}
-          </div>
-        </div>`;
-    }
-
-    function escHtml(str) {
-      return String(str || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-    }
-
-    async function loadExecutors() {
-      const loading = document.getElementById("execLoading");
-      const error = document.getElementById("execError");
-      const grid = document.getElementById("executorsGrid");
-
-      try {
-        // WEAO requires User-Agent: WEAO-3PService — browsers can't set it directly
-        // We use the community proxy which handles the correct headers
-        const PROXY_ENDPOINTS = [
-          "http://farts.fadedis.xyz:25505/api/status/exploits",
-          "https://corsproxy.io/?https://weao.xyz/api/status/exploits",
-          "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://weao.xyz/api/status/exploits")
-        ];
-
-        let data = null;
-        let lastErr = "All proxy endpoints failed.";
-
-        for (const url of PROXY_ENDPOINTS) {
-          try {
-            const res = await fetch(url, {
-              signal: AbortSignal.timeout(10000),
-              headers: { "Accept": "application/json" }
-            });
-            if (res.ok) {
-              const json = await res.json();
-              // WEAO returns { exploits: [...] } or array directly
-              const list = Array.isArray(json) ? json : (json.exploits || json.data || json.results || Object.values(json));
-              if (Array.isArray(list) && list.length > 0) {
-                data = list;
-                break;
-              }
-            }
-          } catch (e) { lastErr = e.message; }
-        }
-
-        if (!data || data.length === 0) throw new Error(lastErr);
-
-        grid.innerHTML = data.map((ex, i) => buildExecutorCard(ex, i)).join("");
-        loading.style.display = "none";
-        grid.style.display = "grid";
-
-        requestAnimationFrame(() => {
-          grid.querySelectorAll(".executor-card").forEach(card => {
-            const d = parseInt(card.style.transitionDelay) || 0;
-            setTimeout(() => card.classList.add("visible"), d);
-          });
-        });
-
-      } catch (err) {
-        loading.style.display = "none";
-        error.style.display = "block";
-        error.innerHTML = `
-          <svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:rgba(255,98,111,.5);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 12px;display:block">
-            <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
-          </svg>
-          Unable to load executors.<br>
-          <span style="font-size:11px;color:rgba(160,170,220,.4)">${escHtml(err.message)}</span><br><br>
-          <button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Retry</button>
-        `;
-      }
-    }
-
-    window.retryExecutors = function() {
-      const loading = document.getElementById("execLoading");
-      const error = document.getElementById("execError");
-      const grid = document.getElementById("executorsGrid");
-      loading.style.display = "flex"; error.style.display = "none"; grid.style.display = "none";
-      loadExecutors();
-    };
-
-    /* ============================================================
-       OBFUSCATOR — ANTILUA API
-       POST https://api.antilua.xyz/v1/obfuscate
-       Body: raw text/plain Luau source
-       Auth: Authorization: Bearer YOUR_KEY
-       Query params: map, 2step, encryptStrings, proxifyFunctions, fastOpcode
-    ============================================================ */
-    const ANTILUA_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNjdhOTUzOS01OWZiLTQ1ZmUtOTlkYy01NTBhZjY4MWRhNDMiLCJ0eXBlIjoiYXBpIiwibWF4Q3JlZGl0cyI6NTAsImlhdCI6MTc5MDQ0NTAwMH0.BlQtKbEPAiXeEZwnCpO4jPsUvEeaTs3ePMXmOFokDck";
-    const ANTILUA_ENDPOINT = "https://api.antilua.xyz/v1/obfuscate";
-
-    const deobInput = document.getElementById("deobInput");
-    const deobOutput = document.getElementById("deobOutput");
-    const deobRunBtn = document.getElementById("deobRunBtn");
-    const deobCopyBtn = document.getElementById("deobCopyBtn");
-    const deobDownloadBtn = document.getElementById("deobDownloadBtn");
-    const deobClearBtn = document.getElementById("deobClearBtn");
-    const deobStatus = document.getElementById("deobStatus");
-    const deobStatusIcon = document.getElementById("deobStatusIcon");
-    const deobStatusText = document.getElementById("deobStatusText");
-    const obfCreditsVal = document.getElementById("obfCreditsVal");
-    const obfCooldown = document.getElementById("obfCooldown");
-
-    // Options toggle
-    let cooldownTimer = null;
-
-    document.querySelectorAll(".obf-option").forEach(opt => {
-      opt.addEventListener("click", () => opt.classList.toggle("active"));
-    });
-
-    function getObfOptions() {
-      const params = {};
-      document.querySelectorAll(".obf-option").forEach(opt => {
-        params[opt.dataset.param] = opt.classList.contains("active") ? "true" : "false";
-      });
-      return params;
-    }
-
-    function setDeobStatus(state, text) {
-      deobStatus.style.display = "flex";
-      deobStatus.className = "deob-status " + state;
-      deobStatusText.textContent = text;
-      if (state === "running") {
-        deobStatusIcon.innerHTML = '<circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>';
-      } else if (state === "success") {
-        deobStatusIcon.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
-      } else {
-        deobStatusIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
-      }
-    }
-
-    function startCooldown(ms) {
-      if (cooldownTimer) clearInterval(cooldownTimer);
-      let remaining = Math.ceil(ms / 1000);
-      obfCooldown.textContent = "⏳ " + remaining + "s cooldown";
-      cooldownTimer = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) {
-          clearInterval(cooldownTimer);
-          obfCooldown.textContent = "";
-          deobRunBtn.disabled = false;
-        } else {
-          obfCooldown.textContent = "⏳ " + remaining + "s cooldown";
-        }
-      }, 1000);
-    }
-
-    async function runObfuscate() {
-      const code = deobInput.value.trim();
-      if (!code) { showNotification("Empty input", "Paste a script before obfuscating.", "error"); return; }
-
-      deobRunBtn.disabled = true;
-      deobCopyBtn.style.display = "none";
-      deobDownloadBtn.style.display = "none";
-      deobOutput.classList.remove("visible");
-      setDeobStatus("running", "Obfuscating…");
-
-      // Build query string from options
-      const opts = getObfOptions();
-      const qs = Object.entries(opts).map(([k,v]) => k + "=" + encodeURIComponent(v)).join("&");
-      const url = ANTILUA_ENDPOINT + "?" + qs;
-
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "text/plain",
-            "Authorization": "Bearer " + ANTILUA_API_KEY
-          },
-          body: code,
-          signal: AbortSignal.timeout(30000)
-        });
-
-        const data = await res.json().catch(() => ({}));
-
-        if (res.ok && data.status === true && data.code) {
-          // Update credits display
-          if (typeof data.credits !== "undefined") {
-            obfCreditsVal.textContent = data.credits + " / " + (data.limit || 50);
-          }
-          // Handle cooldown
-          if (data.cooldownRemaining > 0) {
-            startCooldown(data.cooldownRemaining);
-          } else {
-            deobRunBtn.disabled = false;
-          }
-
-          deobOutput.textContent = data.code;
-          deobOutput.classList.add("visible");
-          deobCopyBtn.style.display = "inline-flex";
-          deobDownloadBtn.style.display = "inline-flex";
-          setDeobStatus("success", "Obfuscation complete · " + (data.taken || 0) + "ms" + (data.cached ? " (cached)" : ""));
-          showNotification("Success", "Script obfuscated successfully.", "success");
-        } else {
-          // Error from API
-          const msg = data.message || data.error || ("HTTP " + res.status);
-          deobRunBtn.disabled = false;
-          // Handle cooldown on 429
-          if (res.status === 429 && data.cooldownRemaining) startCooldown(data.cooldownRemaining);
-          setDeobStatus("error", "Error: " + msg);
-          showNotification("Failed", msg, "error");
-        }
-      } catch (err) {
-        deobRunBtn.disabled = false;
-        const msg = err.name === "TimeoutError" ? "Request timed out (30s)." : (err.message || "Network error.");
-        setDeobStatus("error", msg);
-        showNotification("Failed", msg, "error");
-      }
-    }
-
-    deobRunBtn.addEventListener("click", runObfuscate);
-
-    deobCopyBtn.addEventListener("click", async () => {
-      const text = deobOutput.textContent.trim();
-      if (!text) return;
-      const ok = await copyToClipboard(text);
-      showNotification(ok ? "Copied" : "Error", ok ? "Result copied to clipboard." : "Unable to copy.", ok ? "success" : "error");
-    });
-
-    deobDownloadBtn.addEventListener("click", () => {
-      const text = deobOutput.textContent.trim();
-      if (!text) return;
-      const blob = new Blob([text], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url; a.download = "obfuscated.lua";
-      document.body.appendChild(a); a.click();
-      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
-    });
-
-    deobClearBtn.addEventListener("click", () => {
-      deobInput.value = "";
-      deobOutput.textContent = "";
-      deobOutput.classList.remove("visible");
-      deobCopyBtn.style.display = "none";
-      deobDownloadBtn.style.display = "none";
-      deobStatus.style.display = "none";
-    });
-
-    /* ============================================================
-       SUPABASE AUTH / PROFILE
-    ============================================================ */
-    const SUPABASE_URL = "https://fzuocfhzzvscjhcxuzog.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_XWzMsq-kiPmkQ8rmL_u7Pg_bJT4TwZ5";
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const DISCORD_CLIENT_ID = "1451684958090428579";
-    const DISCORD_REDIRECT_URI = "https://x4tmqq.github.io/Sentinel-Script";
-    const EDGE_FUNCTION_URL = "https://fzuocfhzzvscjhcxuzog.supabase.co/functions/v1/get-key";
-    const KEY_SESSION_KEY = "sentinelKeySession";
-
-    let currentProfile = null;
-    let pendingAvatarFile = null;
-    let pendingBannerFile = null;
-
-    function usernameToEmail(u) { return u.trim().toLowerCase() + "@sentinel-script.internal"; }
-    function initials(n) { return (n||"").trim().slice(0,2).toUpperCase(); }
-    function setAuthError(id, msg) { const el = document.getElementById(id); if (!el) return; el.textContent = msg||""; el.classList.toggle("visible", Boolean(msg)); }
-
-    function switchAuthTab(tab) {
-      const login = tab === "login";
-      document.getElementById("authTabLogin").classList.toggle("active", login);
-      document.getElementById("authTabSignup").classList.toggle("active", !login);
-      document.getElementById("loginForm").classList.toggle("active", login);
-      document.getElementById("signupForm").classList.toggle("active", !login);
-    }
-
-    function showAuthOverlay() { document.getElementById("authOverlay").classList.add("visible"); document.body.style.overflow = "hidden"; }
-    function hideAuthOverlay() { document.getElementById("authOverlay").classList.remove("visible"); document.body.style.overflow = ""; }
-
-    function renderAccountUI(profile) {
-      currentProfile = profile;
-      document.getElementById("accountWidget").style.display = "flex";
-      document.getElementById("accountDivider").style.display = "block";
-      [document.getElementById("accountAvatar"), document.getElementById("accountMenuAvatar")].forEach(el => {
-        if (!el) return;
-        if (profile.avatar_url) { el.style.backgroundImage = "url(" + profile.avatar_url + ")"; el.textContent = ""; }
-        else { el.style.backgroundImage = ""; el.textContent = initials(profile.display_name); }
-      });
-      document.getElementById("accountName").textContent = profile.display_name || profile.username;
-      document.getElementById("accountMenuDisplay").textContent = profile.display_name || profile.username;
-      document.getElementById("accountMenuUsername").textContent = "@" + profile.username;
-      document.getElementById("accountMenuId").textContent = "ID · " + profile.id;
-    }
-
-    async function loadCurrentUser() {
-      const { data, error } = await sb.auth.getUser();
-      if (error || !data?.user) return false;
-      const profileRes = await sb.from("profiles").select("*").eq("id", data.user.id).maybeSingle();
-      if (profileRes.error || !profileRes.data) return false;
-      renderAccountUI(profileRes.data);
-      return true;
-    }
-
-    function toggleAccountMenu(force) {
-      const menu = document.getElementById("accountMenu");
-      if (!menu) return;
-      const show = typeof force === "boolean" ? force : !menu.classList.contains("visible");
-      menu.classList.toggle("visible", show);
-    }
-
-    async function handleSignup(e) {
-      e.preventDefault(); setAuthError("signupError","");
-      const displayName = document.getElementById("signupDisplayName").value.trim();
-      const username = document.getElementById("signupUsername").value.trim();
-      const password = document.getElementById("signupPassword").value;
-      if (!/^[a-zA-Z0-9_]{3,24}$/.test(username)) { setAuthError("signupError","Username must be 3–24 characters."); return; }
-      const btn = document.getElementById("signupSubmitBtn"); btn.disabled = true; btn.textContent = "Creating…";
-      try {
-        const chk = await sb.rpc("check_username_exists", { p_username: username });
-        if (chk.error) throw new Error("Technical error.");
-        if (chk.data === true) throw new Error("Username already taken.");
-        const sup = await sb.auth.signUp({ email: usernameToEmail(username), password });
-        if (sup.error) throw new Error(sup.error.message);
-        if (!sup.data.user) throw new Error("Sign up failed.");
-        const ins = await sb.from("profiles").insert({ id: sup.data.user.id, display_name: displayName, username, bio:"", avatar_url:null, banner_url:null });
-        if (ins.error) throw new Error("Account created but profile not saved.");
-        await loadCurrentUser(); hideAuthOverlay();
-        showNotification("Account created","Your Sentinel account is ready.","success");
-      } catch (err) { setAuthError("signupError", err?.message||"An error occurred."); }
-      finally { btn.disabled = false; btn.textContent = "Create account"; }
-    }
-
-    async function handleLogin(e) {
-      e.preventDefault(); setAuthError("loginError","");
-      const username = document.getElementById("loginUsername").value.trim();
-      const password = document.getElementById("loginPassword").value;
-      const btn = document.getElementById("loginSubmitBtn"); btn.disabled = true; btn.textContent = "Logging in…";
-      try {
-        const chk = await sb.rpc("check_username_exists", { p_username: username });
-        if (chk.error) throw new Error("Technical error.");
-        if (chk.data === false) throw new Error("Username or password incorrect.");
-        const res = await sb.auth.signInWithPassword({ email: usernameToEmail(username), password });
-        if (res.error) throw new Error("Username or password incorrect.");
-        await loadCurrentUser(); hideAuthOverlay();
-      } catch (err) { setAuthError("loginError", err?.message||"An error occurred."); }
-      finally { btn.disabled = false; btn.textContent = "Log in"; }
-    }
-
-    async function handleLogout() {
-      await sb.auth.signOut(); currentProfile = null;
-      toggleAccountMenu(false);
-      document.getElementById("accountWidget").style.display = "none";
-      document.getElementById("accountDivider").style.display = "none";
-      clearSavedKeySession(); showAuthOverlay();
-    }
-
-    function openProfileModal() {
-      toggleAccountMenu(false);
-      if (!currentProfile) return;
-      document.getElementById("editDisplayName").value = currentProfile.display_name||"";
-      document.getElementById("editUsername").value = currentProfile.username||"";
-      document.getElementById("editBio").value = currentProfile.bio||"";
-      const avatar = document.getElementById("profileAvatarPreview");
-      if (currentProfile.avatar_url) { avatar.style.backgroundImage="url("+currentProfile.avatar_url+")"; avatar.textContent=""; }
-      else { avatar.style.backgroundImage=""; avatar.textContent=initials(currentProfile.display_name); }
-      const banner = document.getElementById("profileBannerPreview");
-      banner.style.backgroundImage = currentProfile.banner_url ? "url("+currentProfile.banner_url+")" : "";
-      pendingAvatarFile = null; pendingBannerFile = null;
-      setAuthError("profileEditError","");
-      document.getElementById("profileModalOverlay").classList.add("visible");
-    }
-
-    function closeProfileModal() { document.getElementById("profileModalOverlay").classList.remove("visible"); }
-
-    function handleImageSelect(e, kind) {
-      const file = e.target.files?.[0]; if (!file) return;
-      const url = URL.createObjectURL(file);
-      if (kind === "avatar") {
-        pendingAvatarFile = file;
-        const el = document.getElementById("profileAvatarPreview");
-        el.style.backgroundImage = "url(" + url + ")"; el.textContent = "";
-      } else {
-        pendingBannerFile = file;
-        document.getElementById("profileBannerPreview").style.backgroundImage = "url(" + url + ")";
-      }
-    }
-
-    async function uploadImage(bucket, file, userId) {
-      const ext = file.name.split(".").pop();
-      const path = userId + "/" + bucket + "." + ext;
-      const upRes = await sb.storage.from(bucket).upload(path, file, { upsert: true });
-      if (upRes.error) throw upRes.error;
-      const { data } = sb.storage.from(bucket).getPublicUrl(path);
-      return data.publicUrl + "?t=" + Date.now();
-    }
-
-    async function handleProfileSave() {
-      if (!currentProfile) return; setAuthError("profileEditError","");
-      const btn = document.getElementById("profileSaveBtn"); btn.disabled = true; btn.textContent = "Saving…";
-      const newDisplayName = document.getElementById("editDisplayName").value.trim();
-      const newUsername = document.getElementById("editUsername").value.trim();
-      const newBio = document.getElementById("editBio").value.trim();
-      if (!newDisplayName) { setAuthError("profileEditError","Display name is required."); btn.disabled=false; btn.textContent="Save"; return; }
-      if (!/^[a-zA-Z0-9_]{3,24}$/.test(newUsername)) { setAuthError("profileEditError","Invalid username."); btn.disabled=false; btn.textContent="Save"; return; }
-      try {
-        if (newUsername.toLowerCase() !== String(currentProfile.username||"").toLowerCase()) {
-          const chk = await sb.rpc("check_username_exists", { p_username: newUsername });
-          if (chk.error) throw new Error("Cannot verify username.");
-          if (chk.data === true) throw new Error("Username already taken.");
-        }
-        const updates = { display_name: newDisplayName, username: newUsername, bio: newBio };
-        if (pendingAvatarFile) updates.avatar_url = await uploadImage("avatars", pendingAvatarFile, currentProfile.id);
-        if (pendingBannerFile) updates.banner_url = await uploadImage("banners", pendingBannerFile, currentProfile.id);
-        const upd = await sb.from("profiles").update(updates).eq("id", currentProfile.id);
-        if (upd.error) throw new Error(upd.error.message||"Unable to save.");
-        if (newUsername.toLowerCase() !== String(currentProfile.username||"").toLowerCase()) await sb.auth.updateUser({ email: usernameToEmail(newUsername) });
-        await loadCurrentUser(); closeProfileModal();
-        showNotification("Profile updated","Your info has been saved.","success");
-      } catch (err) { setAuthError("profileEditError", err?.message||"Error while saving."); }
-      finally { btn.disabled=false; btn.textContent="Save"; }
-    }
-
-    function saveKeySession(token) { try { localStorage.setItem(KEY_SESSION_KEY, JSON.stringify({ token, savedAt: Date.now() })); } catch (_) {} }
-    function getSavedKeyToken() { try { const raw = localStorage.getItem(KEY_SESSION_KEY); return raw ? JSON.parse(raw)?.token||null : null; } catch (_) { return null; } }
-    function clearSavedKeySession() { try { localStorage.removeItem(KEY_SESSION_KEY); } catch (_) {} }
-
-    function showKey(scriptId, keyValue) {
-      const reveal = document.getElementById("keyReveal_" + scriptId);
-      const text = document.getElementById("keyText_" + scriptId);
-      const btn = document.getElementById("keyBtn_" + scriptId);
-      const err = document.getElementById("keyError_" + scriptId);
-      if (text) text.textContent = keyValue;
-      if (reveal) reveal.style.display = "flex";
-      if (err) err.classList.remove("visible");
-      if (btn) {
-        btn.disabled = false;
-        setButtonVisual(btn, "Copy Key", '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>');
-        btn.onclick = () => copyKey(scriptId);
-      }
-    }
-
-    function showKeyError(scriptId, message) {
-      const err = document.getElementById("keyError_" + scriptId); if (err) { err.textContent = message; err.classList.add("visible"); }
-      const btn = document.getElementById("keyBtn_" + scriptId);
-      if (btn) {
-        btn.disabled = false;
-        setButtonVisual(btn, "Get Key", '<svg viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.77-7.78L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>');
-        btn.onclick = () => handleGetKey(scriptId);
-      }
-    }
-
-    const keyCooldowns = {};
-    async function copyKey(scriptId) {
-      const now = Date.now(); if (keyCooldowns[scriptId] && now - keyCooldowns[scriptId] < 500) return; keyCooldowns[scriptId] = now;
-      const textEl = document.getElementById("keyText_" + scriptId); if (!textEl || !textEl.textContent.trim()) return;
-      const copied = await copyToClipboard(textEl.textContent.trim());
-      showNotification(copied ? "Key copied" : "Copy failed", copied ? "Key copied to clipboard." : "Unable to copy key.", copied ? "success" : "error");
-    }
-
-    async function fetchKeyWithSession(scriptId, sessionToken) {
-      try {
-        const ses = await sb.auth.getSession(); const token = ses.data?.session?.access_token||"";
-        const r = await fetch(EDGE_FUNCTION_URL, { method:"POST", headers:{"Content-Type":"application/json","Authorization":"Bearer "+token}, body: JSON.stringify({ script_id: scriptId, session_token: sessionToken }) });
-        const data = await r.json();
-        if (r.ok && data.key) { showKey(scriptId, data.key); if (data.session_token) saveKeySession(data.session_token); return true; }
-        if (data.expired) clearSavedKeySession();
-      } catch (_) {}
-      return false;
-    }
-
-    function handleGetKey(scriptId) {
-      const params = new URLSearchParams({ client_id: DISCORD_CLIENT_ID, redirect_uri: DISCORD_REDIRECT_URI, response_type:"code", scope:"identify guilds.members.read", state: scriptId });
-      window.location.href = "https://discord.com/api/oauth2/authorize?" + params.toString();
-    }
-
-    function showDiscordLoading(message) {
-      const overlay = document.getElementById("discordLoadingOverlay"); const txt = document.getElementById("discordLoadingText"); if (!overlay) return;
-      txt.textContent = message||"Discord verification…";
-      document.getElementById("verificationIcon").className = "verification-icon";
-      document.getElementById("verificationIconSvg").innerHTML = "";
-      overlay.classList.add("visible");
-    }
-
-    function showVerificationResult(success, callback) {
-      const overlay = document.getElementById("discordLoadingOverlay"); const icon = document.getElementById("verificationIcon"); const svg = document.getElementById("verificationIconSvg"); const txt = document.getElementById("discordLoadingText");
-      if (!overlay||!icon||!svg) { callback?.(); return; }
-      txt.textContent = success ? "Verification successful" : "Verification failed";
-      icon.className = "verification-icon " + (success ? "success" : "error");
-      svg.innerHTML = success ? '<path d="M5 12.5 9.2 16.7 19 7"></path>' : '<path d="M7 7 17 17"></path><path d="M17 7 7 17"></path>';
-      setTimeout(() => {
-        overlay.classList.remove("visible");
-        setTimeout(() => { icon.className="verification-icon"; svg.innerHTML=""; txt.textContent="Discord verification…"; callback?.(); }, 460);
-      }, 1800);
-    }
-
-    async function restoreDiscordKeySession() {
-      const token = getSavedKeyToken(); if (!token) return;
-      for (const scriptId of ["examination","bloxstrike"]) {
-        const btn = document.getElementById("keyBtn_" + scriptId); if (!btn||!btn.disabled) continue;
-        await fetchKeyWithSession(scriptId, token);
-      }
-    }
-
-    /* ============================================================
-       EVENT BINDINGS
-    ============================================================ */
-    document.getElementById("authTabLogin").addEventListener("click", () => switchAuthTab("login"));
-    document.getElementById("authTabSignup").addEventListener("click", () => switchAuthTab("signup"));
-    document.getElementById("goSignup").addEventListener("click", () => switchAuthTab("signup"));
-    document.getElementById("goLogin").addEventListener("click", () => switchAuthTab("login"));
-    document.getElementById("loginForm").addEventListener("submit", handleLogin);
-    document.getElementById("signupForm").addEventListener("submit", handleSignup);
-    document.getElementById("accountBtn").addEventListener("click", () => toggleAccountMenu());
-    document.getElementById("editProfileItem").addEventListener("click", openProfileModal);
-    document.getElementById("logoutItem").addEventListener("click", handleLogout);
-    document.getElementById("profileCancelBtn").addEventListener("click", closeProfileModal);
-    document.getElementById("profileSaveBtn").addEventListener("click", handleProfileSave);
-    document.getElementById("profileBannerPreview").addEventListener("click", () => document.getElementById("bannerFileInput").click());
-    document.getElementById("profileAvatarWrap").addEventListener("click", () => document.getElementById("avatarFileInput").click());
-    document.getElementById("bannerFileInput").addEventListener("change", (e) => handleImageSelect(e,"banner"));
-    document.getElementById("avatarFileInput").addEventListener("change", (e) => handleImageSelect(e,"avatar"));
-
-    ["examination","bloxstrike"].forEach(scriptId => {
-      document.getElementById("keyBtn_"+scriptId).addEventListener("click", () => handleGetKey(scriptId));
-      document.getElementById("keyCopyBtn_"+scriptId).addEventListener("click", () => copyKey(scriptId));
-    });
-
-    document.addEventListener("click", (e) => {
-      const widget = document.getElementById("accountWidget"); if (widget && !widget.contains(e.target)) toggleAccountMenu(false);
-      const modal = document.getElementById("profileModalOverlay"); if (e.target === modal) closeProfileModal();
-    });
-
+    async function loadExecutors(){
+      const loading=document.getElementById("execLoading"),error=document.getElementById("execError");
+      try{
+        const PROXY_ENDPOINTS=["https://corsproxy.io/?https://weao.xyz/api/status/exploits","https://api.allorigins.win/raw?url="+encodeURIComponent("https://weao.xyz/api/status/exploits")];let data=null,lastErr="All executor data endpoints failed.";
+        for(const url of PROXY_ENDPOINTS){try{const res=await fetch(url,{signal:AbortSignal.timeout(10000),headers:{"Accept":"application/json"}});if(!res.ok)continue;const json=await res.json();const list=Array.isArray(json)?json:(json.exploits||json.data||json.results||Object.values(json));if(Array.isArray(list)&&list.length){data=list;break;}}catch(e){lastErr=e?.message||lastErr;}}
+        if(!data)throw new Error(lastErr);
+        const groups=new Map([["Windows Internal",[]],["iOS Executor",[]],["Android Executor",[]],["Windows External",[]],["macOS Executor",[]]]);data.forEach(ex=>{const cat=classifyExecutor(ex);if(!groups.has(cat))groups.set(cat,[]);groups.get(cat).push(ex);});
+        const ordered=["Windows Internal","iOS Executor","Android Executor","Windows External","macOS Executor"];const html=ordered.filter(k=>groups.get(k)?.length).map(category=>{const items=groups.get(category);return `<section class="executor-category"><div class="executor-category-head"><div class="executor-category-badge">${executorCategoryIcons[category]||""}${escHtml(category)}<span style="opacity:.45">${items.length}</span></div><div class="executor-category-rule"></div></div><div class="executors-grid">${items.map((ex,i)=>buildExecutorCard(ex,i)).join("")}</div></section>`;}).join("");
+        document.getElementById("executorsGrid").outerHTML=`<div id="executorsGrid">${html}</div>`;loading.style.display="none";document.querySelectorAll(".executor-card").forEach(card=>{const d=parseInt(card.dataset.delay||"0",10);setTimeout(()=>card.classList.add("visible"),d);});
+      }catch(err){loading.style.display="none";error.style.display="block";error.innerHTML=`<svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:rgba(255,98,111,.5);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 12px;display:block"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>Unable to load executors.<br><span style="font-size:11px;color:rgba(160,170,220,.4)">${escHtml(err?.message||"Unknown error")}</span><br><br><button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Retry</button>`;}}
+    window.retryExecutors=function(){const loading=document.getElementById("execLoading"),error=document.getElementById("execError");if(loading)loading.style.display="flex";if(error)error.style.display="none";loadExecutors();};
     /* ============================================================
        AUTH INIT
     ============================================================ */
