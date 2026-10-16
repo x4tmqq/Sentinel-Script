@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Sentinel Script</title>
   <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/x4tmqq/Sentinel-Script/refs/heads/main/SS_icon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -730,9 +731,6 @@
     .analytics-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 11px; font-size: 8.5px; color: rgba(255,255,255,.3); }
     .analytics-refresh { width: 27px; height: 27px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.68); background: rgba(255,255,255,.035); cursor: pointer; transition: transform .35s, background .2s, border-color .2s; }
     .analytics-refresh:hover { transform: rotate(90deg); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.22); }
-
-    /* ===== EXECUTORS SECTION ===== */
-    .executor-category{position:relative;z-index:3;max-width:1180px;margin:0 auto 42px;padding:0 32px}.executor-category:last-child{margin-bottom:0}.executor-category-head{display:flex;align-items:center;gap:12px;margin:0 0 16px}.executor-category-rule{height:1px;flex:1;background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,0))}.executor-category-badge{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 6px 18px rgba(0,0,0,.16);color:rgba(240,242,255,.85);font-size:10px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.executor-category-badge svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.executors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}.executor-card{position:relative;overflow:hidden;min-width:0;border-radius:22px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.022) 46%,rgba(255,255,255,.045));backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);-webkit-backdrop-filter:blur(16px) saturate(180%) contrast(112%) brightness(1.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.12),0 4px 24px rgba(0,0,0,.2);padding:18px;display:flex;flex-direction:column;gap:13px;opacity:0;transform:translateY(22px);transition:opacity .48s,transform .48s,border-color .25s,box-shadow .25s}.executor-card.visible{opacity:1;transform:translateY(0)}.executor-card:before{content:"";position:absolute;inset:-18px;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 115% at -2% 50%,rgba(255,255,255,.18),transparent 30%),radial-gradient(ellipse 55% 115% at 102% 50%,rgba(255,255,255,.15),transparent 30%),radial-gradient(ellipse 115% 55% at 50% -2%,rgba(255,255,255,.14),transparent 28%);filter:blur(10px);opacity:.8}.executor-card:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:linear-gradient(90deg,rgba(255,255,255,.16),transparent 8%,transparent 92%,rgba(255,255,255,.14)),linear-gradient(180deg,rgba(255,255,255,.14),transparent 12%,transparent 86%,rgba(0,0,0,.18)),radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.11),transparent 70%);mix-blend-mode:screen}.executor-card:hover{border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 24px 60px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.28)}.executor-card>*{position:relative;z-index:2}.executor-header{display:flex;align-items:center;gap:12px;min-width:0}.executor-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.14);overflow:hidden;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}.executor-icon img{width:30px;height:30px;object-fit:contain}.executor-icon svg{width:23px;height:23px;fill:none;stroke:rgba(255,255,255,.72);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.executor-title-wrap{min-width:0;flex:1}.executor-name{font-size:15px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-version{font-size:10px;color:rgba(160,170,220,.5);margin-top:3px;font-family:"Courier New",monospace}.executor-status{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);font-size:8.5px;font-weight:800}.executor-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.executor-status-dot.online{background:var(--green);box-shadow:0 0 8px rgba(109,255,154,.6)}.executor-status-dot.offline{background:var(--red);box-shadow:0 0 8px rgba(255,98,111,.6)}.executor-status-dot.unknown{background:rgba(255,210,50,.8);box-shadow:0 0 8px rgba(255,210,50,.4)}.executor-desc{font-size:11.5px;color:rgba(210,214,235,.55);line-height:1.55;min-height:35px}.executor-tags{display:flex;flex-wrap:wrap;gap:6px}.executor-tag{font-size:9px;font-weight:700;letter-spacing:.06em;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:rgba(210,214,235,.65)}.executor-tag.green{border-color:rgba(109,255,154,.22);background:rgba(109,255,154,.05);color:rgba(109,255,154,.86)}.executor-tag.blue{border-color:rgba(88,101,242,.28);background:rgba(88,101,242,.07);color:rgba(150,162,255,.88)}.executor-tag.yellow{border-color:rgba(255,210,50,.22);background:rgba(255,210,50,.05);color:rgba(255,220,80,.82)}.executor-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.executor-spec{min-width:0;padding:9px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(145deg,rgba(255,255,255,.05),rgba(255,255,255,.015));box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}.executor-spec-label{font-size:7.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.38)}.executor-spec-value{margin-top:4px;font-size:12.5px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.executor-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}.executor-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.025));color:rgba(240,242,255,.82);font-size:9.5px;font-weight:700;text-decoration:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .16s,border-color .2s,background .2s,color .2s}.executor-link:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.26);background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.05));color:#fff}.executor-link svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.exec-loading,.exec-error{position:relative;z-index:3}.exec-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 0}.spinner{width:36px;height:36px;border-radius:50%;border:2.5px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.6);animation:spin .7s linear infinite}.exec-loading-text{font-size:12px;color:rgba(210,214,235,.4);font-weight:500}.exec-error{text-align:center;padding:48px 32px;font-size:13px;color:rgba(255,98,111,.7);font-weight:500}
     /* ===== OVERLAYS & MODALS ===== */
     .auth-overlay, .profile-modal-overlay, .discord-loading-overlay {
       position: fixed; inset: 0;
@@ -813,8 +811,6 @@
     @media (max-width: 900px) {
       .script-card { grid-template-columns: 40% minmax(0,1fr); }
       .card-body { padding: 26px 24px; }
-      .executors-grid { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); }
-      .category-nav-notch { left: 12px; }
     }
 
     @media (max-width: 680px) {
@@ -827,8 +823,6 @@
         border-radius: 22px; width: calc(100% - 32px); margin: 0 auto;
       }
       .scripts-grid { padding: 0 16px; }
-      .executor-category { padding: 0 16px; }
-      .executors-grid { grid-template-columns: 1fr; }
       .script-card { grid-template-columns: 1fr; }
       .card-thumb { min-height: 0; aspect-ratio: 16/9; }
       .thumb-overlay { background: linear-gradient(180deg, transparent 60%, rgba(3,3,4,.85) 100%); }
@@ -844,6 +838,446 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .001ms !important; }
     }
+  
+
+    /* ===== SENTINEL LIQUID GLASS SYSTEM ===== */
+    :root {
+      --accent: #ffffff;
+      --glass-bg: rgba(255,255,255,.075);
+      --glass-border: rgba(255,255,255,.18);
+      --glass-border-strong: rgba(255,255,255,.34);
+    }
+
+    body::before {
+      background:
+        radial-gradient(circle at 50% -10%, rgba(255,255,255,.10), transparent 34%),
+        radial-gradient(circle at 8% 60%, rgba(255,255,255,.035), transparent 30%),
+        radial-gradient(circle at 92% 75%, rgba(255,255,255,.04), transparent 28%);
+    }
+
+    .glass,
+    .script-card,
+    .script-analytics,
+    .lua-panel {
+      backdrop-filter: blur(28px) saturate(195%) contrast(108%) brightness(1.08);
+      -webkit-backdrop-filter: blur(28px) saturate(195%) contrast(108%) brightness(1.08);
+    }
+
+    .category-nav-notch {
+      position: fixed;
+      top: 88px;
+      left: 50%;
+      right: auto;
+      z-index: 900;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: max-content;
+      max-width: calc(100vw - 28px);
+      min-height: 62px;
+      padding: 6px;
+      border-radius: 24px;
+      overflow: hidden;
+      transform: translateX(-50%);
+      border-color: rgba(255,255,255,.2);
+      background: linear-gradient(155deg, rgba(255,255,255,.15), rgba(255,255,255,.045) 52%, rgba(255,255,255,.09));
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.48), inset 0 -1px 0 rgba(0,0,0,.28), 0 20px 65px rgba(0,0,0,.38), 0 4px 18px rgba(0,0,0,.24);
+      isolation: isolate;
+    }
+
+    .category-notch-content {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      width: 100%;
+      padding: 0;
+    }
+
+    .category-notch-divider {
+      width: 1px;
+      height: 25px;
+      margin: 0 2px;
+      flex: 0 0 1px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,.25), transparent);
+    }
+
+    .cat-tab {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 0 17px;
+      border: 1px solid transparent;
+      border-radius: 17px;
+      color: rgba(245,247,255,.64);
+      background: transparent;
+      font: 650 12px/1 "Inter", sans-serif;
+      letter-spacing: .005em;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+      transition: color .22s ease, background .22s ease, border-color .22s ease, transform .22s ease, box-shadow .22s ease;
+    }
+
+    .cat-tab-label {
+      display: inline-block;
+      max-width: none;
+      opacity: 1;
+      overflow: visible;
+      transition: color .22s ease;
+    }
+
+    .cat-tab svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+      transition: transform .22s ease;
+    }
+
+    .cat-tab:hover {
+      color: #fff;
+      padding-right: 17px;
+      background: linear-gradient(145deg, rgba(255,255,255,.1), rgba(255,255,255,.035));
+    }
+
+    .cat-tab:hover svg { transform: translateY(-1px); }
+
+    .cat-tab.active {
+      color: #fff;
+      padding-right: 17px;
+      border-color: rgba(255,255,255,.25);
+      background: linear-gradient(150deg, rgba(255,255,255,.23), rgba(255,255,255,.085) 54%, rgba(255,255,255,.15));
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.2), 0 5px 16px rgba(0,0,0,.18);
+    }
+
+    .cat-tab.active::after {
+      content: "";
+      position: absolute;
+      left: 20%;
+      right: 20%;
+      bottom: 3px;
+      height: 1px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.65), transparent);
+      pointer-events: none;
+    }
+
+    .cat-tab:focus-visible,
+    .lua-action-btn:focus-visible,
+    .lua-editor:focus-visible {
+      outline: 2px solid rgba(255,255,255,.72);
+      outline-offset: 3px;
+    }
+
+    .content-section { padding-top: 132px; }
+    .section-label { color: rgba(225,230,245,.5); }
+    .section-title { letter-spacing: -.045em; }
+
+    .btn-primary,
+    .btn-glass-pill,
+    .btn-dark,
+    .btn-card-glass,
+    .btn-key,
+    .auth-submit,
+    .auth-tab.active,
+    .profile-cancel-btn,
+    .availability-link,
+    .analytics-refresh,
+    .key-reveal-copy {
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.22);
+      background: linear-gradient(155deg, rgba(255,255,255,.16), rgba(255,255,255,.045) 58%, rgba(255,255,255,.10));
+      backdrop-filter: blur(22px) saturate(190%) brightness(1.08);
+      -webkit-backdrop-filter: blur(22px) saturate(190%) brightness(1.08);
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.38), inset 0 -1px 0 rgba(0,0,0,.18), 0 8px 24px rgba(0,0,0,.18);
+    }
+
+    .btn-primary:hover,
+    .btn-glass-pill:hover,
+    .btn-dark:hover,
+    .btn-card-glass:hover,
+    .btn-key:hover,
+    .availability-link:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,.4);
+      background: linear-gradient(155deg, rgba(255,255,255,.23), rgba(255,255,255,.075) 58%, rgba(255,255,255,.15));
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.48), 0 10px 30px rgba(0,0,0,.24);
+    }
+
+    .btn-key { border-color: rgba(255,255,255,.24); }
+    .auth-submit { color: #fff; }
+    .auth-tab.active { color: #fff; border-color: rgba(255,255,255,.3); }
+    .auth-field input,
+    .profile-field textarea {
+      background: linear-gradient(155deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
+      border-color: rgba(255,255,255,.15);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .auth-field input:focus,
+    .profile-field textarea:focus { border-color: rgba(255,255,255,.38); background: rgba(255,255,255,.09); }
+    .availability-link { background: linear-gradient(155deg, rgba(255,255,255,.16), rgba(255,255,255,.045)); }
+
+    /* ===== SCRIPT HELPER PANELS ===== */
+    .lua-section-description {
+      position: relative;
+      z-index: 3;
+      max-width: 680px;
+      margin: -35px auto 34px;
+      padding: 0 24px;
+      color: rgba(220,225,240,.53);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+    .lua-tool-shell {
+      position: relative;
+      z-index: 4;
+      width: min(1180px, calc(100% - 64px));
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .lua-panel {
+      position: relative;
+      isolation: isolate;
+      min-width: 0;
+      overflow: hidden;
+      padding: clamp(18px, 2.5vw, 28px);
+      border-radius: 27px;
+      border: 1px solid rgba(255,255,255,.17);
+      background: linear-gradient(145deg, rgba(255,255,255,.105), rgba(255,255,255,.028) 47%, rgba(255,255,255,.065));
+      box-shadow: inset 0 1.5px 0 rgba(255,255,255,.3), inset 0 -1px 0 rgba(0,0,0,.25), 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .lua-panel::before {
+      content: "";
+      position: absolute;
+      inset: -25%;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(ellipse 45% 80% at 0% 0%, rgba(255,255,255,.1), transparent 62%), radial-gradient(ellipse 50% 75% at 100% 100%, rgba(255,255,255,.055), transparent 62%);
+      filter: blur(18px);
+    }
+
+    .lua-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .lua-panel-head > div:first-child { min-width: 0; }
+    .lua-eyebrow { margin-bottom: 8px; color: rgba(235,239,250,.48); font-size: 9px; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+    .lua-panel h3 { color: #fff; font-size: clamp(18px,2vw,23px); font-weight: 750; letter-spacing: -.035em; }
+    .lua-panel-head p { max-width: 600px; margin-top: 8px; color: rgba(220,225,240,.5); font-size: 11px; line-height: 1.7; }
+    .lua-panel-head code { padding: 2px 5px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; background: rgba(255,255,255,.055); color: rgba(255,255,255,.78); font-family: "Courier New", monospace; }
+
+    .lua-language-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      flex: 0 0 auto;
+      padding: 8px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.15);
+      background: linear-gradient(150deg, rgba(255,255,255,.11), rgba(255,255,255,.03));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+      color: rgba(255,255,255,.8);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .lua-language-pill span { width: 6px; height: 6px; border-radius: 50%; background: #fff; box-shadow: 0 0 10px rgba(255,255,255,.5); }
+
+    .lua-editor-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+    .lua-editor-column { min-width: 0; }
+    .lua-editor-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; color: rgba(245,247,255,.75); font-size: 10px; font-weight: 750; }
+    .lua-editor-label span:last-child { color: rgba(220,225,240,.35); font-size: 9px; font-weight: 500; text-align: right; }
+
+    .lua-editor {
+      display: block;
+      width: 100%;
+      min-height: 340px;
+      resize: vertical;
+      padding: 17px;
+      border-radius: 17px;
+      border: 1px solid rgba(255,255,255,.13);
+      outline: none;
+      color: rgba(247,248,255,.9);
+      background: linear-gradient(145deg, rgba(0,0,0,.38), rgba(255,255,255,.025));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.07), inset 0 12px 40px rgba(0,0,0,.12);
+      font: 11.5px/1.65 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      tab-size: 4;
+      white-space: pre;
+      overflow: auto;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+    .lua-editor::placeholder { color: rgba(220,225,240,.24); }
+    .lua-editor:focus { border-color: rgba(255,255,255,.31); background: linear-gradient(145deg, rgba(0,0,0,.32), rgba(255,255,255,.045)); box-shadow: inset 0 1px 0 rgba(255,255,255,.11), 0 0 0 3px rgba(255,255,255,.025); }
+    .lua-editor-output { color: rgba(235,245,240,.88); }
+    .lua-editor-output:read-only { cursor: text; }
+
+    .lua-editor-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 10px; }
+    .lua-action-btn {
+      position: relative;
+      isolation: isolate;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 35px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.86);
+      background: linear-gradient(150deg, rgba(255,255,255,.13), rgba(255,255,255,.035) 60%, rgba(255,255,255,.07));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 4px 14px rgba(0,0,0,.12);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      cursor: pointer;
+      font: 650 10px/1 "Inter", sans-serif;
+      transition: transform .16s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .lua-action-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .lua-action-btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.34); background: linear-gradient(150deg, rgba(255,255,255,.2), rgba(255,255,255,.06) 60%, rgba(255,255,255,.12)); box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 8px 22px rgba(0,0,0,.18); }
+    .lua-action-btn:active { transform: translateY(0) scale(.985); }
+    .lua-action-primary { color: #fff; border-color: rgba(255,255,255,.3); background: linear-gradient(145deg, rgba(255,255,255,.23), rgba(255,255,255,.075) 57%, rgba(255,255,255,.16)); box-shadow: inset 0 1.5px 0 rgba(255,255,255,.42), 0 6px 20px rgba(0,0,0,.17); }
+    .lua-action-btn-subtle { color: rgba(220,225,240,.55); background: rgba(255,255,255,.025); box-shadow: inset 0 1px 0 rgba(255,255,255,.1); }
+    .lua-action-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+    .lua-clean-status { margin-top: 17px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.08); color: rgba(220,225,240,.42); font-size: 10px; line-height: 1.6; }
+    .lua-clean-status.is-success { color: rgba(220,255,232,.85); }
+    .lua-clean-status.is-error { color: rgba(255,150,160,.85); }
+
+    .lua-log-head { align-items: center; }
+    .lua-log-summary { display: flex; align-items: center; gap: 9px; min-height: 38px; margin-bottom: 10px; padding: 0 12px; border-radius: 13px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.018)); color: rgba(235,239,250,.62); font-size: 10px; }
+    .lua-log-summary-dot { width: 6px; height: 6px; flex: 0 0 auto; border-radius: 50%; background: rgba(255,255,255,.7); box-shadow: 0 0 9px rgba(255,255,255,.3); }
+    .lua-log-summary.has-errors .lua-log-summary-dot { background: var(--red); box-shadow: 0 0 9px rgba(255,98,111,.5); }
+    .lua-log-summary.has-warnings .lua-log-summary-dot { background: #ffd978; box-shadow: 0 0 9px rgba(255,217,120,.35); }
+    .lua-log-summary.has-success .lua-log-summary-dot { background: var(--green); box-shadow: 0 0 9px rgba(109,255,154,.35); }
+    .lua-log-count { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; margin-left: auto; padding: 0 6px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.07); color: #fff; font-size: 9px; font-weight: 750; }
+    .lua-log-output { display: flex; flex-direction: column; gap: 7px; }
+    .lua-log-entry { display: grid; grid-template-columns: 62px 1fr; gap: 11px; padding: 12px 13px; border-radius: 14px; border: 1px solid rgba(255,255,255,.09); background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.018)); box-shadow: inset 0 1px 0 rgba(255,255,255,.08); }
+    .lua-log-level { align-self: start; display: inline-flex; align-items: center; justify-content: center; min-height: 23px; padding: 0 7px; border-radius: 7px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.04); color: rgba(255,255,255,.72); font-size: 8px; font-weight: 850; letter-spacing: .06em; }
+    .lua-log-entry.error { border-color: rgba(255,98,111,.2); background: linear-gradient(145deg, rgba(255,98,111,.07), rgba(255,255,255,.015)); }
+    .lua-log-entry.error .lua-log-level { border-color: rgba(255,98,111,.3); color: #ff929a; background: rgba(255,98,111,.08); }
+    .lua-log-entry.warn { border-color: rgba(255,217,120,.17); }
+    .lua-log-entry.warn .lua-log-level { color: #ffe19b; border-color: rgba(255,217,120,.25); background: rgba(255,217,120,.06); }
+    .lua-log-entry.info .lua-log-level { color: rgba(240,245,255,.9); }
+    .lua-log-entry.success .lua-log-level { color: #a6ffc4; border-color: rgba(109,255,154,.2); background: rgba(109,255,154,.06); }
+    .lua-log-detail { min-width: 0; }
+    .lua-log-message { color: rgba(240,243,250,.78); font-size: 10px; line-height: 1.6; overflow-wrap: anywhere; }
+    .lua-log-source { margin-top: 5px; color: rgba(220,225,240,.38); font: 9px/1.55 "SFMono-Regular", Consolas, monospace; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .lua-log-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 34px 20px; border-radius: 15px; border: 1px dashed rgba(255,255,255,.12); background: rgba(255,255,255,.018); text-align: center; }
+    .lua-log-empty-icon { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 12px; border: 1px solid rgba(255,255,255,.13); background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.035)); color: rgba(255,255,255,.78); font-size: 22px; }
+    .lua-log-empty strong { color: rgba(255,255,255,.78); font-size: 11px; }
+    .lua-log-empty span:last-child { max-width: 340px; color: rgba(220,225,240,.38); font-size: 10px; line-height: 1.65; }
+    .lua-log-footnote { margin-top: 14px; color: rgba(220,225,240,.35); font-size: 9.5px; line-height: 1.7; }
+
+    .lua-cleaner-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 116px minmax(0, 1fr);
+      align-items: stretch;
+      gap: 13px;
+    }
+    .lua-cleaner-zone { min-width: 0; }
+    .lua-editor-side-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 88px;
+      align-items: start;
+      gap: 8px;
+    }
+    .lua-editor-tools-vertical { margin-top: 0; flex-direction: column; align-items: stretch; }
+    .lua-editor-tools-vertical .lua-action-btn { width: 100%; min-height: 36px; padding: 0 7px; font-size: 9px; }
+    .lua-editor-tools-vertical .lua-action-btn svg { width: 12px; height: 12px; }
+    .lua-cleaner-center { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13px; min-width: 0; }
+    .lua-clean-trigger { width: 100%; min-height: 45px; padding: 8px; flex-direction: column; gap: 6px; border-radius: 16px; text-align: center; white-space: normal; }
+    .lua-clean-trigger span { font-size: 9px; line-height: 1.25; }
+    .lua-cleaner-arrow { color: rgba(255,255,255,.32); font-size: 20px; line-height: 1; }
+    .lua-log-editor { min-height: 210px; white-space: pre; }
+    .lua-log-editor-tools { justify-content: flex-end; margin-top: 10px; }
+    .lua-log-results-label { margin: 24px 0 10px; color: rgba(245,247,255,.74); font-size: 10px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .lua-panel { transform-style: preserve-3d; will-change: transform; transition: transform .18s cubic-bezier(.22,1,.36,1), border-color .25s, box-shadow .25s; }
+    .lua-panel .glass-content { transform: translateZ(12px); }
+    .content-section.active { display: block; animation: sectionFadeIn .38s cubic-bezier(.22,1,.36,1) both; }
+    @keyframes sectionFadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(.995); filter: blur(2px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    .lua-log-entry.output { border-color: rgba(255,255,255,.15); background: linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.025)); }
+    .lua-log-entry.output .lua-log-level { color: #fff; border-color: rgba(255,255,255,.2); background: rgba(255,255,255,.08); }
+    .lua-log-entry.output .lua-log-message { color: rgba(255,255,255,.92); font: 11px/1.65 "SFMono-Regular", Consolas, monospace; white-space: pre-wrap; }
+
+    @media (max-width: 900px) {
+      .category-nav-notch { top: 83px; }
+      .content-section { padding-top: 124px; }
+      .lua-tool-shell { width: calc(100% - 36px); }
+      .lua-editor { min-height: 300px; }
+      .lua-cleaner-layout { grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); gap: 9px; }
+      .lua-editor-side-layout { grid-template-columns: minmax(0, 1fr) 78px; gap: 6px; }
+      .lua-editor-tools-vertical .lua-action-btn { font-size: 8px; padding: 0 4px; }
+    }
+
+    @media (max-width: 680px) {
+      .category-nav-notch { top: 70px; min-height: 54px; max-width: calc(100vw - 20px); padding: 5px; border-radius: 21px; }
+      .category-notch-content { gap: 3px; }
+      .cat-tab, .cat-tab:hover, .cat-tab.active { min-height: 41px; padding: 0 12px; gap: 7px; border-radius: 15px; font-size: 10px; }
+      .cat-tab svg { width: 14px; height: 14px; }
+      .category-notch-divider { height: 22px; }
+      .content-section { padding-top: 108px; }
+      .lua-section-description { margin-top: -36px; margin-bottom: 27px; font-size: 11px; }
+      .lua-tool-shell { width: calc(100% - 24px); gap: 13px; }
+      .lua-panel { padding: 16px; border-radius: 22px; }
+      .lua-panel-head { gap: 10px; margin-bottom: 17px; }
+      .lua-panel h3 { font-size: 18px; }
+      .lua-panel-head p { font-size: 10px; }
+      .lua-editor-grid { grid-template-columns: 1fr; gap: 18px; }
+      .lua-cleaner-layout { grid-template-columns: 1fr; gap: 15px; }
+      .lua-editor-side-layout { grid-template-columns: minmax(0, 1fr) 88px; gap: 8px; }
+      .lua-editor-tools-vertical .lua-action-btn { min-height: 36px; font-size: 9px; padding: 0 7px; }
+      .lua-cleaner-center { flex-direction: row; justify-content: center; gap: 14px; }
+      .lua-clean-trigger { width: auto; min-width: 180px; min-height: 40px; flex-direction: row; padding: 0 15px; border-radius: 999px; }
+      .lua-clean-trigger span { font-size: 10px; }
+      .lua-cleaner-arrow { transform: rotate(90deg); }
+      .lua-editor { min-height: 260px; font-size: 11px; }
+      .lua-log-editor { min-height: 220px; }
+      .lua-log-editor-tools { justify-content: flex-start; }
+      .lua-editor-tools { gap: 6px; }
+      .lua-action-btn { padding: 0 10px; font-size: 9.5px; }
+      .lua-log-head { align-items: flex-start; flex-direction: column; }
+      .lua-log-entry { grid-template-columns: 55px 1fr; gap: 8px; padding: 10px; }
+      .lua-log-footnote { font-size: 9px; }
+    }
+
+    @media (max-width: 360px) {
+      .cat-tab, .cat-tab:hover, .cat-tab.active { padding: 0 9px; }
+      .lua-panel { padding: 13px; }
+      .lua-action-btn { min-height: 33px; padding: 0 8px; }
+      .lua-action-btn svg { display: none; }
+    }
+
+
+    /* ===== CONTENT CREATORS / VERTICAL LIQUID GLASS FEED ===== */
+    .creator-intro{position:relative;z-index:3;text-align:center;color:rgba(230,232,245,.58);font-size:13px;margin:-35px auto 28px;padding:0 20px}
+    .creator-api-panel,.creator-card{position:relative;isolation:isolate;overflow:hidden;border-radius:28px;border:1px solid rgba(255,255,255,.17);background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 52%,rgba(255,255,255,.065));backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.38),inset 0 -1px 0 rgba(0,0,0,.25),0 24px 70px rgba(0,0,0,.32);transform-style:preserve-3d;transition:transform .25s,border-color .25s,box-shadow .25s}
+    .creator-api-panel{max-width:1080px;margin:0 auto 28px;padding:20px 22px;z-index:3}
+    .creator-api-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.creator-api-row>div{flex:1;min-width:210px}.creator-api-row strong{font-size:13px}.creator-api-row p,.creator-api-note{font-size:11px;color:rgba(225,228,242,.5);line-height:1.6;margin-top:5px}.creator-api-row input{min-width:210px;flex:1;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.16);border-radius:13px;padding:11px 13px;color:#fff;outline:none}.creator-api-row input:focus{border-color:rgba(255,255,255,.42)}#youtubeApiStatus{font-size:10px;color:rgba(230,232,245,.55);width:100%}
+    .creator-feed{position:relative;z-index:3;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:1080px;padding:0 24px;margin:0 auto}.creator-card{min-width:0;padding:12px;display:flex;flex-direction:column;gap:14px}.creator-card:hover{transform:perspective(1100px) rotateX(1deg) rotateY(-1deg) translateY(-3px);border-color:rgba(255,255,255,.32);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.48),0 30px 85px rgba(0,0,0,.48)}.creator-video-frame{position:relative;overflow:hidden;border-radius:21px;background:#050505;aspect-ratio:9/16;max-height:660px;isolation:isolate}.creator-video-frame iframe,.creator-video-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}.creator-youtube-stage{position:absolute;inset:0;width:100%;height:100%;z-index:1}.creator-youtube-stage iframe{width:100%;height:100%;border:0}.creator-video-badge{position:absolute;top:12px;left:12px;z-index:4;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:7px 10px;background:rgba(0,0,0,.35);backdrop-filter:blur(16px);font-size:9px;font-weight:800;letter-spacing:.12em;pointer-events:none}.creator-controls{position:absolute;z-index:6;left:10px;right:10px;bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 10px;border:1px solid rgba(255,255,255,.22);border-radius:17px;background:linear-gradient(135deg,rgba(30,30,34,.76),rgba(8,8,11,.78));backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.23),0 8px 30px rgba(0,0,0,.32);color:#fff}.creator-control-btn{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:32px;height:32px;padding:0;border:1px solid rgba(255,255,255,.14);border-radius:11px;background:rgba(255,255,255,.08);color:#fff;font-size:14px;line-height:1;cursor:pointer;transition:background .18s,transform .18s,border-color .18s}.creator-control-btn:hover{background:rgba(255,255,255,.19);border-color:rgba(255,255,255,.32);transform:translateY(-1px)}.creator-control-btn:focus-visible,.creator-seek:focus-visible,.creator-volume:focus-visible{outline:2px solid #fff;outline-offset:2px}.creator-control-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.creator-time{font:10px/1.2 "SFMono-Regular",Consolas,monospace;white-space:nowrap;color:rgba(255,255,255,.84);font-variant-numeric:tabular-nums}.creator-controls .creator-seek{width:100%;flex:1 1 100%;order:10;accent-color:#fff;min-width:0;height:4px;cursor:pointer}.creator-control-main{display:flex;align-items:center;gap:7px;flex:1 1 auto;min-width:0}.creator-volume{width:58px;max-width:17%;height:4px;accent-color:#fff;cursor:pointer}.creator-speed{height:30px;max-width:56px;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.15);border-radius:9px;color:white;font-size:10px;padding:0 5px;outline:none}.creator-speed option{background:#171719;color:#fff}.creator-player-error{position:absolute;z-index:5;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px;background:linear-gradient(145deg,rgba(10,10,12,.96),rgba(28,28,32,.93));color:white}.creator-player-error[hidden]{display:none}.creator-player-error strong{font-size:16px}.creator-player-error p{max-width:290px;font-size:11px;line-height:1.65;color:rgba(255,255,255,.68)}.creator-player-error a{color:white;text-decoration:none;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:10px 14px;font-size:11px;background:rgba(255,255,255,.1)}.creator-info{padding:8px 8px 10px}.creator-kicker{font-size:9px;font-weight:800;letter-spacing:.16em;color:rgba(230,232,245,.42)}.creator-info h3{font-size:18px;margin:8px 0}.creator-info p{font-size:11px;color:rgba(225,228,242,.55);line-height:1.6;margin-bottom:14px}.creator-metrics{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}.creator-metrics span{font-size:10px;color:rgba(235,237,248,.65);padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}.creator-metrics b{color:#fff}.creator-glass-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 15px;border-radius:999px;text-decoration:none;color:#fff;font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.26);background:linear-gradient(155deg,rgba(255,255,255,.18),rgba(255,255,255,.045));backdrop-filter:blur(18px) saturate(180%);box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 6px 20px rgba(0,0,0,.18);cursor:pointer;transition:transform .2s,background .2s}.creator-glass-btn:hover{transform:translateY(-2px);background:linear-gradient(155deg,rgba(255,255,255,.26),rgba(255,255,255,.08))}.creator-api-note{position:relative;z-index:3;max-width:1030px;margin:18px auto 0;padding:0 24px}
+    @media(max-width:760px){.creator-feed{grid-template-columns:1fr;max-width:520px;padding:0 16px}.creator-api-panel{margin:0 16px 22px;padding:16px}.creator-video-frame{max-height:75vh}.creator-api-row input{min-width:100%;width:100%}.creator-api-row .creator-glass-btn{flex:1}}
+    @media(max-width:420px){.creator-controls{left:7px;right:7px;bottom:7px;gap:5px;padding:7px;border-radius:14px}.creator-control-btn{width:29px;height:29px;border-radius:9px}.creator-volume{width:42px}.creator-time{font-size:9px}.creator-speed{height:28px;max-width:49px}}
+
   </style>
 </head>
 
@@ -1019,15 +1453,22 @@
   <nav class="category-nav-notch glass" role="tablist" aria-label="Categories" id="catNotch">
     <div class="glass-sheen"></div>
     <div class="glass-edge-highlight"></div>
-    <button class="cat-tab active" role="tab" data-cat="scripts" aria-selected="true">
-      <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-      <span class="cat-tab-label">Scripts</span>
-    </button>
-    <button class="cat-tab" role="tab" data-cat="executors" aria-selected="false">
-      <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-      <span class="cat-tab-label">Executors</span>
-    </button>
-
+    <div class="category-notch-content glass-content">
+      <button class="cat-tab active" role="tab" data-cat="scripts" aria-selected="true" aria-controls="section-scripts">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <span class="cat-tab-label">Scripts</span>
+      </button>
+      <span class="category-notch-divider" aria-hidden="true"></span>
+      <button class="cat-tab" role="tab" data-cat="script-helper" aria-selected="false" aria-controls="section-script-helper">
+        <svg viewBox="0 0 24 24"><path d="m8 8-4 4 4 4"></path><path d="m16 8 4 4-4 4"></path><path d="m14 5-4 14"></path></svg>
+        <span class="cat-tab-label">Script Helper</span>
+      </button>
+      <span class="category-notch-divider" aria-hidden="true"></span>
+      <button class="cat-tab" role="tab" data-cat="content-creators" aria-selected="false" aria-controls="section-content-creators">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="m10 9 5 3-5 3z"></path></svg>
+        <span class="cat-tab-label">Content Creators</span>
+      </button>
+    </div>
   </nav>
 
   <!-- ===== SECTION : SCRIPTS ===== -->
@@ -1080,10 +1521,10 @@
                 <a class="analytics-open" href="https://rscripts.net/script/examination-oBz7" target="_blank" rel="noopener noreferrer">Open</a>
               </div>
               <div class="analytics-grid">
-                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Views</div><div class="analytics-value" data-analytics="views">50.500k</div><div class="analytics-sub">page views</div></div>
-                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Executions</div><div class="analytics-value" data-analytics="executions">5k</div><div class="analytics-sub">script runs</div></div>
-                <div class="analytics-metric"><div class="analytics-label">Likes</div><div class="analytics-value small" data-analytics="likes">28</div></div>
-                <div class="analytics-metric"><div class="analytics-label">Dislikes</div><div class="analytics-value small" data-analytics="dislikes">3</div></div>
+                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Views</div><div class="analytics-value" data-analytics="views">55.5k</div><div class="analytics-sub">page views</div></div>
+                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Executions</div><div class="analytics-value" data-analytics="executions">7.2k</div><div class="analytics-sub">script runs</div></div>
+                <div class="analytics-metric"><div class="analytics-label">Likes</div><div class="analytics-value small" data-analytics="likes">31</div></div>
+                <div class="analytics-metric"><div class="analytics-label">Dislikes</div><div class="analytics-value small" data-analytics="dislikes">4</div></div>
                 <div class="analytics-metric analytics-status">
                   <div class="analytics-label">Compatibility</div>
                   <div class="analytics-status-value">
@@ -1146,9 +1587,9 @@
                 <a class="analytics-open" href="https://rscripts.net/script/sentinel-script-bloxstrike-HMJb" target="_blank" rel="noopener noreferrer">Open</a>
               </div>
               <div class="analytics-grid">
-                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Views</div><div class="analytics-value" data-analytics="views">1.200</div><div class="analytics-sub">page views</div></div>
-                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Executions</div><div class="analytics-value" data-analytics="executions">1.000</div><div class="analytics-sub">script runs</div></div>
-                <div class="analytics-metric"><div class="analytics-label">Likes</div><div class="analytics-value small" data-analytics="likes">12</div></div>
+                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Views</div><div class="analytics-value" data-analytics="views">2.3k</div><div class="analytics-sub">page views</div></div>
+                <div class="analytics-metric analytics-metric-wide"><div class="analytics-label">Executions</div><div class="analytics-value" data-analytics="executions">1.6k</div><div class="analytics-sub">script runs</div></div>
+                <div class="analytics-metric"><div class="analytics-label">Likes</div><div class="analytics-value small" data-analytics="likes">14</div></div>
                 <div class="analytics-metric"><div class="analytics-label">Dislikes</div><div class="analytics-value small" data-analytics="dislikes">0</div></div>
                 <div class="analytics-metric analytics-status">
                   <div class="analytics-label">Compatibility</div>
@@ -1171,17 +1612,147 @@
     </div>
   </section>
 
-  <!-- ===== SECTION : EXECUTORS ===== -->
-  <section class="content-section" id="section-executors">
+  <!-- ===== SECTION : CONTENT CREATORS ===== -->
+  <section class="content-section" id="section-content-creators" role="tabpanel" aria-labelledby="content-creators-title">
     <div class="dark-ambient"><div class="spotlight"></div></div>
-    <div class="section-label">Roblox executors</div>
-    <div class="section-title">Run your scripts.</div>
-    <div class="exec-loading" id="execLoading">
-      <div class="spinner"></div>
-      <div class="exec-loading-text">Loading executors…</div>
+    <div class="section-label">Sentinel community</div>
+    <div class="section-title" id="content-creators-title">Content Creators.</div>
+    <p class="creator-intro">A vertical, TikTok-inspired feed for Sentinel videos — wrapped in Liquid Glass.</p>
+    <div class="creator-api-panel glass">
+      <div class="glass-sheen"></div><div class="glass-edge-highlight"></div>
+      <div class="glass-content creator-api-row">
+        <div><strong>YouTube statistics</strong><p>Optionnel : ajoute une clé YouTube Data API v3 pour afficher les vrais likes, commentaires et vues.</p></div>
+        <input id="youtubeApiKey" type="password" autocomplete="off" placeholder="YouTube API key (optional)" aria-label="YouTube API key">
+        <button class="creator-glass-btn" id="youtubeStatsBtn" type="button">Load stats</button>
+        <span id="youtubeApiStatus" aria-live="polite">Stats non chargées</span>
+      </div>
     </div>
-    <div class="exec-error" id="execError" style="display:none"></div>
-    <div class="executors-grid" id="executorsGrid" style="display:none"></div>
+    <div class="creator-feed">
+      <article class="creator-card glass" data-video-id="G_9w4AQWcvE">
+        <div class="glass-sheen"></div><div class="glass-edge-highlight"></div>
+        <div class="creator-video-frame creator-youtube-frame" id="creatorYoutubeFrame">
+          <div id="creatorYoutubePlayer" class="creator-youtube-stage" aria-label="YouTube Short"></div>
+          <span class="creator-video-badge">YOUTUBE SHORTS</span>
+          <div class="creator-player-error" id="creatorYoutubeError" hidden>
+            <strong>Le lecteur YouTube est bloqué</strong>
+            <p id="creatorYoutubeErrorText">Le lecteur n'a pas pu démarrer. Ouvre la page depuis le site HTTPS de Sentinel Script pour transmettre le référent requis par YouTube.</p>
+            <a href="https://www.youtube.com/shorts/G_9w4AQWcvE" target="_blank" rel="noopener noreferrer">Regarder sur YouTube ↗</a>
+          </div>
+          <div class="creator-controls" data-player-controls="youtube" aria-label="Commandes du lecteur YouTube">
+            <button class="creator-control-btn" type="button" data-action="play" aria-label="Lire ou mettre en pause" title="Lecture / pause">▶</button>
+            <div class="creator-control-main"><span class="creator-time" data-time-current>0:00</span><span class="creator-time" data-time-duration>0:00</span></div>
+            <input class="creator-seek" data-action="seek" type="range" min="0" max="1000" value="0" aria-label="Position de la vidéo">
+            <button class="creator-control-btn" type="button" data-action="mute" aria-label="Couper le son" title="Couper / rétablir le son">◖))</button>
+            <input class="creator-volume" data-action="volume" type="range" min="0" max="100" value="80" aria-label="Volume">
+            <button class="creator-control-btn" type="button" data-action="fullscreen" aria-label="Plein écran" title="Plein écran">⛶</button>
+          </div>
+        </div>
+        <div class="creator-info glass-content"><div class="creator-kicker">YOUTUBE SHORTS · VIDEO 01</div><h3>Sentinel Script — Short</h3><p>Lecteur Liquid Glass personnalisé. YouTube doit autoriser la lecture intégrée.</p><div class="creator-metrics"><span>▶ <b data-stat="viewCount">—</b> views</span><span>♡ <b data-stat="likeCount">—</b> likes</span><span>▤ <b data-stat="commentCount">—</b> comments</span></div><a class="creator-glass-btn" href="https://www.youtube.com/shorts/G_9w4AQWcvE" target="_blank" rel="noopener noreferrer">Open on YouTube ↗</a></div>
+      </article>
+      <article class="creator-card glass">
+        <div class="glass-sheen"></div><div class="glass-edge-highlight"></div>
+        <div class="creator-video-frame creator-local-video" id="creatorMp4Frame">
+          <video id="creatorMp4" playsinline preload="metadata" referrerpolicy="strict-origin-when-cross-origin" src="https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/contentcreation_1.mp4">Your browser does not support HTML video.</video>
+          <span class="creator-video-badge">SENTINEL ORIGINAL</span>
+          <div class="creator-controls" data-player-controls="mp4" aria-label="Commandes du lecteur MP4">
+            <button class="creator-control-btn" type="button" data-action="play" aria-label="Lire ou mettre en pause" title="Lecture / pause">▶</button>
+            <div class="creator-control-main"><span class="creator-time" data-time-current>0:00</span><span class="creator-time" data-time-duration>0:00</span></div>
+            <input class="creator-seek" data-action="seek" type="range" min="0" max="1000" value="0" aria-label="Position de la vidéo">
+            <button class="creator-control-btn" type="button" data-action="mute" aria-label="Couper le son" title="Couper / rétablir le son">◖))</button>
+            <input class="creator-volume" data-action="volume" type="range" min="0" max="100" value="80" aria-label="Volume">
+            <select class="creator-speed" data-action="speed" aria-label="Vitesse de lecture" title="Vitesse"><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+            <button class="creator-control-btn" type="button" data-action="download" aria-label="Télécharger la vidéo" title="Télécharger">↓</button>
+            <button class="creator-control-btn" type="button" data-action="fullscreen" aria-label="Plein écran" title="Plein écran">⛶</button>
+          </div>
+        </div>
+        <div class="creator-info glass-content"><div class="creator-kicker">MP4 · VIDEO 02</div><h3>Sentinel Content</h3><p>Lecteur vidéo personnalisé avec volume, vitesse, barre de lecture, plein écran et téléchargement.</p><div class="creator-metrics"><span>MP4 <b>Hosted</b></span><span>Liquid Glass <b>UI</b></span></div><a class="creator-glass-btn" href="https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/contentcreation_1.mp4?download=1" download="Sentinel-Content.mp4" target="_blank" rel="noopener noreferrer">Download MP4 ↓</a></div>
+      </article>
+    </div>
+    <p class="creator-api-note">Les statistiques YouTube sont fournies par l’API officielle si une clé valide est saisie. Les likes/commentaires peuvent être masqués ou indisponibles selon les paramètres de la vidéo. La clé reste dans cette page uniquement et est gardée en mémoire jusqu’à fermeture/actualisation.</p>
+  </section>
+
+  <!-- ===== SECTION : SCRIPT HELPER ===== -->
+  <section class="content-section" id="section-script-helper" role="tabpanel" aria-labelledby="lua-helper-title">
+    <div class="dark-ambient"><div class="spotlight"></div></div>
+    <div class="section-label">Sentinel tools</div>
+    <div class="section-title" id="lua-helper-title">Script Helper.</div>
+    <p class="lua-section-description">The Cleaner and Logger are independent tools: clean one script while inspecting another. No Roblox code is executed in your browser.</p>
+
+    <div class="lua-tool-shell">
+      <section class="lua-panel glass lua-cleaner-panel" aria-labelledby="lua-cleaner-title">
+        <div class="glass-sheen"></div><div class="glass-edge-highlight"></div>
+        <div class="glass-content">
+          <div class="lua-panel-head">
+            <div>
+              <div class="lua-eyebrow">01 / Cleaner</div>
+              <h3 id="lua-cleaner-title">Remove Lua comments</h3>
+              <p>Paste a script in <strong>Before</strong>, remove comments, then copy or download the result from <strong>After</strong>. Other code and strings are kept intact.</p>
+            </div>
+            <span class="lua-language-pill"><span></span> Luau</span>
+          </div>
+
+          <div class="lua-cleaner-layout">
+            <div class="lua-editor-column lua-cleaner-zone">
+              <div class="lua-editor-label"><span>Before</span><span id="luaInputMeta">0 lines · 0 chars</span></div>
+              <div class="lua-editor-side-layout">
+                <textarea class="lua-editor" id="luaInput" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Script before cleaning" placeholder="-- Paste your Roblox script here&#10;print(&quot;HelloWorld&quot;)"></textarea>
+                <div class="lua-editor-tools lua-editor-tools-vertical">
+                  <button class="lua-action-btn" type="button" id="luaImportBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M4 20h16"></path></svg>Import .lua</button>
+                  <button class="lua-action-btn lua-action-btn-subtle" type="button" id="luaClearBtn">Clear</button>
+                  <input type="file" id="luaFileInput" accept=".lua,.txt,text/plain" hidden>
+                </div>
+              </div>
+            </div>
+
+            <div class="lua-cleaner-center">
+              <button class="lua-action-btn lua-action-primary lua-clean-trigger" type="button" id="luaCleanBtn"><svg viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M7 4h10"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v5M14 11v5"></path></svg><span>Remove Comments</span></button>
+              <span class="lua-cleaner-arrow" aria-hidden="true">→</span>
+            </div>
+
+            <div class="lua-editor-column lua-cleaner-zone">
+              <div class="lua-editor-label"><span>After</span><span id="luaOutputMeta">Ready when you are</span></div>
+              <div class="lua-editor-side-layout">
+                <textarea class="lua-editor lua-editor-output" id="luaOutput" spellcheck="false" readonly aria-label="Script after cleaning" placeholder="Your cleaned script appears here…"></textarea>
+                <div class="lua-editor-tools lua-editor-tools-vertical">
+                  <button class="lua-action-btn" type="button" id="luaCopyBtn"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>Copy</button>
+                  <button class="lua-action-btn" type="button" id="luaDownloadBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M4 20h16"></path></svg>Download .lua</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lua-clean-status" id="luaCleanStatus" aria-live="polite">The Cleaner is independent from the Logger below.</div>
+        </div>
+      </section>
+
+      <section class="lua-panel lua-log-panel glass" aria-labelledby="lua-logs-title">
+        <div class="glass-sheen"></div><div class="glass-edge-highlight"></div>
+        <div class="glass-content">
+          <div class="lua-panel-head lua-log-head">
+            <div>
+              <div class="lua-eyebrow">02 / Logger</div>
+              <h3 id="lua-logs-title">Luau Output &amp; quick checks</h3>
+              <p>Use this separate script box to inspect <code>print()</code>, <code>warn()</code>, <code>error()</code>, <code>assert()</code>, and basic syntax issues. Literal calls such as <code>print("HelloWorld")</code> show their expected text below.</p>
+            </div>
+          </div>
+          <div class="lua-log-editor-wrap">
+            <div class="lua-editor-label"><span>Logger script</span><span id="luaLogInputMeta">0 lines · 0 chars</span></div>
+            <textarea class="lua-editor lua-log-editor" id="luaLogInput" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Script to inspect in the logger" placeholder="print(&quot;HelloWorld&quot;)&#10;warn(&quot;Careful!&quot;)"></textarea>
+            <div class="lua-editor-tools lua-log-editor-tools">
+              <button class="lua-action-btn" type="button" id="luaLogImportBtn"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M4 20h16"></path></svg>Import .lua</button>
+              <button class="lua-action-btn lua-action-btn-subtle" type="button" id="luaLogClearBtn">Clear</button>
+              <button class="lua-action-btn lua-action-primary" type="button" id="luaAnalyzeBtn"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>Analyze</button>
+              <input type="file" id="luaLogFileInput" accept=".lua,.txt,text/plain" hidden>
+            </div>
+          </div>
+          <div class="lua-log-results-label">Output &amp; findings</div>
+          <div class="lua-log-summary" id="luaLogSummary"><span class="lua-log-summary-dot"></span><span>Ready to inspect</span><span class="lua-log-count" id="luaLogCount">0</span></div>
+          <div class="lua-log-output" id="luaLogOutput" aria-live="polite">
+            <div class="lua-log-empty"><span class="lua-log-empty-icon">⌁</span><strong>No output yet</strong><span>Paste a script into this Logger box and press Analyze. It never reads the Cleaner automatically.</span></div>
+          </div>
+          <div class="lua-log-footnote">Static analysis only — the browser does not execute Roblox/Luau code. Literal print/warn/error arguments can be previewed; runtime-dependent values and actual engine errors require Roblox Studio’s Output window.</div>
+        </div>
+      </section>
+    </div>
   </section>
 
   <div class="notification-container" id="notificationContainer"></div>
@@ -1248,17 +1819,17 @@
           heroLight.style.setProperty("--gx", (mx - r.left) + "px");
           heroLight.style.setProperty("--gy", (my - r.top) + "px");
         }
-        const targets = document.querySelectorAll(".glass, .script-card, .script-analytics, .executor-card");
+        const targets = document.querySelectorAll(".glass, .script-card, .script-analytics, .lua-panel");
         targets.forEach((el) => {
           const r = el.getBoundingClientRect();
           if (mx < r.left - 120 || mx > r.right + 120 || my < r.top - 120 || my > r.bottom + 120) {
             el.style.setProperty("--gx", "-9999px"); el.style.setProperty("--gy", "-9999px");
-            if (el.classList.contains("script-card") || el.classList.contains("executor-card")) { el.style.setProperty("--mx","50%"); el.style.setProperty("--my","50%"); }
+            if (el.classList.contains("script-card")) { el.style.setProperty("--mx","50%"); el.style.setProperty("--my","50%"); }
             return;
           }
           el.style.setProperty("--gx", (mx - r.left) + "px");
           el.style.setProperty("--gy", (my - r.top) + "px");
-          if (el.classList.contains("script-card") || el.classList.contains("executor-card")) {
+          if (el.classList.contains("script-card")) {
             el.style.setProperty("--mx", (mx - r.left) + "px");
             el.style.setProperty("--my", (my - r.top) + "px");
           }
@@ -1311,14 +1882,28 @@
     const catTabs = document.querySelectorAll(".cat-tab");
     const sections = {
       scripts: document.getElementById("section-scripts"),
-      executors: document.getElementById("section-executors")
+      "script-helper": document.getElementById("section-script-helper"),
+      "content-creators": document.getElementById("section-content-creators")
     };
-    let executorsLoaded = false;
 
     function switchCategory(cat) {
-      catTabs.forEach(t => { t.classList.toggle("active", t.dataset.cat === cat); t.setAttribute("aria-selected", t.dataset.cat === cat); });
-      Object.entries(sections).forEach(([key, el]) => { if (el) el.classList.toggle("active", key === cat); });
-      if (cat === "executors" && !executorsLoaded) { executorsLoaded = true; loadExecutors(); }
+      if (!sections[cat]) return;
+      const current = Object.values(sections).find(el => el?.classList.contains("active"));
+      if (current === sections[cat]) return;
+      catTabs.forEach(t => {
+        const active = t.dataset.cat === cat;
+        t.classList.toggle("active", active);
+        t.setAttribute("aria-selected", String(active));
+      });
+      Object.entries(sections).forEach(([key, el]) => {
+        if (el) el.classList.toggle("active", key === cat);
+      });
+      const next = sections[cat];
+      if (next) {
+        next.style.animation = "none";
+        void next.offsetWidth;
+        next.style.animation = "";
+      }
       document.getElementById("content").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
@@ -1370,8 +1955,8 @@
        STATIC STATS
     ============================================================ */
     const STATIC_STATS = {
-      examination: { views:"50.500k", executions:"5k", likes:"28", dislikes:"3" },
-      bloxstrike:  { views:"1.200", executions:"1.000", likes:"12", dislikes:"0" }
+      examination: { views:"55.5k", executions:"7.2k", likes:"31", dislikes:"4" },
+      bloxstrike:  { views:"2.3k", executions:"1.6k", likes:"14", dislikes:"0" }
     };
 
     function paintStaticStats(root) {
@@ -1395,45 +1980,815 @@
       });
     });
 
+
     /* ============================================================
-       EXECUTORS — WEAO API + ENRICHED CATALOG
+       CONTENT CREATORS — CUSTOM LIQUID GLASS VIDEO CONTROLS
     ============================================================ */
-    function statusDotClass(status){const s=String(status||"").toLowerCase();if(["working","online","up","updated"].includes(s))return"online";if(["broken","offline","down","outdated"].includes(s))return"offline";return"unknown";}
-    function statusLabel(status){if(!status)return"Unknown";const s=String(status).toLowerCase();if(["working","online","up","updated"].includes(s))return"Working";if(["broken","offline","down","outdated"].includes(s))return"Broken";return String(status).charAt(0).toUpperCase()+String(status).slice(1);}
-    function tagClass(tag){const t=String(tag||"").toLowerCase();if(["free","gratuit","keyless"].includes(t))return"green";if(["pc","windows","android","mobile","ios","macos","mac"].includes(t))return"blue";if(["partial","beta","experimental","paid"].includes(t))return"yellow";return"";}
-    function firstDefined(obj,keys){for(const key of keys){const value=obj?.[key];if(value!==undefined&&value!==null&&String(value).trim()!=="")return value;}return"";}
-    function statusValue(value){return value===true?"Passed":value===false?"Failed":"—";}
-    function scoreValue(obj,scoreKeys,statusKeys){const raw=firstDefined(obj,scoreKeys);if(raw!=="")return String(raw);for(const key of statusKeys)if(typeof obj?.[key]==="boolean")return statusValue(obj[key]);return"—";}
-    function getExecutorPlatforms(exec){const values=[];[exec.platform,exec.platforms,exec.os,exec.device,exec.devices,exec.supportedPlatforms,exec.supported,exec.tags].forEach(v=>{if(Array.isArray(v))values.push(...v);else if(typeof v==="string")values.push(...v.split(/[|,;/]+/));});return values.map(v=>String(v).trim().toLowerCase()).filter(Boolean);}
-    function classifyExecutor(exec){const values=getExecutorPlatforms(exec);const type=String(firstDefined(exec,["type","category","executorType","kind","mode","extype"])||"").toLowerCase();if(values.some(v=>/ios|iphone|ipad/.test(v)))return"iOS Executor";if(values.some(v=>/android/.test(v)))return"Android Executor";if(values.some(v=>/macos|mac/.test(v)))return"macOS Executor";if(/external|wexternal|mexternal/.test(type))return"Windows External";return"Windows Internal";}
-    function escHtml(str){return String(str??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
-    function safeLink(value){const raw=String(value||"").trim();return/^https?:\/\//i.test(raw)?raw:"";}
-    const executorCategoryIcons={"Windows Internal":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>',"Windows External":'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"></rect><circle cx="9" cy="10" r="1"></circle><path d="M12 10h4M8 14h8"></path></svg>',"Android Executor":'<svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="3"></rect><path d="M9 6h6M10 18h4"></path></svg>',"iOS Executor":'<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"></rect><path d="M10 5h4M11 18.5h2"></path></svg>',"macOS Executor":'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>'};
-    function buildExecutorCard(exec,index){
-      const name=firstDefined(exec,["name","title","exploitName"])||"Executor";const status=firstDefined(exec,["status","exploitStatus"])||(exec.updateStatus===true?"Updated":"Unknown");const version=firstDefined(exec,["version","currentVersion"]);const desc=firstDefined(exec,["description","about"])||"No description available.";const icon=safeLink(firstDefined(exec,["icon","image","logo"]));const platform=classifyExecutor(exec);
-      const sUNC=scoreValue(exec,["sUNC","sunc","sUNCScore","suncScore","s_unc","sunc_percentage"],["suncStatus"]);const UNC=scoreValue(exec,["UNC","unc","uncScore","uncCompatibility","unc_percentage"],["uncStatus"]);
-      const website=safeLink(firstDefined(exec,["websitelink","officialWebsite","official","website","site","homepage","url","link"]));const discord=safeLink(firstDefined(exec,["discordlink","discord","discordLink","discord_url","discordUrl","discordInvite"]));const install=safeLink(firstDefined(exec,["downloadLink","download_link","downloadUrl","download","v3rmlink","install","installation"]));const price=firstDefined(exec,["price","cost","pricing","payment"]);const detected=typeof exec.detected==="boolean"?(exec.detected?"Detected":"Not detected"):"—";
-      let tags=exec.tags||exec.supported||[];if(typeof tags==="string")tags=tags.split(",").map(v=>v.trim()).filter(Boolean);if(!Array.isArray(tags))tags=[];if(exec.free===true&&!tags.some(t=>String(t).toLowerCase()==="free"))tags.unshift("Free");if(!tags.some(t=>String(t).toLowerCase()===platform.toLowerCase()))tags.push(platform);
-      const tagsHtml=tags.slice(0,5).map(t=>`<span class="executor-tag ${tagClass(t)}">${escHtml(t)}</span>`).join("");
-      const links=[website&&`<a class="executor-link" href="${escHtml(website)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l2-2a5 5 0 0 0-7.07-7.07l-1.15 1.15"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-2 2a5 5 0 0 0 7.07 7.07l1.15-1.15"></path></svg>Official</a>`,discord&&`<a class="executor-link" href="${escHtml(discord)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M19.5 5.4a16 16 0 0 0-4-1.3l-.5 1a14 14 0 0 0-5.9 0l-.5-1a16 16 0 0 0-4 1.3"></path><path d="M4.5 15.4A13.8 13.8 0 0 0 7.9 17c2.7 1 5.5 1 8.2 0a13.8 13.8 0 0 0 3.4-1.6"></path></svg>Discord</a>`,install&&`<a class="executor-link" href="${escHtml(install)}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><path d="M4 20h16"></path></svg>Install</a>`].filter(Boolean).join("");
-      const specs=[["sUNC",sUNC],["UNC",UNC],["Detected",detected],["Price",price||"—"]];const specsHtml=specs.map(([label,value])=>`<div class="executor-spec"><div class="executor-spec-label">${label}</div><div class="executor-spec-value">${escHtml(value)}</div></div>`).join("");
-      return `<article class="executor-card" data-delay="${index*45}"><div class="executor-header"><div class="executor-icon">${icon?`<img src="${escHtml(icon)}" alt="" loading="lazy" onerror="this.style.display='none'">`:'<svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'}</div><div class="executor-title-wrap"><div class="executor-name">${escHtml(name)}</div>${version?`<div class="executor-version">v${escHtml(version)}</div>`:""}</div><div class="executor-status"><span class="executor-status-dot ${statusDotClass(status)}"></span>${escHtml(statusLabel(status))}</div></div><div class="executor-desc">${escHtml(desc)}</div>${tagsHtml?`<div class="executor-tags">${tagsHtml}</div>`:""}<div class="executor-specs">${specsHtml}</div>${links?`<div class="executor-links">${links}</div>`:""}</article>`;
+    (() => {
+      const mp4 = document.getElementById("creatorMp4");
+      const mp4Frame = document.getElementById("creatorMp4Frame");
+      const ytFrame = document.getElementById("creatorYoutubeFrame");
+      const ytError = document.getElementById("creatorYoutubeError");
+      const ytErrorText = document.getElementById("creatorYoutubeErrorText");
+      const ytLink = "https://www.youtube.com/shorts/G_9w4AQWcvE";
+      let ytPlayer = null;
+      let ytReady = false;
+      let ytSeekDragging = false;
+      let ytRaf = 0;
+      let mp4Seeking = false;
+
+      const fmtTime = (seconds) => {
+        if (!Number.isFinite(seconds) || seconds < 0) seconds = 0;
+        const total = Math.floor(seconds);
+        const hours = Math.floor(total / 3600);
+        const minutes = Math.floor((total % 3600) / 60);
+        const secs = total % 60;
+        return hours ? `${hours}:${String(minutes).padStart(2,"0")}:${String(secs).padStart(2,"0")}` : `${minutes}:${String(secs).padStart(2,"0")}`;
+      };
+      const setPlayIcon = (frame, playing) => {
+        const button = frame?.querySelector('[data-action="play"]');
+        if (button) { button.textContent = playing ? "Ⅱ" : "▶"; button.setAttribute("aria-label", playing ? "Mettre en pause" : "Lire la vidéo"); }
+      };
+      const setMuteIcon = (frame, muted) => {
+        const button = frame?.querySelector('[data-action="mute"]');
+        if (button) { button.textContent = muted ? "×♪" : "◖))"; button.setAttribute("aria-label", muted ? "Rétablir le son" : "Couper le son"); }
+      };
+      const setText = (frame, selector, text) => { const el = frame?.querySelector(selector); if (el) el.textContent = text; };
+      const controlsFor = (frame) => frame?.querySelector(".creator-controls");
+
+      function updateMp4() {
+        if (!mp4 || !mp4Frame) return;
+        const duration = Number.isFinite(mp4.duration) ? mp4.duration : 0;
+        const current = Number.isFinite(mp4.currentTime) ? mp4.currentTime : 0;
+        setText(mp4Frame, "[data-time-current]", fmtTime(current));
+        setText(mp4Frame, "[data-time-duration]", fmtTime(duration));
+        const seek = mp4Frame.querySelector('[data-action="seek"]');
+        if (seek && !mp4Seeking) { seek.value = duration > 0 ? String(Math.round(current / duration * 1000)) : "0"; }
+        setPlayIcon(mp4Frame, !mp4.paused && !mp4.ended);
+        setMuteIcon(mp4Frame, mp4.muted || mp4.volume === 0);
+        const vol = mp4Frame.querySelector('[data-action="volume"]');
+        if (vol && document.activeElement !== vol) vol.value = String(Math.round(mp4.volume * 100));
+      }
+
+      if (mp4 && mp4Frame) {
+        ["loadedmetadata","durationchange","timeupdate","play","pause","ended","volumechange","ratechange","seeked"].forEach(event => mp4.addEventListener(event, updateMp4));
+        mp4.addEventListener("error", () => {
+          const note = mp4Frame.querySelector(".creator-player-error") || document.createElement("div");
+          if (!note.classList.contains("creator-player-error")) { note.className = "creator-player-error"; mp4Frame.appendChild(note); }
+          note.hidden = false;
+          note.innerHTML = `<strong>Impossible de charger la vidéo</strong><p>Le fichier MP4 n'a pas pu être chargé. Vérifie la connexion ou ouvre directement le fichier hébergé.</p><a href="https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/contentcreation_1.mp4?download=1" target="_blank" rel="noopener noreferrer">Ouvrir le MP4 ↗</a>`;
+        });
+      }
+
+      function updateYoutube() {
+        if (!ytPlayer || !ytReady || !ytFrame) return;
+        try {
+          const duration = ytPlayer.getDuration() || 0;
+          const current = ytPlayer.getCurrentTime() || 0;
+          setText(ytFrame, "[data-time-current]", fmtTime(current));
+          setText(ytFrame, "[data-time-duration]", fmtTime(duration));
+          const seek = ytFrame.querySelector('[data-action="seek"]');
+          if (seek && !ytSeekDragging) seek.value = duration > 0 ? String(Math.round(current / duration * 1000)) : "0";
+          setPlayIcon(ytFrame, ytPlayer.getPlayerState() === 1);
+          setMuteIcon(ytFrame, ytPlayer.isMuted() || ytPlayer.getVolume() === 0);
+          const vol = ytFrame.querySelector('[data-action="volume"]');
+          if (vol && document.activeElement !== vol) vol.value = String(ytPlayer.getVolume());
+        } catch (_) {}
+      }
+      function startYoutubeProgress() {
+        cancelAnimationFrame(ytRaf);
+        const tick = () => {
+          updateYoutube();
+          if (ytReady && ytPlayer && ytPlayer.getPlayerState() === 1) ytRaf = requestAnimationFrame(tick);
+        };
+        ytRaf = requestAnimationFrame(tick);
+      }
+      function showYoutubeError(code) {
+        if (!ytError) return;
+        ytError.hidden = false;
+        if (code === 153) {
+          ytErrorText.textContent = "Erreur 153 : YouTube ne reçoit pas le HTTP Referer. Ouvre cette page depuis une adresse HTTPS (ex. GitHub Pages), pas en ouvrant le fichier HTML directement depuis ton PC. Le bouton ci-dessous reste disponible.";
+        } else if (code === 101 || code === 150) {
+          ytErrorText.textContent = "Le propriétaire de la vidéo n'autorise pas sa lecture intégrée. Tu peux quand même l'ouvrir directement sur YouTube.";
+        } else {
+          ytErrorText.textContent = `Le lecteur YouTube a rencontré une erreur (${code}). Ouvre la vidéo directement sur YouTube.`;
+        }
+      }
+      function initYoutubePlayer() {
+        if (!window.YT || !window.YT.Player || ytPlayer) return;
+        const playerVars = { autoplay: 0, controls: 0, disablekb: 0, enablejsapi: 1, playsinline: 1, rel: 0 };
+        if (location.protocol === "https:" || location.protocol === "http:") playerVars.origin = location.origin;
+        try {
+          ytPlayer = new YT.Player("creatorYoutubePlayer", {
+            videoId: "G_9w4AQWcvE",
+            playerVars,
+            events: {
+              onReady: () => { ytReady = true; updateYoutube(); },
+              onStateChange: () => { updateYoutube(); startYoutubeProgress(); },
+              onError: (event) => showYoutubeError(event.data)
+            }
+          });
+        } catch (_) { showYoutubeError(153); }
+      }
+      if (ytFrame) {
+        const tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/iframe_api";
+        tag.async = true;
+        tag.onerror = () => showYoutubeError(153);
+        window.onYouTubeIframeAPIReady = initYoutubePlayer;
+        document.head.appendChild(tag);
+      }
+
+      document.querySelectorAll("[data-player-controls]").forEach((bar) => {
+        const type = bar.dataset.playerControls;
+        const frame = bar.closest(".creator-video-frame");
+        if (!frame) return;
+        const isYT = type === "youtube";
+        const getYT = () => ytReady && ytPlayer;
+        bar.addEventListener("click", async (event) => {
+          const button = event.target.closest("button[data-action]");
+          if (!button) return;
+          const action = button.dataset.action;
+          if (action === "play") {
+            if (isYT) {
+              if (!getYT()) return;
+              const state = ytPlayer.getPlayerState();
+              if (state === 1) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+            } else if (mp4) {
+              if (mp4.paused || mp4.ended) { const promise = mp4.play(); if (promise?.catch) promise.catch(() => {}); } else mp4.pause();
+            }
+          } else if (action === "mute") {
+            if (isYT) { if (!getYT()) return; if (ytPlayer.isMuted() || ytPlayer.getVolume() === 0) { ytPlayer.unMute(); if (ytPlayer.getVolume() === 0) ytPlayer.setVolume(80); } else ytPlayer.mute(); updateYoutube(); }
+            else if (mp4) { mp4.muted = !(mp4.muted || mp4.volume === 0); if (!mp4.muted && mp4.volume === 0) mp4.volume = .8; updateMp4(); }
+          } else if (action === "fullscreen") {
+            const request = frame.requestFullscreen || frame.webkitRequestFullscreen;
+            if (request) { const promise = request.call(frame); if (promise?.catch) promise.catch(() => {}); }
+          } else if (action === "download" && !isYT) {
+            const link = document.createElement("a");
+            link.href = "https://github.com/x4tmqq/Sentinel-Script/raw/refs/heads/main/contentcreation_1.mp4?download=1";
+            link.download = "Sentinel-Content.mp4";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            document.body.appendChild(link); link.click(); link.remove();
+          }
+        });
+        const seek = bar.querySelector('[data-action="seek"]');
+        if (seek) {
+          seek.addEventListener("pointerdown", () => { if (isYT) ytSeekDragging = true; else mp4Seeking = true; });
+          seek.addEventListener("pointerup", () => { if (isYT) ytSeekDragging = false; else mp4Seeking = false; });
+          seek.addEventListener("input", () => {
+            const ratio = Math.max(0, Math.min(1, Number(seek.value) / 1000));
+            if (isYT) {
+              if (!getYT()) return;
+              const duration = ytPlayer.getDuration() || 0;
+              setText(frame, "[data-time-current]", fmtTime(duration * ratio));
+              if (!ytSeekDragging) ytPlayer.seekTo(duration * ratio, true);
+            } else if (mp4 && Number.isFinite(mp4.duration) && mp4.duration > 0) {
+              setText(frame, "[data-time-current]", fmtTime(mp4.duration * ratio));
+              mp4.currentTime = mp4.duration * ratio;
+            }
+          });
+          seek.addEventListener("change", () => {
+            if (isYT && getYT()) { ytPlayer.seekTo((ytPlayer.getDuration() || 0) * Number(seek.value) / 1000, true); ytSeekDragging = false; }
+            if (!isYT) mp4Seeking = false;
+          });
+        }
+        const volume = bar.querySelector('[data-action="volume"]');
+        volume?.addEventListener("input", () => {
+          const value = Math.max(0, Math.min(100, Number(volume.value)));
+          if (isYT) { if (!getYT()) return; ytPlayer.setVolume(value); if (value > 0) ytPlayer.unMute(); else ytPlayer.mute(); updateYoutube(); }
+          else if (mp4) { mp4.volume = value / 100; mp4.muted = value === 0; updateMp4(); }
+        });
+        const speed = bar.querySelector('[data-action="speed"]');
+        speed?.addEventListener("change", () => { if (mp4) mp4.playbackRate = Number(speed.value) || 1; });
+      });
+      updateMp4();
+    })();
+
+    /* ============================================================
+       CONTENT CREATORS — YOUTUBE DATA API v3
+    ============================================================ */
+    document.getElementById("youtubeStatsBtn")?.addEventListener("click", async () => {
+      const key = document.getElementById("youtubeApiKey")?.value.trim();
+      const status = document.getElementById("youtubeApiStatus");
+      if (!key) { status.textContent = "Ajoute une clé API YouTube Data API v3 pour charger les statistiques."; return; }
+      status.textContent = "Loading YouTube statistics…";
+      try {
+        const id = "G_9w4AQWcvE";
+        const url = new URL("https://www.googleapis.com/youtube/v3/videos");
+        url.search = new URLSearchParams({part:"statistics,snippet",id,key}).toString();
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!response.ok || data.error) throw new Error(data.error?.message || `YouTube API error (${response.status})`);
+        const video = data.items?.[0];
+        if (!video) throw new Error("Video not found or not accessible through the API.");
+        const stats = video.statistics || {};
+        const card = document.querySelector('.creator-card[data-video-id="G_9w4AQWcvE"]');
+        if (card) ["viewCount","likeCount","commentCount"].forEach(name => {
+          const el = card.querySelector(`[data-stat="${name}"]`);
+          if (el) el.textContent = Number(stats[name] || 0).toLocaleString("en-US");
+        });
+        status.textContent = `Updated: ${video.snippet?.title || "YouTube Short"}`;
+      } catch (err) {
+        status.textContent = `Impossible de charger les stats : ${err.message}`;
+      }
+    });
+
+    /* ============================================================
+       SCRIPT HELPER — COMMENT CLEANER + STATIC LOG INSPECTOR
+    ============================================================ */
+    function luaLongBracketOpenAt(source, index) {
+      if (source[index] !== "[") return null;
+      let cursor = index + 1;
+      while (source[cursor] === "=") cursor++;
+      if (source[cursor] !== "[") return null;
+      return { equals: cursor - index - 1, length: cursor - index + 1 };
     }
-    async function loadExecutors(){
-      const loading=document.getElementById("execLoading"),error=document.getElementById("execError");
-      try{
-        const PROXY_ENDPOINTS=["https://corsproxy.io/?https://weao.xyz/api/status/exploits","https://api.allorigins.win/raw?url="+encodeURIComponent("https://weao.xyz/api/status/exploits")];let data=null,lastErr="All executor data endpoints failed.";
-        for(const url of PROXY_ENDPOINTS){try{const res=await fetch(url,{signal:AbortSignal.timeout(10000),headers:{"Accept":"application/json"}});if(!res.ok)continue;const json=await res.json();const list=Array.isArray(json)?json:(json.exploits||json.data||json.results||Object.values(json));if(Array.isArray(list)&&list.length){data=list;break;}}catch(e){lastErr=e?.message||lastErr;}}
-        if(!data)throw new Error(lastErr);
-        const groups=new Map([["Windows Internal",[]],["iOS Executor",[]],["Android Executor",[]],["Windows External",[]],["macOS Executor",[]]]);data.forEach(ex=>{const cat=classifyExecutor(ex);if(!groups.has(cat))groups.set(cat,[]);groups.get(cat).push(ex);});
-        const ordered=["Windows Internal","iOS Executor","Android Executor","Windows External","macOS Executor"];const html=ordered.filter(k=>groups.get(k)?.length).map(category=>{const items=groups.get(category);return `<section class="executor-category"><div class="executor-category-head"><div class="executor-category-badge">${executorCategoryIcons[category]||""}${escHtml(category)}<span style="opacity:.45">${items.length}</span></div><div class="executor-category-rule"></div></div><div class="executors-grid">${items.map((ex,i)=>buildExecutorCard(ex,i)).join("")}</div></section>`;}).join("");
-        document.getElementById("executorsGrid").outerHTML=`<div id="executorsGrid">${html}</div>`;loading.style.display="none";document.querySelectorAll(".executor-card").forEach(card=>{const d=parseInt(card.dataset.delay||"0",10);setTimeout(()=>card.classList.add("visible"),d);});
-      }catch(err){loading.style.display="none";error.style.display="block";error.innerHTML=`<svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:rgba(255,98,111,.5);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin:0 auto 12px;display:block"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>Unable to load executors.<br><span style="font-size:11px;color:rgba(160,170,220,.4)">${escHtml(err?.message||"Unknown error")}</span><br><br><button onclick="retryExecutors()" style="margin-top:8px;padding:9px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Retry</button>`;}}
-    window.retryExecutors=function(){const loading=document.getElementById("execLoading"),error=document.getElementById("execError");if(loading)loading.style.display="flex";if(error)error.style.display="none";loadExecutors();};
+
+    function luaLongBracketEnd(source, index, equals) {
+      return source.indexOf("]" + "=".repeat(equals) + "]", index);
+    }
+
+    function luaQuotedStringInfo(source, start) {
+      const quote = source[start];
+      let cursor = start + 1;
+      while (cursor < source.length) {
+        if (source[cursor] === "\\") {
+          if (source[cursor + 1] === "\r" && source[cursor + 2] === "\n") cursor += 3;
+          else cursor += 2;
+          continue;
+        }
+        if (source[cursor] === quote) return { end: cursor + 1, closed: true };
+        cursor++;
+      }
+      return { end: source.length, closed: false };
+    }
+
+    function luaQuotedStringEnd(source, start) {
+      return luaQuotedStringInfo(source, start).end;
+    }
+
+    function stripLuaComments(source) {
+      let output = "";
+      let cursor = 0;
+      let removed = 0;
+      const commentLines = new Set();
+
+      function markCommentLines(start, end) {
+        const first = source.slice(0, start).split(/\r\n|\r|\n/).length - 1;
+        const last = source.slice(0, end).split(/\r\n|\r|\n/).length - 1;
+        for (let line = first; line <= last; line++) commentLines.add(line);
+      }
+
+      while (cursor < source.length) {
+        const char = source[cursor];
+
+        if (char === "\"" || char === "'") {
+          const end = luaQuotedStringEnd(source, cursor);
+          output += source.slice(cursor, end);
+          cursor = end;
+          continue;
+        }
+
+        const longString = luaLongBracketOpenAt(source, cursor);
+        if (longString) {
+          const closing = luaLongBracketEnd(source, cursor + longString.length, longString.equals);
+          const end = closing === -1 ? source.length : closing + longString.equals + 2;
+          output += source.slice(cursor, end);
+          cursor = end;
+          continue;
+        }
+
+        if (char === "-" && source[cursor + 1] === "-") {
+          removed++;
+          const commentStart = cursor;
+          const contentStart = cursor + 2;
+          const longComment = luaLongBracketOpenAt(source, contentStart);
+          if (longComment) {
+            const closing = luaLongBracketEnd(source, contentStart + longComment.length, longComment.equals);
+            const end = closing === -1 ? source.length : closing + longComment.equals + 2;
+            markCommentLines(commentStart, end);
+            output += source.slice(cursor, end).replace(/[^\r\n]/g, "");
+            cursor = end;
+          } else {
+            let end = contentStart;
+            while (end < source.length && source[end] !== "\n" && source[end] !== "\r") end++;
+            markCommentLines(commentStart, end);
+            cursor = end;
+          }
+          continue;
+        }
+
+        output += char;
+        cursor++;
+      }
+
+      const parts = output.split(/(\r\n|\r|\n)/);
+      let compact = "";
+      let lineIndex = 0;
+      for (let i = 0; i < parts.length; i += 2) {
+        const line = parts[i] ?? "";
+        const lineBreak = parts[i + 1] ?? "";
+        const removeLine = commentLines.has(lineIndex) && line.trim() === "";
+        if (!removeLine) compact += line + lineBreak;
+        lineIndex++;
+      }
+      return { text: compact, removed };
+    }
+
+    function maskLuaCommentsAndStrings(source) {
+      const chars = source.split("");
+      const issues = [];
+      let cursor = 0;
+
+      function maskRange(start, end) {
+        for (let i = start; i < end; i++) {
+          if (chars[i] !== "\n" && chars[i] !== "\r") chars[i] = " ";
+        }
+      }
+
+      while (cursor < source.length) {
+        if (source[cursor] === "\"" || source[cursor] === "'") {
+          const start = cursor;
+          const quoted = luaQuotedStringInfo(source, cursor);
+          maskRange(start, quoted.end);
+          if (!quoted.closed) issues.push({ level: "error", line: source.slice(0, start).split(/\r\n|\r|\n/).length, message: "Possible unclosed quoted string." });
+          cursor = quoted.end;
+          continue;
+        }
+
+        if (source[cursor] === "-" && source[cursor + 1] === "-") {
+          const start = cursor;
+          const commentStart = cursor + 2;
+          const longComment = luaLongBracketOpenAt(source, commentStart);
+          if (longComment) {
+            const closing = luaLongBracketEnd(source, commentStart + longComment.length, longComment.equals);
+            const end = closing === -1 ? source.length : closing + longComment.equals + 2;
+            maskRange(start, end);
+            if (closing === -1) issues.push({ level: "error", line: source.slice(0, start).split(/\r\n|\r|\n/).length, message: "Possible unclosed long comment." });
+            cursor = end;
+          } else {
+            while (cursor < source.length && source[cursor] !== "\n" && source[cursor] !== "\r") cursor++;
+            maskRange(start, cursor);
+          }
+          continue;
+        }
+
+        const longString = luaLongBracketOpenAt(source, cursor);
+        if (longString) {
+          const closing = luaLongBracketEnd(source, cursor + longString.length, longString.equals);
+          const start = cursor;
+          const end = closing === -1 ? source.length : closing + longString.equals + 2;
+          maskRange(start, end);
+          if (closing === -1) issues.push({ level: "error", line: source.slice(0, start).split(/\r\n|\r|\n/).length, message: "Possible unclosed long string." });
+          cursor = end;
+          continue;
+        }
+        cursor++;
+      }
+
+      return { text: chars.join(""), issues };
+    }
+
+    function luaLineCount(value) {
+      return value.length ? value.split(/\r\n|\r|\n/).length : 0;
+    }
+
+    function updateLuaInputMeta() {
+      const input = document.getElementById("luaInput");
+      const meta = document.getElementById("luaInputMeta");
+      if (input && meta) meta.textContent = luaLineCount(input.value) + " lines · " + input.value.length.toLocaleString() + " chars";
+    }
+
+    function updateLuaLogInputMeta() {
+      const input = document.getElementById("luaLogInput");
+      const meta = document.getElementById("luaLogInputMeta");
+      if (input && meta) meta.textContent = luaLineCount(input.value) + " lines · " + input.value.length.toLocaleString() + " chars";
+    }
+
+    const luaInput = document.getElementById("luaInput");
+    const luaOutput = document.getElementById("luaOutput");
+    const luaCleanStatus = document.getElementById("luaCleanStatus");
+    const luaLogInput = document.getElementById("luaLogInput");
+    const luaLogOutput = document.getElementById("luaLogOutput");
+    const luaLogSummary = document.getElementById("luaLogSummary");
+    const luaLogCount = document.getElementById("luaLogCount");
+
+    luaInput?.addEventListener("input", updateLuaInputMeta);
+    luaLogInput?.addEventListener("input", updateLuaLogInputMeta);
+    updateLuaInputMeta();
+    updateLuaLogInputMeta();
+
+    document.getElementById("luaImportBtn")?.addEventListener("click", () => document.getElementById("luaFileInput")?.click());
+    document.getElementById("luaFileInput")?.addEventListener("change", async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        luaInput.value = await file.text();
+        updateLuaInputMeta();
+        showNotification("Script imported", file.name + " loaded into Cleaner.", "success");
+      } catch (_) {
+        showNotification("Import failed", "Unable to read this file.", "error");
+      }
+      event.target.value = "";
+    });
+
+    document.getElementById("luaLogImportBtn")?.addEventListener("click", () => document.getElementById("luaLogFileInput")?.click());
+    document.getElementById("luaLogFileInput")?.addEventListener("change", async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      try {
+        luaLogInput.value = await file.text();
+        updateLuaLogInputMeta();
+        showNotification("Script imported", file.name + " loaded into Logger.", "success");
+      } catch (_) {
+        showNotification("Import failed", "Unable to read this file.", "error");
+      }
+      event.target.value = "";
+    });
+
+    document.getElementById("luaClearBtn")?.addEventListener("click", () => {
+      luaInput.value = "";
+      luaOutput.value = "";
+      updateLuaInputMeta();
+      document.getElementById("luaOutputMeta").textContent = "Ready when you are";
+      luaCleanStatus.textContent = "The Cleaner is independent from the Logger below.";
+      luaCleanStatus.className = "lua-clean-status";
+      showNotification("Cleaner cleared", "The Before and After panels were cleared.", "success");
+    });
+
+    document.getElementById("luaLogClearBtn")?.addEventListener("click", () => {
+      luaLogInput.value = "";
+      updateLuaLogInputMeta();
+      luaLogOutput.replaceChildren();
+      luaLogSummary.className = "lua-log-summary";
+      luaLogSummary.querySelector("span:nth-child(2)").textContent = "Ready to inspect";
+      luaLogCount.textContent = "0";
+      const empty = document.createElement("div");
+      empty.className = "lua-log-empty";
+      empty.innerHTML = '<span class="lua-log-empty-icon">⌁</span><strong>No output yet</strong><span>Paste a script in this Logger box and press Analyze.</span>';
+      luaLogOutput.appendChild(empty);
+      showNotification("Logger cleared", "The logger input and findings were cleared.", "success");
+    });
+
+    document.getElementById("luaCleanBtn")?.addEventListener("click", () => {
+      const source = luaInput.value;
+      if (!source.trim()) {
+        luaCleanStatus.textContent = "Paste or import a Lua script into Before first.";
+        luaCleanStatus.className = "lua-clean-status is-error";
+        showNotification("Nothing to clean", "Paste a Lua script into Cleaner → Before first.", "error");
+        return;
+      }
+      const result = stripLuaComments(source);
+      luaOutput.value = result.text;
+      const lines = luaLineCount(result.text);
+      document.getElementById("luaOutputMeta").textContent = lines + " lines · " + result.text.length.toLocaleString() + " chars";
+      luaCleanStatus.textContent = result.removed === 0
+        ? "No Lua comments found. The script content was left unchanged."
+        : result.removed + " comment" + (result.removed === 1 ? "" : "s") + " removed. Comment-only lines were removed too; code and quoted strings were preserved.";
+      luaCleanStatus.className = "lua-clean-status is-success";
+      showNotification("Script cleaned", result.removed + " comment" + (result.removed === 1 ? "" : "s") + " removed.", "success");
+    });
+
+    document.getElementById("luaCopyBtn")?.addEventListener("click", async () => {
+      if (!luaOutput.value) {
+        showNotification("No output yet", "Click Remove Comments first.", "error");
+        return;
+      }
+      const copied = await copyToClipboard(luaOutput.value);
+      showNotification(copied ? "Copied" : "Copy failed", copied ? "The cleaned script is on your clipboard." : "The browser blocked clipboard access.", copied ? "success" : "error");
+    });
+
+    document.getElementById("luaDownloadBtn")?.addEventListener("click", () => {
+      if (!luaOutput.value) {
+        showNotification("No output yet", "Click Remove Comments first.", "error");
+        return;
+      }
+      const blob = new Blob([luaOutput.value], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "script-cleaned.lua";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showNotification("Download started", "Saved as script-cleaned.lua.", "success");
+    });
+
+    function addLuaLogEntry(level, line, message, sourceLine) {
+      const entry = document.createElement("div");
+      entry.className = "lua-log-entry " + level;
+      const badge = document.createElement("span");
+      badge.className = "lua-log-level";
+      const labels = { error: "ERROR", warn: "WARN", info: "INFO", success: "OK", output: "OUTPUT" };
+      badge.textContent = labels[level] || "CHECK";
+      const detail = document.createElement("div");
+      detail.className = "lua-log-detail";
+      const text = document.createElement("div");
+      text.className = "lua-log-message";
+      text.textContent = message === "" ? "(empty output line)" : message;
+      detail.appendChild(text);
+      if (sourceLine) {
+        const source = document.createElement("div");
+        source.className = "lua-log-source";
+        source.textContent = "Line " + line + " · " + sourceLine;
+        detail.appendChild(source);
+      }
+      entry.append(badge, detail);
+      luaLogOutput.appendChild(entry);
+    }
+
+    function readLuaStringLiteral(value) {
+      const text = value.trim();
+      if (text.length >= 2 && (text[0] === "\"" || text[0] === "'")) {
+        const quotedInfo = luaQuotedStringInfo(text, 0);
+        if (!quotedInfo.closed || quotedInfo.end !== text.length) return null;
+        const body = text.slice(1, -1);
+        return body.replace(/\\(\\|\"|'|a|b|f|n|r|t|v|\n|\r\n|\r|x[0-9a-fA-F]{2}|[0-9]{1,3}|z\s*)/g, (all, esc) => {
+          if (esc === "\\") return "\\";
+          if (esc === "\"") return "\"";
+          if (esc === "'") return "'";
+          if (esc === "a") return "\x07";
+          if (esc === "b") return "\b";
+          if (esc === "f") return "\f";
+          if (esc === "n") return "\n";
+          if (esc === "r") return "\r";
+          if (esc === "t") return "\t";
+          if (esc === "v") return "\v";
+          if (esc === "z") return "";
+          if (esc === "\n" || esc === "\r" || esc === "\r\n") return "";
+          if (esc[0] === "x") return String.fromCharCode(parseInt(esc.slice(1), 16));
+          if (/^\d+$/.test(esc)) return String.fromCharCode(parseInt(esc, 10));
+          return all;
+        });
+      }
+      const longOpen = luaLongBracketOpenAt(text, 0);
+      if (longOpen) {
+        const close = "]" + "=".repeat(longOpen.equals) + "]";
+        const closeAt = luaLongBracketEnd(text, longOpen.length, longOpen.equals);
+        if (closeAt === text.length - close.length) {
+          let body = text.slice(longOpen.length, closeAt);
+          body = body.replace(/^\r?\n/, "");
+          return body;
+        }
+      }
+      return null;
+    }
+
+    function skipLuaStringOrComment(source, index) {
+      const ch = source[index];
+      if (ch === "\"" || ch === "'") return luaQuotedStringEnd(source, index);
+      if (ch === "-" && source[index + 1] === "-") {
+        const long = luaLongBracketOpenAt(source, index + 2);
+        if (long) {
+          const close = luaLongBracketEnd(source, index + 2 + long.length, long.equals);
+          return close < 0 ? source.length : close + long.equals + 2;
+        }
+        let end = index + 2;
+        while (end < source.length && source[end] !== "\n" && source[end] !== "\r") end++;
+        return end;
+      }
+      const longString = luaLongBracketOpenAt(source, index);
+      if (longString) {
+        const close = luaLongBracketEnd(source, index + longString.length, longString.equals);
+        return close < 0 ? source.length : close + longString.equals + 2;
+      }
+      return index;
+    }
+
+    function getLuaCallArguments(source, openParenIndex) {
+      let cursor = openParenIndex + 1;
+      const start = cursor;
+      const stack = [];
+      const closing = { "(": ")", "[": "]", "{": "}" };
+      while (cursor < source.length) {
+        const skipped = skipLuaStringOrComment(source, cursor);
+        if (skipped !== cursor) { cursor = skipped; continue; }
+        const ch = source[cursor];
+        if (closing[ch]) stack.push(closing[ch]);
+        else if (ch === ")") {
+          if (!stack.length) return source.slice(start, cursor);
+          if (stack[stack.length - 1] === ch) stack.pop();
+        } else if ((ch === "]" || ch === "}") && stack.length && stack[stack.length - 1] === ch) stack.pop();
+        cursor++;
+      }
+      return source.slice(start);
+    }
+
+    function splitLuaArguments(raw) {
+      if (!raw.trim()) return [];
+      const result = [];
+      let start = 0;
+      let cursor = 0;
+      const stack = [];
+      const closing = { "(": ")", "[": "]", "{": "}" };
+      while (cursor < raw.length) {
+        const skipped = skipLuaStringOrComment(raw, cursor);
+        if (skipped !== cursor) { cursor = skipped; continue; }
+        const ch = raw[cursor];
+        if (closing[ch]) stack.push(closing[ch]);
+        else if (stack.length && ch === stack[stack.length - 1]) stack.pop();
+        else if (ch === "," && !stack.length) { result.push(raw.slice(start, cursor).trim()); start = cursor + 1; }
+        cursor++;
+      }
+      result.push(raw.slice(start).trim());
+      return result;
+    }
+
+    function splitLuaConcat(raw) {
+      const pieces = [];
+      let start = 0, cursor = 0;
+      const stack = [];
+      const closing = { "(": ")", "[": "]", "{": "}" };
+      while (cursor < raw.length) {
+        const skipped = skipLuaStringOrComment(raw, cursor);
+        if (skipped !== cursor) { cursor = skipped; continue; }
+        const ch = raw[cursor];
+        if (closing[ch]) stack.push(closing[ch]);
+        else if (stack.length && ch === stack[stack.length - 1]) stack.pop();
+        if (!stack.length && raw.slice(cursor, cursor + 2) === ".." && raw[cursor + 2] !== ".") {
+          pieces.push(raw.slice(start, cursor).trim());
+          cursor += 2; start = cursor; continue;
+        }
+        cursor++;
+      }
+      if (!pieces.length) return null;
+      pieces.push(raw.slice(start).trim());
+      return pieces;
+    }
+
+    function evaluateLuaLiteral(expression) {
+      const value = expression.trim();
+      const stringValue = readLuaStringLiteral(value);
+      if (stringValue !== null) return { known: true, value: stringValue, type: "string" };
+      if (value === "true") return { known: true, value: true, type: "boolean" };
+      if (value === "false") return { known: true, value: false, type: "boolean" };
+      if (value === "nil") return { known: true, value: null, type: "nil" };
+      if (/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(value)) return { known: true, value: Number(value), type: "number" };
+      if (/^0[xX][0-9a-fA-F]+$/.test(value)) return { known: true, value: parseInt(value.slice(2), 16), type: "number" };
+      const concat = splitLuaConcat(value);
+      if (concat) {
+        const values = concat.map(evaluateLuaLiteral);
+        if (values.every(item => item.known && item.value !== null && ["string", "number", "boolean"].includes(item.type))) {
+          return { known: true, value: values.map(item => String(item.value)).join(""), type: "string" };
+        }
+      }
+      return { known: false, value: undefined, type: "unknown" };
+    }
+
+    function luaConsoleString(value) {
+      if (value === null) return "nil";
+      if (typeof value === "boolean") return value ? "true" : "false";
+      return String(value);
+    }
+
+    function formatLuaCallOutput(source, openParenIndex) {
+      const raw = getLuaCallArguments(source, openParenIndex);
+      const args = splitLuaArguments(raw).map(evaluateLuaLiteral);
+      if (args.every(item => item.known)) return { known: true, text: args.map(item => luaConsoleString(item.value)).join(" ") };
+      return { known: false, text: "" };
+    }
+
+    function analyzeLuaScript() {
+      const source = luaLogInput.value;
+      luaLogOutput.replaceChildren();
+      luaLogSummary.className = "lua-log-summary";
+      if (!source.trim()) {
+        luaLogSummary.classList.add("has-warnings");
+        luaLogSummary.querySelector("span:nth-child(2)").textContent = "No script to inspect";
+        luaLogCount.textContent = "0";
+        const empty = document.createElement("div");
+        empty.className = "lua-log-empty";
+        empty.innerHTML = '<span class="lua-log-empty-icon">!</span><strong>Input is empty</strong><span>Paste or import a script into the Logger box above, then press Analyze.</span>';
+        luaLogOutput.appendChild(empty);
+        return;
+      }
+
+      const code = maskLuaCommentsAndStrings(source);
+      const sourceLines = source.split(/\r\n|\r|\n/);
+      const codeLines = code.text.split(/\r\n|\r|\n/);
+      const lineOffsets = [];
+      let offset = 0;
+      source.split(/\r\n|\r|\n/).forEach((line, index, all) => {
+        lineOffsets.push(offset);
+        offset += line.length;
+        if (index < all.length - 1) {
+          const eol = source.slice(offset).match(/^\r\n|^\r|^\n/);
+          if (eol) offset += eol[0].length;
+        }
+      });
+      const findings = [];
+
+      code.issues.forEach(issue => findings.push({ level: issue.level, line: issue.line, message: issue.message, source: sourceLines[issue.line - 1]?.trim() || "" }));
+
+      const callPattern = /\b(warn|error|print|assert)\s*\(/g;
+      codeLines.forEach((codeLine, index) => {
+        callPattern.lastIndex = 0;
+        let match;
+        while ((match = callPattern.exec(codeLine)) !== null) {
+          const before = codeLine.slice(0, match.index);
+          if (/\bfunction\s*$/.test(before)) continue;
+          const type = match[1];
+          const openParenIndex = lineOffsets[index] + match.index + match[0].lastIndexOf("(");
+          const result = formatLuaCallOutput(source, openParenIndex);
+          const callSource = sourceLines[index]?.trim() || match[0];
+          if (type === "print") {
+            findings.push({ level: result.known ? "output" : "info", line: index + 1, message: result.known ? result.text : "print() detected; output depends on runtime values that cannot be predicted in the browser.", source: callSource });
+          } else if (type === "warn") {
+            findings.push({ level: "warn", line: index + 1, message: result.known ? ("warn output: " + (result.text || "(empty warning)")) : "warn() detected; the warning text depends on runtime values.", source: callSource });
+          } else if (type === "error") {
+            findings.push({ level: "error", line: index + 1, message: result.known ? ("error() would stop execution here if reached: " + (result.text || "(empty error message)")) : "error() detected; this would stop execution if reached.", source: callSource });
+          } else {
+            const firstArg = splitLuaArguments(getLuaCallArguments(source, openParenIndex))[0] || "";
+            const condition = evaluateLuaLiteral(firstArg);
+            const failing = condition.known && (condition.value === false || condition.value === null);
+            findings.push({ level: failing ? "error" : "info", line: index + 1, message: failing ? "assert() has a literal false/nil condition and would raise an error if reached." : "assert() call detected; a failed condition raises an error at runtime.", source: callSource });
+          }
+        }
+      });
+
+      codeLines.forEach((codeLine, index) => {
+        if (/\bwait\s*\(/.test(codeLine) && !/\btask\s*\.\s*wait\s*\(/.test(codeLine)) {
+          findings.push({ level: "warn", line: index + 1, message: "Legacy wait() call spotted. In modern Roblox scripts, task.wait() is usually the preferred alternative.", source: sourceLines[index]?.trim() || "wait()" });
+        }
+      });
+
+      const stack = [];
+      const openers = { "(": ")", "{": "}", "[": "]" };
+      const closers = new Set(Object.values(openers));
+      let lineNumber = 1;
+      for (let i = 0; i < code.text.length; i++) {
+        const char = code.text[i];
+        if (char === "\n") lineNumber++;
+        if (openers[char]) stack.push({ char, line: lineNumber });
+        else if (closers.has(char)) {
+          const last = stack[stack.length - 1];
+          if (!last || openers[last.char] !== char) {
+            findings.push({ level: "error", line: lineNumber, message: "Unmatched closing delimiter '" + char + "'.", source: sourceLines[lineNumber - 1]?.trim() || "" });
+          } else stack.pop();
+        }
+      }
+      stack.forEach(item => findings.push({ level: "error", line: item.line, message: "Opening delimiter '" + item.char + "' has no matching closing delimiter.", source: sourceLines[item.line - 1]?.trim() || "" }));
+
+      const priority = { error: 0, warn: 1, output: 2, info: 3, success: 4 };
+      findings.sort((a, b) => a.line - b.line || (priority[a.level] ?? 5) - (priority[b.level] ?? 5));
+      if (!findings.length) {
+        addLuaLogEntry("success", 0, "No print/warn/error calls or basic delimiter problems were detected.", "");
+        addLuaLogEntry("info", 0, "This is a static scan. It cannot confirm that Roblox services, variables, permissions or APIs exist at runtime.", "");
+        luaLogSummary.classList.add("has-success");
+        luaLogSummary.querySelector("span:nth-child(2)").textContent = "Scan complete · no basic issues spotted";
+        luaLogCount.textContent = "2";
+        return;
+      }
+
+      findings.forEach(item => addLuaLogEntry(item.level, item.line, item.message, item.source));
+      const errors = findings.filter(item => item.level === "error").length;
+      const warnings = findings.filter(item => item.level === "warn").length;
+      const outputs = findings.filter(item => item.level === "output").length;
+      if (errors) luaLogSummary.classList.add("has-errors");
+      else if (warnings) luaLogSummary.classList.add("has-warnings");
+      else luaLogSummary.classList.add("has-success");
+      luaLogSummary.querySelector("span:nth-child(2)").textContent = "Scan complete · " + errors + " error checks · " + warnings + " warnings · " + outputs + " output lines · " + findings.length + " findings";
+      luaLogCount.textContent = String(findings.length);
+    }
+
+    document.getElementById("luaAnalyzeBtn")?.addEventListener("click", () => {
+      analyzeLuaScript();
+      showNotification("Logger scan complete", "Literal output was previewed; Roblox code was not executed.", "success");
+    });
+
+    (function initHelperPanelTilt() {
+      if (window.matchMedia("(max-width:680px), (prefers-reduced-motion: reduce)").matches) return;
+      document.querySelectorAll(".lua-panel").forEach(panel => {
+        let active = false;
+        panel.addEventListener("pointermove", event => {
+          const rect = panel.getBoundingClientRect();
+          const rx = -((event.clientY - rect.top) / rect.height - .5) * 4.5;
+          const ry = ((event.clientX - rect.left) / rect.width - .5) * 4.5;
+          panel.style.transform = "perspective(1200px) rotateX(" + rx + "deg) rotateY(" + ry + "deg) scale3d(1.004,1.004,1.004)";
+          active = true;
+        });
+        panel.addEventListener("pointerleave", () => {
+          if (active) panel.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+          active = false;
+        });
+      });
+    })();
+
     /* ============================================================
        AUTH INIT
     ============================================================ */
     (async function initAuthGate() {
+      if (typeof sb === "undefined" || !sb?.auth) {
+        const overlay = document.getElementById("authOverlay");
+        if (overlay) {
+          overlay.classList.remove("visible");
+          overlay.style.display = "none";
+          overlay.setAttribute("aria-hidden", "true");
+        }
+        return;
+      }
       try {
         const ses = await sb.auth.getSession();
         if (ses.data?.session) { const ok = await loadCurrentUser(); if (!ok) showAuthOverlay(); }
